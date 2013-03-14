@@ -34,7 +34,16 @@ abstract class AbstractQuestion implements IQuestion {
 
     @Override
     String getText() {
+        if (Form.numberQuestions)
+            return "${getQuestionIdx()}. $question"
         return question
+    }
+
+    def getQuestionIdx() {
+        if (hasQuestions instanceof Form)
+            return hasQuestions.questions.indexOf(this) + 1
+        else if (hasQuestions instanceof RepeatQuestion)
+            return "${hasQuestions.getQuestionIdx()}.${hasQuestions.questions.indexOf(this) + 1}"
     }
 
     @Override

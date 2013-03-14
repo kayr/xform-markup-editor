@@ -13,6 +13,7 @@ class Form implements HasQuestions {
 
     String name
     Study study
+    static numberQuestions = false
 
     List<Page> pages = []
 
