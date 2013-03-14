@@ -692,6 +692,7 @@ Jjidjf
     <label>Page1</label>
     <group id="child_repeat">
       <label>Children</label>
+      <hint>Details</hint>
       <repeat bind="child_repeat">
         <input bind="name">
           <label>name</label>

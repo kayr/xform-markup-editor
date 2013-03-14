@@ -178,24 +178,26 @@ class XFormSerializer {
         def qnType = getQuestionType(question)
         if (qnType.type == 'xsd:base64Binary') {
             xml.upload(bind: question.binding, mediatype: "${qnType.format}/*") {
-                xml.label(question.text)
-                if (question.comment)
-                    xml.hint(question.comment)
+                buildQuestionLabelAndHint (xml,question)
             }
         }
         else
             xml.input(bind: question.binding) {
-                xml.label(question.text)
-                if (question.comment)
-                    xml.hint(question.comment)
+                buildQuestionLabelAndHint (xml,question)
             }
+    }
+
+    void buildQuestionLabelAndHint(MarkupBuilder xml,IQuestion question){
+        xml.label(question.text)
+        if (question.comment)
+            xml.hint(question.comment)
     }
 
     void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, Page page) {
 
         xml.select1(bind: question.binding) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
-            xml.label(question.text)
+            buildQuestionLabelAndHint (xml,question)
             xml.itemset(nodeset: "instance('$question.binding')/item[@parent=instance('$page.form.binding')/$question.parentQuestionId]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
@@ -208,9 +210,7 @@ class XFormSerializer {
 
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
         xml."select$selectRef"(bind: question.binding) {
-            xml.label(question.text)
-            if (question.comment)
-                xml.hint(question.comment)
+            buildQuestionLabelAndHint (xml,question)
             question.options.each { option ->
                 xml.item(id: option.bind) {
                     xml.label(option.text)
@@ -225,7 +225,8 @@ class XFormSerializer {
     void buildRepeatLayout(MarkupBuilder xml, RepeatQuestion question, HasQuestions page) {
 
         xml.group(id: question.binding) {
-            xml.label(question.text)
+            buildQuestionLabelAndHint (xml,question)
+
             xml.repeat(bind: question.binding) {
 
                 buildQuestionsLayout(question, xml)
