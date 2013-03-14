@@ -86,10 +86,11 @@ class DynamicBuilder {
 
         strings.eachWithIndex {row, rowIdx ->
             row.eachWithIndex {cellValue, cellIdx ->
-                if (cellValue.trim() == "") {
+                if (cellValue == "") {
                     strings[rowIdx][cellIdx] = strings[rowIdx - 1][cellIdx]
+                }else{
+                     strings[rowIdx][cellIdx] =  strings[rowIdx][cellIdx].trim()
                 }
-                strings[rowIdx][cellIdx] =  strings[rowIdx][cellIdx].trim()
             }
         }
         return strings

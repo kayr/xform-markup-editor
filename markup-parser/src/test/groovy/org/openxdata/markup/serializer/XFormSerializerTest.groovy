@@ -73,4 +73,12 @@ class XFormSerializerTest extends GroovyTestCase {
 
     }
 
+    void testFormWithPages(){
+        def parser = Util.createParser(Fixtures.formWithMultiplePage)
+
+        def xml = serializer.toXForm(parser.study().forms[0])
+
+        assertEquals Fixtures.formWithMultiPageXML,xml
+    }
+
 }

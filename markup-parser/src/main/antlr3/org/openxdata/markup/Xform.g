@@ -46,12 +46,32 @@ scope						{Form scopeForm;}
 						rv.setStudy($study::scopeStudy);
 						} 
 
+		(
 		(rpt = repeatQn			{rv.addQuestion(rpt);}
 		|txt = txtQn			{rv.addQuestion(txt);}
 		|single = singleSelQn		{rv.addQuestion(single);}
 		|multi = multipleSelQn		{rv.addQuestion(multi);}
 		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
 		)+
+		|(pg = page)+
+		)
+	;
+	
+page returns [Page rv = new Page()]
+	:	PAGE
+		
+						{
+						rv.setName($PAGE.text);
+						($form::scopeForm).addPage(rv);
+						rv.setStudy($study::scopeStudy);
+						} 
+
+		(rpt = repeatQn			{rv.addQuestion(rpt);}
+		|txt = txtQn			{rv.addQuestion(txt);}
+		|single = singleSelQn		{rv.addQuestion(single);}
+		|multi = multipleSelQn		{rv.addQuestion(multi);}
+		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}	
+		)+		
 	;
 
 
@@ -101,11 +121,15 @@ ATTRIBUTE
 	:	SPACE '@' SPACE LINECONTENTS		{setText(rl($LINECONTENTS.text));}
 	;
 	
+	
 STUDYNAME
 	: 	SPACE '###' LINECONTENTS	{setText(rl($LINECONTENTS.text));}
 	;
 	
 FORMNAME:	SPACE '##' LINECONTENTS		{setText(rl($LINECONTENTS.text));}
+	;
+	
+PAGE	:	SPACE '#>' LINECONTENTS		{setText(rl($LINECONTENTS.text));}
 	;
 
 DYNAMICMARKER

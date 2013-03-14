@@ -288,6 +288,42 @@ jeelopo
         }
     }
 
+   void testFormWithPages(){
+        def parser = createParser(Fixtures.formWithMultiplePage)
+
+       def study = parser.study();
+
+       def form = study.forms[0]
+
+       assertEquals 2,form.pages.size()
+
+       assertEquals 3 , form.pages[0].questions.size()
+
+       assertEquals 4 , form.pages[1].questions.size()
+
+    }
+
+    void testFormWithDuplicatePages(){
+        def parser = createParser(Fixtures.formWithDupePages)
+
+        try{
+             parser.study()
+            fail("Expecting duplicate page exception")
+        }   catch(ValidationException ex){
+            assertTrue ex.message.startsWith("Duplicate pages")
+        }
+    }
+
+    void testDupeQuestionInPagedForm(){
+        def parser = createParser(Fixtures.formMultiplePageDupeQuestion)
+
+        try{
+            parser.study()
+            fail("Expecting duplicate question exception")
+        }catch (DuplicateQuestionException ex){
+            //this is ok
+        }
+    }
 
     private XformParser createParser(String testString) throws IOException {
         CharStream stream = new ANTLRStringStream(testString);

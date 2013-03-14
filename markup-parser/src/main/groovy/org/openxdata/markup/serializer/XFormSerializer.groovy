@@ -72,10 +72,12 @@ class XFormSerializer {
                 }
             }
 
-            xml.group(id: '1') {
-                xml.label('Page1')
-                buildQuestionsLayout(form, xml)
+            form.pages.eachWithIndex { page,idx ->
+                xml.group(id: idx+1) {
+                    xml.label(page.name)
+                    buildQuestionsLayout(page, xml)
 
+                }
             }
         }
 
@@ -125,13 +127,13 @@ class XFormSerializer {
         xml.bind(map)
     }
 
-    private void buildQuestionsLayout(HasQuestions form, MarkupBuilder xml) {
-        form.questions.each {  question ->
+    private void buildQuestionsLayout(HasQuestions page, MarkupBuilder xml) {
+        page.questions.each {  question ->
             def questionClass = question.class
 
             switch (questionClass) {
                 case RepeatQuestion.class:
-                    buildRepeatLayout(xml, question, form)
+                    buildRepeatLayout(xml, question, page)
                     break
                 case MultiSelectQuestion.class:
                     buildSelectionLayout(xml, question)
@@ -140,7 +142,7 @@ class XFormSerializer {
                     buildSelectionLayout(xml, question)
                     break
                 case DynamicQuestion.class:
-                    buildDynamicLayout(xml, question, form)
+                    buildDynamicLayout(xml, question, page)
                     break
                 default:
                     buildQuestionLayout(xml, question)
@@ -189,12 +191,12 @@ class XFormSerializer {
             }
     }
 
-    void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, Form form) {
+    void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, Page page) {
 
         xml.select1(bind: question.binding) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             xml.label(question.text)
-            xml.itemset(nodeset: "instance('$question.binding')/item[@parent=instance('$form.binding')/$question.parentQuestionId]") {
+            xml.itemset(nodeset: "instance('$question.binding')/item[@parent=instance('$page.form.binding')/$question.parentQuestionId]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
             }
@@ -220,7 +222,7 @@ class XFormSerializer {
     }
 
 
-    void buildRepeatLayout(MarkupBuilder xml, RepeatQuestion question, HasQuestions form) {
+    void buildRepeatLayout(MarkupBuilder xml, RepeatQuestion question, HasQuestions page) {
 
         xml.group(id: question.binding) {
             xml.label(question.text)

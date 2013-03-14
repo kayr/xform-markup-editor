@@ -9,6 +9,21 @@ package org.openxdata.markup
  */
 class Fixtures {
 
+    static def formMultiplePageDupeQuestion = '''### study
+
+## form
+
+#> Page1
+ Age
+
+ Sex
+
+ #> Page2
+ Name
+
+ sex
+'''
+
     static def formRepeatWithAttributesOnRepeats = """### Study
 ## Form
 
@@ -19,6 +34,47 @@ repeat{ Children
   sex
 }
 """
+
+    static def formWithMultiplePage = '''### Study
+
+## Form
+
+#> BioInfo
+
+@id gender
+Sex
+>male
+>female
+
+@enableif  $gender = 'male'
+Name
+
+repeat{ Lol
+ Child name
+ Child Sex
+}
+
+#> Location
+
+@enableif $name = 'peter'
+Peters 2nd name
+
+dynamic{
+Country,District,School
+Uganda,Kampala,Macos
+Kenya,Nairobi,Machaccos
+Uganda,Kampala,Bugiroad
+Kenya,Kampala,Bugiroad
+}'''
+
+    static def formWithDupePages = '''###Study
+##Form
+#>Bioform
+  Name
+  Sex
+#>Bioform
+    Country
+'''
 
     static def formWithSkipLogic = '''### Study
 
@@ -591,7 +647,7 @@ Jjidjf
   </group>
 </xforms>"""
 
-    static def xfromWithValidationLogicXML='''<xforms>
+    static def xfromWithValidationLogicXML = '''<xforms>
   <model>
     <instance id="study_form_v1">
       <study_form_v1 id="0" name="Form" formKey="study_form_v1">
@@ -618,7 +674,7 @@ Jjidjf
   </group>
 </xforms>'''
 
-    static  def xformWithRepeatAttributesXML='''<xforms>
+    static def xformWithRepeatAttributesXML = '''<xforms>
   <model>
     <instance id="study_form_v1">
       <study_form_v1 id="0" name="Form" formKey="study_form_v1">
@@ -645,6 +701,121 @@ Jjidjf
         </input>
       </repeat>
     </group>
+  </group>
+</xforms>'''
+
+    static def formWithMultiPageXML = '''<xforms>
+  <model>
+    <instance id="study_form_v1">
+      <study_form_v1 id="0" name="Form" formKey="study_form_v1">
+        <gender />
+        <name />
+        <lol>
+          <child_name />
+          <child_sex />
+        </lol>
+        <peters_2nd_name />
+        <country />
+        <district />
+        <school />
+      </study_form_v1>
+    </instance>
+    <instance id="district">
+      <dynamiclist>
+        <item id="kampala" parent="uganda">
+          <label>Kampala</label>
+          <value>kampala</value>
+        </item>
+        <item id="nairobi" parent="kenya">
+          <label>Nairobi</label>
+          <value>nairobi</value>
+        </item>
+      </dynamiclist>
+    </instance>
+    <instance id="school">
+      <dynamiclist>
+        <item id="macos" parent="kampala">
+          <label>Macos</label>
+          <value>macos</value>
+        </item>
+        <item id="machaccos" parent="nairobi">
+          <label>Machaccos</label>
+          <value>machaccos</value>
+        </item>
+        <item id="bugiroad" parent="kampala">
+          <label>Bugiroad</label>
+          <value>bugiroad</value>
+        </item>
+      </dynamiclist>
+    </instance>
+    <bind id="gender" nodeset="/study_form_v1/gender" type="xsd:string" />
+    <bind id="name" nodeset="/study_form_v1/name" type="xsd:string" relevant="/study_form_v1/gender = 'male'" action="enable" />
+    <bind id="lol" nodeset="/study_form_v1/lol" />
+    <bind id="child_name" nodeset="/study_form_v1/lol/child_name" type="xsd:string" />
+    <bind id="child_sex" nodeset="/study_form_v1/lol/child_sex" type="xsd:string" />
+    <bind id="peters_2nd_name" nodeset="/study_form_v1/peters_2nd_name" type="xsd:string" relevant="/study_form_v1/name = 'peter'" action="enable" />
+    <bind id="country" nodeset="/study_form_v1/country" type="xsd:string" />
+    <bind id="district" nodeset="/study_form_v1/district" type="xsd:string" />
+    <bind id="school" nodeset="/study_form_v1/school" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>BioInfo</label>
+    <select1 bind="gender">
+      <label>Sex</label>
+      <item id="male">
+        <label>male</label>
+        <value>male</value>
+      </item>
+      <item id="female">
+        <label>female</label>
+        <value>female</value>
+      </item>
+    </select1>
+    <input bind="name">
+      <label>Name</label>
+    </input>
+    <group id="lol">
+      <label>Lol</label>
+      <repeat bind="lol">
+        <input bind="child_name">
+          <label>Child name</label>
+        </input>
+        <input bind="child_sex">
+          <label>Child Sex</label>
+        </input>
+      </repeat>
+    </group>
+  </group>
+  <group id="2">
+    <label>Location</label>
+    <input bind="peters_2nd_name">
+      <label>Peters 2nd name</label>
+    </input>
+    <select1 bind="country">
+      <label>Country</label>
+      <item id="uganda">
+        <label>Uganda</label>
+        <value>uganda</value>
+      </item>
+      <item id="kenya">
+        <label>Kenya</label>
+        <value>kenya</value>
+      </item>
+    </select1>
+    <select1 bind="district">
+      <label>District</label>
+      <itemset nodeset="instance('district')/item[@parent=instance('study_form_v1')/country]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+    <select1 bind="school">
+      <label>School</label>
+      <itemset nodeset="instance('school')/item[@parent=instance('study_form_v1')/district]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
   </group>
 </xforms>'''
 
