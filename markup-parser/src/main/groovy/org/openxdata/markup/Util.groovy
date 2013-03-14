@@ -122,7 +122,7 @@ class Util {
      * @return
      */
     static String getType(String bind) {
-        boolean isBool = booleanKeys.any {bind.startsWith(it)}
+        boolean isBool = booleanKeys.any {bind.startsWith(it+'_')}
         if (isBool)
             return "boolean"
 
