@@ -86,9 +86,9 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
                                 return token(TokenType.KEYWORD);
                                 }
 
-  
+
   /* labels */
-  "@id"|"###"|"##"              {
+  "@id"|"###"|"##"|"#>"         {
                                 yybegin(ID_TEXT);
                                 return token(TokenType.TYPE3);
                                 }
@@ -112,7 +112,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 }
 
 <ID_TEXT> {
-  . *                           { return token(TokenType.STRING2); }
+  . *                           { return token(TokenType.STRING); }
   {LineTerminator}              { yybegin(YYINITIAL) ; }
 }
 
