@@ -622,7 +622,7 @@ Jjidjf
       </study_form_v1>
     </instance>
     <bind id="sex" nodeset="/study_form_v1/sex" type="xsd:string" />
-    <bind id="pregnant" nodeset="/study_form_v1/pregnant" type="xsd:string" relevant="/study_form_v1/sex = 'female'" action="enable" />
+    <bind id="pregnant" nodeset="/study_form_v1/pregnant" type="xsd:boolean" relevant="/study_form_v1/sex = 'female'" action="enable" />
     <bind id="male_question" nodeset="/study_form_v1/male_question" type="xsd:string" relevant="/study_form_v1/sex = 'male'" action="show" />
   </model>
   <group id="1">

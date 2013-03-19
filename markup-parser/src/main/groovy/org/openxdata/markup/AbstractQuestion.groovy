@@ -48,11 +48,11 @@ abstract class AbstractQuestion implements IQuestion {
 
     @Override
     void setText(String text) {
-        if (!binding)
-            binding = Util.getBindName(text)
-        if (!type)
-            type = Util.getType(binding)
         this.question = text
+        if (!binding)
+            binding = Util.getBindName(getText())
+        if (!type)
+            type = Util.getType(Util.getBindName(text))
     }
 
     @Override
