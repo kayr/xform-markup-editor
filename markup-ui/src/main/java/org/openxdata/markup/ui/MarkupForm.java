@@ -54,13 +54,12 @@ public class MarkupForm extends javax.swing.JFrame {
                 menuOpen = new javax.swing.JMenuItem();
                 menuSave = new javax.swing.JMenuItem();
                 menuNew = new javax.swing.JMenuItem();
-                exitMenuItem = new javax.swing.JMenuItem();
                 jMenu1 = new javax.swing.JMenu();
                 menuSimpleSkip = new javax.swing.JMenuItem();
                 menuAdvancedSkip = new javax.swing.JMenuItem();
                 menuOxdForm = new javax.swing.JMenuItem();
 
-                setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
                 setTitle("Form MarkUp Builder");
 
                 jToolBar1.setRollover(true);
@@ -118,15 +117,6 @@ public class MarkupForm extends javax.swing.JFrame {
                 menuNew.setText("New");
                 fileMenu.add(menuNew);
 
-                exitMenuItem.setMnemonic('x');
-                exitMenuItem.setText("Exit");
-                exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                exitMenuItemActionPerformed(evt);
-                        }
-                });
-                fileMenu.add(exitMenuItem);
-
                 menuBar.add(fileMenu);
 
                 jMenu1.setText("Examples");
@@ -166,10 +156,6 @@ public class MarkupForm extends javax.swing.JFrame {
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
-
-    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-	    System.exit(0);
-    }//GEN-LAST:event_exitMenuItemActionPerformed
 
 private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateXMLActionPerformed
 // TODO add your handling code here:
@@ -254,7 +240,6 @@ private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GE
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnGenerateXML;
         private javax.swing.JButton btnShowXml;
-        private javax.swing.JMenuItem exitMenuItem;
         private javax.swing.JMenu fileMenu;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JMenu jMenu1;

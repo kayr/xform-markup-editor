@@ -1,12 +1,15 @@
 package org.openxdata.markup.ui
 
 import org.openxdata.markup.Attrib
+import org.openxdata.markup.Form
 import org.openxdata.markup.Study
 import org.openxdata.markup.Util
 import org.openxdata.markup.serializer.XFormSerializer
 
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import javax.swing.JFileChooser
 import javax.swing.JOptionPane
 import javax.swing.filechooser.FileFilter
@@ -23,7 +26,6 @@ class FormBinderPresenter {
     MarkupForm form
     javax.swing.filechooser.FileFilter xfmFilter
     File currentFile
-    //loadSample study
     def allowedAttribs
     def allowedTypes
 
@@ -78,11 +80,38 @@ class FormBinderPresenter {
         } as ActionListener)
 
 
+        form.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent evt) {
+                handleWindowCloseOperation(evt)
+            }
+        })
+
+
         allowedAttribs = Attrib.allowedAttributes.collect {'@' + it}
         allowedTypes = Attrib.types.collect {'@' + it}
+        Form.numberQuestions = true
 
         //loadSample study
         loadForm(addHeader(Resources.sampleStudy))
+    }
+
+    void handleWindowCloseOperation(WindowEvent evt) {
+
+        def text = form.txtMarkUp.text
+        if (text == null || text.isEmpty()) {
+            System.exit(0)
+        }
+
+        def option = JOptionPane.showConfirmDialog(form, "Save File?")
+
+        switch (option) {
+            case JOptionPane.CANCEL_OPTION:
+                return
+            case JOptionPane.OK_OPTION:
+                saveFile()
+            default:
+                System.exit(0)
+        }
     }
 
     private void loadForm(String markupTxt) {
