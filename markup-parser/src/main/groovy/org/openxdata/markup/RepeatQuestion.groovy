@@ -1,6 +1,9 @@
 package org.openxdata.markup
 
 import org.openxdata.markup.exception.DuplicateQuestionException
+import static org.openxdata.markup.Form.validateSkipLogic
+import static org.openxdata.markup.Form.validateValidationLogic
+import static org.openxdata.markup.Form.validateCalculation
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +37,10 @@ class RepeatQuestion extends AbstractQuestion implements HasQuestions {
         }
 
         question.setParent(this)
+
+        validateSkipLogic(question)
+        validateValidationLogic(question)
+        validateCalculation(question)
         questions << question
     }
 

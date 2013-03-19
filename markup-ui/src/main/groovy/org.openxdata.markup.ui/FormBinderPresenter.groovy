@@ -89,7 +89,6 @@ class FormBinderPresenter {
 
         allowedAttribs = Attrib.allowedAttributes.collect {'@' + it}
         allowedTypes = Attrib.types.collect {'@' + it}
-        Form.numberQuestions = true
 
         //loadSample study
         loadForm(addHeader(Resources.sampleStudy))
@@ -133,7 +132,7 @@ class FormBinderPresenter {
         trimContentInEditor()
 
         def study = getParsedStudy()
-        XFormSerializer ser = new XFormSerializer()
+        XFormSerializer ser = new XFormSerializer(numberQuestions: true)
         def studyXml = ser.toStudyXml(study)
 
         def previewFrame = XFormView.initFrame(form)

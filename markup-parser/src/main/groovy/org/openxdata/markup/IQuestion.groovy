@@ -63,5 +63,7 @@ interface IQuestion {
 
     String getCalculation()
 
+    def getQuestionIdx()
+
 
 }

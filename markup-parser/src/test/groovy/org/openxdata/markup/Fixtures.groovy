@@ -24,6 +24,33 @@ class Fixtures {
  sex
 '''
 
+    static def badSkipLogicInRepeat = '''### Study
+
+## Form
+
+Hello
+
+repeat{Give the details for grading for the last PLE exam.
+    @required
+    @id grade_class
+    @enableif $evaluation_period = 'quarter1_2012' or $evaluation_period = 'quarter1_2013'
+    Class
+      >Grade 1
+
+}'''
+
+    static def skipLogicInRepeat='''### Study
+
+## Form
+
+Hello
+
+repeat{Give the details for grading for the last PLE exam.
+    @enableif $hello = true
+    Class
+
+}'''
+
     static def formRepeatWithAttributesOnRepeats = """### Study
 ## Form
 

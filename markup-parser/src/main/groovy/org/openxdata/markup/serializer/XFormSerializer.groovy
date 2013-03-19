@@ -12,6 +12,8 @@ import org.openxdata.markup.*
  */
 class XFormSerializer {
 
+    boolean numberQuestions = false
+
     def xforms = [:]
 
     public String toStudyXml(Study study) {
@@ -72,8 +74,8 @@ class XFormSerializer {
                 }
             }
 
-            form.pages.eachWithIndex { page,idx ->
-                xml.group(id: idx+1) {
+            form.pages.eachWithIndex { page, idx ->
+                xml.group(id: idx + 1) {
                     xml.label(page.name)
                     buildQuestionsLayout(page, xml)
 
@@ -178,17 +180,19 @@ class XFormSerializer {
         def qnType = getQuestionType(question)
         if (qnType.type == 'xsd:base64Binary') {
             xml.upload(bind: question.binding, mediatype: "${qnType.format}/*") {
-                buildQuestionLabelAndHint (xml,question)
+                buildQuestionLabelAndHint(xml, question)
             }
         }
         else
             xml.input(bind: question.binding) {
-                buildQuestionLabelAndHint (xml,question)
+                buildQuestionLabelAndHint(xml, question)
             }
     }
 
-    void buildQuestionLabelAndHint(MarkupBuilder xml,IQuestion question){
-        xml.label(question.text)
+    void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
+
+        def label = numberQuestions ? "${question.questionIdx}. $question.text" : question.text
+        xml.label(label)
         if (question.comment)
             xml.hint(question.comment)
     }
@@ -197,7 +201,7 @@ class XFormSerializer {
 
         xml.select1(bind: question.binding) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
-            buildQuestionLabelAndHint (xml,question)
+            buildQuestionLabelAndHint(xml, question)
             xml.itemset(nodeset: "instance('$question.binding')/item[@parent=instance('$page.form.binding')/$question.parentQuestionId]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
@@ -210,7 +214,7 @@ class XFormSerializer {
 
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
         xml."select$selectRef"(bind: question.binding) {
-            buildQuestionLabelAndHint (xml,question)
+            buildQuestionLabelAndHint(xml, question)
             question.options.each { option ->
                 xml.item(id: option.bind) {
                     xml.label(option.text)
@@ -225,7 +229,7 @@ class XFormSerializer {
     void buildRepeatLayout(MarkupBuilder xml, RepeatQuestion question, HasQuestions page) {
 
         xml.group(id: question.binding) {
-            buildQuestionLabelAndHint (xml,question)
+            buildQuestionLabelAndHint(xml, question)
 
             xml.repeat(bind: question.binding) {
 

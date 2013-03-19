@@ -34,8 +34,6 @@ abstract class AbstractQuestion implements IQuestion {
 
     @Override
     String getText() {
-        if (Form.numberQuestions)
-            return "${getQuestionIdx()}. $question"
         return question
     }
 
@@ -49,10 +47,11 @@ abstract class AbstractQuestion implements IQuestion {
     @Override
     void setText(String text) {
         this.question = text
+        def tempBind =    Util.getBindName(text)
         if (!binding)
-            binding = Util.getBindName(getText())
+            binding = tempBind
         if (!type)
-            type = Util.getType(Util.getBindName(text))
+            type = Util.getType(tempBind)
     }
 
     @Override

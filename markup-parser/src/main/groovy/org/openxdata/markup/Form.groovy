@@ -1,6 +1,7 @@
 package org.openxdata.markup
 
 import org.openxdata.markup.exception.ValidationException
+import org.openxdata.xpath.XPathParser
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +14,6 @@ class Form implements HasQuestions {
 
     String name
     Study study
-    static numberQuestions = false
 
     List<Page> pages = []
 
@@ -31,7 +31,7 @@ class Form implements HasQuestions {
 
     void addPage(Page page) {
         def dupPage = pages.find {it.name.equalsIgnoreCase(page.name)}
-        if (dupPage!=null)
+        if (dupPage != null)
             throw new ValidationException("Duplicate pages[$page.name] found in form [$name]");
         page.setForm(this)
         pages << page
@@ -61,17 +61,71 @@ class Form implements HasQuestions {
 
     static IQuestion findQuestionWithBinding(String binding, HasQuestions hasQuestions) {
 
+        if (hasQuestions instanceof IQuestion)
+            hasQuestions = hasQuestions.parent
+
+        def dupeQuestion = findQuestion(binding, hasQuestions)
+
+        return dupeQuestion
+    }
+
+    static IQuestion findQuestion(String binding, HasQuestions hasQuestions) {
         def dupeQuestion = hasQuestions.questions.find {
+
             if (it.binding == binding)
                 return true
 
             if (it instanceof HasQuestions)
-                return findQuestionWithBinding(it.binding, it)
+                return findQuestion(binding, it)
 
             return false
-
         }
         return dupeQuestion
+    }
+
+    static void validateCalculation(IQuestion iQuestion) {
+        if (!iQuestion.calculation)
+            return
+
+        validateXpath(iQuestion.calculation, iQuestion, 'Calculation')
+    }
+
+    static void validateValidationLogic(IQuestion question) {
+
+        if (!question.validationLogic)
+            return
+
+        if (!question.message)
+            throw new ValidationException("Validation message has not been set on question [$question.text]")
+
+        validateXpath(question.validationLogic, question, 'Validation')
+
+    }
+
+    static void validateSkipLogic(IQuestion question) {
+
+        if (!question.skipLogic)
+            return
+
+        if (!question.skipAction)
+            question.skipAction = "enable"
+
+        validateXpath(question.skipLogic, question, 'Skip')
+    }
+
+    static String validateXpath(String xpath, IQuestion question, String logicType) {
+        println "Validating XPATH [$xpath]"
+        xpath = getFullBindingXPath(xpath, question, logicType)
+        println "Resolved XPATH [$xpath]"
+
+        println "Parsing XPATH for validation"
+
+        try {
+            XPathParser parser = Util.createXpathParser(xpath)
+            parser.eval()
+        } catch (Exception e) {
+            throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for \n [$question.text] \n $e.message", e)
+        }
     }
 
     public String getBinding() {

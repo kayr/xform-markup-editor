@@ -271,9 +271,9 @@ jeelopo
 
         def qn = Form.findQuestionWithBinding('age', study.forms[0])
 
-        assertEquals  '. > 5',qn.validationLogic
+        assertEquals '. > 5', qn.validationLogic
 
-        assertEquals  'valid when greater than 5',qn.message
+        assertEquals 'valid when greater than 5', qn.message
     }
 
     void testFromWithValidationLogicNoMessage() {
@@ -288,41 +288,62 @@ jeelopo
         }
     }
 
-   void testFormWithPages(){
+    void testFormWithPages() {
         def parser = createParser(Fixtures.formWithMultiplePage)
 
-       def study = parser.study();
+        def study = parser.study();
 
-       def form = study.forms[0]
+        def form = study.forms[0]
 
-       assertEquals 2,form.pages.size()
+        assertEquals 2, form.pages.size()
 
-       assertEquals 3 , form.pages[0].questions.size()
+        assertEquals 3, form.pages[0].questions.size()
 
-       assertEquals 4 , form.pages[1].questions.size()
+        assertEquals 4, form.pages[1].questions.size()
 
     }
 
-    void testFormWithDuplicatePages(){
+    void testFormWithDuplicatePages() {
         def parser = createParser(Fixtures.formWithDupePages)
 
-        try{
-             parser.study()
+        try {
+            parser.study()
             fail("Expecting duplicate page exception")
-        }   catch(ValidationException ex){
+        } catch (ValidationException ex) {
             assertTrue ex.message.startsWith("Duplicate pages")
         }
     }
 
-    void testDupeQuestionInPagedForm(){
+    void testDupeQuestionInPagedForm() {
         def parser = createParser(Fixtures.formMultiplePageDupeQuestion)
 
-        try{
+        try {
             parser.study()
             fail("Expecting duplicate question exception")
-        }catch (DuplicateQuestionException ex){
+        } catch (DuplicateQuestionException ex) {
             //this is ok
         }
+    }
+
+    void testBadSkipLogicInRepeat() {
+
+        def parser = createParser(Fixtures.badSkipLogicInRepeat)
+
+        try {
+            def study = parser.study()
+            fail("Expectiong a validation Exception")
+        } catch (ValidationException ex) {
+
+        }
+
+    }
+
+    void testSkipLogicInRepeat() {
+
+        def parser = createParser(Fixtures.skipLogicInRepeat)
+        def study = parser.study()
+
+
     }
 
     private XformParser createParser(String testString) throws IOException {
@@ -333,8 +354,6 @@ jeelopo
 
         return parser;
     }
-
-
 
 
 }
