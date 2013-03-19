@@ -20,13 +20,13 @@ class Option implements IOption {
 
     void parseBind() {
         if (option[0] == '$') {
-            def tmpBind = option.find(/[$][a-z][a-z0-9_]*/)
+            def tmpBind = option.find(/[$][a-z][a-z0-9_]*\s/)
             //make sure bind is at the beginning
-            if (option == null || option.indexOf(tmpBind) > 0)
+            if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
  An Id should start with lower case characters follow by low case characters, numbers or underscores""")
             option = option.replaceFirst(/[$][a-z][a-z0-9_]*/, '').trim()
-            bind = tmpBind - '$'
+            bind = tmpBind.trim() - '$'
         }
         else {
             bind = Util.getBindName(option)
