@@ -122,7 +122,7 @@ class FormBinderPresenter {
 
 
     private void loadSampleWithConfirmation(String markupTxt) {
-        def option = JOptionPane.showConfirmDialog(form, "Are You Sure you want to load this form?",'Confirm',YES_NO_OPTION)
+        def option = JOptionPane.showConfirmDialog(form, "Are You Sure you want to load this form?", 'Confirm', YES_NO_OPTION)
 
         if (option == JOptionPane.OK_OPTION) {
             reset()
@@ -131,7 +131,6 @@ class FormBinderPresenter {
     }
 
     void showXML() {
-        trimContentInEditor()
 
         def study = getParsedStudy()
         XFormSerializer ser = new XFormSerializer(numberQuestions: true)
@@ -148,7 +147,7 @@ class FormBinderPresenter {
 
     void newFile() {
 
-        if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(form, "Are You Sure",'Confirm',YES_NO_OPTION)) {
+        if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(form, "Are You Sure", 'Confirm', YES_NO_OPTION)) {
             return
         }
 
@@ -158,7 +157,7 @@ class FormBinderPresenter {
     }
 
     private void mayBeSaveFile() {
-        if (currentFile != null && JOptionPane.showConfirmDialog(form, "Save File First?",'Confirm',YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+        if (currentFile != null && JOptionPane.showConfirmDialog(form, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION) {
             currentFile.text = form.txtMarkUp.text
         }
     }
@@ -216,7 +215,6 @@ class FormBinderPresenter {
 
     void btnGenerateXMLActionPerformed(ActionEvent actionEvent) {
 
-        trimContentInEditor()
 
         Study study = getParsedStudy()
 
@@ -271,15 +269,13 @@ Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath ""
     }
 
     private Study getParsedStudy() {
-        def text = form.txtMarkUp.text
-        def parser = Util.createParser(text)
-        def study = parser.study()
-        study
-    }
-
-    void trimContentInEditor() {
-        def trimmedForm = form.txtMarkUp.text.trim()
-        form.txtMarkUp.read(new StringReader(trimmedForm), 'text/xform')
+        def result = Util.time("StudyParsing") {
+            def text = form.txtMarkUp.text
+            def parser = Util.createParser(text)
+            def study = parser.study()
+            return study
+        }
+        return result.value
     }
 
     def executeSafely(Closure closure) {

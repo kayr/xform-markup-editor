@@ -117,6 +117,17 @@ class Util {
 
     }
 
+    def static time(String name = "",Closure worker) {
+        println "BenchmarkStart: $name"
+        def start = System.currentTimeMillis()
+        def rt = worker.call()
+        def stop = System.currentTimeMillis()
+        def time = stop - start
+        def readableTime = TimeFormat.valueOf(time, TimeFormat.ROUND_TO_SECOND)
+        println "Completed in ${ readableTime}"
+        return [value:rt,time:time]
+    }
+
     /**
      * This was used to try and guess datatype for a specific project I was working on
      * it is far from accurate. Just left it here just in case

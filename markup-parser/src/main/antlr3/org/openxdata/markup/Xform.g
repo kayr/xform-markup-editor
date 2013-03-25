@@ -30,7 +30,7 @@ package  org.openxdata.markup;
 
 study returns [Study result = new Study()]
 scope 						{ Study scopeStudy;}
-	:	STUDYNAME 			{
+	:	NEWLINE* STUDYNAME		{
 						$study::scopeStudy = result;
 						result.setName($STUDYNAME.text);
 						}

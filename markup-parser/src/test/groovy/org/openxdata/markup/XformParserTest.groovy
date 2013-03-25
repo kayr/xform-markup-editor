@@ -343,7 +343,9 @@ jeelopo
         def parser = createParser(Fixtures.skipLogicInRepeat)
         def study = parser.study()
 
+        def rptQn = study.forms[0].questions.find {it instanceof RepeatQuestion}
 
+        assertNotNull rptQn.questions[0].skipLogic
     }
 
     private XformParser createParser(String testString) throws IOException {
