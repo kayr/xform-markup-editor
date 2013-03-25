@@ -14,6 +14,8 @@ import javax.swing.JFileChooser
 import javax.swing.JOptionPane
 import javax.swing.filechooser.FileFilter
 
+import static javax.swing.JOptionPane.YES_NO_OPTION
+
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -120,7 +122,7 @@ class FormBinderPresenter {
 
 
     private void loadSampleWithConfirmation(String markupTxt) {
-        def option = JOptionPane.showConfirmDialog(form, "Are You Sure you want to load this form?")
+        def option = JOptionPane.showConfirmDialog(form, "Are You Sure you want to load this form?",'Confirm',YES_NO_OPTION)
 
         if (option == JOptionPane.OK_OPTION) {
             reset()
@@ -146,14 +148,19 @@ class FormBinderPresenter {
 
     void newFile() {
 
-        if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(form, "Are You Sure")) {
+        if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(form, "Are You Sure",'Confirm',YES_NO_OPTION)) {
             return
         }
 
-        if (currentFile != null && JOptionPane.showConfirmDialog(form, "Save File First?") == JOptionPane.OK_OPTION) {
+        mayBeSaveFile()
+
+        reset()
+    }
+
+    private void mayBeSaveFile() {
+        if (currentFile != null && JOptionPane.showConfirmDialog(form, "Save File First?",'Confirm',YES_NO_OPTION) == JOptionPane.OK_OPTION) {
             currentFile.text = form.txtMarkUp.text
         }
-        reset()
     }
 
     private void reset() {
@@ -203,6 +210,7 @@ class FormBinderPresenter {
 
         File f = jc.getSelectedFile()
 
+        mayBeSaveFile()
         openFile(f)
     }
 
