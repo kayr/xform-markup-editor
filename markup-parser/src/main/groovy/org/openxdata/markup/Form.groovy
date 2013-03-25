@@ -114,13 +114,8 @@ class Form implements HasQuestions {
     }
 
     static String validateXpath(String xpath, IQuestion question, String logicType) {
-        println "Validating XPATH [$xpath]"
         xpath = getFullBindingXPath(xpath, question, logicType)
-        println "Resolved XPATH [$xpath]"
-
-        println "Parsing XPATH for validation"
-
-        try {
+       try {
             XPathParser parser = Util.createXpathParser(xpath)
             parser.eval()
         } catch (Exception e) {
