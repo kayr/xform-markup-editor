@@ -21,7 +21,7 @@ class XFormSerializer {
         def xml = new MarkupBuilder(printWriter)
         xml.setDoubleQuotes(true)
 
-        println "========== Converting study [$study?.name] to XML"
+        println "========== Converting study [${study?.name}] to XML"
         xml.study(name: study.name) {
 
             study.forms.each { form ->
@@ -32,7 +32,7 @@ class XFormSerializer {
                 }
             }
         }
-        println "========== Done converting study [$study?.name] ${new Date()}"
+        println "========== Done converting study [${study?.name}] ${new Date()}"
         return printWriter.toString()
     }
 

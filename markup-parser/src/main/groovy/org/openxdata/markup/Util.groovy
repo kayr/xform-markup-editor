@@ -123,7 +123,7 @@ class Util {
         def rt = worker.call()
         def stop = System.currentTimeMillis()
         def time = stop - start
-        def readableTime = TimeFormat.valueOf(time, TimeFormat.ROUND_TO_SECOND)
+        def readableTime = TimeFormat.valueOf(time, TimeFormat.ROUND_TO_MILLISECOND)
         println "Completed in ${ readableTime}"
         return [value:rt,time:time]
     }
