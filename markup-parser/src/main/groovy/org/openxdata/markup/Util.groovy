@@ -46,6 +46,8 @@ class Util {
         swapChars.put("=", "eq");
         swapChars.put("/", "slash");
         swapChars.put("\\\\", "backslash");
+        swapChars.put("\\.", "dot");
+        swapChars.put("-", "hyphen");
 
         s = s.replace("'", "");
 
