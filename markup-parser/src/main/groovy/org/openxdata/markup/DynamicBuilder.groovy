@@ -16,8 +16,6 @@ class DynamicBuilder {
 
     List<IQuestion> questions = []
 
-    List<DynamicOption> dynamicOptions = []
-
     //temp solution
     static boolean makeRequired = false
 
