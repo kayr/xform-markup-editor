@@ -367,6 +367,16 @@ jeelopo
         assertEquals xml1,xml2
     }
 
+    void testDuplicateRepeatWithChild(){
+        def parser = createParser(Fixtures.formRepeatChildDuplicates)
+
+        try{
+            def study = parser.study()
+        }   catch (DuplicateQuestionException e){
+            assertEquals e.question1.binding , e.question2.binding
+        }
+    }
+
     private XformParser createParser(String testString) throws IOException {
         CharStream stream = new ANTLRStringStream(testString);
         XformLexer lexer = new XformLexer(stream);

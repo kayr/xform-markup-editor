@@ -70,15 +70,15 @@ class Form implements HasQuestions {
     }
 
     static IQuestion findQuestion(String binding, HasQuestions hasQuestions) {
-        def dupeQuestion = hasQuestions.questions.find {
+        def dupeQuestion = hasQuestions.questions.findResult {
 
             if (it.binding == binding)
-                return true
+                return it
 
             if (it instanceof HasQuestions)
                 return findQuestion(binding, it)
 
-            return false
+            return null
         }
         return dupeQuestion
     }

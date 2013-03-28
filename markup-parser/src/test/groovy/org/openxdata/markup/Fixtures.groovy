@@ -205,6 +205,22 @@ repeat{ Repeat header
     Hello
 """
 
+    static def formRepeatChildDuplicates ='''
+### Study
+
+## form
+
+repeat{ Repeat 1
+     Hello
+    }
+
+    repeat{ Repeat 2
+    Hello
+    }
+
+
+'''
+
     static def normalPurcform = """###Snv Study
 ##Snv Form
 >>>
