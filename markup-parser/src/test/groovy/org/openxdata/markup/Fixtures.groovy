@@ -639,6 +639,54 @@ Jjidjf
 >>kkdflf
 """
 
+    static def requiredQns='''
+
+### Study
+
+## Form
+
+@required
+Hello
+
+@required
+Ait
+>ds
+
+@required
+Hello2
+>>re
+
+@required
+repeat{ Required repeat
+    Jon
+}
+
+'''
+
+   static def requiredTwo = '''
+
+### Study
+
+## Form
+
+
+*Hello
+
+
+*Ait
+>ds
+
+
+*Hello2
+>>re
+
+
+repeat{ *Required repeat
+    Jon
+}
+
+'''
+
     static def xformWithSkipLogicXML = """<xforms>
   <model>
     <instance id="study_form_v1">

@@ -46,6 +46,10 @@ abstract class AbstractQuestion implements IQuestion {
 
     @Override
     void setText(String text) {
+        if(text.startsWith('*')){
+            text = text[1..text.length()-1]
+            required = true
+        }
         this.question = text
         def tempBind =    Util.getBindName(text)
         if (!binding)

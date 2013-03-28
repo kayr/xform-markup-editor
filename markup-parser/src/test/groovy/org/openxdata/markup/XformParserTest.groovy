@@ -6,6 +6,7 @@ import org.antlr.runtime.CommonTokenStream
 
 import org.openxdata.markup.exception.DuplicateQuestionException
 import org.openxdata.markup.exception.ValidationException
+import org.openxdata.markup.serializer.XFormSerializer
 
 /**
  * Created with IntelliJ IDEA.
@@ -346,6 +347,24 @@ jeelopo
         def rptQn = study.forms[0].questions.find {it instanceof RepeatQuestion}
 
         assertNotNull rptQn.questions[0].skipLogic
+    }
+
+    void testRequiredWithStarsMatchesAnnotatedRequired(){
+        def parser = createParser(Fixtures.requiredTwo)
+
+        def parser2 =  createParser(Fixtures.requiredQns)
+
+        def study1 = parser.study()
+
+        def study2 = parser2.study()
+
+        XFormSerializer ser = new XFormSerializer()
+
+        def xml1 = ser.toStudyXml(study1)
+
+        def xml2  = ser.toStudyXml(study2)
+
+        assertEquals xml1,xml2
     }
 
     private XformParser createParser(String testString) throws IOException {
