@@ -10,15 +10,16 @@ package org.openxdata.markup.ui;
 
 import java.awt.*;
 import java.io.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 public class MsgConsole implements Runnable {
-    JTextArea displayPane;
-    BufferedReader reader;
+    private JTextArea displayPane;
+    private BufferedReader reader;
+    private PrintStream oldOut;
 
-    private MsgConsole(JTextArea displayPane, PipedOutputStream pos) {
+    private MsgConsole(JTextArea displayPane, PipedOutputStream pos, PrintStream oldOut) {
         this.displayPane = displayPane;
+        this.oldOut = oldOut;
 
         try {
             PipedInputStream pis = new PipedInputStream(pos);
@@ -32,11 +33,19 @@ public class MsgConsole implements Runnable {
 
         try {
             while ((line = reader.readLine()) != null) {
+                if (!displayPane.isShowing())
+                    displayPane.setVisible(true);
                 displayPane.append(line + "\n");
                 displayPane.setCaretPosition(displayPane.getDocument().getLength());
-            }
 
-            System.err.println("im here");
+                oldOut.println(line);
+
+                Window win = SwingUtilities.windowForComponent(displayPane);
+                if (!win.isVisible()) {
+                    win.setVisible(true);
+                }
+                win.toFront();
+            }
         } catch (IOException ioe) {
             JOptionPane.showMessageDialog(null,
                     "Error redirecting output : " + ioe.getMessage());
@@ -50,30 +59,30 @@ public class MsgConsole implements Runnable {
 
     public static void redirectOut(JTextArea displayPane) {
         PipedOutputStream pos = new PipedOutputStream();
+        PrintStream oldOut = System.out;
         System.setOut(new PrintStream(pos, true));
 
-        MsgConsole console = new MsgConsole(displayPane, pos);
+        MsgConsole console = new MsgConsole(displayPane, pos, oldOut);
         new Thread(console).start();
     }
 
     public static void redirectErr(JTextArea displayPane) {
         PipedOutputStream pos = new PipedOutputStream();
+        PrintStream oldOut = System.out;
         System.setErr(new PrintStream(pos, true));
 
-        MsgConsole console = new MsgConsole(displayPane, pos);
+        MsgConsole console = new MsgConsole(displayPane, pos, oldOut);
         new Thread(console).start();
     }
 
-    public static void init(Component comp) {
+    public static void init(Component parentComponent) {
         JTextArea textArea = new JTextArea();
         JScrollPane scrollPane = new JScrollPane(textArea);
 
         JFrame frame = new JFrame("Output");
-
-        frame.setLocation(comp.getX(),comp.getY()+comp.getHeight());
+        frame.setLocation(parentComponent.getX(), parentComponent.getY() + parentComponent.getHeight());
         frame.getContentPane().add(scrollPane);
-        frame.setSize(comp.getWidth(), 100);
-        frame.setVisible(true);
+        frame.setSize(parentComponent.getWidth(), 150);
 
         MsgConsole.redirectOutput(textArea);
 
