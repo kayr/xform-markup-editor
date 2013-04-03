@@ -1,7 +1,7 @@
 package org.openxdata.markup.ui
 
 import org.openxdata.markup.Attrib
-import org.openxdata.markup.Form
+
 import org.openxdata.markup.Study
 import org.openxdata.markup.Util
 import org.openxdata.markup.serializer.XFormSerializer
@@ -125,6 +125,7 @@ class FormBinderPresenter {
         def option = JOptionPane.showConfirmDialog(form, "Are You Sure you want to load this form?", 'Confirm', YES_NO_OPTION)
 
         if (option == JOptionPane.OK_OPTION) {
+            mayBeSaveFile()
             reset()
             loadForm(markupTxt)
         }
@@ -156,10 +157,16 @@ class FormBinderPresenter {
         reset()
     }
 
-    private void mayBeSaveFile() {
-        if (currentFile != null && JOptionPane.showConfirmDialog(form, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+    private boolean mayBeSaveFile() {
+        if (!doesFileNeedSaving() && JOptionPane.showConfirmDialog(form, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION) {
             currentFile.text = form.txtMarkUp.text
+            return true
         }
+        return false
+    }
+
+    boolean doesFileNeedSaving(){
+        return currentFile==null || currentFile.text == form.txtMarkUp.text
     }
 
     private void reset() {
@@ -261,7 +268,7 @@ Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath ""
 
         def text = f.text
 
-        form.txtMarkUp.read(new StringReader(text), 'text/xform');
+        loadForm(text)
 
         currentFile = f
         form.title = "OXD-Markup: " + currentFile.absolutePath
