@@ -296,7 +296,10 @@ $markupTxt"""
     }
 
     static main(args) {
-        new FormBinderPresenter().form.setVisible(true)
+        def form =new FormBinderPresenter()
+        form.form.setVisible(true)
+        MsgConsole.init(form.form)
+
     }
 
 }
