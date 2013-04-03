@@ -160,15 +160,15 @@ SPACE	:	('\t'|' ')*
 
 	
 EMPTYLINECOMMENT
-	:	('\t'|' ')+ NEWLINE 		{$channel=HIDDEN;}
-	|	'//' LINECONTENTS 		{$channel=HIDDEN;}
+	:	('\t'|' ')+ (NEWLINE) 		{$channel=HIDDEN;}
+	|	SPACE '//' (NEWLINE | LINECONTENTS){$channel=HIDDEN;}
 	;
 	
 LINECONTENTS 
 	:	LINEXTERS+ NEWLINE  		{setText(rl(getText()));}
 	;
 
-NEWLINE :	    (('\r')? '\n' )+ | EOF
+NEWLINE :	    ((('\r')? '\n' )+) | EOF
 	;
 	
 fragment LINEXTERS 
