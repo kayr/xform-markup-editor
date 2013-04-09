@@ -15,6 +15,9 @@ import javax.swing.JOptionPane
 import javax.swing.filechooser.FileFilter
 
 import static javax.swing.JOptionPane.YES_NO_OPTION
+import javax.swing.SwingUtilities
+
+import static javax.swing.SwingUtilities.invokeLater
 
 /**
  * Created with IntelliJ IDEA.
@@ -66,7 +69,7 @@ class FormBinderPresenter {
         } as ActionListener)
 
         form.btnShowXml.addActionListener({ActionEvent evt ->
-            executeSafely {showXML()}
+            Thread.start {executeSafely {showXML()}}
         } as ActionListener)
 
         form.menuAdvancedSkip.addActionListener({
@@ -139,10 +142,10 @@ class FormBinderPresenter {
 
         def previewFrame = XFormView.initFrame(form)
         ser.xforms.each {frmName, xml ->
-            previewFrame.addLockedEditor("Frm:$frmName.name", xml)
+            invokeLater { previewFrame.addLockedEditor("Frm:$frmName.name", xml) }
         }
 
-        previewFrame.addLockedEditor("Study:$study.name", studyXml)
+        invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml)}
 
     }
 
@@ -303,9 +306,9 @@ $markupTxt"""
     }
 
     static main(args) {
-        def form =new FormBinderPresenter()
+        def form = new FormBinderPresenter()
         form.form.setVisible(true)
-        MsgConsole.init(form.form)
+        MessageConsole.init(form.form)
 
     }
 
