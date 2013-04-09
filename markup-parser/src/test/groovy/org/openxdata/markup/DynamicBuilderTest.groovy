@@ -1,6 +1,7 @@
 package org.openxdata.markup
 
 import au.com.bytecode.opencsv.CSVWriter
+import org.openxdata.markup.exception.ValidationException
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,8 +20,8 @@ Kenya,Nairobi,Lala
 Kenya,Nairobi,Langley
 Kenya,Nairobi,Kikuyu
 """
-     //added space specifically on kampala to make sure it is trimmed
-    def csvWithSpace ="""Country,*District,School
+    //added space specifically on kampala to make sure it is trimmed
+    def csvWithSpace = """Country,*District,School
 Uganda,Kampala,Macos
 ,   Kampala   ,Bugiroad
 Kenya,Nairobi,Machaccos
@@ -42,7 +43,7 @@ Kenya,Nairobi,Kikuyu
 
     DynamicBuilder builder = new DynamicBuilder();
 
-    public void testParse(){
+    public void testParse() {
         builder.csvSrc = csv
         builder.parse()
 
@@ -55,40 +56,39 @@ Kenya,Nairobi,Kikuyu
         SingleSelectQuestion qn = builder.questions.find {it instanceof SingleSelectQuestion}
         assertEquals 'Dingle select has 2 options', 2, qn.options.size()
 
-        def districtDynInstance = builder.dynamicOptions[ Util.getBindName('District')]
+        def districtDynInstance = builder.dynamicOptions[Util.getBindName('District')]
         assertEquals 'Expecting 2 options for dirstrict', 2, districtDynInstance.size()
 
 
         def districtQn = builder.questions.find {it.text.equals('District')}
-        assertEquals Util.getBindName('District'),districtQn.binding
+        assertEquals Util.getBindName('District'), districtQn.binding
         assertTrue districtQn.required
 
-        def dynQn3 =builder.dynamicOptions[ Util.getBindName('School')]
+        def dynQn3 = builder.dynamicOptions[Util.getBindName('School')]
         assertEquals 'Expecting 3 option for school', 6, dynQn3.size()
     }
 
 
 
-    public void testAppend(){
+    public void testAppend() {
         def lines = csv.split('\n')
         lines.each {builder.appendLine(it)}
         builder.parse()
         checkQuestionContent()
     }
 
-    public void testFillUpSpace(){
+    public void testFillUpSpace() {
 
         def spaceCsv = DynamicBuilder.toStringArrayList(csvWithSpace)
 
         builder.fillUpSpace(spaceCsv)
 
-        assertEquals DynamicBuilder.toStringArrayList(csv).toString(),spaceCsv.toString()
-
+        assertEquals DynamicBuilder.toStringArrayList(csv).toString(), spaceCsv.toString()
 
 
     }
 
-    public void testDynamicInstanceBuilding(){
+    public void testDynamicInstanceBuilding() {
 
         DynamicBuilder builder = new DynamicBuilder();
 
@@ -96,20 +96,29 @@ Kenya,Nairobi,Kikuyu
 
         builder.parse()
 
-        assertEquals 2,builder.dynamicOptions.size()
-        assertEquals 0,builder.questions.size()
+        assertEquals 2, builder.dynamicOptions.size()
+        assertEquals 0, builder.questions.size()
 
         Form form = new Form("Form")
         form.addQuestion(new SingleSelectQuestion("Root"))
         builder.addQuestionsToForm(form)
 
-        assertEquals 2,form.dynamicOptions.size()
+        assertEquals 2, form.dynamicOptions.size()
 
-        assertEquals 2,form.questions[0].options.size()
+        assertEquals 2, form.questions[0].options.size()
+
+        try {
+            form = new Form("Form")
+            form.addQuestion(new SingleSelectQuestion("Blah"))
+            builder.addQuestionsToForm(form)
+            fail("Expection a not found validation exception")
+        } catch (ValidationException ex) {
+            assertTrue ex.message.contains("SingleSelect question with id [")
+        }
 
     }
 
-    public void rtestLol(){
+    public void rtestLol() {
 
         def text = new File('i:/fac.csv').text
 
@@ -122,7 +131,7 @@ Kenya,Nairobi,Kikuyu
 
         writer.writeAll(csv)
         def file2 = new File('i:/fac2.csv')
-       if(!file2.exists()) file2.createNewFile()
+        if (!file2.exists()) file2.createNewFile()
 
         file2.text = stringWriter.toString()
 

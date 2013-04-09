@@ -36,14 +36,19 @@ class DynamicBuilder {
                     form.addQuestion(it)
                 }
             } else {
-                def singleSelectQuestion = Form.findQuestionWithBinding(singleSelectQuestion, form)
-                singleSelectQuestion.options = singleSelectOptions
+                def singleSelectQuestionInstance = Form.findQuestionWithBinding(singleSelectQuestion, form)
+                if (singleSelectQuestionInstance == null)
+                    throw new ValidationException("""Error while parsing CSV. SingleSelect question with id [$singleSelectQuestion]
+could not be found in the form""")
+                    singleSelectQuestionInstance.options = singleSelectOptions
             }
 
             form.parentForm.dynamicOptions = dynamicOptions
 
         } catch (Exception e) {
-            throw new RuntimeException("Error while creating dynamic question: " + e.toString(), e)
+            if(e instanceof ValidationException)
+                throw e
+            throw new RuntimeException("Error while creating dynamic question:\n " + e.toString(), e)
         }
     }
 

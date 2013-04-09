@@ -93,7 +93,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
                                 return token(TokenType.TYPE3);
                                 }
 
- ">"                            {
+ ">"|"$>"                            {
                                 yybegin(OPTIONS);
                                 return token(TokenType.OPERATOR);
                                 }

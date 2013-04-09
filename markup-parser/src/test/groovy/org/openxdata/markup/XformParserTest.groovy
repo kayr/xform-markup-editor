@@ -137,6 +137,9 @@ jeelopo
         assertNotNull study.forms[0].questions.find {it instanceof MultiSelectQuestion}
 
         assertNotNull study.forms[0].questions.find {it instanceof RepeatQuestion}
+
+        def allQuestions = study.forms[0].allQuestions
+        assertEquals 12, allQuestions.size()
     }
 
     public void testDynamicQuestion() {
@@ -349,10 +352,10 @@ jeelopo
         assertNotNull rptQn.questions[0].skipLogic
     }
 
-    void testRequiredWithStarsMatchesAnnotatedRequired(){
+    void testRequiredWithStarsMatchesAnnotatedRequired() {
         def parser = createParser(Fixtures.requiredTwo)
 
-        def parser2 =  createParser(Fixtures.requiredQns)
+        def parser2 = createParser(Fixtures.requiredQns)
 
         def study1 = parser.study()
 
@@ -362,22 +365,22 @@ jeelopo
 
         def xml1 = ser.toStudyXml(study1)
 
-        def xml2  = ser.toStudyXml(study2)
+        def xml2 = ser.toStudyXml(study2)
 
-        assertEquals xml1,xml2
+        assertEquals xml1, xml2
     }
 
-    void testDuplicateRepeatWithChild(){
+    void testDuplicateRepeatWithChild() {
         def parser = createParser(Fixtures.formRepeatChildDuplicates)
 
-        try{
+        try {
             def study = parser.study()
-        }   catch (DuplicateQuestionException e){
-            assertEquals e.question1.binding , e.question2.binding
+        } catch (DuplicateQuestionException e) {
+            assertEquals e.question1.binding, e.question2.binding
         }
     }
 
-    void testDynamicWithInstanceVariables(){
+    void testDynamicWithInstanceVariables() {
         def form1 = Util.createParser(Fixtures.normalPurcform).study().forms[0]
 
         def form2 = Util.createParser(Fixtures.normalPurcform2).study().forms[0]
@@ -387,7 +390,7 @@ jeelopo
         def xForm1 = ser.toXForm(form1)
         def xForm2 = ser.toXForm(form2)
 
-        assertEquals xForm1,xForm2
+        assertEquals xForm1, xForm2
 
 
     }

@@ -85,6 +85,23 @@ class Form implements HasQuestions {
         return dupeQuestion
     }
 
+    List<IQuestion> getAllQuestions() {
+        def allQuestions = extractQuestion(this)
+        return allQuestions
+    }
+
+    List<IQuestion> extractQuestion(HasQuestions questions) {
+        def allQuestions = []
+        questions.questions.each {
+            allQuestions.add(it)
+            if (it instanceof RepeatQuestion) {
+                def moreQuestions = extractQuestion(it)
+                allQuestions.addAll(moreQuestions)
+            }
+        }
+        return allQuestions
+    }
+
     static void validateCalculation(IQuestion iQuestion) {
         if (!iQuestion.calculation)
             return

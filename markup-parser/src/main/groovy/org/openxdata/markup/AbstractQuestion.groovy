@@ -89,4 +89,8 @@ abstract class AbstractQuestion implements IQuestion {
         }
         return form
     }
+
+    String toString(){
+        return text
+    }
 }

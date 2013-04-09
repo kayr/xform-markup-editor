@@ -156,7 +156,7 @@ class XFormSerializer {
 
 
     void buildDynamicModel(MarkupBuilder xml, Form form) {
-        form.questions.each { question ->
+        form.allQuestions.each { question ->
             if (!(question instanceof DynamicQuestion))
                 return
 
@@ -197,12 +197,12 @@ class XFormSerializer {
             xml.hint(question.comment)
     }
 
-    void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, Page page) {
+    void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, HasQuestions page) {
 
         xml.select1(bind: question.binding) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
-            xml.itemset(nodeset: "instance('$question.binding')/item[@parent=instance('$page.form.binding')/$question.parentQuestionId]") {
+            xml.itemset(nodeset: "instance('$question.binding')/item[@parent=instance('$page.parentForm.binding')/$question.parentQuestionId]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
             }
