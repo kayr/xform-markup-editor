@@ -15,7 +15,7 @@ class DynamicBuilder {
     def csvSrc = "";
 
     List<IQuestion> questions = []
-    Map<String,List<DynamicOption>> dynamicOptions = [:]
+    Map<String, List<DynamicOption>> dynamicOptions = [:]
 
 
     public void appendLine(String line) {
@@ -39,14 +39,7 @@ class DynamicBuilder {
     }
 
     public void parse() {
-        def csv = toStringArrayList(csvSrc)
-
-        csv = fillUpSpace(csv)
-
-        StringWriter str = new StringWriter()
-        def csvWriter = new CSVWriter(str)
-        csvWriter.writeAll(csv)
-        csvSrc = str.toString()
+        List<String[]> csv = parseCsv()
 
         def singleSelectCol = getValuesForColumn(csv, 0).unique {Util.getBindName(it)}
 
@@ -64,28 +57,45 @@ class DynamicBuilder {
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
             qn.dynamicInstanceId = qn.binding
             qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
-            dynamicOptions[qn.binding] = []
-
-            def visitedChildren = new HashSet()
-
-            csv.eachWithIndex { csvRow, csvRowIdx ->
-                if (csvRowIdx == 0) return
-
-                def childName = csvRow[headerIdx]
-                def childBind = Util.getBindName(childName)
-
-                def parent = Util.getBindName(csvRow[headerIdx - 1])
-                def option = new DynamicOption(child: childName, parent: parent)
-                if (visitedChildren.contains(childBind)) return
-
-                dynamicOptions[qn.binding] << option
-                visitedChildren.add(childBind)
-
-            }
-
             questions << qn
+
+
+            processForHeader(headerIdx, qn.binding, csv)
+
+
         }
 
+    }
+
+    private void processForHeader(Integer headerIdx, String binding, List<String> csv) {
+        def visitedChildren = new HashSet()
+        dynamicOptions[binding] = []
+        csv.eachWithIndex { csvRow, csvRowIdx ->
+
+            if (csvRowIdx == 0) return
+
+            def childName = csvRow[headerIdx]
+            def childBind = Util.getBindName(childName)
+            def parent = Util.getBindName(csvRow[headerIdx - 1])
+
+            if (visitedChildren.contains(childBind)) return
+
+            def option = new DynamicOption(child: childName, parent: parent)
+            dynamicOptions[binding] << option
+            visitedChildren.add(childBind)
+        }
+    }
+
+    private List<String[]> parseCsv() {
+        def csv = toStringArrayList(csvSrc)
+
+        csv = fillUpSpace(csv)
+
+        StringWriter str = new StringWriter()
+        def csvWriter = new CSVWriter(str)
+        csvWriter.writeAll(csv)
+        csvSrc = str.toString()
+        csv
     }
 
     List<String[]> fillUpSpace(List<String[]> strings) {
