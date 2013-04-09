@@ -46,14 +46,16 @@ Kenya,Nairobi,Machaccos
         SingleSelectQuestion qn = builder.questions.find {it instanceof SingleSelectQuestion}
         assertEquals 'Dingle select has 2 options', 2, qn.options.size()
 
-        DynamicQuestion districtQn = builder.questions.find {it.text.equals('District')}
-        assertEquals 'Expecting 2 options for dirstrict', 2, districtQn.options.size()
+        def districtDynInstance = builder.dynamicOptions[ Util.getBindName('District')]
+        assertEquals 'Expecting 2 options for dirstrict', 2, districtDynInstance.size()
 
+
+        def districtQn = builder.questions.find {it.text.equals('District')}
         assertEquals Util.getBindName('District'),districtQn.binding
         assertTrue districtQn.required
 
-        DynamicQuestion dynQn3 = builder.questions.find {it.text.equals('School')}
-        assertEquals 'Expecting 3 option for school', 6, dynQn3.options.size()
+        def dynQn3 =builder.dynamicOptions[ Util.getBindName('School')]
+        assertEquals 'Expecting 3 option for school', 6, dynQn3.size()
     }
 
 

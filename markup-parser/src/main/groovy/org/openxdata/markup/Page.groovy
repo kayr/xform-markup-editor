@@ -52,4 +52,9 @@ class Page implements HasQuestions {
     String getFullBinding() {
         return null
     }
+
+    @Override
+    Form getParentForm() {
+        return form
+    }
 }

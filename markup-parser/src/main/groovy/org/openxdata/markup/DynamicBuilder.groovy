@@ -15,6 +15,7 @@ class DynamicBuilder {
     def csvSrc = "";
 
     List<IQuestion> questions = []
+    Map<String,List<DynamicOption>> dynamicOptions = [:]
 
 
     public void appendLine(String line) {
@@ -29,6 +30,9 @@ class DynamicBuilder {
             questions.each {
                 form.addQuestion(it)
             }
+
+            form.parentForm.dynamicOptions = dynamicOptions
+
         } catch (Exception e) {
             throw new RuntimeException("Error while creating dynamic question: " + e.toString(), e)
         }
@@ -58,7 +62,9 @@ class DynamicBuilder {
                 return
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
+            qn.dynamicInstanceId = qn.binding
             qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
+            dynamicOptions[qn.binding] = []
 
             def visitedChildren = new HashSet()
 
@@ -71,7 +77,8 @@ class DynamicBuilder {
                 def parent = Util.getBindName(csvRow[headerIdx - 1])
                 def option = new DynamicOption(child: childName, parent: parent)
                 if (visitedChildren.contains(childBind)) return
-                qn.options.add(option)
+
+                dynamicOptions[qn.binding] << option
                 visitedChildren.add(childBind)
 
             }

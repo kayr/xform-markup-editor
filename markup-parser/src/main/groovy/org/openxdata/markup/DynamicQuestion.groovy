@@ -9,7 +9,7 @@ package org.openxdata.markup
  */
 class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
 
-    String instanceId
+    String dynamicInstanceId
     String parentQuestionId
 
     DynamicQuestion(String question) {

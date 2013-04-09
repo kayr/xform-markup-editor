@@ -749,7 +749,7 @@ repeat{ *Required repeat
     </instance>
     <bind id="age" nodeset="/study_form_v1/age" type="xsd:string" constraint=". &gt; 5" message="valid when greater than 5" />
     <bind id="age2" nodeset="/study_form_v1/age2" type="xsd:string" />
-    <bind id="average" nodeset="/study_form_v1/average" type="xsd:decimal" calculate="(/study_form_v1/age + age2) div 2" />
+    <bind id="average" nodeset="/study_form_v1/average" type="xsd:string" calculate="(/study_form_v1/age + age2) div 2" />
   </model>
   <group id="1">
     <label>Page1</label>

@@ -133,4 +133,9 @@ class Form implements HasQuestions {
     String getFullBinding() {
         return '/' + binding
     }
+
+    @Override
+    Form getParentForm() {
+        return this
+    }
 }
