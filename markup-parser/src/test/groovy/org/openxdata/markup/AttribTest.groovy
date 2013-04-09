@@ -13,6 +13,7 @@ class AttribTest extends GroovyTestCase {
 
     TextQuestion qn = new TextQuestion("Hello")
     SingleSelectQuestion sn = new SingleSelectQuestion("Other")
+    DynamicQuestion dn = new DynamicQuestion("Dynamic")
 
     void testAddAttribute() {
 
@@ -53,6 +54,20 @@ class AttribTest extends GroovyTestCase {
         }   catch (Exception ex){
                  assertTrue ex instanceof InvalidAttributeException
         }
+
+        try{
+            Attrib.addAttribute(sn,'parent blah_blah')
+            Attrib.addAttribute(qn,'parent blah_blah')
+            Attrib.addAttribute(dn,'parent blah blah')
+            fail('Expecting an exception here')
+        }   catch (InvalidAttributeException ex){
+
+        }
+
+        Attrib.addAttribute(dn,'parent blah_blah')
+        assertEquals 'blah_blah',dn.parentQuestionId
+
+
     }
 
     void testSetQuestionAttribute() {

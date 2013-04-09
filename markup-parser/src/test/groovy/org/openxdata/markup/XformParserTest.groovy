@@ -377,6 +377,21 @@ jeelopo
         }
     }
 
+    void testDynamicWithInstanceVariables(){
+        def form1 = Util.createParser(Fixtures.normalPurcform).study().forms[0]
+
+        def form2 = Util.createParser(Fixtures.normalPurcform2).study().forms[0]
+
+        XFormSerializer ser = new XFormSerializer()
+
+        def xForm1 = ser.toXForm(form1)
+        def xForm2 = ser.toXForm(form2)
+
+        assertEquals xForm1,xForm2
+
+
+    }
+
     private XformParser createParser(String testString) throws IOException {
         CharStream stream = new ANTLRStringStream(testString);
         XformLexer lexer = new XformLexer(stream);

@@ -29,6 +29,15 @@ Kenya,Nairobi,Machaccos
 ,,Kikuyu
 """
 
+    def dynInstance = '''$root,district,school
+Uganda,Kampala,Macos
+Uganda,Kampala,Bugiroad
+Kenya,Nairobi,Machaccos
+Kenya,Nairobi,Lala
+Kenya,Nairobi,Langley
+Kenya,Nairobi,Kikuyu
+'''
+
 
 
     DynamicBuilder builder = new DynamicBuilder();
@@ -76,6 +85,27 @@ Kenya,Nairobi,Machaccos
         assertEquals DynamicBuilder.toStringArrayList(csv).toString(),spaceCsv.toString()
 
 
+
+    }
+
+    public void testDynamicInstanceBuilding(){
+
+        DynamicBuilder builder = new DynamicBuilder();
+
+        builder.csvSrc = dynInstance
+
+        builder.parse()
+
+        assertEquals 2,builder.dynamicOptions.size()
+        assertEquals 0,builder.questions.size()
+
+        Form form = new Form("Form")
+        form.addQuestion(new SingleSelectQuestion("Root"))
+        builder.addQuestionsToForm(form)
+
+        assertEquals 2,form.dynamicOptions.size()
+
+        assertEquals 2,form.questions[0].options.size()
 
     }
 

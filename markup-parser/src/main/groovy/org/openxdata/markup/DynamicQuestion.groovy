@@ -12,6 +12,8 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
     String dynamicInstanceId
     String parentQuestionId
 
+    DynamicQuestion() {}
+
     DynamicQuestion(String question) {
         super(question)
     }
@@ -26,7 +28,6 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
     }
 
     List<IOption> getOptions() {
-       return parentForm.dynamicOptions."${binding}"
-        //return options
+        return parentForm.dynamicOptions."${binding}"
     }
 }

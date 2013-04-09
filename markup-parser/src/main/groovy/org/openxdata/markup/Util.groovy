@@ -5,6 +5,7 @@ import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonTokenStream
 import org.openxdata.xpath.XPathLexer
 import org.openxdata.xpath.XPathParser
+import org.openxdata.markup.exception.InvalidAttributeException
 
 /**
  * Created with IntelliJ IDEA.
@@ -161,6 +162,12 @@ class Util {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         XPathParser parser = new XPathParser(tokens);
         return parser;
+    }
+
+    public static void validateId(String id) {
+        if (!(id ==~ /[a-z][a-z0-9_]*/))
+            throw new InvalidAttributeException("""You have an invalid variable $id .
+Attributes should start with a small letter followed by small letters and underscores""")
     }
 
 

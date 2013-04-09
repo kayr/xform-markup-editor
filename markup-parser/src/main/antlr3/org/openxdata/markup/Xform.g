@@ -51,6 +51,7 @@ scope						{Form scopeForm;}
 		|txt = txtQn			{rv.addQuestion(txt);}
 		|single = singleSelQn		{rv.addQuestion(single);}
 		|multi = multipleSelQn		{rv.addQuestion(multi);}
+		|dynInstance = dynamicQnInstance{rv.addQuestion(dynInstance);}
 		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
 		)+
 		|(pg = page)+
@@ -70,6 +71,7 @@ page returns [Page rv = new Page()]
 		|txt = txtQn			{rv.addQuestion(txt);}
 		|single = singleSelQn		{rv.addQuestion(single);}
 		|multi = multipleSelQn		{rv.addQuestion(multi);}
+		|dynInstance = dynamicQnInstance{rv.addQuestion(dynInstance);}
 		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}	
 		)+		
 	;
@@ -87,6 +89,7 @@ repeatQn returns [RepeatQuestion rv = new RepeatQuestion()]
 	|txt = txtQn				{rv.addQuestion(txt);}
 	|single = singleSelQn			{rv.addQuestion(single);}
 	|multi = multipleSelQn			{rv.addQuestion(multi);}
+	|dynInstance = dynamicQnInstance	{rv.addQuestion(dynInstance);}
 	|dynamic = dynamicQn			{dynamic.addQuestionsToForm(rv);}
 	)+ (ENDREPEATMARKER|LEFTBRACE)
 	;
@@ -101,6 +104,13 @@ singleSelQn returns [SingleSelectQuestion rv = new SingleSelectQuestion() ]
 	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
 		LINECONTENTS 			{rv.setText($LINECONTENTS.text);}
 		(SINGLEOPTION			{rv.getOptions().add(new Option($SINGLEOPTION.text));})+
+					
+	;
+	
+dynamicQnInstance returns [DynamicQuestion rv = new DynamicQuestion() ]
+	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
+		LINECONTENTS 			{rv.setText($LINECONTENTS.text);}
+		DYNAMICOPTION			{rv.setDynamicInstanceId($DYNAMICOPTION.text);}
 					
 	;
 	
@@ -149,6 +159,10 @@ ENDREPEATMARKER
 	
 MULTIPLEOPTION	
 	:	SPACE '>>' LINECONTENTS 	{setText(rl($LINECONTENTS.text));}
+	;
+	
+DYNAMICOPTION	
+	:	SPACE '$>' LINECONTENTS 	{setText(rl($LINECONTENTS.text));}
 	;
 
 SINGLEOPTION	

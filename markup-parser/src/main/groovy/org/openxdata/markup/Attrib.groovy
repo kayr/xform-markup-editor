@@ -11,11 +11,11 @@ import org.openxdata.markup.exception.InvalidAttributeException
  */
 class Attrib {
 
-    static def types = ['number', 'decimal', 'date', 'boolean', 'time', 'dateTime', 'picture', 'video', 'audio',
+    static def types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
             'picture', 'gps', 'barcode']
 
     static def allowedAttributes = ['readonly', 'required', 'id', 'invisible', 'comment', 'skiplogic', 'skipaction',
-            'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate']
+            'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent']
 
 
     static void addAttribute(IQuestion question, String attribute) {
@@ -24,9 +24,12 @@ class Attrib {
 
         def param = lowCaseAttrib.length() == attribute.length() ? "" : (attribute[lowCaseAttrib.length()..attribute.length() - 1]).trim()
 
-        if (!(question instanceof TextQuestion) && types.contains(lowCaseAttrib)) {
+        if (!(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
+                (!(question instanceof DynamicQuestion) && lowCaseAttrib == 'parent')) {
             throw new InvalidAttributeException("Cannot set datatype $attribute on a ${question.class.simpleName}")
         }
+
+
 
         if (types.contains(lowCaseAttrib)) {
             question.type = attribute
@@ -55,11 +58,8 @@ Supported attributes include $types \n$allowedAttributes""")
                 break
             case 'id':
                 param = param.toLowerCase()
-                if (param ==~ /[a-z][a-z0-9_]*/)
-                    question.binding = param
-                else
-                    throw new InvalidAttributeException("""You have an invalid variable $attribute .
-Attributes should start with a small letter followed by small letters and underscores""")
+                Util.validateId(param)
+                question.binding = param
                 break
             case 'hideif':
             case 'showif':
@@ -83,6 +83,10 @@ Attributes should start with a small letter followed by small letters and unders
 
             case 'calculate':
                 question.calculation = param
+                break
+            case 'parent':
+                Util.validateId(param)
+                question.parentQuestionId = param
                 break
         }
     }

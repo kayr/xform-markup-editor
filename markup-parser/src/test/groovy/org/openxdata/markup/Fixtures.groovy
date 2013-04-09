@@ -258,6 +258,54 @@ Video
 jeelopo
 """
 
+    static def normalPurcform2 = '''###Snv Study
+##Snv Form
+
+@id country
+Country
+>null
+
+@parent country
+*District
+$>district
+
+@parent district
+School
+$>school
+
+How are you
+what is name
+
+What is sex
+>Male
+>female
+
+Select your diseases
+>>AIDS
+>>TB
+>>Whooping cough
+
+>>>>Repeat Question header
+rpt question 1
+>sdsd
+rpt question 2
+>>dsksd
+>>>>
+
+@video
+Video
+
+>>>
+$country,district,school
+Uganda,Kampala,Macos
+Kenya,Nairobi,Machaccos
+Uganda,Kampala,Bugiroad
+Kenya,Kampala,Bugiroad
+>>>
+##form2
+jeelopo
+'''
+
     static def expectedXForm = '''<xforms>
   <model>
     <instance id="snv_study_snv_form_v1">

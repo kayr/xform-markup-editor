@@ -2,6 +2,7 @@ package org.openxdata.markup
 
 import au.com.bytecode.opencsv.CSVReader
 import au.com.bytecode.opencsv.CSVWriter
+import org.openxdata.markup.exception.ValidationException
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,9 +14,12 @@ import au.com.bytecode.opencsv.CSVWriter
 class DynamicBuilder {
 
     def csvSrc = "";
+    List<List<String>> parsedCsv
 
     List<IQuestion> questions = []
     Map<String, List<DynamicOption>> dynamicOptions = [:]
+    String singleSelectQuestion
+    def singleSelectOptions = []
 
 
     public void appendLine(String line) {
@@ -27,8 +31,13 @@ class DynamicBuilder {
     public void addQuestionsToForm(HasQuestions form) {
         try {
             parse()
-            questions.each {
-                form.addQuestion(it)
+            if (getSingleSelectVariable() == null) {
+                questions.each {
+                    form.addQuestion(it)
+                }
+            } else {
+                def singleSelectQuestion = Form.findQuestionWithBinding(singleSelectQuestion, form)
+                singleSelectQuestion.options = singleSelectOptions
             }
 
             form.parentForm.dynamicOptions = dynamicOptions
@@ -42,47 +51,66 @@ class DynamicBuilder {
         List<String[]> csv = parseCsv()
 
         def singleSelectCol = getValuesForColumn(csv, 0).unique {Util.getBindName(it)}
-
-        def singleSelQuestion = makeSingleSelectFromList(singleSelectCol)
-
-        questions << singleSelQuestion
+        def singleSelVar = getSingleSelectVariable()
+        if (singleSelVar == null) {
+            def singleSelQuestion = makeSingleSelectFromList(singleSelectCol)
+            questions << singleSelQuestion
+        } else {
+            this.singleSelectQuestion = singleSelVar
+            singleSelectCol.remove(0)
+            singleSelectOptions = singleSelectCol.collect {return new Option(it)}
+        }
 
         def headers = csv[0]
 
-        headers.eachWithIndex {csvHeader, headerIdx ->
-
-            if (headerIdx == 0)
-                return
+        for (int headerIdx = 1; headerIdx < headers.length; headerIdx++) {
+            def csvHeader = headers[headerIdx]
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
-            qn.dynamicInstanceId = qn.binding
-            qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
-            questions << qn
+            if (getSingleSelectVariable() == null) {
+                qn.dynamicInstanceId = qn.binding
+                qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
+                questions << qn
+            } else {
+                validateVariable(qn.binding, qn.text)
+            }
 
-
-            processForHeader(headerIdx, qn.binding, csv)
-
+            processForHeader(headerIdx, qn.binding)
 
         }
 
     }
 
-    private void processForHeader(Integer headerIdx, String binding, List<String> csv) {
+    private void processForHeader(Integer headerIdx, String dynamicBinding) {
         def visitedChildren = new HashSet()
-        dynamicOptions[binding] = []
-        csv.eachWithIndex { csvRow, csvRowIdx ->
+        dynamicOptions[dynamicBinding] = []
+        for (int csvRowIdx = 1; csvRowIdx < parsedCsv.size(); csvRowIdx++) {
 
-            if (csvRowIdx == 0) return
+            def csvRow = parsedCsv[csvRowIdx]
 
             def childName = csvRow[headerIdx]
             def childBind = Util.getBindName(childName)
             def parent = Util.getBindName(csvRow[headerIdx - 1])
 
-            if (visitedChildren.contains(childBind)) return
+            if (visitedChildren.contains(childBind)) continue
 
             def option = new DynamicOption(child: childName, parent: parent)
-            dynamicOptions[binding] << option
+            dynamicOptions[dynamicBinding] << option
             visitedChildren.add(childBind)
+        }
+    }
+
+    private String getSingleSelectVariable() {
+        def topColumn = parsedCsv[0][0]
+        def question = topColumn.find(/[$][a-z][a-z0-9_]*/)
+        validateVariable(question, topColumn)
+        return question == null ? question : question - '$'
+    }
+
+    private void validateVariable(String variable, parentVariable) {
+        if (variable != null && variable != parentVariable) {
+            throw new ValidationException("""Invalid Variable in CSV [${parentVariable}]
+ An Id should start with lower case characters follow by low case characters, numbers or underscores""")
         }
     }
 
@@ -95,7 +123,8 @@ class DynamicBuilder {
         def csvWriter = new CSVWriter(str)
         csvWriter.writeAll(csv)
         csvSrc = str.toString()
-        csv
+        parsedCsv = csv
+        return parsedCsv
     }
 
     List<String[]> fillUpSpace(List<String[]> strings) {
