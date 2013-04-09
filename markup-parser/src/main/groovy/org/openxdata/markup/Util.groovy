@@ -117,7 +117,7 @@ class Util {
 
     }
 
-    def static time(String name = "",Closure worker) {
+    def static time(String name = "", Closure worker) {
         println "BenchmarkStart: $name"
         def start = System.currentTimeMillis()
         def rt = worker.call()
@@ -125,7 +125,7 @@ class Util {
         def time = stop - start
         def readableTime = TimeFormat.valueOf(time, TimeFormat.ROUND_TO_MILLISECOND)
         println "Completed in ${ readableTime}"
-        return [value:rt,time:time]
+        return [value: rt, time: time]
     }
 
     /**
@@ -135,21 +135,14 @@ class Util {
      * @return
      */
     static String getType(String bind) {
-        boolean isBool = booleanKeys.any {bind.startsWith(it+'_')}
+        boolean isBool = booleanKeys.any {bind.startsWith(it + '_')}
         if (isBool)
             return "boolean"
 
-        boolean isNumber = numbers.any {bind.contains(it)}
-        if (isNumber)
-            return "int"
-
-        boolean isDecimal = decimals.any {bind.contains(it)}
-        if (isDecimal)
-            return "decimal"
-
-        boolean isDate = dates.any {bind.contains(it)}
+        boolean isDate = dates.any {bind.startsWith(it + '_')}
         if (isDate)
             return "date"
+
         return "string"
     }
 
@@ -178,37 +171,6 @@ class Util {
                         does
                         are
                    """.split(/\s+/)
-
-    def static numbers = """number
-                        _enrollment
-                        total
-                        boys_in
-                        girls_in
-                        days
-                        no.
-                        stances
-        """.split(/\s+/)
-
-    def static decimals = """_number
-                        _kg
-                        _size_
-                        _estimation
-                        estimate
-                        _acre
-                        average
-                        _size
-                        _enrollment
-                        _rate
-                        capacity
-                        distance
-                        total
-                        boys_in
-                        girls_in
-                        percentage
-                        percent
-                        volume
-                        days
-        """.split(/\s+/)
 
     def static dates = """period
                   date
