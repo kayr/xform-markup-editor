@@ -89,8 +89,8 @@ class XFormSerializer {
     }
 
     private void checkBindLength(String bind) {
-        if (bind.length() > 64)
-            println "########WARNING!!!##########\n Question: $bind is too long"
+        if (bind.length() > 63)
+            System.err.println "Binding: [$bind] is too long"
     }
 
     private void addBindNode(MarkupBuilder xml, IQuestion question) {
