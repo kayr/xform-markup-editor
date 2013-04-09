@@ -224,7 +224,7 @@ repeat{ Repeat 1
     static def normalPurcform = """###Snv Study
 ##Snv Form
 >>>
-Country,District,School
+Country,*District,School
 Uganda,Kampala,Macos
 Kenya,Nairobi,Machaccos
 Uganda,Kampala,Bugiroad
@@ -305,7 +305,7 @@ jeelopo
       </dynamiclist>
     </instance>
     <bind id="country" nodeset="/snv_study_snv_form_v1/country" type="xsd:string" />
-    <bind id="district" nodeset="/snv_study_snv_form_v1/district" type="xsd:string" />
+    <bind id="district" nodeset="/snv_study_snv_form_v1/district" type="xsd:string" required="true()" />
     <bind id="school" nodeset="/snv_study_snv_form_v1/school" type="xsd:string" />
     <bind id="how_are_you" nodeset="/snv_study_snv_form_v1/how_are_you" type="xsd:string" />
     <bind id="what_is_name" nodeset="/snv_study_snv_form_v1/what_is_name" type="xsd:string" />
@@ -450,7 +450,7 @@ jeelopo
       &lt;/dynamiclist&gt;
     &lt;/instance&gt;
     &lt;bind id="country" nodeset="/snv_study_snv_form_v1/country" type="xsd:string" /&gt;
-    &lt;bind id="district" nodeset="/snv_study_snv_form_v1/district" type="xsd:string" /&gt;
+    &lt;bind id="district" nodeset="/snv_study_snv_form_v1/district" type="xsd:string" required="true()" /&gt;
     &lt;bind id="school" nodeset="/snv_study_snv_form_v1/school" type="xsd:string" /&gt;
     &lt;bind id="how_are_you" nodeset="/snv_study_snv_form_v1/how_are_you" type="xsd:string" /&gt;
     &lt;bind id="what_is_name" nodeset="/snv_study_snv_form_v1/what_is_name" type="xsd:string" /&gt;

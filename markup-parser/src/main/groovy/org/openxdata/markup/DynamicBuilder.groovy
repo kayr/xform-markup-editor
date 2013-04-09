@@ -16,8 +16,6 @@ class DynamicBuilder {
 
     List<IQuestion> questions = []
 
-    //temp solution
-    static boolean makeRequired = false
 
     public void appendLine(String line) {
         line = line << "\n"
@@ -29,7 +27,6 @@ class DynamicBuilder {
         try {
             parse()
             questions.each {
-                it.required = makeRequired
                 form.addQuestion(it)
             }
         } catch (Exception e) {
@@ -61,7 +58,7 @@ class DynamicBuilder {
                 return
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
-            qn.parentQuestionId = Util.getBindName(headers[headerIdx - 1])  //set previous header column as the parent of the current one.
+            qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
 
             def visitedChildren = new HashSet()
 
@@ -90,8 +87,8 @@ class DynamicBuilder {
             row.eachWithIndex {cellValue, cellIdx ->
                 if (cellValue.isEmpty()) {
                     strings[rowIdx][cellIdx] = strings[rowIdx - 1][cellIdx]
-                }else{
-                     strings[rowIdx][cellIdx] =  strings[rowIdx][cellIdx].trim()
+                } else {
+                    strings[rowIdx][cellIdx] = strings[rowIdx][cellIdx].trim()
                 }
             }
         }
