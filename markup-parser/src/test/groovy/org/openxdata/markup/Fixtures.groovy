@@ -256,7 +256,9 @@ Video
 
 ##form2
 jeelopo
-"""
+
+//Deliberately put space here
+    """
 
     static def normalPurcform2 = '''###Snv Study
 ##Snv Form

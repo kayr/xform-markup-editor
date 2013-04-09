@@ -35,6 +35,7 @@ scope 						{ Study scopeStudy;}
 						result.setName($STUDYNAME.text);
 						}
 		(frm = form			{result.addForm(frm);})+
+		SPACE*
 	;
 
 form returns [Form rv]
