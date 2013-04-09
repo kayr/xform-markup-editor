@@ -17,6 +17,8 @@ class Form implements HasQuestions {
 
     List<Page> pages = []
 
+    Map<String, List<DynamicOption>> dynamicOptions = [:]
+
     Form(String name) {
         this.name = name
     }
@@ -115,7 +117,7 @@ class Form implements HasQuestions {
 
     static String validateXpath(String xpath, IQuestion question, String logicType) {
         xpath = getFullBindingXPath(xpath, question, logicType)
-       try {
+        try {
             XPathParser parser = Util.createXpathParser(xpath)
             parser.eval()
         } catch (Exception e) {

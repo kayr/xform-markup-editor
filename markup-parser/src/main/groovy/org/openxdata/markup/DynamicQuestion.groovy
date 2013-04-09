@@ -9,7 +9,7 @@ package org.openxdata.markup
  */
 class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
 
-    List<DynamicOption> options = []
+    String instanceId
     String parentQuestionId
 
     DynamicQuestion(String question) {
@@ -26,6 +26,7 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
     }
 
     List<IOption> getOptions() {
-        return options
+       return parentForm.dynamicOptions."${binding}"
+        //return options
     }
 }

@@ -81,4 +81,12 @@ abstract class AbstractQuestion implements IQuestion {
     HasQuestions getParent() {
         return hasQuestions
     }
+
+    Form getParentForm(){
+        def form = hasQuestions
+        while (!(form instanceof Form)){
+               form = hasQuestions.parent
+        }
+        return form
+    }
 }
