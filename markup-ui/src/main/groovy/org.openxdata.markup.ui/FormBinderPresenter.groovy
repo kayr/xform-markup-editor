@@ -225,7 +225,7 @@ class FormBinderPresenter {
 
         Study study = getParsedStudy()
 
-        XFormSerializer ser = new XFormSerializer()
+        XFormSerializer ser = new XFormSerializer(numberQuestions: true)
         def studyXML = ser.toStudyXml(study)
 
         JFileChooser fc = new JFileChooser()
