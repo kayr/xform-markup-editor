@@ -89,7 +89,7 @@ Europe,\t    Netherlands,Another Netherlands
 }
 '''
 
-    static def simpleSkip= '''### Markup Example Study
+    static def simpleSkip = '''### Markup Example Study
 
 
 ## Simple Skip Logic form
@@ -160,7 +160,7 @@ Score History
 Total score
 '''
 
-    static def advanceSkip='''//This form was used to demostrate the new Evaluator developed by Brent
+    static def advanceSkip = '''//This form was used to demostrate the new Evaluator developed by Brent
 //NOTE: THIS FORM CAN CURRENTLY RUN ON THE MFORMS CLIENTS 2.0 UPWARDS
 ### Advanced Skiplogic Study
 
@@ -264,7 +264,7 @@ Has armpain
 Seen Cardioligist
 '''
 
-    static def oxdSampleForm='''### Example study2
+    static def oxdSampleForm = '''### Example study2
 
 ## Example form2
 

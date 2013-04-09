@@ -168,8 +168,8 @@ class FormBinderPresenter {
         return false
     }
 
-    boolean doesFileNeedSaving(){
-        return currentFile==null || currentFile.text == form.txtMarkUp.text
+    boolean doesFileNeedSaving() {
+        return currentFile == null || currentFile.text == form.txtMarkUp.text
     }
 
     private void reset() {

@@ -226,8 +226,8 @@ public class MessageConsole {
         frame.setSize(parentComponent.getWidth(), 150);
 
         MessageConsole con = new MessageConsole(textArea);
-        con.redirectOut(Color.black,System.out);
-        con.redirectErr(Color.red,System.err);
+        con.redirectOut(Color.black, System.out);
+        con.redirectErr(Color.red, System.err);
 
     }
 }
