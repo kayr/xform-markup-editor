@@ -19,11 +19,9 @@ class Attrib {
 
 
     static void addAttribute(IQuestion question, String attribute) {
-        attribute = attribute.trim().replaceAll(/\s+/, ' ')
-        def lowCaseAttrib = attribute.toLowerCase().split(/\s+/)[0]
-
-        def param = lowCaseAttrib.length() == attribute.length() ? "" : (attribute[lowCaseAttrib.length()..attribute.length() - 1]).trim()
-
+        def params = extractAttribAndParam(attribute)
+        def param = params.param
+        def lowCaseAttrib = params.attrib
         if (!(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
                 (!(question instanceof DynamicQuestion) && lowCaseAttrib == 'parent')) {
             throw new InvalidAttributeException("Cannot set datatype $attribute on a ${question.class.simpleName}")
@@ -40,6 +38,14 @@ class Attrib {
 Supported attributes include $types \n$allowedAttributes""")
         }
 
+    }
+
+    static Map extractAttribAndParam(String attribute) {
+        attribute = attribute.trim().replaceAll(/\s+/, ' ')
+        def lowCaseAttrib = attribute.toLowerCase().split(/\s+/)[0]
+
+        def param = lowCaseAttrib.length() == attribute.length() ? "" : (attribute[lowCaseAttrib.length()..attribute.length() - 1]).trim()
+        [attrib: lowCaseAttrib, param: param]
     }
 
     static void setQuestionAttribute(IQuestion question, String attribute, String param) {
