@@ -270,6 +270,7 @@ Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath ""
     void openFile(File f) {
 
         def text = f.text
+        System.setProperty('form.dir',f.parent)
 
         loadForm(text)
 

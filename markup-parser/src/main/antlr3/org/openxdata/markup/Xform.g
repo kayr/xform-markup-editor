@@ -56,6 +56,7 @@ scope						{Form scopeForm;}
 		|multi = multipleSelQn		{rv.addQuestion(multi);}
 		|dynInstance = dynamicQnInstance{rv.addQuestion(dynInstance);}
 		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
+		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}	
 		)+
 		|(pg = page)+
 		)
@@ -75,7 +76,8 @@ page returns [Page rv = new Page()]
 		|single = singleSelQn		{rv.addQuestion(single);}
 		|multi = multipleSelQn		{rv.addQuestion(multi);}
 		|dynInstance = dynamicQnInstance{rv.addQuestion(dynInstance);}
-		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}	
+		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
+		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}	
 		)+		
 	;
 
@@ -103,12 +105,17 @@ dynamicQn returns [DynamicBuilder rv]
 		(DYNAMICMARKER|LEFTBRACE)
 	;
 	
+csvImport returns [DynamicBuilder rv = new DynamicBuilder()]
+	:	CSVIMPORT			{rv.setCsvFile($CSVIMPORT.text);}
+	;
+	
 singleSelQn returns [SingleSelectQuestion rv = new SingleSelectQuestion() ]
 	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
 		LINECONTENTS 			{rv.setText($LINECONTENTS.text);}
 		(SINGLEOPTION			{rv.getOptions().add(new Option($SINGLEOPTION.text));})+
 					
 	;
+	
 	
 dynamicQnInstance returns [DynamicQuestion rv = new DynamicQuestion() ]
 	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
@@ -170,6 +177,10 @@ DYNAMICOPTION
 
 SINGLEOPTION	
 	:	SPACE '>' LINECONTENTS 		{setText(rl($LINECONTENTS.text));}
+	;
+	
+CSVIMPORT
+	:	'csv:import' LINECONTENTS     	{setText(rl($LINECONTENTS.text));}	
 	;
 
 SPACE	:	('\t'|' ')*

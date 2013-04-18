@@ -118,6 +118,37 @@ Kenya,Nairobi,Kikuyu
 
     }
 
+    public void testCsvImport (){
+        DynamicBuilder builder = new DynamicBuilder();
+        builder.csvFile = /C:\var\code\prsnl\oxd-form-markup\markup-parser\src\test\resources\quaters.csv/
+
+        builder.parse()
+
+        assertNotNull builder.parsedCsv
+
+        builder = new DynamicBuilder();
+        builder.csvFile = /C:\var\code\prsnl\oxd-form-markup\markup-parser\src\test\resources\quaters.csv2/
+
+        try{
+            assertNull builder.parsedCsv
+            builder.parse()
+            fail('Expecting file not found')
+        }   catch (FileNotFoundException ex){
+              //do nothins
+        }
+
+        builder = new DynamicBuilder();
+        builder.csvFile = 'quaters.csv'
+        System.setProperty('form.dir',/C:\var\code\prsnl\oxd-form-markup\markup-parser\src\test\resources/)
+
+       builder.parse()
+
+        assertNotNull builder.parsedCsv
+
+
+
+    }
+
     public void rtestLol() {
 
         def text = new File('i:/fac.csv').text

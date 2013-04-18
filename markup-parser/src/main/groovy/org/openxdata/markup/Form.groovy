@@ -59,6 +59,7 @@ class Form implements HasQuestions {
 
             return tmpQn.fullBinding
         }
+        xpath = xpath.replace('$.',question.fullBinding)
         return xpath
     }
 

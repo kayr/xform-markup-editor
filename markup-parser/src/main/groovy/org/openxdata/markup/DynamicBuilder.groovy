@@ -14,6 +14,7 @@ import org.openxdata.markup.exception.ValidationException
 class DynamicBuilder {
 
     def csvSrc = "";
+    def csvFile = null;
     List<List<String>> parsedCsv
 
     List<IQuestion> questions = []
@@ -124,6 +125,18 @@ could not be found in the form""")
     }
 
     private List<String[]> parseCsv() {
+        if (csvFile != null) {
+            def file = new File(csvFile)
+            if (!file.exists()) {
+                def formDir = System.getProperty('form.dir')
+                file = new File(formDir + "/$csvFile")
+                if (!file.exists()) {
+                    println "formDir: $formDir path: $file.absolutePath"
+                    throw new FileNotFoundException(csvFile, "The Dynamic list could not be found")
+                }
+            }
+            csvSrc = file.text
+        }
         def csv = toStringArrayList(csvSrc)
 
         csv = fillUpSpace(csv)

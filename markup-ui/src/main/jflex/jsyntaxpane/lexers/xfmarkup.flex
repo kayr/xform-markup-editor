@@ -21,6 +21,7 @@ import jsyntaxpane.TokenType;
 %state ATTRIB_TEXT
 %state STRING_DOUBLE
 %state  STRING_SINGLE
+%state  FILE_TEXT
 
 %{
     /**
@@ -88,15 +89,21 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 
   /* labels */
-  "@id"|"###"|"##"|"#>"         {
+  "@id"|"###"|"##"|"#>"
+                                {
                                 yybegin(ID_TEXT);
                                 return token(TokenType.TYPE3);
                                 }
 
- ">"|"$>"                            {
+ ">"|"$>"                       {
                                 yybegin(OPTIONS);
                                 return token(TokenType.OPERATOR);
                                 }
+
+ "csv:import"                    {
+                                 yybegin(FILE_TEXT);
+                                 return token(TokenType.TYPE3);
+                                 }
 
 
   /* comments */
@@ -123,6 +130,11 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 <Q_COMMENT>{
   . *                           { return token(TokenType.COMMENT2); }
+  {LineTerminator}              { yybegin(YYINITIAL) ; }
+}
+
+<FILE_TEXT>{
+  . *                           {  return token(TokenType.KEYWORD2); }
   {LineTerminator}              { yybegin(YYINITIAL) ; }
 }
 
