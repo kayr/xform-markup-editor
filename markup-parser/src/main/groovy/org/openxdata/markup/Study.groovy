@@ -17,7 +17,7 @@ class Study {
 
     void addForm(Form form) {
         form.study = this
-        validateForm(form)
+        form.validate()
         forms << form
     }
 
@@ -25,15 +25,7 @@ class Study {
         forms.each { addForm(it) }
     }
 
-    void validateForm(Form form) {
-        form.allQuestions.each {
-            validateSkipLogic(it)
-            validateCalculation(it)
-            validateValidationLogic(it)
-        }
-    }
-
-    List<Form> getForms() {
+     List<Form> getForms() {
         return new ArrayList<Form>(forms)
     }
 }

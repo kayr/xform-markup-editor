@@ -32,19 +32,33 @@ class DynamicBuilder {
     public void addQuestionsToForm(HasQuestions form) {
         try {
             parse()
-            if (isBuildDynamicModelOnly()) {
+            if (isInQuestionMode()) {
                 questions.each {
                     form.addQuestion(it)
                 }
             } else {
                 def singleSelectQuestionInstance = Form.findQuestionWithBinding(singleSelectQuestion, form)
-                if (singleSelectQuestionInstance == null)
+
+                if (singleSelectQuestionInstance == null )
                     throw new ValidationException("""Error while parsing CSV. SingleSelect question with id [$singleSelectQuestion]
 could not be found in the form""")
+
+                if(!(singleSelectQuestionInstance instanceof SingleSelectQuestion))
+                    throw new ValidationException(("Error while parsing CSV.Question with id[$singleSelectQuestion] is not a SingleSelect Question"))
                 singleSelectQuestionInstance.options = singleSelectOptions
             }
 
-            form.parentForm.dynamicOptions = dynamicOptions
+            def localKeys = dynamicOptions.keySet()
+            def formKeys = form.parentForm.dynamicOptions.keySet()
+
+            def newLocalKeys = localKeys - formKeys
+
+            if(!newLocalKeys.containsAll(localKeys))
+                throw new ValidationException("You have duplicate columns in your csv files ${localKeys - newLocalKeys}")
+
+            form.parentForm.dynamicOptions.putAll(dynamicOptions)
+
+
 
         } catch (Exception e) {
             if (e instanceof ValidationException)
@@ -53,7 +67,7 @@ could not be found in the form""")
         }
     }
 
-    private boolean isBuildDynamicModelOnly() {
+    private boolean isInQuestionMode() {
         return getSingleSelectReferenceIfAvailable() == null
     }
 
@@ -62,7 +76,7 @@ could not be found in the form""")
 
         def singleSelectCol = getValuesForColumn(csv, 0).unique {Util.getBindName(it)}
         def singleSelVar = getSingleSelectReferenceIfAvailable()
-        if (isBuildDynamicModelOnly()) {
+        if (isInQuestionMode()) {
             def singleSelQuestion = makeSingleSelectFromList(singleSelectCol)
             questions << singleSelQuestion
         } else {
@@ -77,7 +91,7 @@ could not be found in the form""")
             def csvHeader = headers[headerIdx]
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
-            if (isBuildDynamicModelOnly()) {
+            if (isInQuestionMode()) {
                 qn.dynamicInstanceId = qn.binding
                 qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
                 questions << qn

@@ -9,6 +9,29 @@ package org.openxdata.markup
  */
 class Fixtures {
 
+    static def formWithDynamicInstanceReferences =
+'''
+### study
+
+## form
+
+@id region
+Select Region
+>blah
+
+@parent region
+Subregion
+$>subregion2
+
+dynamic{
+$region, subregion2
+ug,kla
+ug,mbra
+ky,nai
+ky,kis
+}
+'''
+
     static def formMultiplePageDupeQuestion = '''### study
 
 ## form
@@ -1021,6 +1044,61 @@ repeat{ *Required repeat
     <input bind="question">
       <label>question</label>
     </input>
+  </group>
+</xforms>'''
+
+    static def xmlFormWithDynamicInstanceIds =
+'''<xforms>
+  <model>
+    <instance id="study_form_v1">
+      <study_form_v1 id="0" name="form" formKey="study_form_v1">
+        <region />
+        <subregion />
+      </study_form_v1>
+    </instance>
+    <instance id="subregion2">
+      <dynamiclist>
+        <item id="kla" parent="ug">
+          <label>kla</label>
+          <value>kla</value>
+        </item>
+        <item id="mbra" parent="ug">
+          <label>mbra</label>
+          <value>mbra</value>
+        </item>
+        <item id="nai" parent="ky">
+          <label>nai</label>
+          <value>nai</value>
+        </item>
+        <item id="kis" parent="ky">
+          <label>kis</label>
+          <value>kis</value>
+        </item>
+      </dynamiclist>
+    </instance>
+    <bind id="region" nodeset="/study_form_v1/region" type="xsd:string" />
+    <bind id="subregion" nodeset="/study_form_v1/subregion" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <select1 bind="region">
+      <label>Select Region</label>
+      <item id="ug">
+        <label>ug</label>
+        <value>ug</value>
+      </item>
+      <item id="ky">
+        <label>ky</label>
+        <value>ky</value>
+      </item>
+    </select1>
+    <select1 bind="subregion">
+      <label>Subregion</label>
+      <itemset nodeset="instance('subregion2')/item[@parent=instance('study_form_v1')/region]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
   </group>
 </xforms>'''
 

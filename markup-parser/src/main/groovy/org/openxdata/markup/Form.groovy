@@ -49,6 +49,16 @@ class Form implements HasQuestions {
         pages[0].addQuestion(question)
     }
 
+    void validate(){
+        allQuestions.each {
+            validateSkipLogic(it)
+            validateCalculation(it)
+            validateValidationLogic(it)
+            if(it instanceof DynamicQuestion)
+                it.validate()
+        }
+    }
+
     public static String getFullBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
         def variableRegex = /[$][a-z][a-z0-9_]*/
 

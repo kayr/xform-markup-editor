@@ -91,4 +91,12 @@ class XFormSerializerTest extends GroovyTestCase {
         assertEquals Fixtures.formWithMultiPageXML,xml
     }
 
+    void testFormWithDynamicInstance(){
+         def parser = Util.createParser(Fixtures.formWithDynamicInstanceReferences)
+
+        def xml = serializer.toXForm(parser.study().forms[0])
+
+        assertEquals Fixtures.xmlFormWithDynamicInstanceIds , xml
+    }
+
 }

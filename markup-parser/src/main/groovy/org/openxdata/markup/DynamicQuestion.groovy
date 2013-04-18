@@ -1,5 +1,8 @@
 package org.openxdata.markup
 
+import org.openxdata.markup.exception.InvalidAttributeException
+import org.openxdata.markup.exception.ValidationException
+
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -28,6 +31,19 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
     }
 
     List<IOption> getOptions() {
-        return parentForm.dynamicOptions."${binding}"
+        return parentForm.dynamicOptions."${dynamicInstanceId}"
+    }
+
+    public boolean validate() {
+        if (!parentForm.dynamicOptions."$dynamicInstanceId")
+            throw new ValidationException("DynamicQuestion[$text] Instance ID[$dynamicInstanceId] does not exit in the form")
+
+        if (!parentQuestionId)
+            throw new ValidationException("DynamicQuestion[$text] parent question has not been set. Please set the parent using the [@parent] attribute")
+
+        def parentQn = Form.findQuestion(parentQuestionId, parentForm)
+
+        if (!parentQn)
+            throw new InvalidAttributeException("DynamicQuestion[$text] has an invalid parent question id[$parentQuestionId]")
     }
 }

@@ -5,6 +5,7 @@ import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CommonTokenStream
 
 import org.openxdata.markup.exception.DuplicateQuestionException
+import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
 import org.openxdata.markup.serializer.XFormSerializer
 
@@ -399,6 +400,58 @@ jeelopo
     void testFormWithValidationAChildOfARepeat(){
         def form = Util.createParser(Fixtures.formWithValidationOnInnerRepeat).study().forms[0]
         assertEquals form.allQuestions.size() ,  5
+
+    }
+
+    void  testForDynamicInstanceValidation(){
+         def form = createParser(Fixtures.formWithDynamicInstanceReferences).study().forms[0]
+
+        DynamicQuestion dynamicQuestion = Form.findQuestionWithBinding("subregion", form)
+
+        assertNotNull dynamicQuestion
+
+        assertEquals 'subregion',dynamicQuestion.binding
+
+        assertEquals 'region',dynamicQuestion.parentQuestionId
+
+        assertEquals 'subregion2',dynamicQuestion.dynamicInstanceId
+
+       def singleQuestion = Form.findQuestionWithBinding('region',form)
+
+
+        def oldId = dynamicQuestion.dynamicInstanceId
+        dynamicQuestion.dynamicInstanceId = 'blah'
+        try {
+            form.validate()
+            fail("Expecting a Validation Exception")
+        } catch (ValidationException ex) {
+            assertTrue ex.message.contains("Instance ID[blah] does not exit in the form")
+        }
+        dynamicQuestion.dynamicInstanceId  = oldId
+
+
+
+        oldId = dynamicQuestion.parentQuestionId
+        dynamicQuestion.parentQuestionId = null;
+        try {
+            form.validate()
+            fail("Expectiong a Validation Exception")
+        } catch (ValidationException ex) {
+            assertTrue ex.message.contains("Please set the parent using the [@parent] attribute")
+        }
+        dynamicQuestion.parentQuestionId = oldId
+
+
+        oldId = dynamicQuestion.parentQuestionId
+        dynamicQuestion.parentQuestionId = 'blahDynamicInstance';
+        try {
+            form.validate()
+            fail("Expectiong a Validation Exception")
+        } catch (InvalidAttributeException ex) {
+            assertTrue ex.message.contains("has an invalid parent question id")
+        }
+        dynamicQuestion.parentQuestionId = oldId
+
 
     }
 

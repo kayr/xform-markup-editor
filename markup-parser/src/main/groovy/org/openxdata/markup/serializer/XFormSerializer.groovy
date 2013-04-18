@@ -156,11 +156,16 @@ class XFormSerializer {
 
 
     void buildDynamicModel(MarkupBuilder xml, Form form) {
-        form.allQuestions.each { question ->
+        def completeBinds = []
+        form.allQuestions.each {question ->
             if (!(question instanceof DynamicQuestion))
                 return
 
-            xml.instance(id: question.binding) {
+            if(completeBinds.contains(question.dynamicInstanceId))
+                return
+
+            xml.instance(id: question.dynamicInstanceId) {
+                completeBinds << question.dynamicInstanceId
                 xml.dynamiclist {
 
                     List<DynamicOption> options = question.options
@@ -202,7 +207,7 @@ class XFormSerializer {
         xml.select1(bind: question.binding) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
-            xml.itemset(nodeset: "instance('$question.binding')/item[@parent=instance('$page.parentForm.binding')/$question.parentQuestionId]") {
+            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$page.parentForm.binding')/$question.parentQuestionId]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
             }

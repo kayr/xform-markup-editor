@@ -116,6 +116,26 @@ Kenya,Nairobi,Kikuyu
             assertTrue ex.message.contains("SingleSelect question with id [")
         }
 
+        try {
+            form = new Form("Form")
+            form.addQuestion(new TextQuestion("Root"))
+            builder.addQuestionsToForm(form)
+            fail("Expection a not found validation exception")
+        } catch (ValidationException ex) {
+            assertTrue ex.message.contains("is not a SingleSelect Question")
+        }
+
+
+        try {
+            form = new Form("Form")
+            form.addQuestion(new SingleSelectQuestion("Root"))
+            form.dynamicOptions.put('school',[])
+            builder.addQuestionsToForm(form)
+            fail("Expection a not found validation exception")
+        } catch (ValidationException ex) {
+            assertTrue ex.message.contains("have duplicate columns in your csv files")
+        }
+
     }
 
     public void testCsvImport (){
