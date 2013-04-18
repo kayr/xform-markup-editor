@@ -31,7 +31,7 @@ class DynamicBuilder {
     public void addQuestionsToForm(HasQuestions form) {
         try {
             parse()
-            if (getSingleSelectVariable() == null) {
+            if (isBuildDynamicModelOnly()) {
                 questions.each {
                     form.addQuestion(it)
                 }
@@ -40,24 +40,28 @@ class DynamicBuilder {
                 if (singleSelectQuestionInstance == null)
                     throw new ValidationException("""Error while parsing CSV. SingleSelect question with id [$singleSelectQuestion]
 could not be found in the form""")
-                    singleSelectQuestionInstance.options = singleSelectOptions
+                singleSelectQuestionInstance.options = singleSelectOptions
             }
 
             form.parentForm.dynamicOptions = dynamicOptions
 
         } catch (Exception e) {
-            if(e instanceof ValidationException)
+            if (e instanceof ValidationException)
                 throw e
             throw new RuntimeException("Error while creating dynamic question:\n " + e.toString(), e)
         }
+    }
+
+    private boolean isBuildDynamicModelOnly() {
+        return getSingleSelectReferenceIfAvailable() == null
     }
 
     public void parse() {
         List<String[]> csv = parseCsv()
 
         def singleSelectCol = getValuesForColumn(csv, 0).unique {Util.getBindName(it)}
-        def singleSelVar = getSingleSelectVariable()
-        if (singleSelVar == null) {
+        def singleSelVar = getSingleSelectReferenceIfAvailable()
+        if (isBuildDynamicModelOnly()) {
             def singleSelQuestion = makeSingleSelectFromList(singleSelectCol)
             questions << singleSelQuestion
         } else {
@@ -72,7 +76,7 @@ could not be found in the form""")
             def csvHeader = headers[headerIdx]
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
-            if (getSingleSelectVariable() == null) {
+            if (isBuildDynamicModelOnly()) {
                 qn.dynamicInstanceId = qn.binding
                 qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
                 questions << qn
@@ -80,13 +84,13 @@ could not be found in the form""")
                 validateVariable(qn.binding, qn.text)
             }
 
-            processForHeader(headerIdx, qn.binding)
+            buildDynamicModel(headerIdx, qn.binding)
 
         }
 
     }
 
-    private void processForHeader(Integer headerIdx, String dynamicBinding) {
+    private void buildDynamicModel(Integer headerIdx, String dynamicBinding) {
         def visitedChildren = new HashSet()
         dynamicOptions[dynamicBinding] = []
         for (int csvRowIdx = 1; csvRowIdx < parsedCsv.size(); csvRowIdx++) {
@@ -105,7 +109,7 @@ could not be found in the form""")
         }
     }
 
-    private String getSingleSelectVariable() {
+    private String getSingleSelectReferenceIfAvailable() {
         def topColumn = parsedCsv[0][0]
         def question = topColumn.find(/[$][a-z][a-z0-9_]*/)
         validateVariable(question, topColumn)
