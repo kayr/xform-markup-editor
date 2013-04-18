@@ -40,11 +40,13 @@ scope 						{ Study scopeStudy;}
 
 form returns [Form rv]
 scope						{Form scopeForm;}
-	:	FORMNAME 
+	:	(attrib = ATTRIBUTE)*	FORMNAME 
 						{
 						rv = new Form($FORMNAME.text);
 						$form::scopeForm = rv;
 						rv.setStudy($study::scopeStudy);
+						if(attrib != null)
+						Attrib.addAttributeToForm(rv,attrib.getText());
 						} 
 
 		(

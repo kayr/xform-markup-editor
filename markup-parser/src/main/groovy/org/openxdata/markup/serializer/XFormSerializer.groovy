@@ -40,7 +40,7 @@ class XFormSerializer {
         def printWriter = new StringWriter();
         def xml = new MarkupBuilder(printWriter)
         xml.doubleQuotes = true
-
+        checkBindLength(form.binding)
         xml.xforms {
             xml.model {
                 xml.instance(id: form.binding) {

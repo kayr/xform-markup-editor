@@ -48,11 +48,11 @@ class AttribTest extends GroovyTestCase {
 
         assertEquals 'hello_question',qn.binding
 
-        try{
-            Attrib.addAttribute(qn,'id jsjk sdj sdj')
+        try {
+            Attrib.addAttribute(qn, 'id jsjk sdj sdj')
             fail('Expecting an exception for an invalid attribute')
-        }   catch (Exception ex){
-                 assertTrue ex instanceof InvalidAttributeException
+        } catch (Exception ex) {
+            assertTrue ex instanceof InvalidAttributeException
         }
 
         try{
@@ -70,7 +70,27 @@ class AttribTest extends GroovyTestCase {
 
     }
 
-    void testSetQuestionAttribute() {
+    void testSetAttribOnForm() {
+
+        Form form = new Form("form")
+
+        Attrib.addAttributeToForm(form, 'id someid')
+
+        assertEquals 'someid', form.id
+
+        try {
+            Attrib.addAttributeToForm(form, 'someattrib someid')
+            fail("Expecting ${InvalidAttributeException.class}")
+        } catch (InvalidAttributeException e) {
+            assertEquals "Attribute someattrib on form $form.name in not supported", e.message
+        }
+
+        try {
+            Attrib.addAttributeToForm(form, 'id UPPERCASEID')
+            fail("Expecting ${InvalidAttributeException.class}")
+        } catch (InvalidAttributeException e) {
+              assertTrue e.message.startsWith('You have an invalid variable')
+        }
 
     }
 }

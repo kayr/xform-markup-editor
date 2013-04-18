@@ -375,6 +375,7 @@ jeelopo
 
         try {
             def study = parser.study()
+            fail('Expecting duplicate question Exception')
         } catch (DuplicateQuestionException e) {
             assertEquals e.question1.binding, e.question2.binding
         }

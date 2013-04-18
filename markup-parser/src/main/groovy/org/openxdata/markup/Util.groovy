@@ -166,7 +166,7 @@ class Util {
 
     public static void validateId(String id) {
         if (!(id ==~ /[a-z][a-z0-9_]*/))
-            throw new InvalidAttributeException("""You have an invalid variable $id .
+            throw new InvalidAttributeException("""You have an invalid variable [$id] .
 Attributes should start with a small letter followed by small letters and underscores""")
     }
 

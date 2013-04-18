@@ -13,6 +13,7 @@ import org.openxdata.xpath.XPathParser
 class Form implements HasQuestions {
 
     String name
+    String id
     Study study
 
     List<Page> pages = []
@@ -143,7 +144,9 @@ class Form implements HasQuestions {
     }
 
     public String getBinding() {
-        return Util.getBindName("${study.name}_${name}_v1")
+        if(id == null)
+            id = Util.getBindName("${study.name}_${name}_v1")
+        return id
     }
 
     @Override

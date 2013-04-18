@@ -40,6 +40,21 @@ Supported attributes include $types \n$allowedAttributes""")
 
     }
 
+    static void addAttributeToForm(Form form,String attribute){
+        def params = extractAttribAndParam(attribute)
+
+        def attrib = params.attrib
+        def param  = params.param
+
+        if(attrib != 'id')
+            throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported")
+
+        Util.validateId(param)
+
+        form.id = param
+
+    }
+
     static Map extractAttribAndParam(String attribute) {
         attribute = attribute.trim().replaceAll(/\s+/, ' ')
         def lowCaseAttrib = attribute.toLowerCase().split(/\s+/)[0]

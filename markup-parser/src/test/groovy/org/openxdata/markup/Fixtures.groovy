@@ -260,6 +260,16 @@ jeelopo
 //Deliberately put space here
     """
 
+    static def formWithId =
+'''
+### Study
+
+@id form_v5
+## form
+
+question
+'''
+
     static def normalPurcform2 = '''###Snv Study
 ##Snv Form
 
@@ -958,6 +968,24 @@ repeat{ *Required repeat
         <value ref="value" />
       </itemset>
     </select1>
+  </group>
+</xforms>'''
+
+    static def xmlFormWithId =
+'''<xforms>
+  <model>
+    <instance id="form_v5">
+      <form_v5 id="0" name="form" formKey="form_v5">
+        <question />
+      </form_v5>
+    </instance>
+    <bind id="question" nodeset="/form_v5/question" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="question">
+      <label>question</label>
+    </input>
   </group>
 </xforms>'''
 
