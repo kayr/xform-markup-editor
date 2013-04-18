@@ -455,6 +455,18 @@ jeelopo
 
     }
 
+    void testCSVImport(){
+
+        Fixtures.setFormDirectory()
+
+        def form = createParser(Fixtures.formWithCSVImport).study().forms[0]
+
+        assertEquals 1, form.questions.size()
+        assertEquals 1,form.dynamicOptions.size()
+    }
+
+
+
     private XformParser createParser(String testString) throws IOException {
         CharStream stream = new ANTLRStringStream(testString);
         XformLexer lexer = new XformLexer(stream);

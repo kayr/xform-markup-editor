@@ -139,15 +139,18 @@ Kenya,Nairobi,Kikuyu
     }
 
     public void testCsvImport (){
+
+       def resourceFolder = Fixtures.setFormDirectory()
+
         DynamicBuilder builder = new DynamicBuilder();
-        builder.csvFile = /C:\var\code\prsnl\oxd-form-markup\markup-parser\src\test\resources\quaters.csv/
+        builder.csvFile = "$resourceFolder/quarters.csv"
 
         builder.parse()
 
         assertNotNull builder.parsedCsv
 
         builder = new DynamicBuilder();
-        builder.csvFile = /C:\var\code\prsnl\oxd-form-markup\markup-parser\src\test\resources\quaters.csv2/
+        builder.csvFile = /bad path/
 
         try{
             assertNull builder.parsedCsv
@@ -158,8 +161,8 @@ Kenya,Nairobi,Kikuyu
         }
 
         builder = new DynamicBuilder();
-        builder.csvFile = 'quaters.csv'
-        System.setProperty('form.dir',/C:\var\code\prsnl\oxd-form-markup\markup-parser\src\test\resources/)
+        builder.csvFile = 'quarters.csv'
+        System.setProperty('form.dir',resourceFolder)
 
        builder.parse()
 

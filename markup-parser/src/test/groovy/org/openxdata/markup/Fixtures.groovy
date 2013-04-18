@@ -9,6 +9,27 @@ package org.openxdata.markup
  */
 class Fixtures {
 
+    static String setFormDirectory() {
+        def workingDir = System.getProperty('user.dir')
+        def resourceFolder = "$workingDir/markup-parser/src/test/resources" //for ides
+        if (!(new File(resourceFolder).exists()))
+            resourceFolder = "$workingDir/src/test/resources"  //for maven
+        System.setProperty("form.dir", resourceFolder)
+        return resourceFolder
+    }
+
+    static def formWithCSVImport =
+'''
+### study
+
+## form
+
+Quarter
+>blah
+
+csv:import quarters.csv
+'''
+
     static def formWithDynamicInstanceReferences =
 '''
 ### study
