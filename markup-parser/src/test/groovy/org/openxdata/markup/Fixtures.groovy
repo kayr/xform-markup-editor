@@ -24,6 +24,41 @@ class Fixtures {
  sex
 '''
 
+   static def formWithValidationOnInnerRepeat =
+'''
+### CountUnique Demo
+
+
+## Drugs
+
+Select Quarter
+>Quarter 1
+>Quarter 2
+
+@validif length(.) = 8 and . = countunique(.,$drug_avalaible)
+@message Please enter all 8 drugs
+repeat{ Please check for the following drugs
+
+        @id drug_avalaible
+        *Drugs
+        >Artemether/Lumefantrine (boxes)
+        >SP(Fansidar)
+        >IV Quinine
+        >Oral Quinine
+        >Artesunate( Rectal)
+        >5% Dextrose
+        >50% Dextrose
+        >Artemether(Injectable)
+
+        @number
+        *Number on the  Stock Card
+
+
+        @number
+        *Actual number in the  Store
+}
+'''
+
     static def badSkipLogicInRepeat = '''### Study
 
 ## Form

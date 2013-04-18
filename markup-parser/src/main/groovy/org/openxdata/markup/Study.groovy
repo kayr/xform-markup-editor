@@ -1,5 +1,7 @@
 package org.openxdata.markup
 
+import static org.openxdata.markup.Form.*
+
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -11,14 +13,27 @@ class Study {
 
     String name
 
-    List<Form> forms = []
+    private List<Form> forms = []
 
     void addForm(Form form) {
         form.study = this
+        validateForm(form)
         forms << form
     }
 
     void addForms(List<Form> forms) {
         forms.each { addForm(it) }
+    }
+
+    void validateForm(Form form) {
+        form.allQuestions.each {
+            validateSkipLogic(it)
+            validateCalculation(it)
+            validateValidationLogic(it)
+        }
+    }
+
+    List<Form> getForms() {
+        return new ArrayList<Form>(forms)
     }
 }

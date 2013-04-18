@@ -396,6 +396,12 @@ jeelopo
 
     }
 
+    void testFormWithValidationAChildOfARepeat(){
+        def form = Util.createParser(Fixtures.formWithValidationOnInnerRepeat).study().forms[0]
+        assertEquals form.allQuestions.size() ,  5
+
+    }
+
     private XformParser createParser(String testString) throws IOException {
         CharStream stream = new ANTLRStringStream(testString);
         XformLexer lexer = new XformLexer(stream);

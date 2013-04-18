@@ -36,10 +36,6 @@ class Page implements HasQuestions {
         if (qn != null) {
             throw new DuplicateQuestionException(question1: question, question2: qn)
         }
-
-        validateSkipLogic(question)
-        validateValidationLogic(question)
-        validateCalculation(question)
     }
 
 
