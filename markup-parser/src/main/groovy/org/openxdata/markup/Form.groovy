@@ -60,7 +60,7 @@ class Form implements HasQuestions {
         }
     }
 
-    public static String getFullBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
+    public static String getAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
         def variableRegex = /[$][a-z][a-z0-9_]*/
 
         xpath = xpath.replaceAll(variableRegex) {
@@ -68,13 +68,13 @@ class Form implements HasQuestions {
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
 
-            return tmpQn.fullBinding
+            return tmpQn.absoluteBinding
         }
-        xpath = xpath.replace('$.',question.fullBinding)
+        xpath = xpath.replace('$.',question.absoluteBinding)
         return xpath
     }
 
-    public static String getIndexedFullBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
+    public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
         def variableRegex = /[$][a-z][a-z0-9_]*/
 
         xpath = xpath.replaceAll(variableRegex) {
@@ -82,9 +82,9 @@ class Form implements HasQuestions {
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
 
-            return tmpQn.indexedFullBinding
+            return tmpQn.indexedAbsoluteBinding
         }
-        xpath = xpath.replace('$.',question.indexedFullBinding)
+        xpath = xpath.replace('$.',question.indexedAbsoluteBinding)
         return xpath
     }
 
@@ -149,7 +149,7 @@ class Form implements HasQuestions {
     }
 
     static String validateXpath(String xpath, IQuestion question, String logicType) {
-        xpath = getFullBindingXPath(xpath, question, logicType)
+        xpath = getAbsoluteBindingXPath(xpath, question, logicType)
         try {
             XPathParser parser = Util.createXpathParser(xpath)
             parser.eval()
@@ -165,7 +165,7 @@ class Form implements HasQuestions {
     }
 
     @Override
-    String getFullBinding() {
+    String getAbsoluteBinding() {
         return '/' + binding
     }
 

@@ -64,15 +64,15 @@ abstract class AbstractQuestion implements IQuestion {
     }
 
     @Override
-    String getFullBinding() {
-        return "$hasQuestions.fullBinding/$binding"
+    String getAbsoluteBinding() {
+        return "$hasQuestions.absoluteBinding/$binding"
     }
 
      @Override
-     String getIndexedFullBinding() {
+     String getIndexedAbsoluteBinding() {
          if (hasQuestions instanceof IQuestion)
-             return "$hasQuestions.indexedFullBinding/$indexedBinding"
-         return "$hasQuestions.fullBinding/$indexedBinding"
+             return "$hasQuestions.indexedAbsoluteBinding/$indexedBinding"
+         return "$hasQuestions.absoluteBinding/$indexedBinding"
      }
 
      @Override

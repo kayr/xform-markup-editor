@@ -15,7 +15,7 @@ interface HasQuestions {
 
     String getBinding()
 
-    String getFullBinding()
+    String getAbsoluteBinding()
 
     List<IQuestion> getAllQuestions()
 

@@ -48,7 +48,7 @@ class Page implements HasQuestions {
     }
 
     @Override
-    String getFullBinding() {
+    String getAbsoluteBinding() {
         return null
     }
 

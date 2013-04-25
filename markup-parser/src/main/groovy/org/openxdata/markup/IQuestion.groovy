@@ -27,9 +27,9 @@ interface IQuestion {
 
     void setComment(String comment)
 
-    String getFullBinding()
+    String getAbsoluteBinding()
 
-    String getIndexedFullBinding()
+    String getIndexedAbsoluteBinding()
 
     String getIndexedBinding()
 

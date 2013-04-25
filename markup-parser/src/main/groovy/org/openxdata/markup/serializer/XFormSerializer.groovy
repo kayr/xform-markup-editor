@@ -98,14 +98,14 @@ class XFormSerializer {
 
     private String getAbsoluteBindingXPath(String xPath, IQuestion question) {
         if(numberBindings)
-            return Form.getIndexedFullBindingXPath(xPath,question)
-        return Form.getFullBindingXPath(xPath, question)
+            return Form.getIndexedAbsoluteBindingXPath(xPath,question)
+        return Form.getAbsoluteBindingXPath(xPath, question)
     }
 
     private String absoluteBinding(IQuestion question) {
         if(numberBindings)
-            return question.indexedFullBinding
-        return question.fullBinding
+            return question.indexedAbsoluteBinding
+        return question.absoluteBinding
     }
 
     private void checkBindLength(String bind) {
