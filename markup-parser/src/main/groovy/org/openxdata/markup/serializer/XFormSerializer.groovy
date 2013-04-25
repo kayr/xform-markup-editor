@@ -13,6 +13,7 @@ import org.openxdata.markup.*
 class XFormSerializer {
 
     boolean numberQuestions = false
+    boolean numberBindings = false
 
     def xforms = [:]
 
@@ -47,14 +48,14 @@ class XFormSerializer {
                     xml."$form.binding"(id: 0, name: form.name, formKey: form.binding) {
 
                         form.questions.each {  question ->
-                            def bind = question.binding
+                            def bind = binding(question)
                             checkBindLength(bind)
                             xml."$bind" {//Improve and use recursion when you have time
                                 if (question instanceof RepeatQuestion) {
                                     RepeatQuestion qn = question
                                     qn.questions.each { qnInRpt ->
-                                        checkBindLength(qnInRpt.binding)
-                                        xml."$qnInRpt.binding"()
+                                        checkBindLength(binding(qnInRpt))
+                                        xml."${binding(qnInRpt)}"()
                                     }
                                 }
                             }
@@ -88,6 +89,25 @@ class XFormSerializer {
         return xFormXml
     }
 
+    private String binding(IQuestion question) {
+        if(numberBindings)
+               return question.indexedBinding
+        return question.binding
+
+    }
+
+    private String getAbsoluteBindingXPath(String xPath, IQuestion question) {
+        if(numberBindings)
+            return Form.getIndexedFullBindingXPath(xPath,question)
+        return Form.getFullBindingXPath(xPath, question)
+    }
+
+    private String absoluteBinding(IQuestion question) {
+        if(numberBindings)
+            return question.indexedFullBinding
+        return question.fullBinding
+    }
+
     private void checkBindLength(String bind) {
         if (bind.length() > 63)
             System.err.println "Binding: [$bind] is too long"
@@ -97,7 +117,7 @@ class XFormSerializer {
 
         def type = getQuestionType(question)
 
-        def map = [id: question.binding, nodeset: question.fullBinding]
+        def map = [id: binding(question), nodeset: absoluteBinding(question)]
 
         if (type.type) map.type = type.type
 
@@ -110,19 +130,19 @@ class XFormSerializer {
         if (!question.isVisible()) map.visible = "false()"
 
         if (question.skipLogic) {
-            def xpath = Form.getFullBindingXPath(question.skipLogic, question)
+            def xpath = getAbsoluteBindingXPath(question.skipLogic,question)
             map.relevant = xpath
             map.action = question.skipAction
         }
 
         if (question.validationLogic) {
-            def xpath = Form.getFullBindingXPath(question.validationLogic, question)
+            def xpath = getAbsoluteBindingXPath(question.validationLogic, question)
             map.constraint = xpath
             map.message = question.message
         }
 
         if (question.calculation) {
-            def xpath = Form.getFullBindingXPath(question.calculation, question)
+            def xpath = getAbsoluteBindingXPath(question.calculation, question)
             map.calculate = xpath
         }
 
@@ -184,12 +204,12 @@ class XFormSerializer {
     void buildQuestionLayout(MarkupBuilder xml, IQuestion question) {
         def qnType = getQuestionType(question)
         if (qnType.type == 'xsd:base64Binary') {
-            xml.upload(bind: question.binding, mediatype: "${qnType.format}/*") {
+            xml.upload(bind: binding(question), mediatype: "${qnType.format}/*") {
                 buildQuestionLabelAndHint(xml, question)
             }
         }
         else
-            xml.input(bind: question.binding) {
+            xml.input(bind: binding(question)) {
                 buildQuestionLabelAndHint(xml, question)
             }
     }
@@ -204,10 +224,10 @@ class XFormSerializer {
 
     void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, HasQuestions page) {
 
-        xml.select1(bind: question.binding) {
+        xml.select1(bind: binding(question)) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
-            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$page.parentForm.binding')/$question.parentQuestionId]") {
+            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$page.parentForm.binding')/${dynamicParentQnId(question)}]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
             }
@@ -215,10 +235,16 @@ class XFormSerializer {
         }
     }
 
+    private String dynamicParentQnId(DynamicQuestion question) {
+        if(numberQuestions)
+            return question.indexedParentQuestionId
+        return question.parentQuestionId
+    }
+
     void buildSelectionLayout(MarkupBuilder xml, ISelectionQuestion question) {
 
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
-        xml."select$selectRef"(bind: question.binding) {
+        xml."select$selectRef"(bind:binding(question)) {
             buildQuestionLabelAndHint(xml, question)
             question.options.each { option ->
                 xml.item(id: option.bind) {
@@ -233,10 +259,10 @@ class XFormSerializer {
 
     void buildRepeatLayout(MarkupBuilder xml, RepeatQuestion question, HasQuestions page) {
 
-        xml.group(id: question.binding) {
+        xml.group(id: binding(question)) {
             buildQuestionLabelAndHint(xml, question)
 
-            xml.repeat(bind: question.binding) {
+            xml.repeat(bind: binding(question)) {
 
                 buildQuestionsLayout(question, xml)
 

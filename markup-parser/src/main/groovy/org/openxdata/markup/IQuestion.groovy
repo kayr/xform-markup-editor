@@ -29,6 +29,10 @@ interface IQuestion {
 
     String getFullBinding()
 
+    String getIndexedFullBinding()
+
+    String getIndexedBinding()
+
     String getComment()
 
     String getType()

@@ -17,6 +17,7 @@ class Form implements HasQuestions {
     Study study
 
     List<Page> pages = []
+    Map<String,IQuestion> questionMap = [:]
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
 
@@ -65,7 +66,7 @@ class Form implements HasQuestions {
         xpath = xpath.replaceAll(variableRegex) {
             def tmpQn = findQuestionWithBinding(it - '$', question.parent)
             if (!tmpQn)
-                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable $it")
+                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
 
             return tmpQn.fullBinding
         }
@@ -73,36 +74,39 @@ class Form implements HasQuestions {
         return xpath
     }
 
-    static IQuestion findQuestionWithBinding(String binding, HasQuestions hasQuestions) {
+    public static String getIndexedFullBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
+        def variableRegex = /[$][a-z][a-z0-9_]*/
 
-        if (hasQuestions instanceof IQuestion)
-            hasQuestions = hasQuestions.parent
+        xpath = xpath.replaceAll(variableRegex) {
+            def tmpQn = findQuestionWithBinding(it - '$', question.parent)
+            if (!tmpQn)
+                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
 
-        def dupeQuestion = findQuestion(binding, hasQuestions)
-
-        return dupeQuestion
+            return tmpQn.indexedFullBinding
+        }
+        xpath = xpath.replace('$.',question.indexedFullBinding)
+        return xpath
     }
 
-    static IQuestion findQuestion(String binding, HasQuestions hasQuestions) {
-        def dupeQuestion = hasQuestions.questions.findResult {
+    static IQuestion findQuestionWithBinding(String binding, HasQuestions hasQuestions) {
 
-            if (it.binding == binding)
-                return it
+        Form parentForm = null
+        if (hasQuestions instanceof RepeatQuestion)
+            parentForm = hasQuestions.parentForm
+        else
+            parentForm = hasQuestions
 
-            if (it instanceof HasQuestions)
-                return findQuestion(binding, it)
+        def dupeQuestion = parentForm.questionMap[binding]
 
-            return null
-        }
         return dupeQuestion
     }
 
     List<IQuestion> getAllQuestions() {
-        def allQuestions = extractQuestion(this)
+        def allQuestions = questionMap.values() as List
         return allQuestions
     }
 
-    List<IQuestion> extractQuestion(HasQuestions questions) {
+   static List<IQuestion> extractQuestion(HasQuestions questions) {
         def allQuestions = []
         questions.questions.each {
             allQuestions.add(it)

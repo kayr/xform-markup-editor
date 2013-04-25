@@ -39,7 +39,7 @@ abstract class AbstractQuestion implements IQuestion {
 
     def getQuestionIdx() {
         if (hasQuestions instanceof Form)
-            return hasQuestions.questions.indexOf(this) + 1
+            return ''+(hasQuestions.questions.indexOf(this) + 1)
         else if (hasQuestions instanceof RepeatQuestion)
             return "${hasQuestions.getQuestionIdx()}.${hasQuestions.questions.indexOf(this) + 1}"
     }
@@ -68,7 +68,19 @@ abstract class AbstractQuestion implements IQuestion {
         return "$hasQuestions.fullBinding/$binding"
     }
 
-    @Override
+     @Override
+     String getIndexedFullBinding() {
+         if (hasQuestions instanceof IQuestion)
+             return "$hasQuestions.indexedFullBinding/$indexedBinding"
+         return "$hasQuestions.fullBinding/$indexedBinding"
+     }
+
+     @Override
+     String getIndexedBinding() {
+         return Util.getBindName(questionIdx) + getBinding()
+     }
+
+     @Override
     String getComment() {
         return comment
     }

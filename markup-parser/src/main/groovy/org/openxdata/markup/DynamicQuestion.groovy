@@ -41,9 +41,13 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
         if (!parentQuestionId)
             throw new ValidationException("DynamicQuestion[$text] parent question has not been set. Please set the parent using the [@parent] attribute")
 
-        def parentQn = Form.findQuestion(parentQuestionId, parentForm)
+        def parentQn = Form.findQuestionWithBinding(parentQuestionId, parentForm)
 
         if (!parentQn)
             throw new InvalidAttributeException("DynamicQuestion[$text] has an invalid parent question id[$parentQuestionId]")
+    }
+
+    String getIndexedParentQuestionId(){
+        return Form.findQuestionWithBinding(parentQuestionId,parentForm).indexedBinding
     }
 }

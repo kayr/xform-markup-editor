@@ -28,6 +28,9 @@ class Page implements HasQuestions {
     void addQuestion(IQuestion question) {
         question.setParent(form)
         validate(question)
+        form.questionMap[question.binding] = question
+        if(question instanceof RepeatQuestion)
+            question.allQuestions.each { form.questionMap[it.binding] = it}
         questions.add(question)
     }
 
@@ -47,6 +50,11 @@ class Page implements HasQuestions {
     @Override
     String getFullBinding() {
         return null
+    }
+
+    @Override
+    List<IQuestion> getAllQuestions() {
+        return Form.extractQuestion(this)
     }
 
     @Override

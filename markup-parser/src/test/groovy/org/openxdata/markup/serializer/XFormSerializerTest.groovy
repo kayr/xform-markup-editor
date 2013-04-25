@@ -99,4 +99,48 @@ class XFormSerializerTest extends GroovyTestCase {
         assertEquals Fixtures.xmlFormWithDynamicInstanceIds , xml
     }
 
+    void testToXFormWithNumbering() {
+        def form = study.forms[0]
+
+        serializer.numberBindings = true
+        serializer.numberQuestions = true
+        def xml = serializer.toXForm(form)
+
+        assertEquals NumberedXMLs.expectedXForm , xml
+
+
+    }
+
+
+    void testToXFormWithSkipLogicNumbered() {
+        def parser = Util.createParser(Fixtures.formWithSkipLogic)
+
+        serializer.numberBindings = true
+        serializer.numberQuestions = true
+        def xml = serializer.toXForm(parser.study().forms[0])
+
+
+        assertEquals NumberedXMLs.xformWithSkipLogicXML, xml
+
+
+    }
+
+    void testToXFormWithValidationLogicNumbered() {
+        def parser = Util.createParser(Fixtures.formWithValidationLogic)
+        serializer.numberBindings = true
+        serializer.numberQuestions = true
+        def form = parser.study().forms[0]
+        def xml = serializer.toXForm(form)
+
+       assertEquals NumberedXMLs.xfromWithValidationLogicXML, xml
+
+        serializer.numberBindings = false
+
+        xml = serializer.toXForm(form)
+
+        assertEquals NumberedXMLs.xfromWithValidationLogicXMLUnNumberedBindings, xml
+    }
+
+
+
 }

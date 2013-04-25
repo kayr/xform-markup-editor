@@ -7,6 +7,7 @@
 package org.openxdata.markup.ui;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JMenuItem;
 import javax.swing.text.JTextComponent;
 import jsyntaxpane.DefaultSyntaxKit;
@@ -44,6 +45,8 @@ public class MarkupForm extends javax.swing.JFrame {
                 jToolBar1 = new javax.swing.JToolBar();
                 btnGenerateXML = new javax.swing.JButton();
                 btnShowXml = new javax.swing.JButton();
+                chkNumberBindings = new javax.swing.JCheckBox();
+                chkNumberLabels = new javax.swing.JCheckBox();
                 jPanel1 = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
                 lblCaret = new javax.swing.JLabel();
@@ -76,12 +79,25 @@ public class MarkupForm extends javax.swing.JFrame {
                 });
                 jToolBar1.add(btnGenerateXML);
 
-                btnShowXml.setFont(new java.awt.Font("Tahoma", 3, 11));
+                btnShowXml.setFont(new java.awt.Font("Tahoma", 3, 11)); // NOI18N
                 btnShowXml.setText("SHOW XML");
                 btnShowXml.setFocusable(false);
                 btnShowXml.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 btnShowXml.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
                 jToolBar1.add(btnShowXml);
+
+                chkNumberBindings.setText("Number IDs");
+                chkNumberBindings.setFocusable(false);
+                chkNumberBindings.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+                chkNumberBindings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                jToolBar1.add(chkNumberBindings);
+
+                chkNumberLabels.setText("Number Labels");
+                chkNumberLabels.setFocusable(false);
+                chkNumberLabels.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                chkNumberLabels.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+                chkNumberLabels.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                jToolBar1.add(chkNumberLabels);
 
                 jLabel1.setText("Form Markup Line:");
 
@@ -138,18 +154,18 @@ public class MarkupForm extends javax.swing.JFrame {
                 getContentPane().setLayout(layout);
                 layout.setHorizontalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(112, 112, 112))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                 );
                 layout.setVerticalGroup(
                         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 );
@@ -235,11 +251,21 @@ private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GE
 	public JMenuItem getMenuAdvancedSkip() {
 		return menuAdvancedSkip;
 	}
+
+	public JCheckBox getChkNumberBindings() {
+		return chkNumberBindings;
+	}
+
+	public JCheckBox getChkNumberLabels() {
+		return chkNumberLabels;
+	}
 	
 	
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnGenerateXML;
         private javax.swing.JButton btnShowXml;
+        private javax.swing.JCheckBox chkNumberBindings;
+        private javax.swing.JCheckBox chkNumberLabels;
         private javax.swing.JMenu fileMenu;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JMenu jMenu1;

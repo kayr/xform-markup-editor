@@ -174,9 +174,9 @@ Kenya,Nairobi,Kikuyu
 
     public void rtestLol() {
 
-        def text = new File('i:/fac.csv').text
+        def sourceFile = new File('C:\\Users\\kay\\Documents\\My Dropbox\\OMNI\\snv database\\markup-xforms\\schools.csv')
 
-        def csv = DynamicBuilder.toStringArrayList(text)
+        def csv = DynamicBuilder.toStringArrayList(sourceFile.text)
 
         builder.fillUpSpace(csv)
 
@@ -184,7 +184,7 @@ Kenya,Nairobi,Kikuyu
         CSVWriter writer = new CSVWriter(stringWriter)
 
         writer.writeAll(csv)
-        def file2 = new File('i:/fac2.csv')
+        def file2 = new File("i:/${sourceFile.name-'.csv'}-clean.csv")
         if (!file2.exists()) file2.createNewFile()
 
         file2.text = stringWriter.toString()

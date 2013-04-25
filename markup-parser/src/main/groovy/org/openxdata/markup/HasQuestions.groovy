@@ -17,6 +17,8 @@ interface HasQuestions {
 
     String getFullBinding()
 
+    List<IQuestion> getAllQuestions()
+
     Form getParentForm()
 
 }

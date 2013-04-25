@@ -44,7 +44,9 @@ class RepeatQuestion extends AbstractQuestion implements HasQuestions {
         questions << question
     }
 
-
+    List<IQuestion> getAllQuestions(){
+        return Form.extractQuestion(this)
+    }
 
     @Override
     String getType() {

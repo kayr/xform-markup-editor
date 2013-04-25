@@ -44,6 +44,10 @@ Select Region
 Subregion
 $>subregion2
 
+@parent region
+Subregion dupe
+$>subregion2
+
 dynamic{
 $region, subregion2
 ug,kla
@@ -1075,6 +1079,7 @@ repeat{ *Required repeat
       <study_form_v1 id="0" name="form" formKey="study_form_v1">
         <region />
         <subregion />
+        <subregion_dupe />
       </study_form_v1>
     </instance>
     <instance id="subregion2">
@@ -1099,6 +1104,7 @@ repeat{ *Required repeat
     </instance>
     <bind id="region" nodeset="/study_form_v1/region" type="xsd:string" />
     <bind id="subregion" nodeset="/study_form_v1/subregion" type="xsd:string" />
+    <bind id="subregion_dupe" nodeset="/study_form_v1/subregion_dupe" type="xsd:string" />
   </model>
   <group id="1">
     <label>Page1</label>
@@ -1115,6 +1121,13 @@ repeat{ *Required repeat
     </select1>
     <select1 bind="subregion">
       <label>Subregion</label>
+      <itemset nodeset="instance('subregion2')/item[@parent=instance('study_form_v1')/region]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+    <select1 bind="subregion_dupe">
+      <label>Subregion dupe</label>
       <itemset nodeset="instance('subregion2')/item[@parent=instance('study_form_v1')/region]">
         <label ref="label" />
         <value ref="value" />

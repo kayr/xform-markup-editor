@@ -137,7 +137,7 @@ class FormBinderPresenter {
     void showXML() {
 
         def study = getParsedStudy()
-        XFormSerializer ser = new XFormSerializer(numberQuestions: true)
+        XFormSerializer ser = getSerializer()
         def studyXml = ser.toStudyXml(study)
 
         def previewFrame = XFormView.initFrame(form)
@@ -147,6 +147,10 @@ class FormBinderPresenter {
 
         invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml)}
 
+    }
+
+    private XFormSerializer getSerializer() {
+        new XFormSerializer(numberQuestions: form.chkNumberLabels.model.isSelected(), numberBindings: form.chkNumberBindings.isSelected())
     }
 
     void newFile() {
@@ -228,7 +232,7 @@ class FormBinderPresenter {
 
         Study study = getParsedStudy()
 
-        XFormSerializer ser = new XFormSerializer(numberQuestions: true)
+        XFormSerializer ser = getSerializer()
         def studyXML = ser.toStudyXml(study)
 
         JFileChooser fc = new JFileChooser()
