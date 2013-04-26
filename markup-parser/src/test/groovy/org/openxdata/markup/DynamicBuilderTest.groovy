@@ -38,6 +38,15 @@ Kenya,Nairobi,Lala
 Kenya,Nairobi,Langley
 Kenya,Nairobi,Kikuyu
 '''
+    def csvWithVariables = '''Country,*District,School
+$ug Uganda,Kampala,Macos
+$ug Uganda,Kampala,$maco2 Macos
+$ug2 Uganda,$km Kampala,Bugiroad
+$ky Kenya,Nairobi,Machaccos
+Kenya,$nm2 Nairobi,Lala
+$kn Kenya,Nairobi,Langley
+Kenya,Nairobi,Kikuyu
+'''
 
 
 
@@ -172,22 +181,24 @@ Kenya,Nairobi,Kikuyu
 
     }
 
-    public void rtestLol() {
+    public void testDynamicOptionWithVariables() {
+        builder.csvSrc = csvWithVariables
+        builder.parse()
 
-        def sourceFile = new File('C:\\Users\\kay\\Documents\\My Dropbox\\OMNI\\snv database\\markup-xforms\\schools.csv')
+        assertEquals 'Expecting 3 questions', 3, builder.questions.size()
+        SingleSelectQuestion qn = builder.questions.find {it instanceof SingleSelectQuestion}
 
-        def csv = DynamicBuilder.toStringArrayList(sourceFile.text)
+        assertEquals 'Dingle select has 5 options', 5, qn.options.size()
+        def districtDynInstance = builder.dynamicOptions[Util.getBindName('District')]
 
-        builder.fillUpSpace(csv)
+        assertEquals 'Expecting 2 options for dirstrict', 4, districtDynInstance.size()
+        def districtQn = builder.questions.find {it.text.equals('District')}
 
-        StringWriter stringWriter = new StringWriter();
-        CSVWriter writer = new CSVWriter(stringWriter)
+        assertEquals Util.getBindName('District'), districtQn.binding
+        assertTrue districtQn.required
 
-        writer.writeAll(csv)
-        def file2 = new File("i:/${sourceFile.name-'.csv'}-clean.csv")
-        if (!file2.exists()) file2.createNewFile()
-
-        file2.text = stringWriter.toString()
+        def dynQn3 = builder.dynamicOptions[Util.getBindName('School')]
+        assertEquals 'Expecting 3 option for school', 7, dynQn3.size()
 
     }
 

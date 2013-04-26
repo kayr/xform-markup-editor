@@ -113,14 +113,13 @@ could not be found in the form""")
             def csvRow = parsedCsv[csvRowIdx]
 
             def childName = csvRow[headerIdx]
-            def childBind = Util.getBindName(childName)
-            def parent = Util.getBindName(csvRow[headerIdx - 1])
+            def parent = Util.parseBind(csvRow[headerIdx - 1]).bind
+            def option = new DynamicOption(parent,childName)
 
-            if (visitedChildren.contains(childBind)) continue
+            if (visitedChildren.contains(option.bind)) continue
 
-            def option = new DynamicOption(child: childName, parent: parent)
             dynamicOptions[dynamicBinding] << option
-            visitedChildren.add(childBind)
+            visitedChildren.add(option.bind)
         }
     }
 

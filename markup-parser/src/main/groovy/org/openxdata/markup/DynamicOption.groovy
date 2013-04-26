@@ -7,26 +7,17 @@ package org.openxdata.markup
  * Time: 11:34 PM
  * To change this template use File | Settings | File Templates.
  */
-class DynamicOption implements IOption {
+class DynamicOption extends Option implements IOption {
 
     String parent
-    String child
-
-    DynamicOption() {}
 
     DynamicOption(String parent, String child) {
+        super(child)
         this.parent = parent
-        this.child = child
     }
 
-    @Override
-    String getText() {
-        return child
-    }
-
-    @Override
-    String getBind() {
-        return Util.getBindName(child)
+    String getChild(){
+        return option
     }
 
     boolean equals(o) {
