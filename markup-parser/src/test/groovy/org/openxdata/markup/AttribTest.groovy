@@ -25,6 +25,10 @@ class AttribTest extends GroovyTestCase {
 
         assertFalse qn.isVisible()
 
+        Attrib.addAttribute(qn, 'dateTime')
+
+        assertEquals 'dateTime',qn.type
+
         try {
             Attrib.addAttribute(sn, 'number')
             fail("Expecting an exception")
