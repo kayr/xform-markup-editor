@@ -31,6 +31,10 @@ interface IQuestion {
 
     String getIndexedAbsoluteBinding()
 
+    String getIndexedRelativeBinding()
+
+    String getRelativeBinding()
+
     String getIndexedBinding()
 
     String getComment()

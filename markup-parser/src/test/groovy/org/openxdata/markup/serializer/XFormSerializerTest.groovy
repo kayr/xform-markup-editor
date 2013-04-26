@@ -141,6 +141,24 @@ class XFormSerializerTest extends GroovyTestCase {
         assertEquals NumberedXMLs.xfromWithValidationLogicXMLUnNumberedBindings, xml
     }
 
+    void testRelativePathInVariableNames(){
+        def form = Util.createParser(Fixtures.formUsingRelativeBinds).study().forms[0]
+
+        def qn = form.questionMap.two
+
+        def xml  = serializer.toXForm(form)
+
+        assertEquals xml,Fixtures.xmlWithRelativeBindings
+
+        serializer.numberBindings = true
+        serializer.numberQuestions = true
+
+        xml = serializer.toXForm(form)
+
+        assertEquals xml,NumberedXMLs.xmlWithRelativeBindings
+
+    }
+
 
 
 }

@@ -75,6 +75,14 @@ abstract class AbstractQuestion implements IQuestion {
          return "$hasQuestions.absoluteBinding/$indexedBinding"
      }
 
+    String getRelativeBinding() {
+        return absoluteBinding.replaceFirst('/', '')
+    }
+
+    String getIndexedRelativeBinding() {
+        return indexedAbsoluteBinding.replaceFirst('/', '')
+    }
+
      @Override
      String getIndexedBinding() {
          return Util.getBindName(questionIdx) + getBinding()

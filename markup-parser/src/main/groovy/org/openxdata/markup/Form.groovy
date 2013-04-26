@@ -61,28 +61,30 @@ class Form implements HasQuestions {
     }
 
     public static String getAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
-        def variableRegex = /[$][a-z][a-z0-9_]*/
+        def variableRegex = /[$][:]?[a-z][a-z0-9_]*/
 
         xpath = xpath.replaceAll(variableRegex) {
-            def tmpQn = findQuestionWithBinding(it - '$', question.parent)
+            def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
 
-            return tmpQn.absoluteBinding
+            def binding = it.contains(':') ? tmpQn.relativeBinding :  tmpQn.absoluteBinding
+            return binding
         }
         xpath = xpath.replace('$.',question.absoluteBinding)
         return xpath
     }
 
     public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
-        def variableRegex = /[$][a-z][a-z0-9_]*/
+        def variableRegex = /[$][:]?[a-z][a-z0-9_]*/
 
         xpath = xpath.replaceAll(variableRegex) {
-            def tmpQn = findQuestionWithBinding(it - '$', question.parent)
+            def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
 
-            return tmpQn.indexedAbsoluteBinding
+            def binding = it.contains(':') ? tmpQn.indexedRelativeBinding  :  tmpQn.indexedAbsoluteBinding
+            return binding
         }
         xpath = xpath.replace('$.',question.indexedAbsoluteBinding)
         return xpath
@@ -91,7 +93,7 @@ class Form implements HasQuestions {
     static IQuestion findQuestionWithBinding(String binding, HasQuestions hasQuestions) {
 
         Form parentForm = null
-        if (hasQuestions instanceof RepeatQuestion)
+        if (!(hasQuestions instanceof Form))
             parentForm = hasQuestions.parentForm
         else
             parentForm = hasQuestions

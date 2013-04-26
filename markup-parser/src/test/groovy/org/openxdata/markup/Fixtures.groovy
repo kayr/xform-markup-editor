@@ -18,6 +18,19 @@ class Fixtures {
         return resourceFolder
     }
 
+    static def formUsingRelativeBinds =
+'''
+### Study
+
+## form
+
+One
+
+@validif . = $:one
+@message blah
+Two
+'''
+
     static def formWithCSVImport =
 '''
 ### study
@@ -1133,6 +1146,28 @@ repeat{ *Required repeat
         <value ref="value" />
       </itemset>
     </select1>
+  </group>
+</xforms>'''
+
+    static def xmlWithRelativeBindings = '''<xforms>
+  <model>
+    <instance id="study_form_v1">
+      <study_form_v1 id="0" name="form" formKey="study_form_v1">
+        <one />
+        <two />
+      </study_form_v1>
+    </instance>
+    <bind id="one" nodeset="/study_form_v1/one" type="xsd:string" />
+    <bind id="two" nodeset="/study_form_v1/two" type="xsd:string" constraint=". = study_form_v1/one" message="blah" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="one">
+      <label>One</label>
+    </input>
+    <input bind="two">
+      <label>Two</label>
+    </input>
   </group>
 </xforms>'''
 

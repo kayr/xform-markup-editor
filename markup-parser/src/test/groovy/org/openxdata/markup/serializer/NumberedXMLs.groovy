@@ -240,5 +240,27 @@ class NumberedXMLs {
   </group>
 </xforms>'''
 
+    static def xmlWithRelativeBindings = '''<xforms>
+  <model>
+    <instance id="study_form_v1">
+      <study_form_v1 id="0" name="form" formKey="study_form_v1">
+        <_1one />
+        <_2two />
+      </study_form_v1>
+    </instance>
+    <bind id="_1one" nodeset="/study_form_v1/_1one" type="xsd:string" />
+    <bind id="_2two" nodeset="/study_form_v1/_2two" type="xsd:string" constraint=". = study_form_v1/_1one" message="blah" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="_1one">
+      <label>1. One</label>
+    </input>
+    <input bind="_2two">
+      <label>2. Two</label>
+    </input>
+  </group>
+</xforms>'''
+
 
 }
