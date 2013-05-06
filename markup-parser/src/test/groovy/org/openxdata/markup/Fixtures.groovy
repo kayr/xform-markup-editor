@@ -18,6 +18,112 @@ class Fixtures {
         return resourceFolder
     }
 
+    static def oxdSampleForm = '''### Example study2
+
+## Example form2
+
+@longtext
+Patient ID
+
+Title
+>Mr
+>Mrs
+
+@longtext
+First name
+
+@required
+Last name
+
+Sex
+>$male Male
+>Female
+
+
+@date
+@validif . < today()
+@message Birthdate Cannot be after today
+Birthdate
+
+@decimal
+@validif . > 0  and . <= 200
+@message Should be between 0 and 200 (inclusive)
+Weight(Kg)
+
+@decimal
+@validif . >= 1 and . <= 9
+@message Height should be between 1 and 9
+Height
+
+@enableif $sex = 'male'
+Is patient pregnant
+
+@comment Please select all anti-retrovirals that the patient is taking
+ARVS
+>>AZT
+>>ABICVAR
+>>EFIVARENCE
+>>TRIOMUNE
+>>TRUVADA
+
+@picture
+Picture
+
+@audio
+Sound
+
+@video
+Record video
+
+dynamic{
+Region,\tSub-Region,\t    City
+Washington,\tKing,\t    Seattle
+Washington,\tKing,\t    Redmond
+Washington,\tPierce,\t    Tacoma
+Washington,\tPierce,\t    Puyallup
+Texas,\t    King-Texas,\tDumont
+Texas,\t    King-Texas,\tFinney
+Texas,\t    Cameron,\tbrownsville
+Texas,\t    Cameron,\tharlingen
+Africa,\t    Uganda,\t    Kampala
+Africa,\t    Uganda,\t    Masaka
+Africa,\t    Uganda,\t    Mbale
+Africa,\t    Uganda,\t    Mbarara
+Africa,\t    Kenya,\t    Nairobi
+Africa,\t    Kenya,\t    Kisumu
+Africa,\t    Kenya,\t    Eldoret
+Europe,\t    Netherlands,Netherlandis
+Europe,\t    Netherlands,Another Netherlands
+}
+
+@id children_number
+Number of children
+
+
+
+@validif length(.) =  $children_number
+@message Enter details of all children
+repeat{ Details of Children
+    Name
+
+    @number
+    Age
+
+    @id child_sex
+    Sex
+    >Male
+    >Female
+}
+
+
+
+@time
+Start time
+
+@time
+@id endtime
+End time
+'''
     static def formUsingRelativeBinds =
 '''
 ### Study
@@ -556,7 +662,7 @@ jeelopo
   </group>
 </xforms>'''
 
-    static def snvStudyXML = """<study name="Snv Study">
+    static def snvStudyXML = '''<study name="Snv Study">
   <form name="Snv Form">
     <version name="v1">
       <xform>&lt;xforms&gt;
@@ -700,6 +806,42 @@ jeelopo
     &lt;/upload&gt;
   &lt;/group&gt;
 &lt;/xforms&gt;</xform>
+      <layout>&lt;Form&gt;
+  &lt;Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" Binding="" Width="900px" Height="910px" backgroundColor=""&gt;
+    &lt;Item WidgetType="Label" Text="Country" HelpText="" Binding="country" Left="20px" Top="20px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="ListBox" Text="" HelpText="Country" Binding="country" Left="40px" Top="40px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="District" HelpText="" Binding="district" Left="20px" Top="70px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="ListBox" Text="" HelpText="District" Binding="district" Left="40px" Top="90px" Width="200px" Height="25px" TabIndex="1" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="School" HelpText="" Binding="school" Left="20px" Top="120px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="ListBox" Text="" HelpText="School" Binding="school" Left="40px" Top="140px" Width="200px" Height="25px" TabIndex="2" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="How are you" HelpText="" Binding="how_are_you" Left="20px" Top="170px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="TextBox" Text="" HelpText="How are you" Binding="how_are_you" Left="40px" Top="190px" Width="200px" Height="25px" TabIndex="3" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="what is name" HelpText="" Binding="what_is_name" Left="20px" Top="220px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="TextBox" Text="" HelpText="what is name" Binding="what_is_name" Left="40px" Top="240px" Width="200px" Height="25px" TabIndex="4" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="What is sex" HelpText="" Binding="what_is_sex" Left="20px" Top="270px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="ListBox" Text="" HelpText="What is sex" Binding="what_is_sex" Left="40px" Top="290px" Width="200px" Height="25px" TabIndex="5" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="Select your diseases" HelpText="" Binding="select_your_diseases" Left="20px" Top="320px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="CheckBox" Text="AIDS" HelpText="AIDS" Binding="aids" ParentBinding="select_your_diseases" Left="40px" Top="340px" Width="200px" Height="25px" TabIndex="6" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="CheckBox" Text="TB" HelpText="TB" Binding="tb" ParentBinding="select_your_diseases" Left="40px" Top="360px" Width="200px" Height="25px" TabIndex="7" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="CheckBox" Text="Whooping cough" HelpText="Whooping cough" Binding="whooping_cough" ParentBinding="select_your_diseases" Left="40px" Top="380px" Width="200px" Height="25px" TabIndex="8" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="Repeat Question header" HelpText="" Binding="repeat_question_header" Left="20px" Top="415px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="rpt question 1" HelpText="" Binding="rpt_question_1" Left="0px" Top="440px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Label" Text="rpt question 2" HelpText="" Binding="rpt_question_2" Left="200px" Top="440px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="GroupBox" HelpText="Repeat Question header" Binding="repeat_question_header" Left="0px" Top="465px" Width="400px" Height="100px" TabIndex="9" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" Repeated="1"&gt;
+      &lt;Item WidgetType="Button" Text="Add New" HelpText="addnew" Binding="addnew" Left="10px" Top="55px" Width="100px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+      &lt;Item WidgetType="ListBox" Text="" HelpText="rpt question 1" Binding="rpt_question_1" Left="0px" Top="10px" Width="200px" Height="25px" TabIndex="1" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+      &lt;Item WidgetType="TextBox" Text="" HelpText="rpt question 2" Binding="rpt_question_2" Left="200px" Top="10px" Width="200px" Height="25px" TabIndex="2" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;/Item&gt;
+    &lt;Item WidgetType="GroupBox" HelpText="Video" Binding="LEFT20pxTOP575px" Left="40px" Top="575px" Width="200px" Height="125px" TabIndex="10" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" borderStyle="dashed"&gt;
+      &lt;Item WidgetType="VideoAudio" Text="Click to play" Binding="video" Left="45px" Top="45px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+      &lt;Item WidgetType="Button" Text="Browse" HelpText="browse" Binding="browse" ParentBinding="video" Left="10px" Top="85px" Width="90px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+      &lt;Item WidgetType="Button" Text="Clear" HelpText="clear" Binding="clear" ParentBinding="video" Left="120px" Top="85px" Width="90px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+      &lt;Item WidgetType="Label" Text="Video" Binding="LEFT20pxTOP575px" Left="0px" Top="0px" Width="100%" Height="20px" TabIndex="0" color="white" fontWeight="bold" fontSize="16px" fontFamily="Verdana,'Lucida Grande','Trebuchet MS',Arial,Sans-Serif" backgroundColor="rgb(143, 171, 199)" textAlign="center" HeaderLabel="true" /&gt;
+    &lt;/Item&gt;
+    &lt;Item WidgetType="Button" Text="Submit" HelpText="submit" Binding="submit" Left="20px" Top="710" Width="120px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Button" Text="Cancel" HelpText="cancel" Binding="cancel" Left="220px" Top="710" Width="120px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+  &lt;/Page&gt;
+&lt;/Form&gt;</layout>
     </version>
   </form>
   <form name="form2">
@@ -720,9 +862,17 @@ jeelopo
     &lt;/input&gt;
   &lt;/group&gt;
 &lt;/xforms&gt;</xform>
+      <layout>&lt;Form&gt;
+  &lt;Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" Binding="" Width="900px" Height="270px" backgroundColor=""&gt;
+    &lt;Item WidgetType="Label" Text="jeelopo" HelpText="" Binding="jeelopo" Left="20px" Top="20px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="TextBox" Text="" HelpText="jeelopo" Binding="jeelopo" Left="40px" Top="40px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Button" Text="Submit" HelpText="submit" Binding="submit" Left="20px" Top="70" Width="120px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+    &lt;Item WidgetType="Button" Text="Cancel" HelpText="cancel" Binding="cancel" Left="220px" Top="70" Width="120px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, sans-serif" /&gt;
+  &lt;/Page&gt;
+&lt;/Form&gt;</layout>
     </version>
   </form>
-</study>"""
+</study>'''
 
     static def xformWithAttribsXML = """<xforms>
   <model>

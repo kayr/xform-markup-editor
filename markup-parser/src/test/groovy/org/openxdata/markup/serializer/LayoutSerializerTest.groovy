@@ -17,7 +17,9 @@ public class LayoutSerializerTest extends TestCase {
 
         LayoutSerializer ser = new LayoutSerializer()
 
-        def form = Util.createParser(Fixtures.normalPurcform2).study().forms[0]
+        def parser = Util.createParser(Fixtures.oxdSampleForm)
+
+        def form = parser.study().forms[0]
 
         def xml = ser.generateLayout(form)
 

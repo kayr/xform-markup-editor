@@ -12,7 +12,7 @@ import org.openxdata.markup.exception.InvalidAttributeException
 class Attrib {
 
     static def types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
-            'picture', 'gps', 'barcode']
+            'picture', 'gps', 'barcode','longtext']
 
     static def allowedAttributes = ['readonly', 'required', 'id', 'invisible', 'comment', 'skiplogic', 'skipaction',
             'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent']

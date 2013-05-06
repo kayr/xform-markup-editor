@@ -29,12 +29,22 @@ class XFormSerializer {
                 xml.form(name: form.name) {
                     xml.version(name: 'v1') {
                         xml.xform(toXForm(form))
+                        String layout = toLayout(form)
+                        xml.layout(layout)
                     }
+
+
                 }
             }
         }
         println "========== Done converting study [${study?.name}] ${new Date()}"
         return printWriter.toString()
+    }
+
+    private String toLayout(Form form) {
+        def laySer = new LayoutSerializer()
+        def layout = laySer.generateLayout(form)
+        layout
     }
 
     public String toXForm(Form form) {
@@ -284,6 +294,8 @@ class XFormSerializer {
                 return [type: 'xsd:string', format: 'gps']
             case 'repeat':
                 return [:]
+            case 'longtext':
+                return [type: 'xsd:string']
             default:
                 return [type: "xsd:$question.type"]
 
