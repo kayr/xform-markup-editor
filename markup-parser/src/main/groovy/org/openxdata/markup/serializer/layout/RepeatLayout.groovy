@@ -1,7 +1,7 @@
 package org.openxdata.markup.serializer.layout
 
-import org.openxdata.markup.IQuestion
 import groovy.xml.MarkupBuilder
+import org.openxdata.markup.IQuestion
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +17,7 @@ class RepeatLayout extends Layout {
 
     void setQn(IQuestion qn) {
         for (it in qn.questions) {
-            Layout layout = serializer.getLayout(it)
+            Layout layout = serializer.getLayoutHandler(it)
             layout.left = left
             left = layout.width + left
             questions << layout
@@ -43,7 +43,8 @@ class RepeatLayout extends Layout {
 
     void add(MarkupBuilder xml) {
 
-        int height = addLabel(xml, [fontWeight:"bold" ,fontStyle:"italic"])
+        standardMappings.putAll([fontWeight: "bold", fontStyle: "italic"])
+        int height = addLabel(xml)
 
         top += height
 
@@ -54,16 +55,10 @@ class RepeatLayout extends Layout {
 
         top += 25
 
-//            <Item WidgetType="GroupBox" HelpText="Repeat Question header" Binding="repeat_question_header" Left="20px" Top="430px" Width="425px" Height="100px" TabIndex="10" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" Repeated="1">
-//            <Item WidgetType="Button" Text="Add New" HelpText="addnew" Binding="addnew" Left="10px" Top="55px" Width="90px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana,'Lucida Grande','Trebuchet MS',Arial,Sans-Serif"/>
-//            <Item WidgetType="ListBox" HelpText="rpt question 1" Binding="rpt_question_1" Left="10px" Top="10px" Width="200px" Height="25px" TabIndex="1" fontSize="16px" fontFamily="Verdana,'Lucida Grande','Trebuchet MS',Arial,Sans-Serif"/>
-//            <Item WidgetType="CheckBox" Text="dsksd" HelpText="dsksd" Binding="dsksd" ParentBinding="rpt_question_2" Left="215px" Top="10px" TabIndex="2" fontSize="16px" fontFamily="Verdana,'Lucida Grande','Trebuchet MS',Arial,Sans-Serif"/>
-//            </Item>
+        xml.Item(WidgetType: "GroupBox", HelpText: qn.comment != null ? qn.comment : qn.getText(numberText),
+                Binding: qn.getBinding(numberBindings), Left: "0px", Top: "${top}px", Width: "${width}px",
+                Height: "100px", TabIndex: getNextWidgetId(), fontSize: "16px", fontFamily: FONT, Repeated: "1") {
 
-
-        xml.Item(WidgetType: "GroupBox", HelpText: qn.comment != null ? qn.comment : qn.getText(numberText), Binding: qn.getBinding(numberBindings),
-                Left: "0px", Top: "${top}px", Width: "${width}px", Height: "100px", TabIndex: getNextId(), fontSize: "16px",
-                fontFamily: FONT, Repeated: "1") {
             xml.Item(WidgetType: "Button", Text: "Add New", HelpText: "addnew", Binding: "addnew", Left: "10px",
                     Top: "55px", Width: "90px", Height: "30px", TabIndex: "0", fontSize: "12px", fontFamily: FONT)
 
@@ -73,9 +68,9 @@ class RepeatLayout extends Layout {
         }
     }
 
-    void setBeginIdx(int idx) {
+    void setTopPosition(int idx) {
         top = idx
-        questions.each {it.setBeginIdx(top + 25)}
+        questions.each { it.setTopPosition(top + 25) }
 
     }
 
@@ -85,6 +80,6 @@ class RepeatLayout extends Layout {
 
     int getTTHeight() {
         //return idx + 25 + 25 + 100 + 10
-        return  25 + 25 + 100 + 10
+        return 25 + 25 + 100 + 10
     }
 }

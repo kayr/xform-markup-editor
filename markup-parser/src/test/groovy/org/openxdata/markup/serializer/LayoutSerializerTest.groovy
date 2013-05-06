@@ -1,6 +1,9 @@
 package org.openxdata.markup.serializer;
 
-import junit.framework.TestCase;
+import junit.framework.TestCase
+import org.custommonkey.xmlunit.DetailedDiff
+import org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.XMLTestCase;
 import org.openxdata.markup.Fixtures;
 import org.openxdata.markup.Util;
 
@@ -11,7 +14,7 @@ import org.openxdata.markup.Util;
  * Time: 11:47 PM
  * To change this template use File | Settings | File Templates.
  */
-public class LayoutSerializerTest extends TestCase {
+public class LayoutSerializerTest extends XMLTestCase {
 
     public void testGenerateLayout() throws Exception {
 
@@ -23,9 +26,13 @@ public class LayoutSerializerTest extends TestCase {
 
         def xml = ser.generateLayout(form)
 
+      // assertEquals Fixtures.xmlOxdSampleForm,xml
 
+        DetailedDiff myDiff = new DetailedDiff(new Diff(Fixtures.xmlOxdSampleForm,xml));
+        List allDifferences = myDiff.getAllDifferences();
+        assertEquals(myDiff.toString(), 0, allDifferences.size())
 
-        println xml
+//        assertXMLEqual Fixtures.xmlOxdSampleForm,xml
 
 //        XFormSerializer serializer = new XFormSerializer()
 //        println serializer.toXForm(form)

@@ -18,6 +18,11 @@ class LongTextLayout extends Layout {
         return 25 + 25 * 4
     }
 
+    @Override
+    String getInputType() {
+        return 'TextArea'
+    }
+
     int getWidth() {
         return 250
     }

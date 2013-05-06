@@ -12,5 +12,19 @@ class TextLayout extends Layout {
     int getTTHeight() {
         return 25 - 8 + 25
     }
+
+    @Override
+    String getInputType() {
+        switch (qn.type) {
+            case 'date':
+                return 'DatePicker'
+            case 'dateTime':
+                return 'DateTimeWidget'
+            case 'time':
+                return 'TimeWidget';
+            default:
+                return 'TextBox'
+        }
+    }
 }
 

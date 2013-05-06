@@ -1,5 +1,9 @@
 package org.openxdata.markup.serializer
 
+import org.custommonkey.xmlunit.Diff
+import org.custommonkey.xmlunit.DifferenceListener
+import org.custommonkey.xmlunit.IgnoreTextAndAttributeValuesDifferenceListener
+import org.custommonkey.xmlunit.XMLTestCase
 import org.openxdata.markup.Fixtures
 import org.openxdata.markup.Study
 import org.openxdata.markup.Util
@@ -11,7 +15,7 @@ import org.openxdata.markup.Util
  * Time: 8:59 PM
  * To change this template use File | Settings | File Templates.
  */
-class XFormSerializerTest extends GroovyTestCase {
+class XFormSerializerTest extends XMLTestCase {
 
     private Study study
     XFormSerializer serializer = new XFormSerializer();
@@ -38,7 +42,11 @@ class XFormSerializerTest extends GroovyTestCase {
     void testTodStudy() {
         def studyXml = serializer.toStudyXml(study)
 
-        assertEquals Fixtures.snvStudyXML, studyXml
+        DifferenceListener myDifferenceListener = new IgnoreTextAndAttributeValuesDifferenceListener();
+        Diff myDiff = new Diff(Fixtures.snvStudyXML, studyXml);
+        myDiff.overrideDifferenceListener(myDifferenceListener);
+        assertTrue("test XML matches control skeleton XML", myDiff.similar());
+        //assertEquals Fixtures.snvStudyXML, studyXml
     }
 
     void testToXformWithDataTypes() {
@@ -73,30 +81,30 @@ class XFormSerializerTest extends GroovyTestCase {
 
     }
 
-    void testFormWithId(){
+    void testFormWithId() {
         def form = Util.createParser(Fixtures.formWithId).study().forms[0]
 
-        assertEquals 'form_v5',form.id
+        assertEquals 'form_v5', form.id
 
         def xml = serializer.toXForm(form)
 
-        assertEquals Fixtures.xmlFormWithId,xml
+        assertEquals Fixtures.xmlFormWithId, xml
     }
 
-    void testFormWithPages(){
+    void testFormWithPages() {
         def parser = Util.createParser(Fixtures.formWithMultiplePage)
 
         def xml = serializer.toXForm(parser.study().forms[0])
 
-        assertEquals Fixtures.formWithMultiPageXML,xml
+        assertEquals Fixtures.formWithMultiPageXML, xml
     }
 
-    void testFormWithDynamicInstance(){
-         def parser = Util.createParser(Fixtures.formWithDynamicInstanceReferences)
+    void testFormWithDynamicInstance() {
+        def parser = Util.createParser(Fixtures.formWithDynamicInstanceReferences)
 
         def xml = serializer.toXForm(parser.study().forms[0])
 
-        assertEquals Fixtures.xmlFormWithDynamicInstanceIds , xml
+        assertEquals Fixtures.xmlFormWithDynamicInstanceIds, xml
     }
 
     void testToXFormWithNumbering() {
@@ -106,7 +114,7 @@ class XFormSerializerTest extends GroovyTestCase {
         serializer.numberQuestions = true
         def xml = serializer.toXForm(form)
 
-        assertEquals NumberedXMLs.expectedXForm , xml
+        assertEquals NumberedXMLs.expectedXForm, xml
 
 
     }
@@ -132,7 +140,7 @@ class XFormSerializerTest extends GroovyTestCase {
         def form = parser.study().forms[0]
         def xml = serializer.toXForm(form)
 
-       assertEquals NumberedXMLs.xfromWithValidationLogicXML, xml
+        assertEquals NumberedXMLs.xfromWithValidationLogicXML, xml
 
         serializer.numberBindings = false
 
@@ -141,24 +149,23 @@ class XFormSerializerTest extends GroovyTestCase {
         assertEquals NumberedXMLs.xfromWithValidationLogicXMLUnNumberedBindings, xml
     }
 
-    void testRelativePathInVariableNames(){
+    void testRelativePathInVariableNames() {
         def form = Util.createParser(Fixtures.formUsingRelativeBinds).study().forms[0]
 
         def qn = form.questionMap.two
 
-        def xml  = serializer.toXForm(form)
+        def xml = serializer.toXForm(form)
 
-        assertEquals xml,Fixtures.xmlWithRelativeBindings
+        assertEquals xml, Fixtures.xmlWithRelativeBindings
 
         serializer.numberBindings = true
         serializer.numberQuestions = true
 
         xml = serializer.toXForm(form)
 
-        assertEquals xml,NumberedXMLs.xmlWithRelativeBindings
+        assertEquals xml, NumberedXMLs.xmlWithRelativeBindings
 
     }
-
 
 
 }

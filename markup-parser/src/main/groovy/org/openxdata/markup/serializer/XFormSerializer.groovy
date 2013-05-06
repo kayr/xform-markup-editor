@@ -29,8 +29,7 @@ class XFormSerializer {
                 xml.form(name: form.name) {
                     xml.version(name: 'v1') {
                         xml.xform(toXForm(form))
-                        String layout = toLayout(form)
-                        xml.layout(layout)
+                        xml.layout(toLayout(form))
                     }
 
 

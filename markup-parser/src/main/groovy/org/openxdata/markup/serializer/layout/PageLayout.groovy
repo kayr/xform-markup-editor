@@ -1,7 +1,7 @@
 package org.openxdata.markup.serializer.layout
 
-import org.openxdata.markup.Page
 import groovy.xml.MarkupBuilder
+import org.openxdata.markup.Page
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,12 +20,16 @@ class PageLayOut extends Layout {
 
     void add(MarkupBuilder xml) {
         xml.Page(Text: page.name, fontWeight: 'normal', fontSize: '16px', fontFamily: FONT, Binding: page.binding, Width: '900px', Height: "${top + 200}px", backgroundColor: '') {
+
+            //build each particular layout component
             components.each {
                 it.add(xml)
             }
+
+            //add the submit and cancel buttons at the bottom if allowed
             if (addButtons) {
-                xml.Item(WidgetType: "Button", Text: "Submit", HelpText: "submit", Binding: "submit", Left: "20px", Top: top+'px', Width: "90px", Height: "30px", TabIndex: "0", fontSize: "16px", fontFamily: FONT)
-                xml.Item(WidgetType: "Button", Text: "Cancel", HelpText: "cancel", Binding: "cancel", Left: "220px", Top: top+'px', Width: "90px", Height: "30px", TabIndex: "0", fontSize: "16px", fontFamily: FONT)
+                xml.Item(WidgetType: "Button", Text: "Submit", HelpText: "submit", Binding: "submit", Left: "20px", Top: top + 'px', Width: "90px", Height: "30px", TabIndex: "0", fontSize: "16px", fontFamily: FONT)
+                xml.Item(WidgetType: "Button", Text: "Cancel", HelpText: "cancel", Binding: "cancel", Left: "220px", Top: top + 'px', Width: "90px", Height: "30px", TabIndex: "0", fontSize: "16px", fontFamily: FONT)
             }
         }
     }
@@ -35,14 +39,15 @@ class PageLayOut extends Layout {
         return top + 200
     }
 
+
+
     void addComponent(Layout layout) {
-        layout.setBeginIdx(top)
+        layout.setTopPosition(top)
+        //add a gap between each widget
         top = top + layout.TTHeight + 20
         layout.parentLayout = this
         components << layout
     }
 
-    int getIndex(Layout layout) {
-        return components.indexOf(layout) + 1
-    }
+
 }

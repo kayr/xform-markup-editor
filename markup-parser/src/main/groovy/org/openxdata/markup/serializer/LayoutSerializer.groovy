@@ -13,31 +13,18 @@ import org.openxdata.markup.serializer.layout.*
  */
 class LayoutSerializer {
 
-
-    def wigdets = [gps: 'TextBox', string: 'TextBox']
-
     boolean numberBindings
     boolean numberText
+    int nextWidgetId
 
     String generateLayout(Form form) {
+
+        List<PageLayOut> pageLayouts = initPageLayoutHandlers(form)
+
         def writer = new StringWriter()
-        def xml = new MarkupBuilder(writer);
-
-        List<PageLayOut> pageLayouts = []
-
-        form.pages.each { eachPage ->
-            PageLayOut pageLayOut = new PageLayOut(page: eachPage)
-            pageLayouts << pageLayOut
-            eachPage.questions.each {
-                def layout = getLayout(it)
-                layout.numberBindings = numberBindings
-                layout.numberText  = numberText
-                layout.serializer = this
-                pageLayOut.addComponent(layout)
-            }
-        }
-
+        def xml = new MarkupBuilder(writer)
         xml.doubleQuotes = true
+
         xml.Form() {
             pageLayouts.eachWithIndex { pageLayOut, idx ->
                 if (idx == 0)
@@ -47,10 +34,34 @@ class LayoutSerializer {
         }
 
         return writer.toString()
-
     }
 
-    Layout getLayout(IQuestion qn) {
+    def List<PageLayOut> initPageLayoutHandlers(Form form) {
+
+        List<PageLayOut> pageLayouts = []
+
+        for (eachPage in form.pages) {
+            PageLayOut pageLayOut = new PageLayOut(page: eachPage)
+
+            eachPage.questions.each { IQuestion qn ->
+                Layout layout = initQuestionLayout(qn)
+                pageLayOut.addComponent(layout)
+            }
+
+            pageLayouts << pageLayOut
+        }
+        pageLayouts
+    }
+
+    def Layout initQuestionLayout(IQuestion qn) {
+        def layout = getLayoutHandler(qn)
+        layout.numberBindings = numberBindings
+        layout.numberText = numberText
+        layout.serializer = this
+        return layout
+    }
+
+    Layout getLayoutHandler(IQuestion qn) {
         if (qn instanceof RepeatQuestion) {
             return new RepeatLayout(serializer: this, qn: qn)
         }
@@ -80,18 +91,16 @@ class LayoutSerializer {
             case 'gps':
             case 'barcode':
             case 'decimal':
-                return new TextLayout(qn: qn)
             default:
                 return new TextLayout(qn: qn)
 
         }
-
     }
 
-    int nextId
 
-    def getNextId() {
-        return nextId++
+
+    def synchronized getNextWidgetId() {
+        return nextWidgetId++
     }
 
 

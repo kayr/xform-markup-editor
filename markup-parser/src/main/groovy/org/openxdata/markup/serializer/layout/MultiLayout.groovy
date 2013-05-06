@@ -15,11 +15,17 @@ class MultiLayout extends Layout {
         }
     }
 
-    void setBeginIdx(int idx) {
+    void setTopPosition(int idx) {
         top = idx
     }
 
     int getTTHeight() {
         return (qn.options.size() * 25) + 20
     }
+
+    @Override
+    String getInputType() {
+        return 'TextBox'
+    }  //will not be called
+
 }
