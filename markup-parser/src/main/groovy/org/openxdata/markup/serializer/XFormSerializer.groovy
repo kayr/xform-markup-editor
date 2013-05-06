@@ -190,7 +190,7 @@ class XFormSerializer {
 
                     List<DynamicOption> options = question.options
                     options.each { option ->
-                        xml.item(id: option.bind, parent: option.parent) {
+                        xml.item(id: option.bind, parent: option.parentBinding) {
                             xml.label(option.child)
                             xml.value(option.bind)
                         }

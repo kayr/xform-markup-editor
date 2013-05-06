@@ -44,6 +44,10 @@ abstract class AbstractQuestion implements IQuestion {
             return "${hasQuestions.getQuestionIdx()}.${hasQuestions.questions.indexOf(this) + 1}"
     }
 
+    def getContextIdx(){
+        return ''+(hasQuestions.questions.indexOf(this) + 1)
+    }
+
     @Override
     void setText(String text) {
         if(text.startsWith('*')){

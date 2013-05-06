@@ -23,6 +23,7 @@ abstract class AbstractSelectionQuestion extends AbstractQuestion implements ISe
 
     @Override
     void addOption(IOption option) {
+        option.setParent(this)
         options << option
     }
 }

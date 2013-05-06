@@ -73,5 +73,7 @@ interface IQuestion {
 
     def getQuestionIdx()
 
+    def getContextIdx()
+
 
 }

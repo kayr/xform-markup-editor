@@ -12,4 +12,8 @@ interface IOption {
     String getText()
 
     String getBind()
+
+    ISelectionQuestion getParent()
+
+    void setParent(ISelectionQuestion qn)
 }

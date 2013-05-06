@@ -93,7 +93,7 @@ could not be found in the form""")
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
             if (isInQuestionMode()) {
                 qn.dynamicInstanceId = qn.binding
-                qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parent of the current one.
+                qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parentBinding of the current one.
                 questions << qn
             } else {
                 validateVariable(qn.binding, qn.text)

@@ -9,11 +9,11 @@ package org.openxdata.markup
  */
 class DynamicOption extends Option implements IOption {
 
-    String parent
+    String parentBinding
 
     DynamicOption(String parent, String child) {
         super(child)
-        this.parent = parent
+        this.parentBinding = parent
     }
 
     String getChild(){
@@ -27,14 +27,14 @@ class DynamicOption extends Option implements IOption {
         DynamicOption that = (DynamicOption) o
 
         if (child != that.child) return false
-        if (parent != that.parent) return false
+        if (parentBinding != that.parentBinding) return false
 
         return true
     }
 
     int hashCode() {
         int result
-        result = (parent != null ? parent.hashCode() : 0)
+        result = (parentBinding != null ? parentBinding.hashCode() : 0)
         result = 31 * result + (child != null ? child.hashCode() : 0)
         return result
     }

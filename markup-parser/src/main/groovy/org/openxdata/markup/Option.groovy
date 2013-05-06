@@ -13,6 +13,7 @@ class Option implements IOption {
 
     String option
     String bind
+    ISelectionQuestion parent
 
     Option(String option) {
         setOption(option)
@@ -35,4 +36,7 @@ class Option implements IOption {
     String getBind() {
         return bind
     }
+
+
+
 }
