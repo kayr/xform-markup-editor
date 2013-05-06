@@ -21,8 +21,8 @@ class NumberedXMLs {
         <_6what_is_sex />
         <_7select_your_diseases />
         <_8repeat_question_header>
-          <_8_dot_1rpt_question_1 />
-          <_8_dot_2rpt_question_2 />
+          <_8_1rpt_question_1 />
+          <_8_2rpt_question_2 />
         </_8repeat_question_header>
         <_9video />
       </snv_study_snv_form_v1>
@@ -63,8 +63,8 @@ class NumberedXMLs {
     <bind id="_6what_is_sex" nodeset="/snv_study_snv_form_v1/_6what_is_sex" type="xsd:string" />
     <bind id="_7select_your_diseases" nodeset="/snv_study_snv_form_v1/_7select_your_diseases" type="xsd:string" />
     <bind id="_8repeat_question_header" nodeset="/snv_study_snv_form_v1/_8repeat_question_header" />
-    <bind id="_8_dot_1rpt_question_1" nodeset="/snv_study_snv_form_v1/_8repeat_question_header/_8_dot_1rpt_question_1" type="xsd:string" />
-    <bind id="_8_dot_2rpt_question_2" nodeset="/snv_study_snv_form_v1/_8repeat_question_header/_8_dot_2rpt_question_2" type="xsd:string" />
+    <bind id="_8_1rpt_question_1" nodeset="/snv_study_snv_form_v1/_8repeat_question_header/_8_1rpt_question_1" type="xsd:string" />
+    <bind id="_8_2rpt_question_2" nodeset="/snv_study_snv_form_v1/_8repeat_question_header/_8_2rpt_question_2" type="xsd:string" />
     <bind id="_9video" nodeset="/snv_study_snv_form_v1/_9video" type="xsd:base64Binary" format="video" />
   </model>
   <group id="1">
@@ -129,14 +129,14 @@ class NumberedXMLs {
     <group id="_8repeat_question_header">
       <label>8. Repeat Question header</label>
       <repeat bind="_8repeat_question_header">
-        <select1 bind="_8_dot_1rpt_question_1">
+        <select1 bind="_8_1rpt_question_1">
           <label>8.1. rpt question 1</label>
           <item id="sdsd">
             <label>sdsd</label>
             <value>sdsd</value>
           </item>
         </select1>
-        <select bind="_8_dot_2rpt_question_2">
+        <select bind="_8_2rpt_question_2">
           <label>8.2. rpt question 2</label>
           <item id="dsksd">
             <label>dsksd</label>

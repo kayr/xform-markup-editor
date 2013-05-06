@@ -85,7 +85,7 @@ abstract class AbstractQuestion implements IQuestion {
 
      @Override
      String getIndexedBinding() {
-         return Util.getBindName(questionIdx) + getBinding()
+         return "_${questionIdx.replace('.','_')}$binding"
      }
 
      @Override
