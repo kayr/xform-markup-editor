@@ -10,7 +10,6 @@ package org.openxdata.markup.serializer.layout
 class TextLayout extends Layout {
     @Override
     int getTTHeight() {
-        // return 25 + 15 + 25
         return 25 - 8 + 25
     }
 }

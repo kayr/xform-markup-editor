@@ -42,7 +42,7 @@ class XFormSerializer {
     }
 
     private String toLayout(Form form) {
-        def laySer = new LayoutSerializer()
+        def laySer = new LayoutSerializer(numberText: numberQuestions,numberBindings: numberBindings)
         def layout = laySer.generateLayout(form)
         layout
     }
@@ -101,7 +101,7 @@ class XFormSerializer {
 
     private String binding(IQuestion question) {
         if(numberBindings)
-               return question.indexedBinding
+               return question.getBinding(numberBindings)
         return question.binding
 
     }
@@ -226,7 +226,7 @@ class XFormSerializer {
 
     void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
 
-        def label = numberQuestions ? "${question.questionIdx}. $question.text" : question.text
+        def label = question.getText(numberQuestions)
         xml.label(label)
         if (question.comment)
             xml.hint(question.comment)

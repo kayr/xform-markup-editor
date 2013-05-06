@@ -75,5 +75,9 @@ interface IQuestion {
 
     def getContextIdx()
 
+    String getBinding(boolean  numbered)
+
+    String getText(boolean number)
+
 
 }

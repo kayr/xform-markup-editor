@@ -25,6 +25,22 @@ class RepeatLayout extends Layout {
         super.setQn(qn)
     }
 
+    @Override
+    void setNumberBindings(boolean numberBindings) {
+        questions.each {
+            it.numberBindings = numberBindings
+        }
+        super.setNumberBindings(numberBindings)
+    }
+
+    @Override
+    void setNumberText(boolean numberText) {
+        questions.each {
+            it.numberText = numberText
+        }
+        super.setNumberText(numberText)
+    }
+
     void add(MarkupBuilder xml) {
 
         int height = addLabel(xml, [fontWeight:"bold" ,fontStyle:"italic"])
@@ -45,7 +61,7 @@ class RepeatLayout extends Layout {
 //            </Item>
 
 
-        xml.Item(WidgetType: "GroupBox", HelpText: qn.comment != null ? qn.comment : qn.text, Binding: qn.binding,
+        xml.Item(WidgetType: "GroupBox", HelpText: qn.comment != null ? qn.comment : qn.getText(numberText), Binding: qn.getBinding(numberBindings),
                 Left: "0px", Top: "${top}px", Width: "${width}px", Height: "100px", TabIndex: getNextId(), fontSize: "16px",
                 fontFamily: FONT, Repeated: "1") {
             xml.Item(WidgetType: "Button", Text: "Add New", HelpText: "addnew", Binding: "addnew", Left: "10px",

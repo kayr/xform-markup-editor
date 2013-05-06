@@ -92,7 +92,24 @@ abstract class AbstractQuestion implements IQuestion {
          return "_${questionIdx.replace('.','_')}$binding"
      }
 
-     @Override
+    String getBinding(boolean  numbered){
+        if(numbered)
+            return getIndexedBinding()
+        return binding
+    }
+
+    String getText(boolean number){
+        if(number)
+            return getNumberedText()
+        return text
+
+    }
+
+    String getNumberedText() {
+        return getQuestionIdx() +". $text"
+    }
+
+    @Override
     String getComment() {
         return comment
     }

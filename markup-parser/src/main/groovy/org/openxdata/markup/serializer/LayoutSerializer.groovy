@@ -16,6 +16,9 @@ class LayoutSerializer {
 
     def wigdets = [gps: 'TextBox', string: 'TextBox']
 
+    boolean numberBindings
+    boolean numberText
+
     String generateLayout(Form form) {
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer);
@@ -27,6 +30,8 @@ class LayoutSerializer {
             pageLayouts << pageLayOut
             eachPage.questions.each {
                 def layout = getLayout(it)
+                layout.numberBindings = numberBindings
+                layout.numberText  = numberText
                 layout.serializer = this
                 pageLayOut.addComponent(layout)
             }
