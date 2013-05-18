@@ -18,6 +18,17 @@ class Fixtures {
         return resourceFolder
     }
 
+    static def formWithEndtime="""
+### Study
+
+## Form
+
+@id endtime
+End time
+
+Other question
+"""
+
     static def oxdSampleForm = '''### Example study2
 
 ## Example form2

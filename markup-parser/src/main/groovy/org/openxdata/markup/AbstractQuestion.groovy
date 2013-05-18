@@ -89,6 +89,8 @@ abstract class AbstractQuestion implements IQuestion {
 
      @Override
      String getIndexedBinding() {
+         if(binding == 'endtime' && (type == 'dateTime' || type == 'time'))
+             return binding
          return "_${questionIdx.replace('.','_')}$binding"
      }
 

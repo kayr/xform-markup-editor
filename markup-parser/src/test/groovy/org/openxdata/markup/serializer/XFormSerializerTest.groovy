@@ -167,5 +167,29 @@ class XFormSerializerTest extends XMLTestCase {
 
     }
 
+    void testFormWithEndTime(){
+
+        def form = Util.createParser(Fixtures.formWithEndtime).study().forms[0]
+
+        def question = form.questionMap['endtime']
+
+        assertEquals '_1endtime',question.getBinding(true)
+
+        assertEquals 'endtime',question.getBinding(false)
+
+        question.setType('dateTime')
+
+        assertEquals 'endtime',question.getBinding(true)
+
+        assertEquals 'endtime',question.getBinding(false)
+
+        question.setType('time')
+
+        assertEquals 'endtime',question.getBinding(true)
+
+        assertEquals 'endtime',question.getBinding(false)
+
+    }
+
 
 }
