@@ -807,7 +807,7 @@ jeelopo
   &lt;/group&gt;
 &lt;/xforms&gt;</xform>
       <layout>&lt;Form&gt;
-  &lt;Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" Binding="" Width="900px" Height="1032px" backgroundColor=""&gt;
+  &lt;Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" Binding="" Width="1600px" Height="1032px" backgroundColor=""&gt;
     &lt;Item WidgetType="Label" Text="Country" HelpText="" Binding="country" Left="20px" Top="20px" Width="56px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" /&gt;
     &lt;Item WidgetType="ListBox" Text="" HelpText="Country" Binding="country" Left="40px" Top="37px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" /&gt;
     &lt;Item WidgetType="Label" Text="District" HelpText="" Binding="district" Left="20px" Top="82px" Width="64px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" /&gt;
@@ -863,7 +863,7 @@ jeelopo
   &lt;/group&gt;
 &lt;/xforms&gt;</xform>
       <layout>&lt;Form&gt;
-  &lt;Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" Binding="" Width="900px" Height="282px" backgroundColor=""&gt;
+  &lt;Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" Binding="" Width="1600px" Height="282px" backgroundColor=""&gt;
     &lt;Item WidgetType="Label" Text="jeelopo" HelpText="" Binding="jeelopo" Left="20px" Top="20px" Width="56px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" /&gt;
     &lt;Item WidgetType="TextBox" Text="" HelpText="jeelopo" Binding="jeelopo" Left="40px" Top="37px" Width="200px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" /&gt;
     &lt;Item WidgetType="Button" Text="Submit" HelpText="submit" Binding="submit" Left="20px" Top="82px" Width="90px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" /&gt;
@@ -1323,7 +1323,7 @@ repeat{ *Required repeat
 
 
     static def xmlOxdSampleForm = '''<Form>
-  <Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" Binding="" Width="900px" Height="2216px" backgroundColor="">
+  <Page Text="Page1" fontWeight="normal" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" Binding="" Width="1600px" Height="2216px" backgroundColor="">
     <Item WidgetType="Label" Text="Patient ID" HelpText="" Binding="patient_id" Left="20px" Top="20px" Width="80px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" />
     <Item WidgetType="TextArea" Text="" HelpText="Patient ID" Binding="patient_id" Left="40px" Top="37px" Width="250px" Height="100px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" />
     <Item WidgetType="Label" Text="Title" HelpText="" Binding="title" Left="20px" Top="165px" Width="40px" Height="25px" TabIndex="0" fontSize="12px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" />

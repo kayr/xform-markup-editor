@@ -11,7 +11,7 @@ import org.openxdata.markup.Page
  * To change this template use File | Settings | File Templates.
  */
 
-class PageLayOut extends Layout {
+class PageLayout extends Layout {
     Page page
     int top = 20
 
@@ -19,7 +19,7 @@ class PageLayOut extends Layout {
     boolean addButtons
 
     void add(MarkupBuilder xml) {
-        xml.Page(Text: page.name, fontWeight: 'normal', fontSize: '16px', fontFamily: FONT, Binding: page.binding, Width: '900px', Height: "${top + 200}px", backgroundColor: '') {
+        xml.Page(Text: page.name, fontWeight: 'normal', fontSize: '16px', fontFamily: FONT, Binding: page.binding, Width: '1600px', Height: "${top + 200}px", backgroundColor: '') {
 
             //build each particular layout component
             components.each {

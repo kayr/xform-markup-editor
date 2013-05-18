@@ -19,7 +19,7 @@ class LayoutSerializer {
 
     String generateLayout(Form form) {
 
-        List<PageLayOut> pageLayouts = initPageLayoutHandlers(form)
+        List<PageLayout> pageLayouts = initPageLayoutHandlers(form)
 
         def writer = new StringWriter()
         def xml = new MarkupBuilder(writer)
@@ -36,12 +36,12 @@ class LayoutSerializer {
         return writer.toString()
     }
 
-    def List<PageLayOut> initPageLayoutHandlers(Form form) {
+    def List<PageLayout> initPageLayoutHandlers(Form form) {
 
-        List<PageLayOut> pageLayouts = []
+        List<PageLayout> pageLayouts = []
 
         for (eachPage in form.pages) {
-            PageLayOut pageLayOut = new PageLayOut(page: eachPage)
+            PageLayout pageLayOut = new PageLayout(page: eachPage)
 
             eachPage.questions.each { IQuestion qn ->
                 Layout layout = initQuestionLayout(qn)
