@@ -14,6 +14,7 @@ class XFormSerializer {
 
     boolean numberQuestions = false
     boolean numberBindings = false
+    boolean generateView = true
 
     def xforms = [:]
 
@@ -29,7 +30,8 @@ class XFormSerializer {
                 xml.form(name: form.name) {
                     xml.version(name: 'v1') {
                         xml.xform(toXForm(form))
-                        xml.layout(toLayout(form))
+                        if (generateView)
+                            xml.layout(toLayout(form))
                     }
 
 

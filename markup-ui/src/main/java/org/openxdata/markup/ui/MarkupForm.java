@@ -47,6 +47,7 @@ public class MarkupForm extends javax.swing.JFrame {
                 btnShowXml = new javax.swing.JButton();
                 chkNumberBindings = new javax.swing.JCheckBox();
                 chkNumberLabels = new javax.swing.JCheckBox();
+                chkGenerateLayout = new javax.swing.JCheckBox();
                 jPanel1 = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
                 lblCaret = new javax.swing.JLabel();
@@ -98,6 +99,14 @@ public class MarkupForm extends javax.swing.JFrame {
                 chkNumberLabels.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
                 chkNumberLabels.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
                 jToolBar1.add(chkNumberLabels);
+
+                chkGenerateLayout.setSelected(true);
+                chkGenerateLayout.setText("Generate Layout");
+                chkGenerateLayout.setFocusable(false);
+                chkGenerateLayout.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+                chkGenerateLayout.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+                chkGenerateLayout.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+                jToolBar1.add(chkGenerateLayout);
 
                 jLabel1.setText("Form Markup Line:");
 
@@ -259,11 +268,15 @@ private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GE
 	public JCheckBox getChkNumberLabels() {
 		return chkNumberLabels;
 	}
-	
+
+	public JCheckBox getChkGenerateLayout() {
+		return chkGenerateLayout;
+	}
 	
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JButton btnGenerateXML;
         private javax.swing.JButton btnShowXml;
+        private javax.swing.JCheckBox chkGenerateLayout;
         private javax.swing.JCheckBox chkNumberBindings;
         private javax.swing.JCheckBox chkNumberLabels;
         private javax.swing.JMenu fileMenu;

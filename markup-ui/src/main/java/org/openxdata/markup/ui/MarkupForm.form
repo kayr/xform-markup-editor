@@ -145,6 +145,16 @@
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JCheckBox" name="chkGenerateLayout">
+          <Properties>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="Generate Layout"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="11"/>
+            <Property name="horizontalTextPosition" type="int" value="4"/>
+            <Property name="verticalTextPosition" type="int" value="3"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel1">

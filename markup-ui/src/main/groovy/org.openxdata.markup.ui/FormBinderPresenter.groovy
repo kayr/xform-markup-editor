@@ -15,7 +15,6 @@ import javax.swing.JOptionPane
 import javax.swing.filechooser.FileFilter
 
 import static javax.swing.JOptionPane.YES_NO_OPTION
-import javax.swing.SwingUtilities
 
 import static javax.swing.SwingUtilities.invokeLater
 
@@ -150,7 +149,7 @@ class FormBinderPresenter {
     }
 
     private XFormSerializer getSerializer() {
-        new XFormSerializer(numberQuestions: form.chkNumberLabels.model.isSelected(), numberBindings: form.chkNumberBindings.isSelected())
+        new XFormSerializer(numberQuestions: form.chkNumberLabels.model.isSelected(), numberBindings: form.chkNumberBindings.isSelected(),generateView: form.chkGenerateLayout.isSelected())
     }
 
     void newFile() {
