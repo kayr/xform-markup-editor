@@ -12,6 +12,7 @@ import org.openxdata.xpath.XPathParser
  */
 class Form implements HasQuestions {
 
+    public static final String VARIABLE_REGEX = /[$][:]?[a-zA-Z][a-zA-Z0-9_]*/
     String name
     String id
     Study study
@@ -61,13 +62,11 @@ class Form implements HasQuestions {
     }
 
     public static String getAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
-        def variableRegex = /[$][:]?[a-z][a-z0-9_]*/
-
-        xpath = xpath.replaceAll(variableRegex) {
+          xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
-
+             //TODO Remember to check the XPATH for any $ signs and notify the user
             def binding = it.contains(':') ? tmpQn.relativeBinding :  tmpQn.absoluteBinding
             return binding
         }
@@ -76,9 +75,7 @@ class Form implements HasQuestions {
     }
 
     public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
-        def variableRegex = /[$][:]?[a-z][a-z0-9_]*/
-
-        xpath = xpath.replaceAll(variableRegex) {
+        xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
