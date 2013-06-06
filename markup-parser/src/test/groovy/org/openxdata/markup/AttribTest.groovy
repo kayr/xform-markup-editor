@@ -43,9 +43,7 @@ class AttribTest extends GroovyTestCase {
 
         assertEquals "This is a comment",qn.comment
 
-        Attrib.addAttribute(qn,'id hello_Question')
-
-
+        Attrib.addAttribute(qn,'id hello_question')
         assertEquals 'hello_question',qn.binding
 
         qn.setText("Hahahahha")    //Make sure the binding does not change since the parser set the question later
@@ -59,9 +57,28 @@ class AttribTest extends GroovyTestCase {
             assertTrue ex instanceof InvalidAttributeException
         }
 
+        try {
+            Attrib.addAttribute(qn, 'id hello_Question')
+            fail('Expecting an exception for an invalid attribute')
+        } catch (Exception ex) {
+            assertTrue ex instanceof InvalidAttributeException
+        }
+
         try{
             Attrib.addAttribute(sn,'parent blah_blah')
+            fail('Expecting an exception here')
+        }   catch (InvalidAttributeException ex){
+
+        }
+
+        try{
             Attrib.addAttribute(qn,'parent blah_blah')
+            fail('Expecting an exception here')
+        }   catch (InvalidAttributeException ex){
+
+        }
+
+        try{
             Attrib.addAttribute(dn,'parent blah blah')
             fail('Expecting an exception here')
         }   catch (InvalidAttributeException ex){

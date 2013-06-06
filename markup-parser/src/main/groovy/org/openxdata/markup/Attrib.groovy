@@ -80,7 +80,6 @@ Supported attributes include $types \n$allowedAttributes""")
                 question.comment = param
                 break
             case 'id':
-                param = param.toLowerCase()
                 Util.validateId(param)
                 question.binding = param
                 break
