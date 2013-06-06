@@ -259,7 +259,7 @@ class XFormSerializer {
         xml.select1(bind: binding(question)) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
-            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$page.parentForm.binding')/${dynamicParentQnId(question)}]") {
+            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$page.parentForm.binding')/${getDynamicParentQnId(question)}]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
             }
@@ -267,7 +267,7 @@ class XFormSerializer {
         }
     }
 
-    private String dynamicParentQnId(DynamicQuestion question) {
+    private String getDynamicParentQnId(DynamicQuestion question) {
         if(numberQuestions)
             return question.indexedParentQuestionId
         return question.parentQuestionId
