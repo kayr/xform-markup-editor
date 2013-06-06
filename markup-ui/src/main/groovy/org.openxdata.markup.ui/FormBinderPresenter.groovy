@@ -257,17 +257,28 @@ class FormBinderPresenter {
 
         file.text = studyXML
 
-        def formFolder = new File(file.parentFile.absolutePath + "/xforms")
-        println "Creating directory $formFolder.absolutePath"
-        formFolder.mkdirs()
-
+        def formFolder = createDirectory(file.parentFile.absolutePath + "/xforms")
         ser.xforms.each {key, value ->
             new File(formFolder, key.name + '.xml').text = value
         }
 
+        def importsFolder = createDirectory(file.parentFile.absolutePath + "/xform-imports")
+        def imports = ser.formImports
+        imports.each {key, value ->
+            new File(importsFolder, key + '.xml').text = value
+        }
+
         def msg = """Created study file $file.absolutePath
-Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath """
+Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath
+Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath"""
         JOptionPane.showMessageDialog(form, msg)
+    }
+
+    File createDirectory(String path){
+        def directory = new File(path)
+        println "Creating directory $directory.absolutePath"
+        directory.mkdirs()
+        return directory
     }
 
     void openFile(File f) {

@@ -192,4 +192,19 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
 
+    void testFormImports(){
+        def study = Util.createParser(Fixtures.multipleForms).study()
+
+        serializer.toStudyXml(study)
+
+        def formImports = serializer.formImports
+
+
+
+        assertEquals 6 ,formImports.size()
+
+        assertTrue formImports.values().every {!it.isEmpty()}
+    }
+
+
 }

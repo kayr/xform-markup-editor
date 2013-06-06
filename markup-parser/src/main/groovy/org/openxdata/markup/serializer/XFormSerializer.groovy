@@ -2,6 +2,7 @@ package org.openxdata.markup.serializer
 
 import groovy.xml.MarkupBuilder
 import org.openxdata.markup.*
+import groovy.xml.XmlUtil
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +18,8 @@ class XFormSerializer {
     boolean generateView = true
 
     def xforms = [:]
+    def formImports = [:]
+    def studyXML
 
     public String toStudyXml(Study study) {
         def printWriter = new StringWriter();
@@ -39,7 +42,25 @@ class XFormSerializer {
             }
         }
         println "========== Done converting study [${study?.name}] ${new Date()}"
-        return printWriter.toString()
+        studyXML = printWriter.toString()
+        return studyXML
+    }
+
+    public Map<String, String> getFormImports() {
+
+        def imports = [:]
+
+        def studyNode = new XmlParser().parseText(studyXML)
+
+        studyNode.form.each { Node node ->
+            def formName = node.'@name'
+            imports[formName+".form"] = XmlUtil.serialize(node)
+
+            def versionName = node.version[0].'@name'
+            imports["$formName-${versionName}.version"] = XmlUtil.serialize(node.version[0])
+        }
+
+        return imports
     }
 
     private String toLayout(Form form) {

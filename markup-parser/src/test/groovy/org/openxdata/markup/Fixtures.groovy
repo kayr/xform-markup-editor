@@ -18,6 +18,25 @@ class Fixtures {
         return resourceFolder
     }
 
+    static def multipleForms =
+'''
+
+### Study
+
+## form
+
+question
+
+## form2
+
+question
+
+## form3
+
+question
+
+'''
+
     static def formWithEndtime="""
 ### Study
 
