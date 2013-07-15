@@ -90,7 +90,7 @@ abstract class Layout {
     int addCheckBox(IOption option, MarkupBuilder xml) {
         def height = getWidgetHeight('CheckBox')
         def map = [WidgetType: 'CheckBox', Text: option.text, HelpText: option.text, Binding: option.bind,
-                ParentBinding: option.parent.getBinding(numberBindings), Top: "${top}px", Width: "200px",
+                ParentBinding: option.parent.getBinding(numberBindings), Top: "${top}px", Width: "700px",
                 Height: "${height}px", TabIndex: nextWidgetId]
         map.putAll(standardMappings)
         xml.Item(map)

@@ -191,7 +191,7 @@ Kenya,Nairobi,Kikuyu
         assertEquals 'Dingle select has 5 options', 5, qn.options.size()
         def districtDynInstance = builder.dynamicOptions[Util.getBindName('District')]
 
-        assertEquals 'Expecting 2 options for dirstrict', 4, districtDynInstance.size()
+        assertEquals 'Expecting 2 options for district', 4, districtDynInstance.size()
         def districtQn = builder.questions.find {it.text.equals('District')}
 
         assertEquals Util.getBindName('District'), districtQn.binding
@@ -199,6 +199,25 @@ Kenya,Nairobi,Kikuyu
 
         def dynQn3 = builder.dynamicOptions[Util.getBindName('School')]
         assertEquals 'Expecting 3 option for school', 7, dynQn3.size()
+
+    }
+
+    public void ignoreTestFillUpSpace2(){
+        def file = new File(/C:\Users\kay\Dropbox\OMNI\snv database\community wash\community forms\lists.csv/)
+
+        builder.csvFile = file
+
+        def csv = DynamicBuilder.toStringArrayList(file.text)
+
+        builder.fillUpSpace(csv)
+
+        StringWriter stringWriter = new StringWriter()
+       CSVWriter writer = new  CSVWriter(stringWriter)
+
+        writer.writeAll(csv)
+
+        def file2 = new File(file.absolutePath+".filled.csc")
+        file2.text = stringWriter.toString()
 
     }
 
