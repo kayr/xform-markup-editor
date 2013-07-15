@@ -148,19 +148,19 @@ class Util {
         return "string"
     }
 
-    static Map<String,String> parseBind(String option) {
+    static Map<String,String> parseBind(String option,int line = 0) {
         def bind = null;
         if (option[0] == '$') {
             def tmpBind = option.find(/[$][a-z][a-z0-9_]*\s/)
             //make sure bind is at the beginning
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
- An Id should start with lower case characters follow by low case characters, numbers or underscores""")
+ An Id should start with lower case characters follow by low case characters, numbers or underscores""",line)
             option = option.replaceFirst(/[$][a-z][a-z0-9_]*/, '').trim()
             bind = tmpBind.trim() - '$'
         }
         else {
-            bind = Util.getBindName(option)
+            bind = getBindName(option)
         }
         return [option:option,bind:bind]
     }
@@ -182,10 +182,10 @@ class Util {
         return parser;
     }
 
-    public static void validateId(String id) {
+    public static void validateId(String id, int line) {
         if (!(id ==~ /[a-z][a-z0-9_]*/))
             throw new InvalidAttributeException("""You have an invalid variable [$id] .
-Attributes should start with a small letter followed by small letters and underscores""")
+Attributes should start with a small letter followed by small letters and underscores""",line)
     }
 
 

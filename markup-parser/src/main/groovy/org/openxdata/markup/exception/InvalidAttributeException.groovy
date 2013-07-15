@@ -7,7 +7,7 @@ package org.openxdata.markup.exception
  * Time: 12:30 PM
  * To change this template use File | Settings | File Templates.
  */
-class InvalidAttributeException extends Exception {
+class InvalidAttributeException extends ValidationException {
 
     InvalidAttributeException() {
     }
@@ -24,4 +24,7 @@ class InvalidAttributeException extends Exception {
         super(cause)
     }
 
+    InvalidAttributeException(String message, int line) {
+        super(message, line)
+    }
 }

@@ -46,7 +46,7 @@ scope						{Form scopeForm;}
 						$form::scopeForm = rv;
 						rv.setStudy($study::scopeStudy);
 						if(attrib != null)
-						Attrib.addAttributeToForm(rv,attrib.getText());
+						Attrib.addAttributeToForm(rv,attrib.getText(),attrib.getLine());
 						} 
 
 		(
@@ -84,7 +84,7 @@ page returns [Page rv = new Page()]
 
 repeatQn returns [RepeatQuestion rv = new RepeatQuestion()]
 	:	
-	(ATTRIBUTE				{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
+	(ATTRIBUTE				{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
 	BEGINREPEATMARKER  			{
 						rv.setText($BEGINREPEATMARKER.text);
 						rv.setParent($form::scopeForm);
@@ -110,30 +110,42 @@ csvImport returns [DynamicBuilder rv = new DynamicBuilder()]
 	;
 	
 singleSelQn returns [SingleSelectQuestion rv = new SingleSelectQuestion() ]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
-		LINECONTENTS 			{rv.setText($LINECONTENTS.text);}
-		(SINGLEOPTION			{rv.getOptions().add(new Option($SINGLEOPTION.text));})+
+	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
+		LINECONTENTS 			{
+						rv.setText($LINECONTENTS.text);
+						rv.setLine($LINECONTENTS.line);
+						}
+		(SINGLEOPTION			{rv.getOptions().add(new Option($SINGLEOPTION.text,$SINGLEOPTION.line));})+
 					
 	;
 	
 	
 dynamicQnInstance returns [DynamicQuestion rv = new DynamicQuestion() ]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
-		LINECONTENTS 			{rv.setText($LINECONTENTS.text);}
+	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
+		LINECONTENTS 			{
+						rv.setText($LINECONTENTS.text);
+						rv.setLine($LINECONTENTS.line);
+						}
 		DYNAMICOPTION			{rv.setDynamicInstanceId($DYNAMICOPTION.text);}
 					
 	;
 	
 multipleSelQn returns [MultiSelectQuestion rv = new MultiSelectQuestion()]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
-		LINECONTENTS 			{rv.setText($LINECONTENTS.text);}
-		(MULTIPLEOPTION			{rv.addOption(new Option($MULTIPLEOPTION.text));})+
+	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
+		LINECONTENTS 			{
+						rv.setText($LINECONTENTS.text);
+						rv.setLine($LINECONTENTS.line);
+						}
+		(MULTIPLEOPTION			{rv.addOption(new Option($MULTIPLEOPTION.text,$MULTIPLEOPTION.line));})+
 	;
 	
 	
 txtQn	returns [TextQuestion rv = new TextQuestion()]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text);})*
-		LINECONTENTS 			{rv.setText($LINECONTENTS.text);}
+	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
+		LINECONTENTS 			{
+						rv.setText($LINECONTENTS.text);
+						rv.setLine($LINECONTENTS.line);
+						}
 	;
 	
 	

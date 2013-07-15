@@ -44,7 +44,7 @@ class DynamicBuilder {
 could not be found in the form""")
 
                 if(!(singleSelectQuestionInstance instanceof SingleSelectQuestion))
-                    throw new ValidationException(("Error while parsing CSV.Question with id[$singleSelectQuestion] is not a SingleSelect Question"))
+                    throw new ValidationException("Error while parsing CSV.Question with id[$singleSelectQuestion] is not a SingleSelect Question",singleSelectQuestionInstance.line)
                 singleSelectQuestionInstance.options = singleSelectOptions
             }
 

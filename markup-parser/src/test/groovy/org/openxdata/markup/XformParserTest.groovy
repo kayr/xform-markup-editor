@@ -315,7 +315,7 @@ jeelopo
             parser.study()
             fail("Expecting duplicate page exception")
         } catch (ValidationException ex) {
-            assertTrue ex.message.startsWith("Duplicate pages")
+            assertTrue ex.message.contains("Duplicate pages")
         }
     }
 

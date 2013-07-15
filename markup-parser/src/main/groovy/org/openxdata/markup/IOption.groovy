@@ -16,4 +16,8 @@ interface IOption {
     ISelectionQuestion getParent()
 
     void setParent(ISelectionQuestion qn)
+
+    int getLine()
+
+    void setLine(int i)
 }

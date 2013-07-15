@@ -22,6 +22,7 @@ abstract class AbstractQuestion implements IQuestion {
     String validationLogic
     String message
     String calculation
+    int line
 
 
     AbstractQuestion() {

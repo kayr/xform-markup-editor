@@ -9,7 +9,10 @@ package org.openxdata.markup.exception
  */
 class ValidationException extends Exception {
 
+    int line
+
     ValidationException() {
+        super()
     }
 
 
@@ -23,6 +26,21 @@ class ValidationException extends Exception {
 
     ValidationException(Throwable cause) {
         super(cause)
+    }
+
+    ValidationException(String message, int line) {
+        this(message)
+        this.line = line
+    }
+
+    ValidationException(String message, int line,Throwable e) {
+        this(message)
+        this.line = line
+    }
+
+    @Override
+    String getMessage() {
+        return "[Line:$line:] ${super.getMessage()}"
     }
 
 }

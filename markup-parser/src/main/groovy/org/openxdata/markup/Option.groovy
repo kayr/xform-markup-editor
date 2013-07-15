@@ -14,17 +14,24 @@ class Option implements IOption {
     String option
     String bind
     ISelectionQuestion parent
+    int line
 
     Option(String option) {
+        setOption(option)
+    }
+
+    Option(String option,int line) {
+        this.line = line
         setOption(option)
     }
 
 
 
     void setOption(String newOption) {
-        def parsedOption = Util.parseBind(newOption)
+        def parsedOption = Util.parseBind(newOption,line)
         option = parsedOption.option
         bind = parsedOption.bind
+        this.line = line
     }
 
     @Override

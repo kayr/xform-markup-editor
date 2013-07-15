@@ -65,7 +65,7 @@ class Form implements HasQuestions {
           xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
-                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
+                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]",question.line)
              //TODO Remember to check the XPATH for any $ signs and notify the user
             def binding = it.contains(':') ? tmpQn.relativeBinding :  tmpQn.absoluteBinding
             return binding
@@ -78,7 +78,7 @@ class Form implements HasQuestions {
         xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
-                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]")
+                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]",question.line)
 
             def binding = it.contains(':') ? tmpQn.indexedRelativeBinding  :  tmpQn.indexedAbsoluteBinding
             return binding
@@ -130,7 +130,7 @@ class Form implements HasQuestions {
             return
 
         if (!question.message)
-            throw new ValidationException("Validation message has not been set on question [$question.text]")
+            throw new ValidationException("Validation message has not been set on question [$question.text]",question.line)
 
         validateXpath(question.validationLogic, question, 'Validation')
 
@@ -153,7 +153,7 @@ class Form implements HasQuestions {
             XPathParser parser = Util.createXpathParser(xpath)
             parser.eval()
         } catch (Exception e) {
-            throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for \n [$question.text] \n $e.message", e)
+            throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for \n [$question.text] \n $e.message",question.line, e)
         }
     }
 

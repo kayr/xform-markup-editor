@@ -18,13 +18,13 @@ class Attrib {
             'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent']
 
 
-    static void addAttribute(IQuestion question, String attribute) {
+    static void addAttribute(IQuestion question, String attribute, int line) {
         def params = extractAttribAndParam(attribute)
         def param = params.param
         def lowCaseAttrib = params.attrib
         if (!(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
                 (!(question instanceof DynamicQuestion) && lowCaseAttrib == 'parent')) {
-            throw new InvalidAttributeException("Cannot set datatype $attribute on a ${question.class.simpleName}")
+            throw new InvalidAttributeException("Cannot set datatype [$attribute] on a ${question.class.simpleName}",line)
         }
 
 
@@ -34,24 +34,24 @@ class Attrib {
                 attribute = 'dateTime'
             question.type = attribute
         } else if (allowedAttributes.contains(lowCaseAttrib)) {
-            setQuestionAttribute(question, lowCaseAttrib, param)
+            setQuestionAttribute(question, lowCaseAttrib, param,line)
         } else {
             throw new InvalidAttributeException("""Attibute [@$attribute] has no meaning.
-Supported attributes include $types \n$allowedAttributes""")
+Supported attributes include $types \n$allowedAttributes""",line)
         }
 
     }
 
-    static void addAttributeToForm(Form form,String attribute){
+    static void addAttributeToForm(Form form,String attribute, int line){
         def params = extractAttribAndParam(attribute)
 
         def attrib = params.attrib
         def param  = params.param
 
         if(attrib != 'id')
-            throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported")
+            throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported",line)
 
-        Util.validateId(param)
+        Util.validateId(param,line)
 
         form.id = param
 
@@ -65,7 +65,7 @@ Supported attributes include $types \n$allowedAttributes""")
         [attrib: lowCaseAttrib, param: param]
     }
 
-    static void setQuestionAttribute(IQuestion question, String attribute, String param) {
+    static void setQuestionAttribute(IQuestion question, String attribute, String param, int line) {
         switch (attribute) {
             case 'readonly':
                 question.readOnly = true
@@ -80,7 +80,7 @@ Supported attributes include $types \n$allowedAttributes""")
                 question.comment = param
                 break
             case 'id':
-                Util.validateId(param)
+                Util.validateId(param,line)
                 question.binding = param
                 break
             case 'hideif':
@@ -107,7 +107,7 @@ Supported attributes include $types \n$allowedAttributes""")
                 question.calculation = param
                 break
             case 'parent':
-                Util.validateId(param)
+                Util.validateId(param,line)
                 question.parentQuestionId = param
                 break
         }

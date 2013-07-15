@@ -79,5 +79,9 @@ interface IQuestion {
 
     String getText(boolean number)
 
+    int getLine()
+
+    void setLine(int i)
+
 
 }
