@@ -135,6 +135,6 @@ abstract class AbstractQuestion implements IQuestion {
     }
 
     String toString(){
-        return text
+        return "$questionIdx.($binding)$text"
     }
 }

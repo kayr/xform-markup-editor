@@ -61,4 +61,9 @@ class Page implements HasQuestions {
     Form getParentForm() {
         return form
     }
+
+     String toString(){
+        name
+     }
+
 }

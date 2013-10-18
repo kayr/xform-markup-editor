@@ -172,4 +172,8 @@ class Form implements HasQuestions {
     Form getParentForm() {
         return this
     }
+
+    String toString(){
+        name
+    }
 }

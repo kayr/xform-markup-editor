@@ -1,21 +1,20 @@
 package org.openxdata.markup.ui
 
+import jsyntaxpane.actions.ActionUtils
 import org.openxdata.markup.Attrib
-
+import org.openxdata.markup.IQuestion
 import org.openxdata.markup.Study
 import org.openxdata.markup.Util
 import org.openxdata.markup.serializer.XFormSerializer
 
+import javax.swing.*
+import javax.swing.filechooser.FileFilter
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import javax.swing.JFileChooser
-import javax.swing.JOptionPane
-import javax.swing.filechooser.FileFilter
 
 import static javax.swing.JOptionPane.YES_NO_OPTION
-
 import static javax.swing.SwingUtilities.invokeLater
 
 /**
@@ -45,30 +44,30 @@ class FormBinderPresenter {
     void init() {
 
         xfmFilter = [
-                accept: {File file -> file.name.endsWith('.xfm') || file.isDirectory() },
-                getDescription: {"XForm Markup Files"}
+                accept: { File file -> file.name.endsWith('.xfm') || file.isDirectory() },
+                getDescription: { "XForm Markup Files" }
         ] as javax.swing.filechooser.FileFilter
 
         form.btnGenerateXML.addActionListener({ ActionEvent evt ->
 
-            executeSafely { btnGenerateXMLActionPerformed(evt)};
+            executeSafely { btnGenerateXMLActionPerformed(evt) };
 
         } as ActionListener)
 
-        form.menuOpen.addActionListener({ActionEvent evt ->
-            executeSafely { openFile()}
+        form.menuOpen.addActionListener({ ActionEvent evt ->
+            executeSafely { openFile() }
         } as ActionListener)
 
-        form.menuSave.addActionListener({ActionEvent evt ->
-            executeSafely { saveFile()}
+        form.menuSave.addActionListener({ ActionEvent evt ->
+            executeSafely { saveFile() }
         } as ActionListener)
 
-        form.menuNew.addActionListener({ActionEvent evt ->
-            executeSafely { newFile()}
+        form.menuNew.addActionListener({ ActionEvent evt ->
+            executeSafely { newFile() }
         } as ActionListener)
 
-        form.btnShowXml.addActionListener({ActionEvent evt ->
-            Thread.start {executeSafely {showXML()}}
+        form.btnShowXml.addActionListener({ ActionEvent evt ->
+            Thread.start { executeSafely { showXML() } }
         } as ActionListener)
 
         form.menuAdvancedSkip.addActionListener({
@@ -90,9 +89,13 @@ class FormBinderPresenter {
             }
         })
 
+        form.btnRefreshTree.addActionListener({
+            getParsedStudy()
+        } as ActionListener)
 
-        allowedAttribs = Attrib.allowedAttributes.collect {'@' + it}
-        allowedTypes = Attrib.types.collect {'@' + it}
+
+        allowedAttribs = Attrib.allowedAttributes.collect { '@' + it }
+        allowedTypes = Attrib.types.collect { '@' + it }
 
         //loadSample study
         loadForm(addHeader(Resources.sampleStudy))
@@ -140,16 +143,16 @@ class FormBinderPresenter {
         def studyXml = ser.toStudyXml(study)
 
         def previewFrame = XFormView.initFrame(form)
-        ser.xforms.each {frmName, xml ->
+        ser.xforms.each { frmName, xml ->
             invokeLater { previewFrame.addLockedEditor("Frm:$frmName.name", xml) }
         }
 
-        invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml)}
+        invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml) }
 
     }
 
     private XFormSerializer getSerializer() {
-        new XFormSerializer(numberQuestions: form.chkNumberLabels.model.isSelected(), numberBindings: form.chkNumberBindings.isSelected(),generateView: form.chkGenerateLayout.isSelected())
+        new XFormSerializer(numberQuestions: form.chkNumberLabels.model.isSelected(), numberBindings: form.chkNumberBindings.isSelected(), generateView: form.chkGenerateLayout.isSelected())
     }
 
     void newFile() {
@@ -203,8 +206,7 @@ class FormBinderPresenter {
 
             form.title = "OXD-Markup: " + file.absolutePath
             currentFile = file
-        }
-        else {
+        } else {
             currentFile.text = form.txtMarkUp.text
         }
     }
@@ -258,13 +260,13 @@ class FormBinderPresenter {
         file.text = studyXML
 
         def formFolder = createDirectory(file.parentFile.absolutePath + "/xforms")
-        ser.xforms.each {key, value ->
+        ser.xforms.each { key, value ->
             new File(formFolder, key.name + '.xml').text = value
         }
 
         def importsFolder = createDirectory(file.parentFile.absolutePath + "/xform-imports")
         def imports = ser.formImports
-        imports.each {key, value ->
+        imports.each { key, value ->
             new File(importsFolder, key + '.xml').text = value
         }
 
@@ -274,7 +276,7 @@ Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath""
         JOptionPane.showMessageDialog(form, msg)
     }
 
-    File createDirectory(String path){
+    File createDirectory(String path) {
         def directory = new File(path)
         println "Creating directory $directory.absolutePath"
         directory.mkdirs()
@@ -284,7 +286,7 @@ Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath""
     void openFile(File f) {
 
         def text = f.text
-        System.setProperty('form.dir',f.parent)
+        System.setProperty('form.dir', f.parent)
 
         loadForm(text)
 
@@ -300,7 +302,15 @@ Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath""
             def study = parser.study()
             return study
         }
+        updateTree(result.value)
         return result.value
+    }
+
+    def updateTree(Study study) {
+        form.studyTreeBuilder.updateTree(study) { IQuestion qn ->
+            invokeLater { ActionUtils.setCaretPosition(form.txtMarkUp, qn.line, 0) }
+        }
+        invokeLater { form.studyTreeBuilder.expand(3) }
     }
 
     def executeSafely(Closure closure) {

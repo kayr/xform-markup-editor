@@ -1,7 +1,4 @@
 package org.openxdata.markup
-
-import static org.openxdata.markup.Form.*
-
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -27,5 +24,9 @@ class Study {
 
      List<Form> getForms() {
         return new ArrayList<Form>(forms)
+    }
+
+    String toString(){
+        name
     }
 }
