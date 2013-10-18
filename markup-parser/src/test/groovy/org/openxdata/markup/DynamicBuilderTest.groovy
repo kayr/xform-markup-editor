@@ -77,6 +77,33 @@ Kenya,Nairobi,Kikuyu
         assertEquals 'Expecting 3 option for school', 6, dynQn3.size()
     }
 
+    public void testQuickParse() {
+        Study.quickParse.set(true)
+        def lines = csv.split('\n')
+        lines.each { builder.appendLine(it) }
+        builder.parse()
+        Study.quickParse.set(false)
+
+        assertEquals 3, builder.csvSrc.split('\n').length
+    }
+
+
+    public void testQuickParseWithFile() {
+
+        Study.quickParse.set(true)
+        def resourceFolder = Fixtures.setFormDirectory()
+
+        DynamicBuilder builder = new DynamicBuilder();
+        builder.csvFile = "$resourceFolder/quarters.csv"
+
+        builder.parse()
+
+        assertNotNull builder.parsedCsv
+
+        assertEquals 3, builder.csvSrc.split('\n').length
+        Study.quickParse.set(false)
+    }
+
 
 
     public void testAppend() {

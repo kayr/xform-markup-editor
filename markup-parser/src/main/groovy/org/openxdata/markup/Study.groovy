@@ -8,6 +8,11 @@ package org.openxdata.markup
  */
 class Study {
 
+    /**
+     * Set this to true. So the the parser does not build the whole CSV list
+     */
+    public static ThreadLocal<Boolean> quickParse = new ThreadLocal<Boolean>()
+
     String name
 
     private List<Form> forms = []

@@ -56,6 +56,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         renderForms(study.forms)
 
         treeModel.reload()
+        tree.setEnabled(true)
     }
 
     private void renderForms(java.util.List<Form> forms) {
@@ -77,6 +78,12 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
             if (qn instanceof HasQuestions)
                 renderQuestions(childNode, qn)
         }
+    }
+
+    void showError(String error){
+        clear()
+        rootNode.setUserObject(error)
+        tree.setEnabled(false)
     }
 
 

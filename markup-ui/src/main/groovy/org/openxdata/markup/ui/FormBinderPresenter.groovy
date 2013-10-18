@@ -90,7 +90,7 @@ class FormBinderPresenter {
         })
 
         form.btnRefreshTree.addActionListener({
-            getParsedStudy()
+            quickParseStudy()
         } as ActionListener)
 
 
@@ -122,6 +122,7 @@ class FormBinderPresenter {
 
     private void loadForm(String markupTxt) {
         form.txtMarkUp.read(new StringReader(markupTxt), 'text/xform')
+        quickParseStudy()
     }
 
 
@@ -152,7 +153,11 @@ class FormBinderPresenter {
     }
 
     private XFormSerializer getSerializer() {
-        new XFormSerializer(numberQuestions: form.chkNumberLabels.model.isSelected(), numberBindings: form.chkNumberBindings.isSelected(), generateView: form.chkGenerateLayout.isSelected())
+        new XFormSerializer(
+                numberQuestions: form.chkNumberLabels.model.isSelected(),
+                numberBindings: form.chkNumberBindings.isSelected(),
+                generateView: form.chkGenerateLayout.isSelected()
+        )
     }
 
     void newFile() {
@@ -270,9 +275,9 @@ class FormBinderPresenter {
             new File(importsFolder, key + '.xml').text = value
         }
 
-        def msg = """Created study file $file.absolutePath
-Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath
-Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath"""
+        def msg = "Created study file $file.absolutePath\n" +
+                "Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath\n" +
+                "Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath"
         JOptionPane.showMessageDialog(form, msg)
     }
 
@@ -306,6 +311,18 @@ Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath""
         return result.value
     }
 
+    void quickParseStudy() {
+        Thread.start {
+            Study.quickParse.set(true)
+            try {
+                getParsedStudy()
+            } catch (Exception x) {
+                println('error parsing study')
+                invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
+            }
+        }
+    }
+
     def updateTree(Study study) {
         form.studyTreeBuilder.updateTree(study) { IQuestion qn ->
             invokeLater { ActionUtils.setCaretPosition(form.txtMarkUp, qn.line, 0) }
@@ -324,7 +341,7 @@ Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath""
     }
 
     String addHeader(String markupTxt) {
-        return "/Allowed Attributes: $allowedAttribs\n" +
+        return "//Allowed Attributes: $allowedAttribs\n" +
                 "//Allowed Types: $allowedTypes\n" +
                 "//Use Ctrl + K for auto-completion\n$markupTxt"
     }

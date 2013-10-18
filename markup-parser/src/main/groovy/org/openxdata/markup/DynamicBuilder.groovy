@@ -14,7 +14,7 @@ import org.openxdata.markup.exception.ValidationException
 class DynamicBuilder {
 
     def csvSrc = "";
-    def csvFile = null;
+    String csvFile = null;
     List<List<String>> parsedCsv
     int line = 0
 
@@ -23,10 +23,16 @@ class DynamicBuilder {
     String singleSelectQuestion
     def singleSelectOptions = []
 
+    int linesAppended = 0
+    private final static int MAX_LINES = 3
 
-    public void appendLine(String line) {
+    public boolean appendLine(String line) {
+        if (Study.quickParse.get() && line && linesAppended++ >= MAX_LINES)
+            return false
+
         line = line << "\n"
         csvSrc = csvSrc << line
+        return true
     }
 
 
@@ -65,7 +71,9 @@ could not be found in the form""")
         } catch (Exception e) {
             if (e instanceof ValidationException)
                 throw e
-            throw new RuntimeException("Error while creating dynamic question:\n " + e.toString(), e)
+            def newEx = new RuntimeException("Error while creating dynamic question:\n " + e.toString(), e)
+            newEx.stackTrace = e.stackTrace
+            throw newEx
         }
     }
 
@@ -141,16 +149,7 @@ could not be found in the form""")
 
     private List<String[]> parseCsv() {
         if (csvFile != null) {
-            def file = new File(csvFile)
-            if (!file.exists()) {
-                def formDir = System.getProperty('form.dir')
-                file = new File(formDir + "/$csvFile")
-                if (!file.exists()) {
-                    println "formDir: $formDir path: $file.absolutePath"
-                    throw new FileNotFoundException(csvFile, "The Dynamic list could not be found")
-                }
-            }
-            csvSrc = file.text
+            readCSVFile()
         }
         def csv = toStringArrayList(csvSrc)
 
@@ -162,6 +161,36 @@ could not be found in the form""")
         csvSrc = str.toString()
         parsedCsv = csv
         return parsedCsv
+    }
+
+    private void readCSVFile() {
+        def file = new File(csvFile)
+        if (!file.exists()) {
+            def formDir = System.getProperty('form.dir')
+            file = new File(formDir + "/$csvFile")
+            if (!file.exists()) {
+                println "formDir: $formDir path: $file.absolutePath"
+                throw new FileNotFoundException(csvFile, "The Dynamic list could not be found")
+            }
+        }
+        if (Study.quickParse.get()) {
+            readMaxLines(file)
+        } else {
+            csvSrc = file.text
+        }
+    }
+
+    private void readMaxLines(File file) {
+        file.withReader { reader ->
+            def line = reader.readLine()
+            while (line) {
+
+                def appended = appendLine(line)
+                if (!appended) return
+
+                line = reader.readLine()
+            }
+        }
     }
 
     List<String[]> fillUpSpace(List<String[]> strings) {
