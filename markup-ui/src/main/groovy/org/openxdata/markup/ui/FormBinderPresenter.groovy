@@ -49,9 +49,7 @@ class FormBinderPresenter {
         ] as javax.swing.filechooser.FileFilter
 
         form.btnGenerateXML.addActionListener({ ActionEvent evt ->
-
             executeSafely { btnGenerateXMLActionPerformed(evt) };
-
         } as ActionListener)
 
         form.menuOpen.addActionListener({ ActionEvent evt ->
@@ -82,12 +80,9 @@ class FormBinderPresenter {
             loadSampleWithConfirmation(addHeader(Resources.oxdSampleForm))
         } as ActionListener)
 
-
-        form.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent evt) {
-                handleWindowCloseOperation(evt)
-            }
-        })
+        form.addWindowListener({ WindowEvent evt ->
+            handleWindowCloseOperation(evt)
+        } as WindowAdapter)
 
         form.btnRefreshTree.addActionListener({
             quickParseStudy()
