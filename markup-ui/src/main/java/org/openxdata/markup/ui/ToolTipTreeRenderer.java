@@ -19,6 +19,8 @@ public class ToolTipTreeRenderer extends DefaultTreeCellRenderer {
             if (userObject instanceof IQuestion) {
                 IQuestion qn = (IQuestion) userObject;
                 renderQuestion(cmp, qn);
+            } else {
+                this.setToolTipText(userObject + "");
             }
         }
 
@@ -30,7 +32,7 @@ public class ToolTipTreeRenderer extends DefaultTreeCellRenderer {
         if (qn.getIndexedBinding().length() > 64)
             cmp.setForeground(Color.red);
 
-        String tooltip ="#"+qn.getQuestionIdx()+' '+ qn.getBinding();
+        String tooltip = "#" + qn.getQuestionIdx() + ' ' + qn.getBinding();
 
         this.setToolTipText(tooltip);
     }
