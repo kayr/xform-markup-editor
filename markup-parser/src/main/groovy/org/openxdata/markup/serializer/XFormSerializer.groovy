@@ -18,7 +18,6 @@ class XFormSerializer {
     boolean generateView = true
 
     def xforms = [:]
-    def formImports = [:]
     def studyXML
 
     public String toStudyXml(Study study) {
