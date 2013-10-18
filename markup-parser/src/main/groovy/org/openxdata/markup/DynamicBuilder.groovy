@@ -32,7 +32,7 @@ class DynamicBuilder {
     public void addQuestionsToForm(HasQuestions form) {
         try {
             parse()
-            if (isInQuestionMode()) {
+            if (areWeBuildingQuestionsDirectlyFromCSV()) {
                 questions.each {
                     form.addQuestion(it)
                 }
@@ -48,13 +48,13 @@ could not be found in the form""")
                 singleSelectQuestionInstance.options = singleSelectOptions
             }
 
-            def localKeys = dynamicOptions.keySet()
-            def formKeys = form.parentForm.dynamicOptions.keySet()
+            def localDynamicOptionKeys = dynamicOptions.keySet()
+            def formDynamicOptionKeys = form.parentForm.dynamicOptions.keySet()
 
-            def newLocalKeys = localKeys - formKeys
+            def newLocalKeys = localDynamicOptionKeys - formDynamicOptionKeys
 
-            if(!newLocalKeys.containsAll(localKeys))
-                throw new ValidationException("You have duplicate columns in your csv files ${localKeys - newLocalKeys}")
+            if(!newLocalKeys.containsAll(localDynamicOptionKeys))
+                throw new ValidationException("You have duplicate columns in your csv files ${localDynamicOptionKeys - newLocalKeys}")
 
             form.parentForm.dynamicOptions.putAll(dynamicOptions)
 
@@ -67,7 +67,7 @@ could not be found in the form""")
         }
     }
 
-    private boolean isInQuestionMode() {
+    private boolean areWeBuildingQuestionsDirectlyFromCSV() {
         return getSingleSelectReferenceIfAvailable() == null
     }
 
@@ -76,7 +76,7 @@ could not be found in the form""")
 
         def singleSelectCol = getValuesForColumn(csv, 0).unique {Util.getBindName(it)}
         def singleSelVar = getSingleSelectReferenceIfAvailable()
-        if (isInQuestionMode()) {
+        if (areWeBuildingQuestionsDirectlyFromCSV()) {
             def singleSelQuestion = makeSingleSelectFromList(singleSelectCol)
             questions << singleSelQuestion
         } else {
@@ -91,7 +91,7 @@ could not be found in the form""")
             def csvHeader = headers[headerIdx]
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
-            if (isInQuestionMode()) {
+            if (areWeBuildingQuestionsDirectlyFromCSV()) {
                 qn.dynamicInstanceId = qn.binding
                 qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parentBinding of the current one.
                 questions << qn
