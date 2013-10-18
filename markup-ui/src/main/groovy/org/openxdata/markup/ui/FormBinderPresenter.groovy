@@ -80,9 +80,12 @@ class FormBinderPresenter {
             loadSampleWithConfirmation(addHeader(Resources.oxdSampleForm))
         } as ActionListener)
 
-        form.addWindowListener({ WindowEvent evt ->
-            handleWindowCloseOperation(evt)
-        } as WindowAdapter)
+        form.addWindowListener(new WindowAdapter() {
+            @Override
+            void windowClosing(WindowEvent e) {
+                handleWindowCloseOperation(e)
+            }
+        })
 
         form.btnRefreshTree.addActionListener({
             quickParseStudy()
