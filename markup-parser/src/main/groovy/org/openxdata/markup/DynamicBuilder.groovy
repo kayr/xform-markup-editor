@@ -16,6 +16,7 @@ class DynamicBuilder {
     def csvSrc = "";
     def csvFile = null;
     List<List<String>> parsedCsv
+    int line = 0
 
     List<IQuestion> questions = []
     Map<String, List<DynamicOption>> dynamicOptions = [:]
@@ -34,6 +35,7 @@ class DynamicBuilder {
             parse()
             if (areWeBuildingQuestionsDirectlyFromCSV()) {
                 questions.each {
+                    it.line = line
                     form.addQuestion(it)
                 }
             } else {

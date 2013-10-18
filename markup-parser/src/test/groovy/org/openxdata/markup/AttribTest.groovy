@@ -17,76 +17,76 @@ class AttribTest extends GroovyTestCase {
 
     void testAddAttribute() {
 
-        Attrib.addAttribute(qn, "number",1)
+        Attrib.addAttribute(qn, "number", 1)
 
         assertEquals qn.type, 'number'
 
-        Attrib.addAttribute(qn, 'invisible',1)
+        Attrib.addAttribute(qn, 'invisible', 1)
 
         assertFalse qn.isVisible()
 
-        Attrib.addAttribute(qn, 'dateTime',1)
+        Attrib.addAttribute(qn, 'dateTime', 1)
 
-        assertEquals 'dateTime',qn.type
+        assertEquals 'dateTime', qn.type
 
         try {
-            Attrib.addAttribute(sn, 'number',1)
+            Attrib.addAttribute(sn, 'number', 1)
             fail("Expecting an exception")
         } catch (InvalidAttributeException ex) {
 
         }
 
-        Attrib.addAttribute(sn,'required',1)
+        Attrib.addAttribute(sn, 'required', 1)
         assertTrue sn.required
 
-        Attrib.addAttribute(qn,"comment This is a comment",1)
+        Attrib.addAttribute(qn, "comment This is a comment", 1)
 
-        assertEquals "This is a comment",qn.comment
+        assertEquals "This is a comment", qn.comment
 
-        Attrib.addAttribute(qn,'id hello_question',1)
-        assertEquals 'hello_question',qn.binding
+        Attrib.addAttribute(qn, 'id hello_question', 1)
+        assertEquals 'hello_question', qn.binding
 
         qn.setText("Hahahahha")    //Make sure the binding does not change since the parser set the question later
 
-        assertEquals 'hello_question',qn.binding
+        assertEquals 'hello_question', qn.binding
 
         try {
-            Attrib.addAttribute(qn, 'id jsjk sdj sdj',1)
+            Attrib.addAttribute(qn, 'id jsjk sdj sdj', 1)
             fail('Expecting an exception for an invalid attribute')
         } catch (Exception ex) {
             assertTrue ex instanceof InvalidAttributeException
         }
 
         try {
-            Attrib.addAttribute(qn, 'id hello_Question',1)
+            Attrib.addAttribute(qn, 'id hello_Question', 1)
             fail('Expecting an exception for an invalid attribute')
         } catch (Exception ex) {
             assertTrue ex instanceof InvalidAttributeException
         }
 
-        try{
-            Attrib.addAttribute(sn,'parent blah_blah',1)
+        try {
+            Attrib.addAttribute(sn, 'parent blah_blah', 1)
             fail('Expecting an exception here')
-        }   catch (InvalidAttributeException ex){
+        } catch (InvalidAttributeException ex) {
 
         }
 
-        try{
-            Attrib.addAttribute(qn,'parent blah_blah',1)
+        try {
+            Attrib.addAttribute(qn, 'parent blah_blah', 1)
             fail('Expecting an exception here')
-        }   catch (InvalidAttributeException ex){
+        } catch (InvalidAttributeException ex) {
 
         }
 
-        try{
-            Attrib.addAttribute(dn,'parent blah blah',1)
+        try {
+            Attrib.addAttribute(dn, 'parent blah blah', 1)
             fail('Expecting an exception here')
-        }   catch (InvalidAttributeException ex){
+        } catch (InvalidAttributeException ex) {
 
         }
 
-        Attrib.addAttribute(dn,'parent blah_blah',1)
-        assertEquals 'blah_blah',dn.parentQuestionId
+        Attrib.addAttribute(dn, 'parent blah_blah', 1)
+        assertEquals 'blah_blah', dn.parentQuestionId
 
 
     }
@@ -95,23 +95,58 @@ class AttribTest extends GroovyTestCase {
 
         Form form = new Form("form")
 
-        Attrib.addAttributeToForm(form, 'id someid',1)
+        Attrib.addAttributeToForm(form, 'id someid', 1)
 
         assertEquals 'someid', form.id
 
         try {
-            Attrib.addAttributeToForm(form, 'someattrib someid',1)
+            Attrib.addAttributeToForm(form, 'someattrib someid', 1)
             fail("Expecting ${InvalidAttributeException.class}")
         } catch (InvalidAttributeException e) {
             assertEquals "[Line:1:] Attribute someattrib on form $form.name in not supported", e.message
         }
 
         try {
-            Attrib.addAttributeToForm(form, 'id UPPERCASEID',1)
+            Attrib.addAttributeToForm(form, 'id UPPERCASEID', 1)
             fail("Expecting ${InvalidAttributeException.class}")
         } catch (InvalidAttributeException e) {
-              assertTrue e.message.startsWith('[Line:1:] You have an invalid variable')
+            assertTrue e.message.startsWith('[Line:1:] You have an invalid variable')
         }
 
+    }
+
+    void testLineNumbers() {
+        def parser = Util.createParser(Fixtures.oxdSampleForm)
+        def form = parser.study().forms[0]
+
+        def questions = form.allQuestions
+
+        questions.find { it.binding == 'patient_id' }.line == 6
+        questions.find { it.binding == 'title' }.line == 8
+        questions.find { it.binding == 'first_name' }.line == 13
+        questions.find { it.binding == 'last_name' }.line == 16
+        questions.find { it.binding == 'sex' }.line == 18
+        questions.find { it.binding == 'birthdate' }.line == 26
+        questions.find { it.binding == 'weightkg' }.line == 31
+        questions.find { it.binding == 'height' }.line == 36
+        questions.find { it.binding == 'is_patient_pregnant' }.line == 39
+        questions.find { it.binding == 'arvs' }.line == 42
+        questions.find { it.binding == 'picture' }.line == 50
+        questions.find { it.binding == 'sound' }.line == 53
+        questions.find { it.binding == 'record_video' }.line == 56
+        questions.find { it.binding == 'region' }.line == 58
+        questions.find { it.binding == 'sub_hyphen_region' }.line == 58
+        questions.find { it.binding == 'city' }.line == 58
+        questions.find { it.binding == 'children_number' }.line == 80
+        questions.find { it.binding == 'details_of_children' }.line == 86
+        questions.find { it.binding == 'name' }.line == 87
+        questions.find { it.binding == 'age' }.line == 90
+        questions.find { it.binding == 'child_sex' }.line == 93
+        questions.find { it.binding == 'start_time' }.line == 101
+        questions.find { it.binding == 'endtime' }.line == 105
+
+//        form.allQuestions.each {
+//            println "form.questions.find {it.binding == '$it.binding' }.line == $it.line"
+//        }
     }
 }

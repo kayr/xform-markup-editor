@@ -87,6 +87,7 @@ repeatQn returns [RepeatQuestion rv = new RepeatQuestion()]
 	(ATTRIBUTE				{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
 	BEGINREPEATMARKER  			{
 						rv.setText($BEGINREPEATMARKER.text);
+						rv.setLine($BEGINREPEATMARKER.line);
 						rv.setParent($form::scopeForm);
 						}
 	(
@@ -100,13 +101,19 @@ repeatQn returns [RepeatQuestion rv = new RepeatQuestion()]
 	;
 
 dynamicQn returns [DynamicBuilder rv] 
-	:	DYNAMICMARKER			{rv = new DynamicBuilder();}
+	:	dyn1 = DYNAMICMARKER		{
+						rv = new DynamicBuilder();
+						rv.setLine(dyn1.getLine());
+						}
 		(LINECONTENTS			{rv.appendLine($LINECONTENTS.text);})+ 
 		(DYNAMICMARKER|LEFTBRACE)
 	;
 	
 csvImport returns [DynamicBuilder rv = new DynamicBuilder()]
-	:	CSVIMPORT			{rv.setCsvFile($CSVIMPORT.text);}
+	:	CSVIMPORT			{
+						rv.setCsvFile($CSVIMPORT.text);
+						rv.setLine($CSVIMPORT.line);
+						}
 	;
 	
 singleSelQn returns [SingleSelectQuestion rv = new SingleSelectQuestion() ]
