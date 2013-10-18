@@ -324,10 +324,9 @@ Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath""
     }
 
     String addHeader(String markupTxt) {
-        return """//Allowed Attributes: $allowedAttribs
-//Allowed Types: $allowedTypes
-//Use Ctrl + K for auto-completion
-$markupTxt"""
+        return "/Allowed Attributes: $allowedAttribs\n" +
+                "//Allowed Types: $allowedTypes\n" +
+                "//Use Ctrl + K for auto-completion\n$markupTxt"
     }
 
     static main(args) {
