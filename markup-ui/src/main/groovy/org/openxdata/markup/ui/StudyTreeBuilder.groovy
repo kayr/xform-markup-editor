@@ -39,6 +39,8 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         tree.setShowsRootHandles(false);
         JScrollPane scrollPane = new JScrollPane(tree);
         tree.setFont(new Font(tree.font.name, Font.PLAIN, 11))
+        tree.setCellRenderer(new ToolTipTreeRenderer())
+        ToolTipManager.sharedInstance().registerComponent(tree)
         add(scrollPane);
 
     }

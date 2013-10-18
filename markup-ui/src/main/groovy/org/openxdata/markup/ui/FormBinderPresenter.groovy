@@ -300,10 +300,15 @@ class FormBinderPresenter {
 
     private Study getParsedStudy() {
         def result = Util.time("StudyParsing") {
-            def text = form.txtMarkUp.text
-            def parser = Util.createParser(text)
-            def study = parser.study()
-            return study
+            try {
+                def text = form.txtMarkUp.text
+                def parser = Util.createParser(text)
+                def study = parser.study()
+                return study
+            } catch (Exception x) {
+                invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
+                throw x
+            }
         }
         updateTree(result.value)
         return result.value
