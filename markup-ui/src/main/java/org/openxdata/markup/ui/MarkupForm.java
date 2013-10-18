@@ -31,7 +31,7 @@ public class MarkupForm extends javax.swing.JFrame {
 		}*/
 		new CaretMonitor(txtMarkup, lblCaret);
                 
-                spltMainPane.setDividerLocation(100);
+                spltMainPane.setDividerLocation(150);
                  studyTreePanel = new TreePanel();
                 
                 spltMainPane.setLeftComponent(studyTreePanel);
@@ -122,7 +122,7 @@ public class MarkupForm extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 231, Short.MAX_VALUE)
                 .addComponent(lblCaret, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -133,6 +133,7 @@ public class MarkupForm extends javax.swing.JFrame {
                 .addComponent(lblCaret, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        txtMarkup.setPreferredSize(new java.awt.Dimension(200, 20));
         jScrollPane1.setViewportView(txtMarkup);
 
         spltMainPane.setRightComponent(jScrollPane1);
@@ -181,7 +182,7 @@ public class MarkupForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spltMainPane, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                .addComponent(spltMainPane, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
