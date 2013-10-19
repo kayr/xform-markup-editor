@@ -16,14 +16,17 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" max="32767" attributes="0"/>
-          <Component id="studyTreeBuilder1" alignment="1" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <Component id="btnRefreshTree" min="-2" pref="80" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="20" max="32767" attributes="0"/>
+          </Group>
+          <Component id="studyTreeBuilder1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <Component id="btnRefreshTree" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="studyTreeBuilder1" pref="333" max="32767" attributes="0"/>
           </Group>
@@ -31,33 +34,12 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="jPanel1">
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnRefreshTree" alignment="0" pref="80" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="btnRefreshTree" alignment="0" max="32767" attributes="0"/>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JButton" name="btnRefreshTree">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Refresh"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
     <Component class="org.openxdata.markup.ui.StudyTreeBuilder" name="studyTreeBuilder1">
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRefreshTree">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Refresh"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
