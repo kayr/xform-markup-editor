@@ -32,7 +32,7 @@ public class ToolTipTreeRenderer extends DefaultTreeCellRenderer {
         if (qn.getIndexedBinding().length() > 64)
             cmp.setForeground(Color.red);
 
-        String tooltip = "#" + qn.getQuestionIdx() + ' ' + qn.getBinding();
+        String tooltip = "#" + qn.getQuestionIdx() + ' ' + qn.getBinding() + '-'+qn.getText();
 
         this.setToolTipText(tooltip);
     }
