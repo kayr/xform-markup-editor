@@ -37,6 +37,10 @@ class NumberedXMLs {
           <label>Nairobi</label>
           <value>nairobi</value>
         </item>
+        <item id="kenya_kampala" parent="kenya">
+          <label>Kampala</label>
+          <value>kenya_kampala</value>
+        </item>
       </dynamiclist>
     </instance>
     <instance id="school">

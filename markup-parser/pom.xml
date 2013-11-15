@@ -128,9 +128,10 @@
             <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
-                <version>1.2</version>
+                <version>1.4</version>
                 <configuration>
-                    <providerSelection>1.7</providerSelection>
+                    <providerSelection>2.0</providerSelection>
+                    <source>src/main/groovy</source>
                 </configuration>
                 <executions>
                     <execution>

@@ -146,7 +146,7 @@ class FormBinderPresenter {
             invokeLater { previewFrame.addLockedEditor("Frm:$frmName.name", xml) }
         }
 
-        invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml) }
+//        invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml) }
 
     }
 

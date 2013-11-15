@@ -578,6 +578,10 @@ jeelopo
           <label>Nairobi</label>
           <value>nairobi</value>
         </item>
+        <item id="kenya_kampala" parent="kenya">
+          <label>Kampala</label>
+          <value>kenya_kampala</value>
+        </item>
       </dynamiclist>
     </instance>
     <instance id="school">
@@ -1157,6 +1161,10 @@ repeat{ *Required repeat
         <item id="nairobi" parent="kenya">
           <label>Nairobi</label>
           <value>nairobi</value>
+        </item>
+        <item id="kenya_kampala" parent="kenya">
+          <label>Kampala</label>
+          <value>kenya_kampala</value>
         </item>
       </dynamiclist>
     </instance>

@@ -47,12 +47,12 @@ class DynamicBuilder {
             } else {
                 def singleSelectQuestionInstance = Form.findQuestionWithBinding(singleSelectQuestion, form)
 
-                if (singleSelectQuestionInstance == null )
+                if (singleSelectQuestionInstance == null)
                     throw new ValidationException("""Error while parsing CSV. SingleSelect question with id [$singleSelectQuestion]
 could not be found in the form""")
 
-                if(!(singleSelectQuestionInstance instanceof SingleSelectQuestion))
-                    throw new ValidationException("Error while parsing CSV.Question with id[$singleSelectQuestion] is not a SingleSelect Question",singleSelectQuestionInstance.line)
+                if (!(singleSelectQuestionInstance instanceof SingleSelectQuestion))
+                    throw new ValidationException("Error while parsing CSV.Question with id[$singleSelectQuestion] is not a SingleSelect Question", singleSelectQuestionInstance.line)
                 singleSelectQuestionInstance.options = singleSelectOptions
             }
 
@@ -61,11 +61,10 @@ could not be found in the form""")
 
             def newLocalKeys = localDynamicOptionKeys - formDynamicOptionKeys
 
-            if(!newLocalKeys.containsAll(localDynamicOptionKeys))
+            if (!newLocalKeys.containsAll(localDynamicOptionKeys))
                 throw new ValidationException("You have duplicate columns in your csv files ${localDynamicOptionKeys - newLocalKeys}")
 
             form.parentForm.dynamicOptions.putAll(dynamicOptions)
-
 
 
         } catch (Exception e) {
@@ -84,15 +83,17 @@ could not be found in the form""")
     public void parse() {
         List<String[]> csv = parseCsv()
 
-        def singleSelectCol = getValuesForColumn(csv, 0).unique {Util.getBindName(it)}
+        def singleSelectCol = getValuesForColumn(csv, 0).unique { Util.getBindName(it) }
         def singleSelVar = getSingleSelectReferenceIfAvailable()
-        if (areWeBuildingQuestionsDirectlyFromCSV()) {
+        def weAreBuildingQnsDirectlyFromCSV = areWeBuildingQuestionsDirectlyFromCSV()
+
+        if (weAreBuildingQnsDirectlyFromCSV) {
             def singleSelQuestion = makeSingleSelectFromList(singleSelectCol)
             questions << singleSelQuestion
         } else {
             this.singleSelectQuestion = singleSelVar
             singleSelectCol.remove(0)
-            singleSelectOptions = singleSelectCol.collect {return new Option(it)}
+            singleSelectOptions = singleSelectCol.collect { return new Option(it) }
         }
 
         def headers = csv[0]
@@ -101,7 +102,7 @@ could not be found in the form""")
             def csvHeader = headers[headerIdx]
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
-            if (areWeBuildingQuestionsDirectlyFromCSV()) {
+            if (weAreBuildingQnsDirectlyFromCSV) {
                 qn.dynamicInstanceId = qn.binding
                 qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parentBinding of the current one.
                 questions << qn
@@ -115,8 +116,10 @@ could not be found in the form""")
 
     }
 
+    //todo optimise this for faster perfomance
     private void buildDynamicModel(Integer headerIdx, String dynamicBinding) {
-        def visitedChildren = new HashSet()
+        def visitedChildParent = new HashSet()
+        def visitedChildren = new HashMap()
         dynamicOptions[dynamicBinding] = []
         for (int csvRowIdx = 1; csvRowIdx < parsedCsv.size(); csvRowIdx++) {
 
@@ -124,12 +127,26 @@ could not be found in the form""")
 
             def childName = csvRow[headerIdx]
             def parent = Util.parseBind(csvRow[headerIdx - 1]).bind
-            def option = new DynamicOption(parent,childName)
+            def option = new DynamicOption(parent, childName)
 
-            if (visitedChildren.contains(option.bind)) continue
+            def parentChildBinding = "$option.parentBinding<>$option.bind"
+
+            if (visitedChildParent.contains(parentChildBinding)) continue
+
+            if (visitedChildren.containsKey(option.bind)) {
+                def newBinding = "${option.parentBinding}_${option.bind}"
+                println "WARNING: Duplicate DynamicOption[$option.bind in $option.parentBinding] with [$option.bind in ${visitedChildren[option.bind]}] : creating new binding [$newBinding]"
+                option.setBind(newBinding)
+            }
 
             dynamicOptions[dynamicBinding] << option
-            visitedChildren.add(option.bind)
+
+            visitedChildParent.add(parentChildBinding)
+
+            if(!visitedChildren[option.bind]){
+                visitedChildren[option.bind] = []
+            }
+            visitedChildren[option.bind] << option.parentBinding
         }
     }
 
@@ -193,10 +210,11 @@ could not be found in the form""")
         }
     }
 
+    //todo optimise this for faster perfomance
     List<String[]> fillUpSpace(List<String[]> strings) {
 
-        strings.eachWithIndex {row, rowIdx ->
-            row.eachWithIndex {cellValue, cellIdx ->
+        strings.eachWithIndex { row, rowIdx ->
+            row.eachWithIndex { cellValue, cellIdx ->
                 if (cellValue.isEmpty()) {
                     strings[rowIdx][cellIdx] = strings[rowIdx - 1][cellIdx]
                 } else {
@@ -210,7 +228,7 @@ could not be found in the form""")
     SingleSelectQuestion makeSingleSelectFromList(List<String> strings) {
 
         SingleSelectQuestion qn = new SingleSelectQuestion(strings.remove(0))
-        strings.each {qn.addOption(new Option(it))}
+        strings.each { qn.addOption(new Option(it)) }
 
         return qn
     }

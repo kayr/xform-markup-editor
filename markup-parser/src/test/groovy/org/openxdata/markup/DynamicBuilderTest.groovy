@@ -47,6 +47,12 @@ Kenya,$nm2 Nairobi,Lala
 $kn Kenya,Nairobi,Langley
 Kenya,Nairobi,Kikuyu
 '''
+    def oxdIncombustibleCSV = '''Country,*District,School
+Uganda,Kampala,Macos
+Kenya,Kampala,Lala
+Kenya,Nairobi,Langley
+Kenya,Nairobi,Macos
+'''
 
 
 
@@ -104,7 +110,17 @@ Kenya,Nairobi,Kikuyu
         Study.quickParse.set(false)
     }
 
+    public void testOldIncompatibleCSV() {
+        builder.csvSrc = oxdIncombustibleCSV
 
+        builder.parse()
+
+        assert builder.questions.size() == 3
+        assert builder.dynamicOptions.size() == 2
+        assert builder.dynamicOptions.district.size() == 3
+        assert builder.dynamicOptions.school.size() == 4
+
+    }
 
     public void testAppend() {
         def lines = csv.split('\n')
@@ -217,7 +233,7 @@ Kenya,Nairobi,Kikuyu
         assertEquals 'Dingle select has 5 options', 5, qn.options.size()
         def districtDynInstance = builder.dynamicOptions[Util.getBindName('District')]
 
-        assertEquals 'Expecting 2 options for district', 4, districtDynInstance.size()
+        assertEquals 'Expecting 6 options for district', 6, districtDynInstance.size()
         def districtQn = builder.questions.find { it.text.equals('District') }
 
         assertEquals Util.getBindName('District'), districtQn.binding

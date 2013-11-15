@@ -17,15 +17,16 @@ import org.openxdata.markup.exception.ValidationException
  */
 class Util {
     public static String getBindName(String question) {
+
+        // if len(s) < 1, return '_blank'
+        if (question == null || question.length() < 1)
+            return "_blank";
+
         def s = getTextWithoutDecTemplate(question)
         // return s.trim().replaceAll(/\s+/, "_").replaceAll(/\W/, "").toLowerCase()
 
         // Converts a string into a valid XML token (tag name)
         // No spaces, start with a letter or underscore, not 'xml*'
-
-        // if len(s) < 1, return '_blank'
-        if (s == null || s.length() < 1)
-            return "_blank";
 
         // xml tokens must start with a letter
         String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_";
@@ -148,21 +149,23 @@ class Util {
         return "string"
     }
 
-    static Map<String,String> parseBind(String option,int line = 0) {
-        def bind = null;
-        if (option[0] == '$') {
+    static Map<String, String> parseBind(String option, int line = 0) {
+        def bind
+
+        if (!option) {
+            bind = getBindName(option)
+        } else if (option[0] == '$') {
             def tmpBind = option.find(/[$][a-z][a-z0-9_]*\s/)
             //make sure bind is at the beginning
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
- An Id should start with lower case characters follow by low case characters, numbers or underscores""",line)
+ An Id should start with lower case characters follow by low case characters, numbers or underscores""", line)
             option = option.replaceFirst(/[$][a-z][a-z0-9_]*/, '').trim()
             bind = tmpBind.trim() - '$'
-        }
-        else {
+        } else {
             bind = getBindName(option)
         }
-        return [option:option,bind:bind]
+        return [option: option, bind: bind]
     }
 
     public static XformParser createParser(String testString) throws IOException {

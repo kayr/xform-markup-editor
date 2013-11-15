@@ -11,13 +11,19 @@ class OptionTest extends GroovyTestCase {
     void testSetOption() {
         Option option = new Option('$hello Hello world')
 
-        assertEquals option.bind , 'hello'
-        assertEquals  "Hello world",option.option
+        assertEquals option.bind, 'hello'
+        assertEquals "Hello world", option.option
 
 
         option.setOption("Hellow world")
 
-        assertEquals Util.getBindName(option.option) , option.bind
+        assertEquals Util.getBindName(option.option), option.bind
+
+        option.setOption("")
+        assert option.bind == '_blank'
+
+        option.setOption(null)
+        assert option.bind == '_blank'
 
 
     }
