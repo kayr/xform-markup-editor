@@ -62,14 +62,14 @@ Kenya,Nairobi,Kikuyu
     private void checkQuestionContent() {
         assertEquals 'Expecting 3 questions', 3, builder.questions.size()
 
-        SingleSelectQuestion qn = builder.questions.find {it instanceof SingleSelectQuestion}
+        SingleSelectQuestion qn = builder.questions.find { it instanceof SingleSelectQuestion }
         assertEquals 'Dingle select has 2 options', 2, qn.options.size()
 
         def districtDynInstance = builder.dynamicOptions[Util.getBindName('District')]
         assertEquals 'Expecting 2 options for dirstrict', 2, districtDynInstance.size()
 
 
-        def districtQn = builder.questions.find {it.text.equals('District')}
+        def districtQn = builder.questions.find { it.text.equals('District') }
         assertEquals Util.getBindName('District'), districtQn.binding
         assertTrue districtQn.required
 
@@ -108,7 +108,7 @@ Kenya,Nairobi,Kikuyu
 
     public void testAppend() {
         def lines = csv.split('\n')
-        lines.each {builder.appendLine(it)}
+        lines.each { builder.appendLine(it) }
         builder.parse()
         checkQuestionContent()
     }
@@ -165,7 +165,7 @@ Kenya,Nairobi,Kikuyu
         try {
             form = new Form("Form")
             form.addQuestion(new SingleSelectQuestion("Root"))
-            form.dynamicOptions.put('school',[])
+            form.dynamicOptions.put('school', [])
             builder.addQuestionsToForm(form)
             fail("Expection a not found validation exception")
         } catch (ValidationException ex) {
@@ -174,9 +174,9 @@ Kenya,Nairobi,Kikuyu
 
     }
 
-    public void testCsvImport (){
+    public void testCsvImport() {
 
-       def resourceFolder = Fixtures.setFormDirectory()
+        def resourceFolder = Fixtures.setFormDirectory()
 
         DynamicBuilder builder = new DynamicBuilder();
         builder.csvFile = "$resourceFolder/quarters.csv"
@@ -188,22 +188,21 @@ Kenya,Nairobi,Kikuyu
         builder = new DynamicBuilder();
         builder.csvFile = /bad path/
 
-        try{
+        try {
             assertNull builder.parsedCsv
             builder.parse()
             fail('Expecting file not found')
-        }   catch (FileNotFoundException ex){
-              //do nothins
+        } catch (FileNotFoundException ex) {
+            //do nothins
         }
 
         builder = new DynamicBuilder();
         builder.csvFile = 'quarters.csv'
-        System.setProperty('form.dir',resourceFolder)
+        System.setProperty('form.dir', resourceFolder)
 
-       builder.parse()
+        builder.parse()
 
         assertNotNull builder.parsedCsv
-
 
 
     }
@@ -213,13 +212,13 @@ Kenya,Nairobi,Kikuyu
         builder.parse()
 
         assertEquals 'Expecting 3 questions', 3, builder.questions.size()
-        SingleSelectQuestion qn = builder.questions.find {it instanceof SingleSelectQuestion}
+        SingleSelectQuestion qn = builder.questions.find { it instanceof SingleSelectQuestion }
 
         assertEquals 'Dingle select has 5 options', 5, qn.options.size()
         def districtDynInstance = builder.dynamicOptions[Util.getBindName('District')]
 
         assertEquals 'Expecting 2 options for district', 4, districtDynInstance.size()
-        def districtQn = builder.questions.find {it.text.equals('District')}
+        def districtQn = builder.questions.find { it.text.equals('District') }
 
         assertEquals Util.getBindName('District'), districtQn.binding
         assertTrue districtQn.required
@@ -229,7 +228,7 @@ Kenya,Nairobi,Kikuyu
 
     }
 
-    public void ignoreTestFillUpSpace2(){
+    public void ignoreTestFillUpSpace2() {
         def file = new File(/C:\Users\kay\Dropbox\OMNI\snv database\community wash\community forms\lists.csv/)
 
         builder.csvFile = file
@@ -239,11 +238,11 @@ Kenya,Nairobi,Kikuyu
         builder.fillUpSpace(csv)
 
         StringWriter stringWriter = new StringWriter()
-       CSVWriter writer = new  CSVWriter(stringWriter)
+        CSVWriter writer = new CSVWriter(stringWriter)
 
         writer.writeAll(csv)
 
-        def file2 = new File(file.absolutePath+".filled.csc")
+        def file2 = new File(file.absolutePath + ".filled.csc")
         file2.text = stringWriter.toString()
 
     }
