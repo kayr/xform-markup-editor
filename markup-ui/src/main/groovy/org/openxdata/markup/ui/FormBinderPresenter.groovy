@@ -5,6 +5,7 @@ import org.openxdata.markup.Attrib
 import org.openxdata.markup.IQuestion
 import org.openxdata.markup.Study
 import org.openxdata.markup.Util
+import org.openxdata.markup.serializer.MarkupAligner
 import org.openxdata.markup.serializer.XFormSerializer
 
 import javax.swing.*
@@ -64,6 +65,10 @@ class FormBinderPresenter {
             executeSafely { newFile() }
         } as ActionListener)
 
+        form.menuAlign.addActionListener({ ActionEvent evt ->
+            executeSafely { align() }
+        } as ActionListener)
+
         form.btnShowXml.addActionListener({ ActionEvent evt ->
             Thread.start { executeSafely { showXML() } }
         } as ActionListener)
@@ -97,6 +102,12 @@ class FormBinderPresenter {
 
         //loadSample study
         loadForm(addHeader(Resources.sampleStudy))
+    }
+
+    def align() {
+        def text = form.txtMarkUp.text
+        def align = new MarkupAligner(text).align()
+        loadForm(align)
     }
 
     void handleWindowCloseOperation(WindowEvent evt) {

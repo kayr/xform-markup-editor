@@ -67,6 +67,8 @@ public class MarkupForm extends javax.swing.JFrame {
         menuSimpleSkip = new javax.swing.JMenuItem();
         menuAdvancedSkip = new javax.swing.JMenuItem();
         menuOxdForm = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menuAlign = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Form MarkUp Builder");
@@ -164,6 +166,13 @@ public class MarkupForm extends javax.swing.JFrame {
         jMenu1.add(menuOxdForm);
 
         menuBar.add(jMenu1);
+
+        jMenu2.setText("Tools");
+
+        menuAlign.setText("Align Text");
+        jMenu2.add(menuAlign);
+
+        menuBar.add(jMenu2);
 
         setJMenuBar(menuBar);
 
@@ -292,6 +301,12 @@ private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GE
     public JButton getBtnRefreshTree(){
         return studyTreePanel.getBtnRefreshTree();
     }
+
+    public JMenuItem getMenuAlign() {
+        return menuAlign;
+    }
+    
+    
     
     
     TreePanel studyTreePanel;    
@@ -306,11 +321,13 @@ private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblCaret;
     private javax.swing.JMenuItem menuAdvancedSkip;
+    private javax.swing.JMenuItem menuAlign;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuNew;
     private javax.swing.JMenuItem menuOpen;
