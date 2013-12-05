@@ -4,6 +4,8 @@ import au.com.bytecode.opencsv.CSVReader
 import au.com.bytecode.opencsv.CSVWriter
 import org.openxdata.markup.exception.ValidationException
 
+import static org.openxdata.markup.Util.parseBind
+
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -118,35 +120,52 @@ could not be found in the form""")
 
     //todo optimise this for faster perfomance
     private void buildDynamicModel(Integer headerIdx, String dynamicBinding) {
-        def visitedChildParent = new HashSet()
+
+        def createdOptions = new HashSet()
+        //map of visited children and parents
         def visitedChildren = new HashMap()
         dynamicOptions[dynamicBinding] = []
+
         for (int csvRowIdx = 1; csvRowIdx < parsedCsv.size(); csvRowIdx++) {
 
             def csvRow = parsedCsv[csvRowIdx]
 
             def childName = csvRow[headerIdx]
-            def parent = Util.parseBind(csvRow[headerIdx - 1]).bind
+            //optimisation to avoid parsing text many times
+            def parent = headerIdx == 1 ? parseBind(csvRow[headerIdx - 1]).bind : csvRow[headerIdx - 1]
             def option = new DynamicOption(parent, childName)
+            def oldBind = option.bind
 
-            def parentChildBinding = "$option.parentBinding<>$option.bind"
-
-            if (visitedChildParent.contains(parentChildBinding)) continue
-
-            if (visitedChildren.containsKey(option.bind)) {
-                def newBinding = "${option.parentBinding}_${option.bind}"
-                println "WARNING: Duplicate DynamicOption[$option.bind in $option.parentBinding] with [$option.bind in ${visitedChildren[option.bind]}] : creating new binding [$newBinding]"
-                option.setBind(newBinding)
+            if (createdOptions.contains(option)) {
+                csvRow[headerIdx] = option.bind  //set the new bind in the csv so as to keep history
+                continue
             }
+
+
+            if (visitedChildren.containsKey(oldBind)) {
+
+                String parBind = option.parentBinding
+                String childBind = option.bind
+
+                def newBinding = parBind.endsWith('_') || childBind.startsWith('_') ? "${option.parentBinding}${option.bind}" : "${option.parentBinding}_${option.bind}"
+
+                option.setBind(newBinding)
+
+                if (createdOptions.contains(option)) {
+                    csvRow[headerIdx] = option.bind  //set the new bind in the csv so as to keep history
+                    continue
+                }
+                println "WARNING: Duplicate DynamicOption[$oldBind in $option.parentBinding] with [$oldBind in ${visitedChildren[oldBind]}] : created new binding [$newBinding]"
+            }
+
 
             dynamicOptions[dynamicBinding] << option
 
-            visitedChildParent.add(parentChildBinding)
-
-            if(!visitedChildren[option.bind]){
-                visitedChildren[option.bind] = []
-            }
-            visitedChildren[option.bind] << option.parentBinding
+            csvRow[headerIdx] = option.bind  //set the new bind in the csv so as to keep history
+            createdOptions.add(option)
+            if (!visitedChildren[oldBind])
+                visitedChildren[oldBind] = new HashSet()
+            visitedChildren[oldBind] << option.parentBinding
         }
     }
 

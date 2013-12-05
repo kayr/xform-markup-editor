@@ -57,6 +57,10 @@ class NumberedXMLs {
           <label>Bugiroad</label>
           <value>bugiroad</value>
         </item>
+        <item id="kenya_kampala_bugiroad" parent="kenya_kampala">
+          <label>Bugiroad</label>
+          <value>kenya_kampala_bugiroad</value>
+        </item>
       </dynamiclist>
     </instance>
     <bind id="_1country" nodeset="/snv_study_snv_form_v1/_1country" type="xsd:string" />

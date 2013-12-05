@@ -598,6 +598,10 @@ jeelopo
           <label>Bugiroad</label>
           <value>bugiroad</value>
         </item>
+        <item id="kenya_kampala_bugiroad" parent="kenya_kampala">
+          <label>Bugiroad</label>
+          <value>kenya_kampala_bugiroad</value>
+        </item>
       </dynamiclist>
     </instance>
     <bind id="country" nodeset="/snv_study_snv_form_v1/country" type="xsd:string" />
@@ -1181,6 +1185,10 @@ repeat{ *Required repeat
         <item id="bugiroad" parent="kampala">
           <label>Bugiroad</label>
           <value>bugiroad</value>
+        </item>
+        <item id="kenya_kampala_bugiroad" parent="kenya_kampala">
+          <label>Bugiroad</label>
+          <value>kenya_kampala_bugiroad</value>
         </item>
       </dynamiclist>
     </instance>

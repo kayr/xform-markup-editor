@@ -16,7 +16,7 @@ class DynamicOption extends Option implements IOption {
         this.parentBinding = parent
     }
 
-    String getChild(){
+    String getChild() {
         return option
     }
 
@@ -26,7 +26,7 @@ class DynamicOption extends Option implements IOption {
 
         DynamicOption that = (DynamicOption) o
 
-        if (child != that.child) return false
+        if (bind != that.bind) return false
         if (parentBinding != that.parentBinding) return false
 
         return true
@@ -35,7 +35,12 @@ class DynamicOption extends Option implements IOption {
     int hashCode() {
         int result
         result = (parentBinding != null ? parentBinding.hashCode() : 0)
-        result = 31 * result + (child != null ? child.hashCode() : 0)
+        result = 31 * result + (bind != null ? bind.hashCode() : 0)
         return result
     }
+
+    String toString() {
+        return "$child in $parentBinding"
+    }
+
 }

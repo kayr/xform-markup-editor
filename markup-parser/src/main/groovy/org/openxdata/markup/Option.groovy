@@ -1,7 +1,4 @@
 package org.openxdata.markup
-
-import org.openxdata.markup.exception.ValidationException
-
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -20,7 +17,7 @@ class Option implements IOption {
         setOption(option)
     }
 
-    Option(String option,int line) {
+    Option(String option, int line) {
         this.line = line
         setOption(option)
     }
@@ -28,7 +25,7 @@ class Option implements IOption {
 
 
     void setOption(String newOption) {
-        def parsedOption = Util.parseBind(newOption,line)
+        def parsedOption = Util.parseBind(newOption, line)
         option = parsedOption.option
         bind = parsedOption.bind
         this.line = line
@@ -44,6 +41,8 @@ class Option implements IOption {
         return bind
     }
 
-
+    String toString() {
+        return option
+    }
 
 }

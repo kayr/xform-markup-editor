@@ -45,9 +45,10 @@ $ug2 Uganda,$km Kampala,Bugiroad
 $ky Kenya,Nairobi,Machaccos
 Kenya,$nm2 Nairobi,Lala
 $kn Kenya,Nairobi,Langley
+$kn Kenya,Nairobi,Langley
 Kenya,Nairobi,Kikuyu
 '''
-    def oxdIncombustibleCSV = '''Country,*District,School
+    def oxdIncompatibleCSV = '''Country,*District,School
 Uganda,Kampala,Macos
 Kenya,Kampala,Lala
 Kenya,Nairobi,Langley
@@ -110,8 +111,8 @@ Kenya,Nairobi,Macos
         Study.quickParse.set(false)
     }
 
-    public void testOldIncompatibleCSV() {
-        builder.csvSrc = oxdIncombustibleCSV
+    public void testOxdIncompatibleCSV() {
+        builder.csvSrc = oxdIncompatibleCSV
 
         builder.parse()
 
@@ -241,6 +242,27 @@ Kenya,Nairobi,Macos
 
         def dynQn3 = builder.dynamicOptions[Util.getBindName('School')]
         assertEquals 'Expecting 3 option for school', 7, dynQn3.size()
+
+    }
+
+    def csvWithSameChildrenDifferentParents = '''Region,Sub_Region,    City
+                    Africa,    Kenya,    Eldoret
+                    Europe,    Kenya,    Eldoret
+                    America,    Kenya,    Eldoret
+                    America,    Kenya,    Eldoret
+                    America,    Kenya,    Eldoret
+                    Africa,    Kenya,    Eldoret
+                    Europe,    Kenya,    Eldoret'''
+
+    public void testOxdInCompatibleCSV2() {
+        builder.csvSrc = csvWithSameChildrenDifferentParents
+
+        builder.parse()
+
+        assert builder.questions.size() == 3
+        assert builder.dynamicOptions.size() == 2
+        assert builder.dynamicOptions.sub_region.size() == 3
+        assert builder.dynamicOptions.city.size() == 3
 
     }
 
