@@ -699,6 +699,155 @@ jeelopo
     </upload>
   </group>
 </xforms>'''
+    static def expectedXFormWithNumberedLabels = '''<xforms>
+  <model>
+    <instance id="snv_study_snv_form_v1">
+      <snv_study_snv_form_v1 id="0" name="Snv Form" formKey="snv_study_snv_form_v1">
+        <country />
+        <district />
+        <school />
+        <how_are_you />
+        <what_is_name />
+        <what_is_sex />
+        <select_your_diseases />
+        <repeat_question_header>
+          <rpt_question_1 />
+          <rpt_question_2 />
+        </repeat_question_header>
+        <video />
+      </snv_study_snv_form_v1>
+    </instance>
+    <instance id="district">
+      <dynamiclist>
+        <item id="kampala" parent="uganda">
+          <label>Kampala</label>
+          <value>kampala</value>
+        </item>
+        <item id="nairobi" parent="kenya">
+          <label>Nairobi</label>
+          <value>nairobi</value>
+        </item>
+        <item id="kenya_kampala" parent="kenya">
+          <label>Kampala</label>
+          <value>kenya_kampala</value>
+        </item>
+      </dynamiclist>
+    </instance>
+    <instance id="school">
+      <dynamiclist>
+        <item id="macos" parent="kampala">
+          <label>Macos</label>
+          <value>macos</value>
+        </item>
+        <item id="machaccos" parent="nairobi">
+          <label>Machaccos</label>
+          <value>machaccos</value>
+        </item>
+        <item id="bugiroad" parent="kampala">
+          <label>Bugiroad</label>
+          <value>bugiroad</value>
+        </item>
+        <item id="kenya_kampala_bugiroad" parent="kenya_kampala">
+          <label>Bugiroad</label>
+          <value>kenya_kampala_bugiroad</value>
+        </item>
+      </dynamiclist>
+    </instance>
+    <bind id="country" nodeset="/snv_study_snv_form_v1/country" type="xsd:string" />
+    <bind id="district" nodeset="/snv_study_snv_form_v1/district" type="xsd:string" required="true()" />
+    <bind id="school" nodeset="/snv_study_snv_form_v1/school" type="xsd:string" />
+    <bind id="how_are_you" nodeset="/snv_study_snv_form_v1/how_are_you" type="xsd:string" />
+    <bind id="what_is_name" nodeset="/snv_study_snv_form_v1/what_is_name" type="xsd:string" />
+    <bind id="what_is_sex" nodeset="/snv_study_snv_form_v1/what_is_sex" type="xsd:string" />
+    <bind id="select_your_diseases" nodeset="/snv_study_snv_form_v1/select_your_diseases" type="xsd:string" />
+    <bind id="repeat_question_header" nodeset="/snv_study_snv_form_v1/repeat_question_header" />
+    <bind id="rpt_question_1" nodeset="/snv_study_snv_form_v1/repeat_question_header/rpt_question_1" type="xsd:string" />
+    <bind id="rpt_question_2" nodeset="/snv_study_snv_form_v1/repeat_question_header/rpt_question_2" type="xsd:string" />
+    <bind id="video" nodeset="/snv_study_snv_form_v1/video" type="xsd:base64Binary" format="video" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <select1 bind="country">
+      <label>1. Country</label>
+      <item id="uganda">
+        <label>Uganda</label>
+        <value>uganda</value>
+      </item>
+      <item id="kenya">
+        <label>Kenya</label>
+        <value>kenya</value>
+      </item>
+    </select1>
+    <select1 bind="district">
+      <label>2. District</label>
+      <itemset nodeset="instance('district')/item[@parent=instance('snv_study_snv_form_v1')/country]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+    <select1 bind="school">
+      <label>3. School</label>
+      <itemset nodeset="instance('school')/item[@parent=instance('snv_study_snv_form_v1')/district]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+    <input bind="how_are_you">
+      <label>4. How are you</label>
+    </input>
+    <input bind="what_is_name">
+      <label>5. what is name</label>
+    </input>
+    <select1 bind="what_is_sex">
+      <label>6. What is sex</label>
+      <item id="male">
+        <label>Male</label>
+        <value>male</value>
+      </item>
+      <item id="female">
+        <label>female</label>
+        <value>female</value>
+      </item>
+    </select1>
+    <select bind="select_your_diseases">
+      <label>7. Select your diseases</label>
+      <item id="aids">
+        <label>AIDS</label>
+        <value>aids</value>
+      </item>
+      <item id="tb">
+        <label>TB</label>
+        <value>tb</value>
+      </item>
+      <item id="whooping_cough">
+        <label>Whooping cough</label>
+        <value>whooping_cough</value>
+      </item>
+    </select>
+    <group id="repeat_question_header">
+      <label>8. Repeat Question header</label>
+      <repeat bind="repeat_question_header">
+        <select1 bind="rpt_question_1">
+          <label>8.1. rpt question 1</label>
+          <item id="sdsd">
+            <label>sdsd</label>
+            <value>sdsd</value>
+          </item>
+        </select1>
+        <select bind="rpt_question_2">
+          <label>8.2. rpt question 2</label>
+          <item id="dsksd">
+            <label>dsksd</label>
+            <value>dsksd</value>
+          </item>
+        </select>
+      </repeat>
+    </group>
+    <upload bind="video" mediatype="video/*">
+      <label>9. Video</label>
+    </upload>
+  </group>
+</xforms>'''
 
     static def snvStudyXML = '''<study name="Snv Study">
   <form name="Snv Form">

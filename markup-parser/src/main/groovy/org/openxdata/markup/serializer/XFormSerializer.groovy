@@ -267,7 +267,7 @@ class XFormSerializer {
     }
 
     private String getDynamicParentQnId(DynamicQuestion question) {
-        if(numberQuestions)
+        if(numberBindings)
             return question.indexedParentQuestionId
         return question.parentQuestionId
     }

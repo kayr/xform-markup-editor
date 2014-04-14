@@ -39,6 +39,17 @@ class XFormSerializerTest extends XMLTestCase {
         assertEquals Fixtures.expectedXForm, xml
     }
 
+    void testToXFormWithNumberedLabels() {
+        def form = study.forms[0]
+
+        serializer.numberQuestions = true
+
+        def xml = serializer.toXForm(form)
+
+        assertEquals Fixtures.expectedXFormWithNumberedLabels, xml
+    }
+
+
     void testTodStudy() {
         def studyXml = serializer.toStudyXml(study)
 
