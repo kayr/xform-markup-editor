@@ -14,7 +14,7 @@ class Attrib {
     static def types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
             'picture', 'gps', 'barcode','longtext']
 
-    static def allowedAttributes = ['readonly', 'required', 'id', 'invisible', 'comment', 'skiplogic', 'skipaction',
+    static def allowedAttributes = ['readonly', 'required', 'id','absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
             'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent']
 
 
@@ -82,6 +82,11 @@ Supported attributes include $types \n$allowedAttributes""",line)
             case 'id':
                 Util.validateId(param,line)
                 question.binding = param
+                break
+            case 'absoluteid':
+                Util.validateId(param,line)
+                question.binding = param
+                question.hasAbsoluteId = true
                 break
             case 'hideif':
             case 'showif':

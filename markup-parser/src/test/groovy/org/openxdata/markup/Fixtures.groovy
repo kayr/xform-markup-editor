@@ -18,6 +18,21 @@ class Fixtures {
         return resourceFolder
     }
 
+
+    static def formWithAbsoluteId = '''
+
+### Study
+
+## Form
+
+question 1
+
+@absoluteid mn
+question 2
+
+question 3
+'''
+
     static def multipleForms =
 '''
 
@@ -1587,4 +1602,31 @@ repeat{ *Required repeat
     <Item WidgetType="Button" Text="Cancel" HelpText="cancel" Binding="cancel" Left="220px" Top="2016px" Width="90px" Height="30px" TabIndex="0" fontSize="16px" fontFamily="Verdana, 'Lucida Grande', 'Trebuchet MS', Arial, Sans-Serif" />
   </Page>
 </Form>'''
+
+    def static absoluteIdXML = '''<xforms>
+  <model>
+    <instance id="study_form_v1">
+      <study_form_v1 id="0" name="Form" formKey="study_form_v1">
+        <_1question_1 />
+        <mn />
+        <_3question_3 />
+      </study_form_v1>
+    </instance>
+    <bind id="_1question_1" nodeset="/study_form_v1/_1question_1" type="xsd:string" />
+    <bind id="mn" nodeset="/study_form_v1/mn" type="xsd:string" />
+    <bind id="_3question_3" nodeset="/study_form_v1/_3question_3" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="_1question_1">
+      <label>1. question 1</label>
+    </input>
+    <input bind="mn">
+      <label>2. question 2</label>
+    </input>
+    <input bind="_3question_3">
+      <label>3. question 3</label>
+    </input>
+  </group>
+</xforms>'''
 }

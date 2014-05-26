@@ -89,7 +89,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 
   /* labels */
-  "@id"|"###"|"##"|"#>"
+  "@id"|"###"|"##"|"#>"|"@absoluteid"
                                 {
                                 yybegin(ID_TEXT);
                                 return token(TokenType.TYPE3);

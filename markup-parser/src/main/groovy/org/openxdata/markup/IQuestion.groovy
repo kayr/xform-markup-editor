@@ -83,5 +83,8 @@ interface IQuestion {
 
     void setLine(int i)
 
+    void setHasAbsoluteId(boolean hasAbsoluteId)
+
+    boolean getHasAbsoluteId()
 
 }

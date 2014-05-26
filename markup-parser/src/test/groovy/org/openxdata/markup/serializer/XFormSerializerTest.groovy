@@ -217,5 +217,15 @@ class XFormSerializerTest extends XMLTestCase {
         assertTrue formImports.values().every {!it.isEmpty()}
     }
 
+    void testToXFormWithAbsoluteId() {
+        def parser = Util.createParser(Fixtures.formWithAbsoluteId)
+
+        serializer.numberBindings = true
+        serializer.numberQuestions = true
+        def xml = serializer.toXForm(parser.study().forms[0])
+
+        assertEquals Fixtures.absoluteIdXML, xml
+    }
+
 
 }

@@ -23,6 +23,7 @@ abstract class AbstractQuestion implements IQuestion {
     String message
     String calculation
     int line
+    boolean hasAbsoluteId = false
 
 
     AbstractQuestion() {
@@ -63,6 +64,14 @@ abstract class AbstractQuestion implements IQuestion {
             type = Util.getType(tempBind)
     }
 
+    void setHasAbsoluteId(boolean hasAbsoluteId) {
+        this.hasAbsoluteId = hasAbsoluteId
+    }
+
+    boolean getHasAbsoluteId() {
+        return hasAbsoluteId
+    }
+
     @Override
     String getBinding() {
         return binding
@@ -90,7 +99,7 @@ abstract class AbstractQuestion implements IQuestion {
 
      @Override
      String getIndexedBinding() {
-         if(binding == 'endtime' && (type == 'dateTime' || type == 'time'))
+         if ((binding == 'endtime' && (type == 'dateTime' || type == 'time' )) || hasAbsoluteId)
              return binding
          return "_${questionIdx.replace('.','_')}$binding"
      }
