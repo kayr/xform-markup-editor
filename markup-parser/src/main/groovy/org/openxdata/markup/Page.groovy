@@ -54,7 +54,7 @@ class Page implements HasQuestions {
 
     @Override
     List<IQuestion> getAllQuestions() {
-        return Form.extractQuestion(this)
+        return Form.extractQuestions(this)
     }
 
     @Override

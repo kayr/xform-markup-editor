@@ -105,12 +105,12 @@ class Form implements HasQuestions {
         return allQuestions
     }
 
-   static List<IQuestion> extractQuestion(HasQuestions questions) {
+   static List<IQuestion> extractQuestions(HasQuestions questions) {
         def allQuestions = []
         questions.questions.each {
             allQuestions.add(it)
             if (it instanceof RepeatQuestion) {
-                def moreQuestions = extractQuestion(it)
+                def moreQuestions = extractQuestions(it)
                 allQuestions.addAll(moreQuestions)
             }
         }

@@ -1,9 +1,6 @@
 package org.openxdata.markup.deserializer
 
-import org.openxdata.markup.Form
-import org.openxdata.markup.IQuestion
-import org.openxdata.markup.Page
-import org.openxdata.markup.SingleSelectQuestion
+import org.openxdata.markup.*
 
 /**
  * Created by kay on 6/7/14.
@@ -11,7 +8,7 @@ import org.openxdata.markup.SingleSelectQuestion
 class FormDeserializer {
 
     String xml
-    def xforms
+    def xForm
     Form form
 
     Form parse() {
@@ -24,71 +21,72 @@ class FormDeserializer {
 
     Form toForm() {
         form = new Form()
-        def instance = xforms.model.instance[0]
+        def instance = xForm.model.instance[0]
         form.id = instance.@id
         form.name = instance.'*'[0].@name
         addPages()
         return form
     }
 
-    List<String> getFieldNames() {
-        //get the last element inside the first child tag
-        def names = xforms.model.instance[0].'*'.'**'
-        return names.collect { it.name() }
-    }
-
-    List<String> getFieldLabels() {
-        def names = xforms.model.instance.'*'.'*'
-        return names.collect { it.name() }
-    }
-
-    List<String> iterateFieldLabels() {
-        def names = xforms.group.'*'
-        return names.collect { it.name() }
-    }
-
-    List<Page> addPages() {
-        def groups = xforms.group
+    def addPages() {
+        def groups = xForm.group
         groups.each {
-            def page = toPage(it)
-            form.addPage(page)
+            processPage(it)
         }
     }
 
-    Page toPage(def elem) {
-        def p = new Page(name: elem.label.text())
-        addQuestions(p, elem)
-        return p
+    Page processPage(def group) {
+        def page = new Page(name: group.label.text())
+        form.addPage(page)
+        addQuestions(page, group)
+        return page
     }
 
-    List<IQuestion> addQuestions(Page p, def elem) {
-        def qnElems = elem.findAll { it.name() != 'label' }
+    List<IQuestion> addQuestions(HasQuestions page, def elem) {
+        def qnElems = elem.'*'.findAll { it.name() != 'label' }
         qnElems.each {
-            def name = it.name()
+            processQnElem(page, it)
         }
-        return qnElems.collect { it.name() }
+        page.allQuestions
     }
 
-    IQuestion process_select1(Page page, def elem) {
-        def qn = new SingleSelectQuestion()
-        addMetaInfo(qn)
+    IQuestion processQnElem(HasQuestions page, def qnElem) {
+        def tagName = qnElem.name()
+        def method = "process_$tagName"
+
+        if (this.respondsTo(method)) {
+            def qn = this."$method"(page, qnElem)
+        }
     }
 
-    IQuestion process_select(Page page, def elem) {
-
+    IQuestion process_select1(HasQuestions page, def elem) {
+        def qn = addMetaInfo new SingleSelectQuestion(), page, elem
+        return qn
     }
 
-    IQuestion process_input(Page page, def elem) {
-
+    IQuestion process_select(HasQuestions page, def elem) {
+        def qn = addMetaInfo new MultiSelectQuestion(), page, elem
+        return qn
     }
 
-    IQuestion process_group(Page page, def elem) {
-
+    IQuestion process_input(HasQuestions page, def elem) {
+        def qn = addMetaInfo new TextQuestion(), page, elem
+        return qn
     }
 
-    IQuestion addMetaInfo(IQuestion qn, def elem) {
+    IQuestion process_group(HasQuestions page, def elem) {
+        def qn = new RepeatQuestion(parent: page)
+        addQuestions(qn, elem.repeat)
+        addMetaInfo qn, page, elem
+        return qn
+    }
+
+    IQuestion addMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
         qn.binding = elem.@id
-//        qn.
+        qn.text = elem.label.text()
+        qn.comment = elem.hint.text()
+        parent.addQuestion(qn)
+        return qn
     }
 
     String getType(def element) {
@@ -97,7 +95,7 @@ class FormDeserializer {
 
 
     def parseXml() {
-        xforms = new XmlSlurper().parseText(xml)
+        xForm = new XmlSlurper().parseText(xml)
         return this
     }
 
