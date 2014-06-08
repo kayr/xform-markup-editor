@@ -1,12 +1,11 @@
-package org.openxdata.markup.serializer;
+package org.openxdata.markup.deserializer;
 
 import junit.framework.TestCase
-import org.openxdata.markup.Fixtures;
+import org.openxdata.markup.Fixtures
 
+public class StudyDeSerializerTest extends TestCase {
 
-public class XFormDeSerializerTest extends TestCase {
-
-    def deSerializer = new XFormDeSerializer()
+    def deSerializer = new StudyDeSerializer()
 
     public void testToStudy() throws Exception {
 

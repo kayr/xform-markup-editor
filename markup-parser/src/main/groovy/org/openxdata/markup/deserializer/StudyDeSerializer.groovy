@@ -1,8 +1,7 @@
-package org.openxdata.markup.serializer
+package org.openxdata.markup.deserializer
 
 import org.openxdata.markup.Form
 import org.openxdata.markup.Study
-import org.openxdata.mforms.server.XForm
 import org.openxdata.markup.Page
 
 /**
@@ -12,7 +11,7 @@ import org.openxdata.markup.Page
  * Time: 7:45 PM
  * To change this template use File | Settings | File Templates.
  */
-class XFormDeSerializer {
+class StudyDeSerializer {
 
     def parser = new XmlParser()
 
@@ -50,7 +49,7 @@ class XFormDeSerializer {
 
     Form toForm(String text){
 
-        def form = XForm.fromXform2FormDef(new StringReader(text))
+//        def form = XForm.fromXform2FormDef(new StringReader(text))
 
         form.pages.each {
             def page = new Page()
