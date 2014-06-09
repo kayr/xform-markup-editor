@@ -13,29 +13,25 @@ class FormDeserializerTest extends GroovyTestCase {
 
 
     void testToForm() {
-        def ds = new FormDeserializer(xml: Fixtures.expectedXForm).parseXml()
-        def form = ds.toForm()
+        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
         assert form.name == 'Snv Form'
         assert form.id == 'snv_study_snv_form_v1'
     }
 
     void testAddPages() {
-        def ds = new FormDeserializer(xml: Fixtures.expectedXForm).parseXml()
-        def form = ds.toForm()
+        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
         assert form.pages.size() == 1
         assert form.pages[0].name == 'Page1'
     }
 
     void testNumberOfQuestions() {
-        def ds = new FormDeserializer(xml: Fixtures.expectedXForm).parseXml()
-        def form = ds.toForm()
+        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
         assert form.allQuestions.size() == 10
         assert extractQuestions(form).size() == 10
     }
 
     void testSingleSelectOption() {
-        def ds = new FormDeserializer(xml: Fixtures.expectedXForm).parseXml()
-        def form = ds.toForm()
+        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
 
         def question = form.allQuestions.find { it.binding == 'what_is_sex' }
         assert question instanceof SingleSelectQuestion
@@ -47,8 +43,7 @@ class FormDeserializerTest extends GroovyTestCase {
     }
 
     void testMultipleSelectOption() {
-        def ds = new FormDeserializer(xml: Fixtures.expectedXForm).parseXml()
-        def form = ds.toForm()
+        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
 
         def question = form.allQuestions.find { it.binding == 'select_your_diseases' }
         assert question instanceof MultiSelectQuestion

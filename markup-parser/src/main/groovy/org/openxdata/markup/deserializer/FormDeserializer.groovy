@@ -14,9 +14,8 @@ class FormDeserializer {
     Form parse() {
         if (form)
             return form
-        parseXml()
+        xForm = new XmlSlurper().parseText(xml)
         toForm()
-        return form
     }
 
     Form toForm() {
@@ -55,7 +54,7 @@ class FormDeserializer {
         def method = "process_$tagName"
 
         if (this.respondsTo(method)) {
-            def qn = this."$method"(page, qnElem)
+            this."$method"(page, qnElem)
         }
     }
 
@@ -79,7 +78,7 @@ class FormDeserializer {
     IQuestion process_group(HasQuestions page, def elem) {
         def qn = new RepeatQuestion(parent: page)
         addQuestions(qn, elem.repeat)
-        addMetaInfo qn, page, elem
+        addMetaInfo(qn, page, elem)
         return qn
     }
 
@@ -99,12 +98,4 @@ class FormDeserializer {
         def items = select.item
         return items.collect { new Option(it.label.text(), it.@id.text()) }
     }
-
-
-    def parseXml() {
-        xForm = new XmlSlurper().parseText(xml)
-        return this
-    }
-
-
 }
