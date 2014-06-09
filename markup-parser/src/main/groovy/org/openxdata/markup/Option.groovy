@@ -22,6 +22,10 @@ class Option implements IOption {
         setOption(option)
     }
 
+    Option(String option, String bind) {
+        this.option = option
+        this.bind = bind
+    }
 
 
     void setOption(String newOption) {

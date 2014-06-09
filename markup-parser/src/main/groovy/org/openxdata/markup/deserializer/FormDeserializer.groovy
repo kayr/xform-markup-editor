@@ -61,11 +61,13 @@ class FormDeserializer {
 
     IQuestion process_select1(HasQuestions page, def elem) {
         def qn = addMetaInfo new SingleSelectQuestion(), page, elem
+        qn.options.addAll(getSelectOptions(elem))
         return qn
     }
 
     IQuestion process_select(HasQuestions page, def elem) {
         def qn = addMetaInfo new MultiSelectQuestion(), page, elem
+        qn.options.addAll(getSelectOptions(elem))
         return qn
     }
 
@@ -91,6 +93,11 @@ class FormDeserializer {
 
     String getType(def element) {
 
+    }
+
+    List<Option> getSelectOptions(def select) {
+        def items = select.item
+        return items.collect { new Option(it.label.text(), it.@id.text()) }
     }
 
 
