@@ -47,7 +47,7 @@ abstract class AbstractQuestion implements IQuestion {
     }
 
     def getContextIdx(){
-        return ''+(hasQuestions.questions.indexOf(this) + 1)
+        return "${hasQuestions.questions.indexOf(this) + 1}"
     }
 
     @Override
@@ -118,7 +118,7 @@ abstract class AbstractQuestion implements IQuestion {
     }
 
     String getNumberedText() {
-        return getQuestionIdx() +". $text"
+        return "${getQuestionIdx()}. $text"
     }
 
     @Override
