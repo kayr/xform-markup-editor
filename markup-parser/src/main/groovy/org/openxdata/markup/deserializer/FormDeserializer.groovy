@@ -72,6 +72,13 @@ class FormDeserializer {
 
     IQuestion process_input(HasQuestions page, def elem) {
         def qn = addMetaInfo new TextQuestion(), page, elem
+        qn.setType(resolveType(qn))
+        return qn
+    }
+
+    IQuestion process_upload(HasQuestions page, def elem) {
+        def qn = addMetaInfo new TextQuestion(), page, elem
+        qn.setType(resolveType(qn))
         return qn
     }
 
@@ -83,18 +90,44 @@ class FormDeserializer {
     }
 
     IQuestion addMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
-        qn.binding = elem.@id
+        qn.binding = elem.@bind
         qn.text = elem.label.text()
         qn.comment = elem.hint.text()
         parent.addQuestion(qn)
         return qn
     }
 
-    String getType(def element) {
+    String resolveType(IQuestion qn) {
+        def binding = xForm.model.bind.find { it.@id == qn.binding }
 
+        if (!binding) return 'string'
+
+        def type = binding.@type.text()?.replaceFirst('xsd:', '')
+        def format = binding.@format
+
+
+
+        if (Attrib.types.contains(type)) {
+            return format?.isEmpty() ? type : format;
+        }
+
+        switch (type) {
+            case 'base64Binary':
+                return resolveMediaType(format)
+            case 'int':
+                return 'number'
+            default:
+                return type ?: 'string'
+
+        }
     }
 
-    List<Option> getSelectOptions(def select) {
+    static private String resolveMediaType(format) {
+        return format == 'image' ? 'picture' : format
+    }
+
+
+    static List<Option> getSelectOptions(def select) {
         def items = select.item
         return items.collect { new Option(it.label.text(), it.@id.text()) }
     }
