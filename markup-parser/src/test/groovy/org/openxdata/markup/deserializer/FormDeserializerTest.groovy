@@ -86,6 +86,14 @@ class FormDeserializerTest extends GroovyTestCase {
         assert questions.find { it.binding == 'child_sex' }.type == 'string'
         assert questions.find { it.binding == 'start_time' }.type == 'time'
         assert questions.find { it.binding == 'endtime' }.type == 'time'
+
+        //options
+        assert questions.find { it.binding == 'sex' }.options.size() == 2
+        assert questions.find { it.binding == 'arvs' }.options.size() == 5
+
+        ['azt', 'abicvar', 'efivarence', 'triomune', 'truvada'].each { binding ->
+            assert  questions.find { it.binding == 'arvs' }.options.any{option -> binding == option.bind}
+        }
     }
 
 
