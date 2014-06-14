@@ -119,53 +119,64 @@ could not be found in the form""")
     }
 
     //todo optimise this for faster perfomance
-    private void buildDynamicModel(Integer headerIdx, String dynamicBinding) {
+    private void buildDynamicModel(Integer columnIdx, String instanceId) {
 
         def createdOptions = new HashSet()
         //map of visited children and parents
         def visitedChildren = new HashMap()
-        dynamicOptions[dynamicBinding] = []
+        dynamicOptions[instanceId] = []
 
-        for (int csvRowIdx = 1; csvRowIdx < parsedCsv.size(); csvRowIdx++) {
+        for (int rowIdx = 1; rowIdx < parsedCsv.size(); rowIdx++) {
 
-            def csvRow = parsedCsv[csvRowIdx]
+            def currentRow = parsedCsv[rowIdx]
 
-            def childName = csvRow[headerIdx]
+            def childName = currentRow[columnIdx]
+
             //optimisation to avoid parsing text many times
-            def parent = headerIdx == 1 ? parseBind(csvRow[headerIdx - 1]).bind : csvRow[headerIdx - 1]
-            def option = new DynamicOption(parent, childName)
-            def oldBind = option.bind
+            //get the parent binding it was already parsed by the previous call to this method
+            def parentBinding = columnIdx == 1 ? parseBind(currentRow[columnIdx - 1]).bind : currentRow[columnIdx - 1]
 
+
+            def option = new DynamicOption(parentBinding, childName)
+
+            //we do not allow options of same parent tna child  in a single dynamic instance
             if (createdOptions.contains(option)) {
-                csvRow[headerIdx] = option.bind  //set the new bind in the csv so as to keep history
+                //set the new bind in the global csv so as to keep history
+                //generally a visited column should have binding by the time we leave this method
+                currentRow[columnIdx] = option.bind
                 continue
             }
 
 
-            if (visitedChildren.containsKey(oldBind)) {
+            //check if this child option_bind already exist and change the binding if parent is different
+            def currentBinding = option.bind
+            if (visitedChildren.containsKey(currentBinding)) {
 
                 String parBind = option.parentBinding
                 String childBind = option.bind
 
+                //build a proper binding that with proper number if underscores
                 def newBinding = parBind.endsWith('_') || childBind.startsWith('_') ? "${option.parentBinding}${option.bind}" : "${option.parentBinding}_${option.bind}"
 
                 option.setBind(newBinding)
 
+                //we do not allow options of same parent the child  in a single dynamic instance
                 if (createdOptions.contains(option)) {
-                    csvRow[headerIdx] = option.bind  //set the new bind in the csv so as to keep history
+                    currentRow[columnIdx] = option.bind  //set the new bind in the csv so as to keep history
                     continue
                 }
-                println "WARNING: Duplicate DynamicOption[$oldBind in $option.parentBinding] with [$oldBind in ${visitedChildren[oldBind]}] : created new binding [$newBinding]"
+                println "WARNING: Duplicate DynamicOption[$currentBinding in $option.parentBinding] with [$currentBinding in ${visitedChildren[currentBinding]}] : created new binding [$newBinding]"
             }
 
+            // add this option to the instance
+            dynamicOptions[instanceId] << option
 
-            dynamicOptions[dynamicBinding] << option
-
-            csvRow[headerIdx] = option.bind  //set the new bind in the csv so as to keep history
+            currentRow[columnIdx] = option.bind  //set the new bind in the csv so as to keep history
             createdOptions.add(option)
-            if (!visitedChildren[oldBind])
-                visitedChildren[oldBind] = new HashSet()
-            visitedChildren[oldBind] << option.parentBinding
+            if (!visitedChildren[currentBinding])
+                visitedChildren[currentBinding] = new HashSet()
+            //parent bindings are mainly kept for logging purposes for now. Remove them later
+            visitedChildren[currentBinding] << option.parentBinding
         }
     }
 
