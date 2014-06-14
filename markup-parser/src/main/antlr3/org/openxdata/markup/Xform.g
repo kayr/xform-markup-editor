@@ -111,7 +111,7 @@ dynamicQn returns [DynamicBuilder rv]
 	
 csvImport returns [DynamicBuilder rv = new DynamicBuilder()]
 	:	CSVIMPORT			{
-						rv.setCsvFile($CSVIMPORT.text);
+						rv.setCsvFilePath($CSVIMPORT.text);
 						rv.setLine($CSVIMPORT.line);
 						}
 	;

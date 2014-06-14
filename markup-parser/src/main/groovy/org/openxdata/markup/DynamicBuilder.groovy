@@ -70,7 +70,7 @@ class DynamicBuilder {
         singleSelectQuestionInstance.options = parsedSingleSelectOptions
     }
 
-    private def addBuiltQnsDirectly(form) {
+    private def addBuiltQnsDirectly(HasQuestions form) {
         for (qn in questions) {
             qn.line = line
             form.addQuestion(qn)
@@ -84,44 +84,55 @@ class DynamicBuilder {
     public void parse() {
         List<String[]> csv = parseCsv()
 
-        def singleSelectCol = getValuesForColumn(csv, 0).unique { Util.getBindName(it) }
-        def singleSelVar = getSingleSelectReferenceIfAvailable()
+        def options = getUniqueValuesForFirstColumn(csv)
         def weAreBuildingQnsDirectlyFromCSV = isCsvDirectBuild()
 
         if (weAreBuildingQnsDirectlyFromCSV) {
-            def singleSelQuestion = makeSingleSelectFromList(singleSelectCol)
-            questions << singleSelQuestion
+            makeSingleSelectFromList(options)
         } else {
-            this.referencedSingleSelectBinding = singleSelVar
-            singleSelectCol.remove(0)
-            parsedSingleSelectOptions = singleSelectCol.collect { return new Option(it) }
+            generateSingleSelectOptions(options)
         }
 
-        def headers = csv[0]
+        buildModelAndQuestions(weAreBuildingQnsDirectlyFromCSV)
+    }
 
+    private void generateSingleSelectOptions(List<String> options) {
+        def singleSelVar = getSingleSelectReferenceIfAvailable()
+        this.referencedSingleSelectBinding = singleSelVar
+        options.remove(0)
+        parsedSingleSelectOptions = options.collect { return new Option(it as String) }
+    }
+
+    private static List<String> getUniqueValuesForFirstColumn(List<String[]> csv) {
+        getValuesForColumn(csv, 0).unique { Util.getBindName(it as String) } as List<String>
+    }
+
+    private void buildModelAndQuestions(boolean weAreBuildingQnsDirectlyFromCSV) {
+        def headers = parsedCsv[0]
         for (int headerIdx = 1; headerIdx < headers.length; headerIdx++) {
+
             def csvHeader = headers[headerIdx]
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
             if (weAreBuildingQnsDirectlyFromCSV) {
                 qn.dynamicInstanceId = qn.binding
-                qn.parentQuestionId = questions[headerIdx - 1].binding  //set previous header column as the parentBinding of the current one.
+                qn.parentQuestionId = questions[headerIdx - 1].binding
+                //set previous header column as the parentBinding of the current one.
                 questions << qn
             } else {
                 validateVariable(qn.binding, qn.text)
             }
 
             buildDynamicModel(headerIdx, qn.binding)
-
         }
-
     }
 
     //todo optimise this for faster perfomance
     private void buildDynamicModel(Integer columnIdx, String instanceId) {
 
         def createdOptions = new HashSet()
-        //map of visited children and parents
+        //map of visited children and parents we use a HashMap mainly for logging purposes to
+        //to show the parents a specific child has
         def visitedChildren = new HashMap()
         dynamicOptions[instanceId] = []
 
@@ -146,7 +157,6 @@ class DynamicBuilder {
                 continue
             }
 
-
             //check if this child option_bind already exist and change the binding if parent is different
             def currentBinding = option.bind
             if (visitedChildren.containsKey(currentBinding)) {
@@ -154,10 +164,10 @@ class DynamicBuilder {
                 String parBind = option.parentBinding
                 String childBind = option.bind
 
-                //build a proper binding that with proper number if underscores
+                //build a proper binding with proper number of underscores
                 def newBinding = parBind.endsWith('_') || childBind.startsWith('_') ? "${option.parentBinding}${option.bind}" : "${option.parentBinding}_${option.bind}"
 
-                option.setBind(newBinding)
+                option.setBind(newBinding as String)
 
                 //we do not allow options of same parent the child  in a single dynamic instance
                 if (createdOptions.contains(option)) {
@@ -174,7 +184,7 @@ class DynamicBuilder {
             createdOptions.add(option)
             if (!visitedChildren[currentBinding])
                 visitedChildren[currentBinding] = new HashSet()
-            //parent bindings are mainly kept for logging purposes for now. Remove them later
+            //parent bindings are mainly kept for logging purposes
             visitedChildren[currentBinding] << option.parentBinding
         }
     }
@@ -186,7 +196,7 @@ class DynamicBuilder {
         return question == null ? question : question - '$'
     }
 
-    private void validateVariable(String variable, parentVariable) {
+    private static void validateVariable(String variable, parentVariable) {
         if (variable != null && variable != parentVariable) {
             throw new ValidationException("Invalid Variable in CSV [${parentVariable}]\n An Id should start with lower case characters follow by low case characters, numbers or underscores")
         }
@@ -238,7 +248,7 @@ class DynamicBuilder {
     }
 
     private void readMaxLines(File file) {
-        file.withReader { reader ->
+        file.withReader { Reader reader ->
             def line = reader.readLine()
             while (line) {
 
@@ -253,8 +263,8 @@ class DynamicBuilder {
     //todo optimise this for faster perfomance
     static List<String[]> fillUpSpace(List<String[]> strings) {
 
-        strings.eachWithIndex { row, rowIdx ->
-            row.eachWithIndex { cellValue, cellIdx ->
+        strings.eachWithIndex { String[] row, int rowIdx ->
+            row.eachWithIndex { String cellValue, int cellIdx ->
                 if (cellValue.isEmpty()) {
                     strings[rowIdx][cellIdx] = strings[rowIdx - 1][cellIdx]
                 } else {
@@ -265,10 +275,10 @@ class DynamicBuilder {
         return strings
     }
 
-    static SingleSelectQuestion makeSingleSelectFromList(List<String> strings) {
+    def makeSingleSelectFromList(List<String> strings) {
         SingleSelectQuestion qn = new SingleSelectQuestion(strings.remove(0))
-        strings.each { qn.addOption(new Option(it)) }
-        return qn
+        strings.each { qn.addOption(new Option(it as String)) }
+        questions << qn
     }
 
     static List<String[]> toStringArrayList(def csv) {
@@ -277,8 +287,8 @@ class DynamicBuilder {
     }
 
     static List getValuesForColumn(List csvList, int colIdx) {
-        csvList.collect {
-            it[colIdx]
+        csvList.collect { String[] row ->
+            row[colIdx]
         }
     }
 }
