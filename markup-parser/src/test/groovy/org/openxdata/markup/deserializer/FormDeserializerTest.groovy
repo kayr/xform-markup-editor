@@ -28,8 +28,8 @@ class FormDeserializerTest extends GroovyTestCase {
 
     void testNumberOfQuestions() {
         def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
-        assert form.allQuestions.size() == 10
-        assert extractQuestions(form).size() == 10
+        assert form.allQuestions.size() == 11
+        assert extractQuestions(form).size() == 11
     }
 
     void testSingleSelectOption() {

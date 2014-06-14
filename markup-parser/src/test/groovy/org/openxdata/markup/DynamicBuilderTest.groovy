@@ -101,7 +101,7 @@ Kenya,Nairobi,Macos
         def resourceFolder = Fixtures.setFormDirectory()
 
         DynamicBuilder builder = new DynamicBuilder();
-        builder.csvFile = "$resourceFolder/quarters.csv"
+        builder.csvFilePath = "$resourceFolder/quarters.csv"
 
         builder.parse()
 
@@ -196,14 +196,14 @@ Kenya,Nairobi,Macos
         def resourceFolder = Fixtures.setFormDirectory()
 
         DynamicBuilder builder = new DynamicBuilder();
-        builder.csvFile = "$resourceFolder/quarters.csv"
+        builder.csvFilePath = "$resourceFolder/quarters.csv"
 
         builder.parse()
 
         assertNotNull builder.parsedCsv
 
         builder = new DynamicBuilder();
-        builder.csvFile = /bad path/
+        builder.csvFilePath = /bad path/
 
         try {
             assertNull builder.parsedCsv
@@ -214,7 +214,7 @@ Kenya,Nairobi,Macos
         }
 
         builder = new DynamicBuilder();
-        builder.csvFile = 'quarters.csv'
+        builder.csvFilePath = 'quarters.csv'
         System.setProperty('form.dir', resourceFolder)
 
         builder.parse()
@@ -269,7 +269,7 @@ Kenya,Nairobi,Macos
     public void ignoreTestFillUpSpace2() {
         def file = new File(/C:\Users\kay\Dropbox\OMNI\snv database\community wash\community forms\lists.csv/)
 
-        builder.csvFile = file
+        builder.csvFilePath = file
 
         def csv = DynamicBuilder.toStringArrayList(file.text)
 
