@@ -416,9 +416,6 @@ jeelopo
 
         assertEquals 'subregion2',dynamicQuestion.dynamicInstanceId
 
-       def singleQuestion = Form.findQuestionWithBinding('region',form)
-
-
         def oldId = dynamicQuestion.dynamicInstanceId
         dynamicQuestion.dynamicInstanceId = 'blah'
         try {
