@@ -13,13 +13,16 @@ class Option implements IOption {
     ISelectionQuestion parent
     int line
 
+    Option(){
+    }
+
     Option(String option) {
-        setOption(option)
+        setAndParseOption(option)
     }
 
     Option(String option, int line) {
         this.line = line
-        setOption(option)
+        setAndParseOption(option)
     }
 
     Option(String option, String bind) {
@@ -28,7 +31,7 @@ class Option implements IOption {
     }
 
 
-    void setOption(String newOption) {
+    void setAndParseOption(String newOption) {
         def parsedOption = Util.parseBind(newOption, line)
         option = parsedOption.option
         bind = parsedOption.bind

@@ -15,14 +15,14 @@ class OptionTest extends GroovyTestCase {
         assertEquals "Hello world", option.option
 
 
-        option.setOption("Hellow world")
+        option.setAndParseOption("Hellow world")
 
         assertEquals Util.getBindName(option.option), option.bind
 
-        option.setOption("")
+        option.setAndParseOption("")
         assert option.bind == '_blank'
 
-        option.setOption(null)
+        option.setAndParseOption(null)
         assert option.bind == '_blank'
 
 

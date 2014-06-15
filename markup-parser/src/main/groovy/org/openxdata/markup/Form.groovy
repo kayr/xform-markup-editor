@@ -178,4 +178,11 @@ class Form implements HasQuestions {
     String toString(){
         name
     }
+
+    def addDynamicOptions(String instanceId, List<DynamicOption> dynamicOptions) {
+        if (!this.dynamicOptions[instanceId]) {
+            this.dynamicOptions[instanceId] = []
+        }
+        this.dynamicOptions[instanceId].addAll(dynamicOptions)
+    }
 }

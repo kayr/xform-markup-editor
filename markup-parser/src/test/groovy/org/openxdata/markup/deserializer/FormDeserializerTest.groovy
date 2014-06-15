@@ -57,6 +57,9 @@ class FormDeserializerTest extends GroovyTestCase {
     void testDynamicOption() {
         def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
 
+        assert form.dynamicOptions.size() == 2
+        println form.dynamicOptions
+
         DynamicQuestion districtQn = form.allQuestions.find { it.binding == 'district' }
         assert districtQn.class == DynamicQuestion
         assert districtQn.dynamicInstanceId == 'district'
@@ -71,6 +74,8 @@ class FormDeserializerTest extends GroovyTestCase {
     void testDynamicOption2() {
         def form = new FormDeserializer(xml: Fixtures.xmlFormWithDynamicInstanceIds).parse()
 
+        assert form.dynamicOptions.size() == 1
+
         DynamicQuestion districtQn = form.allQuestions.find { it.binding == 'subregion' }
         assert districtQn.class == DynamicQuestion
         assert districtQn.dynamicInstanceId == 'subregion2'
@@ -81,6 +86,7 @@ class FormDeserializerTest extends GroovyTestCase {
         assert schQn.dynamicInstanceId == 'subregion2'
         assert schQn.parentQuestionId == 'region'
     }
+
 
     void testTypeResolving() {
         def serializer = new XFormSerializer()

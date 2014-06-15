@@ -24,8 +24,31 @@ class FormDeserializer {
         def instance = xForm.model.instance[0]
         form.id = instance.@id
         form.name = instance.'*'[0].@name
+        addDynamicInstances()
         addPages()
         return form
+    }
+
+    def addDynamicInstances() {
+        def instances = xForm.model.instance
+        instances.each {
+            if (isDynamicInstanceNode(it)) {
+                String instanceId = it.@id
+                def dynamicElem = it.dynamiclist
+                buildDynamicList(instanceId, dynamicElem)
+            }
+        }
+    }
+
+    def buildDynamicList(String instanceId, def dynamicElem) {
+        def options = dynamicElem.'*'.collect {
+            def dynamicOption = new DynamicOption()
+            dynamicOption.bind =it.@id.text()
+            dynamicOption.parentBinding = it.@parent.text()
+            dynamicOption.option = it.label.text()
+            return dynamicOption
+        }
+        form.addDynamicOptions(instanceId, options)
     }
 
     def addPages() {
@@ -33,6 +56,10 @@ class FormDeserializer {
         groups.each {
             processPage(it)
         }
+    }
+
+    static boolean isDynamicInstanceNode(def elem) {
+        return elem.dynamiclist.size() > 0
     }
 
     Page processPage(def group) {
@@ -104,9 +131,7 @@ class FormDeserializer {
     }
 
     static boolean isDynamicElement(def elem) {
-        if (elem.itemset.size())
-            return true
-        return false
+        return elem.itemset.size() > 0
     }
 
     IQuestion addMetaInfo(IQuestion qn, HasQuestions parent, def elem) {

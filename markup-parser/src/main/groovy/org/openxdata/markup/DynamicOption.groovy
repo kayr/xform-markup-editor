@@ -11,9 +11,17 @@ class DynamicOption extends Option implements IOption {
 
     String parentBinding
 
+    DynamicOption() {}
+
     DynamicOption(String parent, String child) {
         super(child)
         this.parentBinding = parent
+    }
+
+    DynamicOption(String parent, String child, String text) {
+        this.parentBinding = parent
+        this.bind = child
+        this.option = text
     }
 
     String getChild() {
