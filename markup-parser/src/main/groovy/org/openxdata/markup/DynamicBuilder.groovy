@@ -50,8 +50,10 @@ class DynamicBuilder {
         def localDynamicOptionKeys = dynamicOptions.keySet()
         def formDynamicOptionKeys = form.parentForm.dynamicOptions.keySet()
 
+        //get the local keys and remove the already existing keys
         def newLocalKeys = localDynamicOptionKeys - formDynamicOptionKeys
 
+        //all local keys should be new otherwise it indicates you have duplicate dynamic instances
         if (!newLocalKeys.containsAll(localDynamicOptionKeys))
             throw new ValidationException("You have duplicate columns in your csv files ${localDynamicOptionKeys - newLocalKeys}")
 
