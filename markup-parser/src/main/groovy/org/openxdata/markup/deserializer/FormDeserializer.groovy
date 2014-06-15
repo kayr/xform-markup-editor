@@ -1,5 +1,6 @@
 package org.openxdata.markup.deserializer
 
+import groovy.transform.CompileStatic
 import org.openxdata.markup.*
 
 /**
@@ -59,6 +60,10 @@ class FormDeserializer {
     }
 
     IQuestion process_select1(HasQuestions page, def elem) {
+
+        if (isDynamicElement(elem))
+            return process_Dynamic(page, elem)
+
         def qn = addMetaInfo new SingleSelectQuestion(), page, elem
         qn.options.addAll(getSelectOptions(elem))
         return qn
@@ -89,6 +94,21 @@ class FormDeserializer {
         return qn
     }
 
+    IQuestion process_Dynamic(HasQuestions page, def elem) {
+        def qn = addMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
+        String nodeSet = elem.itemset.@nodeset.text()
+        qn.parentQuestionId = getDynamicParentInstanceId(nodeSet)
+        qn.dynamicInstanceId = getDynamicChildInstanceId(nodeSet)
+        return qn
+
+    }
+
+    static boolean isDynamicElement(def elem) {
+        if (elem.itemset.size())
+            return true
+        return false
+    }
+
     IQuestion addMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
         qn.binding = elem.@bind
         qn.text = elem.label.text()
@@ -104,8 +124,6 @@ class FormDeserializer {
 
         def type = binding.@type.text()?.replaceFirst('xsd:', '')
         def format = binding.@format
-
-
 
         if (Attrib.types.contains(type)) {
             return format?.isEmpty() ? type : format;
@@ -124,6 +142,32 @@ class FormDeserializer {
 
     static private String resolveMediaType(format) {
         return format == 'image' ? 'picture' : format
+    }
+
+    @CompileStatic
+    private static String getDynamicChildInstanceId(String nodeset) {
+        if (!nodeset) return null
+
+        int pos1 = nodeset.indexOf("'")
+        if (pos1 < 0) return null
+
+        int pos2 = nodeset.indexOf("'", pos1 + 1)
+        if (pos2 < 0 || (pos1 == pos2)) return null
+
+        return nodeset.substring(pos1 + 1, pos2)
+    }
+
+    @CompileStatic
+    private static String getDynamicParentInstanceId(String nodeset) {
+        if (!nodeset) return null
+
+        int pos1 = nodeset.lastIndexOf('/')
+        if (pos1 < 0) return null
+
+        int pos2 = nodeset.lastIndexOf(']')
+        if (pos2 < 0 || (pos1 == pos2)) return null
+
+        return nodeset.substring(pos1 + 1, pos2)
     }
 
 

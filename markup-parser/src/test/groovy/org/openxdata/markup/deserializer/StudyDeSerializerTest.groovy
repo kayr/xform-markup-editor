@@ -11,6 +11,7 @@ public class StudyDeSerializerTest extends TestCase {
 
         def study = deSerializer.toStudy(Fixtures.snvStudyXML)
 
+
         assertEquals "Snv Study",study.name
 
         assertEquals 2, study.forms.size()

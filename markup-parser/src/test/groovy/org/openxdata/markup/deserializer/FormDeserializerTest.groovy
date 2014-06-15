@@ -1,9 +1,6 @@
 package org.openxdata.markup.deserializer
 
-import org.openxdata.markup.Fixtures
-import org.openxdata.markup.MultiSelectQuestion
-import org.openxdata.markup.SingleSelectQuestion
-import org.openxdata.markup.Util
+import org.openxdata.markup.*
 import org.openxdata.markup.serializer.XFormSerializer
 
 import static org.openxdata.markup.Form.extractQuestions
@@ -36,7 +33,7 @@ class FormDeserializerTest extends GroovyTestCase {
         def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
 
         def question = form.allQuestions.find { it.binding == 'what_is_sex' }
-        assert question instanceof SingleSelectQuestion
+        assert question.class == SingleSelectQuestion
 
         def options = question.options
         assert options.size() == 2
@@ -57,11 +54,40 @@ class FormDeserializerTest extends GroovyTestCase {
         assert options.any { it.bind == 'whooping_cough' && it.text == 'Whooping cough' }
     }
 
+    void testDynamicOption() {
+        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
+
+        DynamicQuestion districtQn = form.allQuestions.find { it.binding == 'district' }
+        assert districtQn.class == DynamicQuestion
+        assert districtQn.dynamicInstanceId == 'district'
+        assert districtQn.parentQuestionId == 'country'
+
+        DynamicQuestion schQn = form.allQuestions.find { it.binding == 'school' }
+        assert schQn.class == DynamicQuestion
+        assert schQn.dynamicInstanceId == 'school'
+        assert schQn.parentQuestionId == 'district'
+    }
+
+    void testDynamicOption2() {
+        def form = new FormDeserializer(xml: Fixtures.xmlFormWithDynamicInstanceIds).parse()
+
+        DynamicQuestion districtQn = form.allQuestions.find { it.binding == 'subregion' }
+        assert districtQn.class == DynamicQuestion
+        assert districtQn.dynamicInstanceId == 'subregion2'
+        assert districtQn.parentQuestionId == 'region'
+
+        DynamicQuestion schQn = form.allQuestions.find { it.binding == 'subregion_dupe' }
+        assert schQn.class == DynamicQuestion
+        assert schQn.dynamicInstanceId == 'subregion2'
+        assert schQn.parentQuestionId == 'region'
+    }
+
     void testTypeResolving() {
         def serializer = new XFormSerializer()
         def mkpForm = Util.createParser(Fixtures.oxdSampleForm).study().forms[0]
 
         def xForm = serializer.toXForm(mkpForm)
+        println xForm
         def form = new FormDeserializer(xml: xForm).parse()
 
         def questions = form.allQuestions

@@ -22,6 +22,8 @@ class Form implements HasQuestions {
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
 
+    Form() {}
+
     Form(String name) {
         this.name = name
     }

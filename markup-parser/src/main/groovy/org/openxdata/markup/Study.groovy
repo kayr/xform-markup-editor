@@ -14,12 +14,19 @@ class Study {
     public static ThreadLocal<Boolean> quickParse = new ThreadLocal<Boolean>()
 
     String name
+    boolean validating = true
 
     private List<Form> forms = []
 
+    Study() {}
+
+    Study(boolean validating) {
+        this.validating = validating
+    }
+
     void addForm(Form form) {
         form.study = this
-        form.validate()
+        if (validating) form.validate()
         forms << form
     }
 

@@ -13,10 +13,11 @@ import org.openxdata.markup.Study
 class StudyDeSerializer {
 
     def parser = new XmlParser()
+    boolean validating
 
     Study toStudy(String studyXML) {
 
-        def study = new Study()
+        def study = new Study(validating)
 
         def xml = parser.parseText(studyXML)
         study.name = xml.@name
