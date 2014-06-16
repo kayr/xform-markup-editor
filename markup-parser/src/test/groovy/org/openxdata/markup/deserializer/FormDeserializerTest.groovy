@@ -58,6 +58,30 @@ class FormDeserializerTest extends GroovyTestCase {
         def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
 
         assert form.dynamicOptions.size() == 2
+
+        assert form.dynamicOptions.district.size() == 3
+        assert form.dynamicOptions.district.find { it.bind == 'kampala' }.option == 'Kampala'
+        assert form.dynamicOptions.district.find { it.bind == 'kampala' }.parentBinding == 'uganda'
+
+        assert form.dynamicOptions.district.find { it.bind == 'nairobi' }.option == 'Nairobi'
+        assert form.dynamicOptions.district.find { it.bind == 'nairobi' }.parentBinding == 'kenya'
+
+        assert form.dynamicOptions.district.find { it.bind == 'kenya_kampala' }.option == 'Kampala'
+        assert form.dynamicOptions.district.find { it.bind == 'kenya_kampala' }.parentBinding == 'kenya'
+
+        assert form.dynamicOptions.school.size() == 4
+        assert form.dynamicOptions.school.find { it.bind == 'macos' }.option == 'Macos'
+        assert form.dynamicOptions.school.find { it.bind == 'macos' }.parentBinding == 'kampala'
+
+        assert form.dynamicOptions.school.find { it.bind == 'machaccos' }.option == 'Machaccos'
+        assert form.dynamicOptions.school.find { it.bind == 'machaccos' }.parentBinding == 'nairobi'
+
+        assert form.dynamicOptions.school.find { it.bind == 'bugiroad' }.option == 'Bugiroad'
+        assert form.dynamicOptions.school.find { it.bind == 'bugiroad' }.parentBinding == 'kampala'
+
+        assert form.dynamicOptions.school.find { it.bind == 'kenya_kampala_bugiroad' }.option == 'Bugiroad'
+        assert form.dynamicOptions.school.find { it.bind == 'kenya_kampala_bugiroad' }.parentBinding == 'kenya_kampala'
+
         println form.dynamicOptions
 
         DynamicQuestion districtQn = form.allQuestions.find { it.binding == 'district' }
