@@ -28,6 +28,10 @@ class Form implements HasQuestions {
         this.name = name
     }
 
+    /**
+     * Get the first level questions. This method is used mostly by the serializer
+     * @return  all fist level questions
+     */
     List<IQuestion> getQuestions() {
         def questions = []
         pages.each {

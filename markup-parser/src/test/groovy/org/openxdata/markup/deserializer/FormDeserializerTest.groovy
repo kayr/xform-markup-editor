@@ -4,6 +4,7 @@ import org.openxdata.markup.*
 import org.openxdata.markup.serializer.XFormSerializer
 
 import static org.openxdata.markup.Form.extractQuestions
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
 
 /**
  * Created by kay on 6/7/14.
@@ -95,7 +96,7 @@ class FormDeserializerTest extends GroovyTestCase {
         assert schQn.parentQuestionId == 'district'
     }
 
-    void testDynamicOption2() {
+    void testDynamicOptionAttributesInQuestions() {
         def form = new FormDeserializer(xml: Fixtures.xmlFormWithDynamicInstanceIds).parse()
 
         assert form.dynamicOptions.size() == 1
@@ -111,13 +112,11 @@ class FormDeserializerTest extends GroovyTestCase {
         assert schQn.parentQuestionId == 'region'
     }
 
-
     void testTypeResolving() {
         def serializer = new XFormSerializer()
         def mkpForm = Util.createParser(Fixtures.oxdSampleForm).study().forms[0]
 
         def xForm = serializer.toXForm(mkpForm)
-        println xForm
         def form = new FormDeserializer(xml: xForm).parse()
 
         def questions = form.allQuestions
@@ -150,6 +149,19 @@ class FormDeserializerTest extends GroovyTestCase {
         ['azt', 'abicvar', 'efivarence', 'triomune', 'truvada'].each { binding ->
             assert  questions.find { it.binding == 'arvs' }.options.any{option -> binding == option.bind}
         }
+    }
+
+    void testSkipLogic() {
+        def form = new FormDeserializer(xml: forms.advancedMarkedUp.xform).parse()
+
+        form.questions.each {
+            println "\nQuestion: $it.text"
+            println "Readonly: $it.readOnly"
+            println "Visible: $it.visible"
+            println "SkipLogic: $it.skipAction if $it.skipLogic"
+            println "Validation Logic: $it.message  $it.validationLogic"
+        }
+
     }
 
 

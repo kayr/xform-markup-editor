@@ -26,6 +26,9 @@ class FormDeserializer {
         form.name = instance.'*'[0].@name
         addDynamicInstances()
         addPages()
+        Form.extractQuestions(form).each {
+            addBehaviourInfo(it)
+        }
         return form
     }
 
@@ -91,38 +94,39 @@ class FormDeserializer {
         if (isDynamicElement(elem))
             return process_Dynamic(page, elem)
 
-        def qn = addMetaInfo new SingleSelectQuestion(), page, elem
+        def qn = addIdMetaInfo new SingleSelectQuestion(), page, elem
         qn.options.addAll(getSelectOptions(elem))
         return qn
     }
 
     IQuestion process_select(HasQuestions page, def elem) {
-        def qn = addMetaInfo new MultiSelectQuestion(), page, elem
+        def qn = addIdMetaInfo new MultiSelectQuestion(), page, elem
         qn.options.addAll(getSelectOptions(elem))
         return qn
     }
 
     IQuestion process_input(HasQuestions page, def elem) {
-        def qn = addMetaInfo new TextQuestion(), page, elem
+        def qn = addIdMetaInfo new TextQuestion(), page, elem
         qn.setType(resolveType(qn))
         return qn
     }
 
     IQuestion process_upload(HasQuestions page, def elem) {
-        def qn = addMetaInfo new TextQuestion(), page, elem
+        def qn = addIdMetaInfo new TextQuestion(), page, elem
         qn.setType(resolveType(qn))
         return qn
     }
 
     IQuestion process_group(HasQuestions page, def elem) {
         def qn = new RepeatQuestion(parent: page)
+        //add questions after u have set the parent form
         addQuestions(qn, elem.repeat)
-        addMetaInfo(qn, page, elem)
+        addIdMetaInfo(qn, page, elem)
         return qn
     }
 
     IQuestion process_Dynamic(HasQuestions page, def elem) {
-        def qn = addMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
+        def qn = addIdMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
         String nodeSet = elem.itemset.@nodeset.text()
         qn.parentQuestionId = getDynamicParentInstanceId(nodeSet)
         qn.dynamicInstanceId = getDynamicChildInstanceId(nodeSet)
@@ -134,7 +138,7 @@ class FormDeserializer {
         return elem.itemset.size() > 0
     }
 
-    IQuestion addMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
+    static IQuestion addIdMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
         qn.binding = elem.@bind
         qn.text = elem.label.text()
         qn.comment = elem.hint.text()
@@ -142,8 +146,82 @@ class FormDeserializer {
         return qn
     }
 
+    /**
+     * Simply add the formulas and messages without any validation and processing
+     * @param qn the question
+     * @param elem the bind element
+     * @return the passed question
+     */
+    IQuestion addBehaviourInfo(IQuestion qn) {
+        def bindNode = getBindNode(qn.binding)
+
+        //readOnly
+        String readonly = bindNode.@locked.text()
+        if (readonly && readonly.contains('true')) {
+            qn.readOnly = true
+        }
+
+        /*todo implement the notion of readonly and not enabled. Readonly question can be populated with data as opposed to disabled*/
+        //disabled
+        String enabled = bindNode.@readonly.text()
+        if (enabled && enabled.contains('true')) {
+            qn.readOnly = true;
+        }
+
+        //visible
+        String visible = bindNode.@visible.text()
+        if (visible && readonly.contains('false')) {
+            qn.visible = false
+        }
+
+        //add skip logic
+        String skipLogic = bindNode.@relevant.text()
+        if (skipLogic) {
+            qn.skipLogic = getXPathFormula(skipLogic)
+            qn.skipAction = bindNode.@action.text()
+        }
+
+        //validation Logic
+        String validationLogic = bindNode.@constraint.text()
+        if (validationLogic) {
+            qn.validationLogic = validationLogic
+            qn.message = bindNode.@message.text()
+        }
+
+        return qn
+    }
+
+    String getXPathFormula(String xpath) {
+        if (!xpath) return null
+
+        def id = /[a-zA-Z0-9_\-]+/
+        def slash = '/'
+        def regex = /$slash?$id($slash$id)+/
+
+        return xpath.replaceAll(regex) {
+            getReference(it.toString())
+        }
+    }
+
+    private String getReference(String reference) {
+
+        int idx = reference.indexOf('/')
+
+        if (idx < 0) return reference
+
+        //todo do some caching to improve performance
+        def id = reference.substring(idx + 1, reference.length() - 1)
+
+        def referenceId = "\$$id"
+
+        if (Form.findQuestionWithBinding(referenceId, form))
+            return referenceId
+        return reference
+
+    }
+
     String resolveType(IQuestion qn) {
-        def binding = xForm.model.bind.find { it.@id == qn.binding }
+        Object binding = getBindNode(qn.binding)
 
         if (!binding) return 'string'
 
@@ -163,6 +241,10 @@ class FormDeserializer {
                 return type ?: 'string'
 
         }
+    }
+
+    private Object getBindNode(binding) {
+        return xForm.model.bind.find { it.@id == binding }
     }
 
     static private String resolveMediaType(format) {
