@@ -53,8 +53,8 @@ class XPathUtilTest extends GroovyTestCase {
             }
         }
 
-        xpathUtil.pathVariables.each {
-            println xpath.substring(it.start, it.end)
+        assert ['/study_form_v1/weight', '/study_form_v1/heightcm'].every { path ->
+            g.any { it == path }
         }
 
     }
