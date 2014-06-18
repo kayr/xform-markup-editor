@@ -14,19 +14,38 @@ class XPathUtil {
 
     XPathUtil(String xpath) {
         this.xpath = xpath
+        parse()
     }
 
-    private CommonTree parse() {
+    private XPathUtil parse() {
         def parser = Util.createXpathParser(xpath)
         tree = parser.eval().tree as CommonTree
-        return tree
+        return this
     }
 
-    String shorten(Form form) {
-        findResults {}
+    List<Map> getPathVariables() {
+        List<CommonTree> paths = tree.findAll { CommonTree tree ->
+            tree.isPath()
+        }
+
+        paths.collect {
+            String path = it.emitTailString()
+            return [path: path, name: getNodeName(path), start: it.charPositionInLine, end: getLastIndex(it) + 1]
+        }
     }
 
-    List<CommonTree> findResults(Closure filter) {
+    static int getLastIndex(Tree tree) {
+        List trees = tree.findAll { Tree t ->
+            t.childCount == 0
+        }
+        return trees.get(trees.size() - 1).token.stop
+    }
+
+    static String getNodeName(String path) {
+        new File(path).name
+    }
+
+    List<Tree> findResults(Closure filter) {
         tree.findResults(filter)
     }
 

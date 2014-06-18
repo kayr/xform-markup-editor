@@ -179,6 +179,11 @@ class Form implements HasQuestions {
         return this
     }
 
+    @Override
+    IQuestion getQuestion(String binding) {
+        return findQuestionWithBinding(binding,this)
+    }
+
     String toString(){
         name
     }
@@ -188,5 +193,25 @@ class Form implements HasQuestions {
             this.dynamicOptions[instanceId] = []
         }
         this.dynamicOptions[instanceId].addAll(dynamicOptions)
+    }
+
+    def printAll(PrintStream out) {
+
+        questions.each {
+            out.println "___________________________"
+            out.println     "*Qn${it.getText(true)}"
+            if (it.readOnly)
+                out.println "Readonly  : $it.readOnly"
+            if (!it.visible)
+                out.println "Visible   : $it.visible"
+            if (it.skipLogic)
+                out.println "SkipLogic : $it.skipAction if $it.skipLogic"
+            if (it.calculation)
+                out.println "Calcn     : $it.calculation"
+            if (it.validationLogic)
+                out.println "Validation: $it.validationLogic\n" +
+                            "           $it.message "
+        }
+        out.println "___________________________"
     }
 }

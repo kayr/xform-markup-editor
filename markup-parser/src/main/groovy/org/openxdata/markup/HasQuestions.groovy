@@ -21,4 +21,6 @@ interface HasQuestions {
 
     Form getParentForm()
 
+    IQuestion getQuestion(String binding)
+
 }

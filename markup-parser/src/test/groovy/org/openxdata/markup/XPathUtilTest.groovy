@@ -1,7 +1,10 @@
 package org.openxdata.markup
 
 import org.antlr.runtime.tree.CommonTree
+import org.openxdata.markup.deserializer.FormDeserializer
 import org.openxdata.xpath.XPathParser
+
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
 
 /**
  * Created by kay on 6/18/14.
@@ -27,7 +30,8 @@ class XPathUtilTest extends GroovyTestCase {
 
     void testCollect() {
 
-        def xpathUtil = new XPathUtil("some/path = 'male'  and /other/path != 'female'")
+        String xpath = "some/path = 'male'  and /other/path != 'female'"
+        def xpathUtil = new XPathUtil(xpath)
 
         def g = xpathUtil.findResults { CommonTree ctree ->
             if (ctree.isPath()) {
@@ -39,5 +43,22 @@ class XPathUtilTest extends GroovyTestCase {
         assert ['some/path', '/other/path'].every { path ->
             g.any { it == path }
         }
+    }
+
+    void testComplex() {
+
+        String xpath = "/study_form_v1/weight div ((/study_form_v1/heightcm div 100.0)*(/study_form_v1/heightcm div 100.0))"
+        def xpathUtil = new XPathUtil(xpath)
+
+        def g = xpathUtil.findResults { CommonTree ctree ->
+            if (ctree.isPath()) {
+                return ctree.emitTailString()
+            }
+        }
+
+         xpathUtil.pathVariables.each {
+             println xpath.substring(it.start , it.end)
+         }
+
     }
 }

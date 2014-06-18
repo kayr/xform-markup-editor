@@ -1,6 +1,8 @@
 package org.openxdata.markup
 
 import org.openxdata.markup.exception.DuplicateQuestionException
+
+import static org.openxdata.markup.Form.findQuestionWithBinding
 import static org.openxdata.markup.Form.validateSkipLogic
 import static org.openxdata.markup.Form.validateValidationLogic
 import static org.openxdata.markup.Form.validateCalculation
@@ -46,6 +48,11 @@ class RepeatQuestion extends AbstractQuestion implements HasQuestions {
 
     List<IQuestion> getAllQuestions(){
         return Form.extractQuestions(this)
+    }
+
+    @Override
+    IQuestion getQuestion(String binding) {
+        return findQuestionWithBinding(binding,this)
     }
 
     @Override

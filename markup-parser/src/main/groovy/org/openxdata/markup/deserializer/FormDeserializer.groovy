@@ -46,7 +46,7 @@ class FormDeserializer {
     def buildDynamicList(String instanceId, def dynamicElem) {
         def options = dynamicElem.'*'.collect {
             def dynamicOption = new DynamicOption()
-            dynamicOption.bind =it.@id.text()
+            dynamicOption.bind = it.@id.text()
             dynamicOption.parentBinding = it.@parent.text()
             dynamicOption.option = it.label.text()
             return dynamicOption
@@ -89,7 +89,7 @@ class FormDeserializer {
         }
     }
 
-    IQuestion process_select1(HasQuestions page, def elem) {
+    static IQuestion process_select1(HasQuestions page, def elem) {
 
         if (isDynamicElement(elem))
             return process_Dynamic(page, elem)
@@ -99,7 +99,7 @@ class FormDeserializer {
         return qn
     }
 
-    IQuestion process_select(HasQuestions page, def elem) {
+    static IQuestion process_select(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new MultiSelectQuestion(), page, elem
         qn.options.addAll(getSelectOptions(elem))
         return qn
@@ -125,7 +125,7 @@ class FormDeserializer {
         return qn
     }
 
-    IQuestion process_Dynamic(HasQuestions page, def elem) {
+    static IQuestion process_Dynamic(HasQuestions page, def elem) {
         def qn = addIdMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
         String nodeSet = elem.itemset.@nodeset.text()
         qn.parentQuestionId = getDynamicParentInstanceId(nodeSet)
@@ -174,6 +174,13 @@ class FormDeserializer {
             qn.visible = false
         }
 
+        //required
+        String required = bindNode.@required.text()
+        if (required && required.contains('true')) {
+            qn.required = true
+        }
+
+
         //add skip logic
         String skipLogic = bindNode.@relevant.text()
         if (skipLogic) {
@@ -184,8 +191,14 @@ class FormDeserializer {
         //validation Logic
         String validationLogic = bindNode.@constraint.text()
         if (validationLogic) {
-            qn.validationLogic = validationLogic
+            qn.validationLogic = getXPathFormula(validationLogic)
             qn.message = bindNode.@message.text()
+        }
+
+        //calculations
+        String calculate = bindNode.@calculate.text()
+        if (calculate) {
+            qn.calculation = getXPathFormula(calculate)
         }
 
         return qn
@@ -194,28 +207,43 @@ class FormDeserializer {
     String getXPathFormula(String xpath) {
         if (!xpath) return null
 
-        def id = /[a-zA-Z0-9_\-]+/
-        def slash = '/'
-        def regex = /$slash?$id($slash$id)+/
+        try {
+            def builder = new StringBuilder(xpath)
+            def paths = new XPathUtil(xpath).getPathVariables()
 
-        return xpath.replaceAll(regex) {
-            getReference(it.toString())
+            //todo do some caching to improve performance
+            paths.inject(0) { Integer offset,Map path->
+                println "processing '$path.'"
+                processPath(xpath, builder, path,offset)
+            }
+            println "****[$xpath] = [$builder]******"
+            return builder.toString()
+        } catch (Exception x) {
+            System.err.println("!!!!: Failed to process xpath: [$xpath]: [$x]")
+            x.printStackTrace()
+            return xpath
         }
+    }
+
+    private int processPath(String xpath, StringBuilder builder, Map path, int offset) {
+        String pathArea = xpath.substring(path.start, path.end)
+        String newPath = getReference(pathArea)
+        if (pathArea != newPath) {
+            builder.replace(path.start - offset, path.end - offset, newPath)
+        }
+        return pathArea.size() - newPath.size()+offset
     }
 
     private String getReference(String reference) {
 
-        int idx = reference.indexOf('/')
+        int idx = reference.lastIndexOf('/')
 
         if (idx < 0) return reference
 
-        //todo do some caching to improve performance
-        def id = reference.substring(idx + 1, reference.length() - 1)
-
-        def referenceId = "\$$id"
-
-        if (Form.findQuestionWithBinding(referenceId, form))
-            return referenceId
+        //todo do not resolve binding that have conflicts
+        def id = XPathUtil.getNodeName(reference)
+        if (Form.findQuestionWithBinding(id, form))
+            return '$' + id
         return reference
 
     }

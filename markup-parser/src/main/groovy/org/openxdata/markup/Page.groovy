@@ -54,7 +54,7 @@ class Page implements HasQuestions {
 
     @Override
     List<IQuestion> getAllQuestions() {
-        return Form.extractQuestions(this)
+        return extractQuestions(this)
     }
 
     @Override
@@ -62,7 +62,12 @@ class Page implements HasQuestions {
         return form
     }
 
-     String toString(){
+    @Override
+    IQuestion getQuestion(String binding) {
+        return findQuestionWithBinding(binding,this)
+    }
+
+    String toString(){
         name
      }
 

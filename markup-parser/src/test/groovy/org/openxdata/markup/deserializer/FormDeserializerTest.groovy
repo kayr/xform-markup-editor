@@ -154,15 +154,23 @@ class FormDeserializerTest extends GroovyTestCase {
     void testSkipLogic() {
         def form = new FormDeserializer(xml: forms.advancedMarkedUp.xform).parse()
 
-        form.questions.each {
-            println "\nQuestion: $it.text"
-            println "Readonly: $it.readOnly"
-            println "Visible: $it.visible"
-            println "SkipLogic: $it.skipAction if $it.skipLogic"
-            println "Validation Logic: $it.message  $it.validationLogic"
-        }
+
+        form.printAll(System.out)
+
+        IQuestion question = form.getQuestion('armpain')
+        assert question.validationLogic == '. = false() or $chestpain = true()'
+        assert question.message == "You can't have angina without chestpain!"
+        assert form.getQuestion('hypertension').skipLogic == '$gender = \'male\''
+        assert form.getQuestion('hypertension').skipAction == 'enable'
+        assert form.getQuestion('diastolic').validationLogic == '. >= 10 and . <= 150'
+        assert form.getQuestion('birthdate').validationLogic == '(today() - .) > (365*18)'
+
+        XFormSerializer ser = new XFormSerializer()
+
+        String newForm = ser.toXForm(form)
+        String oldForm = forms.advancedMarkedUp.xform
+        assertEquals oldForm ,  newForm
 
     }
-
 
 }
