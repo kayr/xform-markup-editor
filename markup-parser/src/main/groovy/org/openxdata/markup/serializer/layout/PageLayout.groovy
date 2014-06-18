@@ -40,7 +40,6 @@ class PageLayout extends Layout {
     }
 
 
-
     void addComponent(Layout layout) {
         layout.setTopPosition(top)
         //add a gap between each widget

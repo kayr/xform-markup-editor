@@ -38,8 +38,8 @@ class FormDeserializerTest extends GroovyTestCase {
 
         def options = question.options
         assert options.size() == 2
-        assert options.any { it.bind == 'male' && it.text == 'Male'}
-        assert options.any { it.bind == 'female' && it.text == 'female'}
+        assert options.any { it.bind == 'male' && it.text == 'Male' }
+        assert options.any { it.bind == 'female' && it.text == 'female' }
     }
 
     void testMultipleSelectOption() {
@@ -130,7 +130,9 @@ class FormDeserializerTest extends GroovyTestCase {
         assert questions.find { it.binding == 'height' }.type == 'decimal'
         assert questions.find { it.binding == 'is_patient_pregnant' }.type == 'boolean'
         assert questions.find { it.binding == 'arvs' }.type == 'string'
-        assert questions.find { it.binding == 'arvs' }.comment ==  'Please select all anti-retrovirals that the patient is taking'
+        assert questions.find {
+            it.binding == 'arvs'
+        }.comment == 'Please select all anti-retrovirals that the patient is taking'
         assert questions.find { it.binding == 'picture' }.type == 'picture'
         assert questions.find { it.binding == 'sound' }.type == 'audio'
         assert questions.find { it.binding == 'record_video' }.type == 'video'
@@ -147,7 +149,7 @@ class FormDeserializerTest extends GroovyTestCase {
         assert questions.find { it.binding == 'arvs' }.options.size() == 5
 
         ['azt', 'abicvar', 'efivarence', 'triomune', 'truvada'].each { binding ->
-            assert  questions.find { it.binding == 'arvs' }.options.any{option -> binding == option.bind}
+            assert questions.find { it.binding == 'arvs' }.options.any { option -> binding == option.bind }
         }
     }
 
@@ -169,7 +171,7 @@ class FormDeserializerTest extends GroovyTestCase {
 
         String newForm = ser.toXForm(form)
         String oldForm = forms.advancedMarkedUp.xform
-        assertEquals oldForm ,  newForm
+        assertEquals oldForm, newForm
 
     }
 

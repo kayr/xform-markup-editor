@@ -12,9 +12,10 @@ import org.openxdata.markup.exception.InvalidAttributeException
 class Attrib {
 
     static def types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
-            'picture', 'gps', 'barcode','longtext']
+            'picture', 'gps', 'barcode', 'longtext']
 
-    static def allowedAttributes = ['readonly', 'required', 'id','absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
+    static
+    def allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
             'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent']
 
 
@@ -24,34 +25,34 @@ class Attrib {
         def lowCaseAttrib = params.attrib
         if (!(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
                 (!(question instanceof DynamicQuestion) && lowCaseAttrib == 'parent')) {
-            throw new InvalidAttributeException("Cannot set datatype [$attribute] on a ${question.class.simpleName}",line)
+            throw new InvalidAttributeException("Cannot set datatype [$attribute] on a ${question.class.simpleName}", line)
         }
 
 
 
         if (types.contains(lowCaseAttrib)) {
-            if(attribute == 'datetime')
+            if (attribute == 'datetime')
                 attribute = 'dateTime'
             question.type = attribute
         } else if (allowedAttributes.contains(lowCaseAttrib)) {
-            setQuestionAttribute(question, lowCaseAttrib, param,line)
+            setQuestionAttribute(question, lowCaseAttrib, param, line)
         } else {
             throw new InvalidAttributeException("""Attibute [@$attribute] has no meaning.
-Supported attributes include $types \n$allowedAttributes""",line)
+Supported attributes include $types \n$allowedAttributes""", line)
         }
 
     }
 
-    static void addAttributeToForm(Form form,String attribute, int line){
+    static void addAttributeToForm(Form form, String attribute, int line) {
         def params = extractAttribAndParam(attribute)
 
         def attrib = params.attrib
-        def param  = params.param
+        def param = params.param
 
-        if(attrib != 'id')
-            throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported",line)
+        if (attrib != 'id')
+            throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)
 
-        Util.validateId(param,line)
+        Util.validateId(param, line)
 
         form.id = param
 
@@ -80,11 +81,11 @@ Supported attributes include $types \n$allowedAttributes""",line)
                 question.comment = param
                 break
             case 'id':
-                Util.validateId(param,line)
+                Util.validateId(param, line)
                 question.binding = param
                 break
             case 'absoluteid':
-                Util.validateId(param,line)
+                Util.validateId(param, line)
                 question.binding = param
                 question.hasAbsoluteId = true
                 break
@@ -112,7 +113,7 @@ Supported attributes include $types \n$allowedAttributes""",line)
                 question.calculation = param
                 break
             case 'parent':
-                Util.validateId(param,line)
+                Util.validateId(param, line)
                 question.parentQuestionId = param
                 break
         }

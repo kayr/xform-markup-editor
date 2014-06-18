@@ -2,7 +2,8 @@ package org.openxdata.markup
 
 import org.openxdata.markup.exception.DuplicateQuestionException
 
-import static org.openxdata.markup.Form.*
+import static org.openxdata.markup.Form.extractQuestions
+import static org.openxdata.markup.Form.findQuestionWithBinding
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +20,7 @@ class Page implements HasQuestions {
 
     List<IQuestion> questions = []
 
-    Page(){}
+    Page() {}
 
     Page(String name) {
         this.name = name
@@ -29,8 +30,8 @@ class Page implements HasQuestions {
         question.setParent(form)
         validate(question)
         form.questionMap[question.binding] = question
-        if(question instanceof RepeatQuestion)
-            question.allQuestions.each { form.questionMap[it.binding] = it}
+        if (question instanceof RepeatQuestion)
+            question.allQuestions.each { form.questionMap[it.binding] = it }
         questions.add(question)
     }
 
@@ -40,7 +41,6 @@ class Page implements HasQuestions {
             throw new DuplicateQuestionException(question1: question, question2: qn)
         }
     }
-
 
 
     public String getBinding() {
@@ -64,11 +64,11 @@ class Page implements HasQuestions {
 
     @Override
     IQuestion getQuestion(String binding) {
-        return findQuestionWithBinding(binding,this)
+        return findQuestionWithBinding(binding, this)
     }
 
-    String toString(){
+    String toString() {
         name
-     }
+    }
 
 }

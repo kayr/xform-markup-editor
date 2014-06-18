@@ -30,13 +30,13 @@ class StudyDeSerializer {
 
     List<Form> toForms(Node formXML) {
         def forms = []
-        formXML.version.eachWithIndex {vNode, idx ->
+        formXML.version.eachWithIndex { vNode, idx ->
             forms << toForm(vNode.xform.text())
         }
         return forms
     }
 
-    Form toForm(String text){
+    Form toForm(String text) {
         return new FormDeserializer(xml: text).parse()
     }
 

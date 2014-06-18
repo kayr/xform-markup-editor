@@ -47,7 +47,7 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
             throw new InvalidAttributeException("DynamicQuestion[$text] has an invalid parent question id[$parentQuestionId]")
     }
 
-    String getIndexedParentQuestionId(){
-        return Form.findQuestionWithBinding(parentQuestionId,parentForm).indexedBinding
+    String getIndexedParentQuestionId() {
+        return Form.findQuestionWithBinding(parentQuestionId, parentForm).indexedBinding
     }
 }

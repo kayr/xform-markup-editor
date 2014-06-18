@@ -9,7 +9,7 @@ package org.openxdata.markup.serializer
  */
 class NumberedXMLs {
 
-    static def expectedXForm='''<xforms>
+    static def expectedXForm = '''<xforms>
   <model>
     <instance id="snv_study_snv_form_v1">
       <snv_study_snv_form_v1 id="0" name="Snv Form" formKey="snv_study_snv_form_v1">
@@ -194,7 +194,7 @@ class NumberedXMLs {
   </group>
 </xforms>'''
 
-    static def xfromWithValidationLogicXML ='''<xforms>
+    static def xfromWithValidationLogicXML = '''<xforms>
   <model>
     <instance id="study_form_v1">
       <study_form_v1 id="0" name="Form" formKey="study_form_v1">

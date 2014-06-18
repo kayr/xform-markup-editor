@@ -18,7 +18,7 @@ class Form implements HasQuestions {
     Study study
 
     List<Page> pages = []
-    Map<String,IQuestion> questionMap = [:]
+    Map<String, IQuestion> questionMap = [:]
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
 
@@ -30,18 +30,18 @@ class Form implements HasQuestions {
 
     /**
      * Get the first level questions. This method is used mostly by the serializer
-     * @return  all fist level questions
+     * @return all fist level questions
      */
     List<IQuestion> getQuestions() {
         def questions = []
         pages.each {
-            it.questions.each {questions << it}
+            it.questions.each { questions << it }
         }
         return questions
     }
 
     void addPage(Page page) {
-        def dupPage = pages.find {it.name.equalsIgnoreCase(page.name)}
+        def dupPage = pages.find { it.name.equalsIgnoreCase(page.name) }
         if (dupPage != null)
             throw new ValidationException("Duplicate pages[$page.name] found in form [$name]");
         page.setForm(this)
@@ -57,26 +57,26 @@ class Form implements HasQuestions {
         pages[0].addQuestion(question)
     }
 
-    void validate(){
+    void validate() {
         allQuestions.each {
             validateSkipLogic(it)
             validateCalculation(it)
             validateValidationLogic(it)
-            if(it instanceof DynamicQuestion)
+            if (it instanceof DynamicQuestion)
                 it.validate()
         }
     }
 
     public static String getAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
-          xpath = xpath.replaceAll(VARIABLE_REGEX) {
+        xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
-                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]",question.line)
-             //TODO Remember to check the XPATH for any $ signs and notify the user
-            def binding = it.contains(':') ? tmpQn.relativeBinding :  tmpQn.absoluteBinding
+                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]", question.line)
+            //TODO Remember to check the XPATH for any $ signs and notify the user
+            def binding = it.contains(':') ? tmpQn.relativeBinding : tmpQn.absoluteBinding
             return binding
         }
-        xpath = xpath.replace('$.',question.absoluteBinding)
+        xpath = xpath.replace('$.', question.absoluteBinding)
         return xpath
     }
 
@@ -84,12 +84,12 @@ class Form implements HasQuestions {
         xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def tmpQn = findQuestionWithBinding((it - '$') - ':', question.parent)
             if (!tmpQn)
-                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]",question.line)
+                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]", question.line)
 
-            def binding = it.contains(':') ? tmpQn.indexedRelativeBinding  :  tmpQn.indexedAbsoluteBinding
+            def binding = it.contains(':') ? tmpQn.indexedRelativeBinding : tmpQn.indexedAbsoluteBinding
             return binding
         }
-        xpath = xpath.replace('$.',question.indexedAbsoluteBinding)
+        xpath = xpath.replace('$.', question.indexedAbsoluteBinding)
         return xpath
     }
 
@@ -111,7 +111,7 @@ class Form implements HasQuestions {
         return allQuestions
     }
 
-   static List<IQuestion> extractQuestions(HasQuestions questions) {
+    static List<IQuestion> extractQuestions(HasQuestions questions) {
         def allQuestions = []
         questions.questions.each {
             allQuestions.add(it)
@@ -136,7 +136,7 @@ class Form implements HasQuestions {
             return
 
         if (!question.message)
-            throw new ValidationException("Validation message has not been set on question [$question.text]",question.line)
+            throw new ValidationException("Validation message has not been set on question [$question.text]", question.line)
 
         validateXpath(question.validationLogic, question, 'Validation')
 
@@ -159,12 +159,12 @@ class Form implements HasQuestions {
             XPathParser parser = Util.createXpathParser(xpath)
             parser.eval()
         } catch (Exception e) {
-            throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for \n [$question.text] \n $e.message",question.line, e)
+            throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for \n [$question.text] \n $e.message", question.line, e)
         }
     }
 
     public String getBinding() {
-        if(id == null)
+        if (id == null)
             id = Util.getBindName("${study.name}_${name}_v1")
         return id
     }
@@ -181,10 +181,10 @@ class Form implements HasQuestions {
 
     @Override
     IQuestion getQuestion(String binding) {
-        return findQuestionWithBinding(binding,this)
+        return findQuestionWithBinding(binding, this)
     }
 
-    String toString(){
+    String toString() {
         name
     }
 
@@ -199,7 +199,7 @@ class Form implements HasQuestions {
 
         questions.each {
             out.println "___________________________"
-            out.println     "*Qn${it.getText(true)}"
+            out.println "*Qn${it.getText(true)}"
             if (it.readOnly)
                 out.println "Readonly  : $it.readOnly"
             if (!it.visible)
@@ -210,7 +210,7 @@ class Form implements HasQuestions {
                 out.println "Calcn     : $it.calculation"
             if (it.validationLogic)
                 out.println "Validation: $it.validationLogic\n" +
-                            "           $it.message "
+                        "           $it.message "
         }
         out.println "___________________________"
     }

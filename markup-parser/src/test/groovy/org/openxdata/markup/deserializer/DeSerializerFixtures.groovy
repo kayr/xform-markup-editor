@@ -6,7 +6,7 @@ package org.openxdata.markup.deserializer
 class DeSerializerFixtures {
 
     static forms = [
-            advancedMarkedUp : [
+            advancedMarkedUp: [
                     markUp: '''### Study
 
 
@@ -97,7 +97,7 @@ Has angina
 @id armpain
 Has armpain
 ''',
-            xform : '''<xforms>
+                    xform: '''<xforms>
   <model>
     <instance id="study_form_v1">
       <study_form_v1 id="0" name="Form" formKey="study_form_v1">

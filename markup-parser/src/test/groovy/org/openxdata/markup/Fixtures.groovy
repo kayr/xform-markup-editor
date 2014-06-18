@@ -34,7 +34,7 @@ question 3
 '''
 
     static def multipleForms =
-'''
+            '''
 
 ### Study
 
@@ -52,7 +52,7 @@ question
 
 '''
 
-    static def formWithEndtime="""
+    static def formWithEndtime = """
 ### Study
 
 ## Form
@@ -170,7 +170,7 @@ Start time
 End time
 '''
     static def formUsingRelativeBinds =
-'''
+            '''
 ### Study
 
 ## form
@@ -183,7 +183,7 @@ Two
 '''
 
     static def formWithCSVImport =
-'''
+            '''
 ### study
 
 ## form
@@ -195,7 +195,7 @@ csv:import quarters.csv
 '''
 
     static def formWithDynamicInstanceReferences =
-'''
+            '''
 ### study
 
 ## form
@@ -236,8 +236,8 @@ ky,kis
  sex
 '''
 
-   static def formWithValidationOnInnerRepeat =
-'''
+    static def formWithValidationOnInnerRepeat =
+            '''
 ### CountUnique Demo
 
 
@@ -286,7 +286,7 @@ repeat{Give the details for grading for the last PLE exam.
 
 }'''
 
-    static def skipLogicInRepeat='''### Study
+    static def skipLogicInRepeat = '''### Study
 
 ## Form
 
@@ -452,7 +452,7 @@ repeat{ Repeat header
     Hello
 """
 
-    static def formRepeatChildDuplicates ='''
+    static def formRepeatChildDuplicates = '''
 ### Study
 
 ## form
@@ -508,7 +508,7 @@ jeelopo
     """
 
     static def formWithId =
-'''
+            '''
 ### Study
 
 @id form_v5
@@ -1163,7 +1163,7 @@ Jjidjf
 >>kkdflf
 """
 
-    static def requiredQns='''
+    static def requiredQns = '''
 
 ### Study
 
@@ -1187,7 +1187,7 @@ repeat{ Required repeat
 
 '''
 
-   static def requiredTwo = '''
+    static def requiredTwo = '''
 
 ### Study
 
@@ -1428,7 +1428,7 @@ repeat{ *Required repeat
 </xforms>'''
 
     static def xmlFormWithId =
-'''<xforms>
+            '''<xforms>
   <model>
     <instance id="form_v5">
       <form_v5 id="0" name="form" formKey="form_v5">
@@ -1446,7 +1446,7 @@ repeat{ *Required repeat
 </xforms>'''
 
     static def xmlFormWithDynamicInstanceIds =
-'''<xforms>
+            '''<xforms>
   <model>
     <instance id="study_form_v1">
       <study_form_v1 id="0" name="form" formKey="study_form_v1">

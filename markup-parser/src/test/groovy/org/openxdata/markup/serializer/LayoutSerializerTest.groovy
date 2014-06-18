@@ -1,11 +1,10 @@
-package org.openxdata.markup.serializer;
+package org.openxdata.markup.serializer
 
-import junit.framework.TestCase
 import org.custommonkey.xmlunit.DetailedDiff
 import org.custommonkey.xmlunit.Diff
-import org.custommonkey.xmlunit.XMLTestCase;
-import org.openxdata.markup.Fixtures;
-import org.openxdata.markup.Util;
+import org.custommonkey.xmlunit.XMLTestCase
+import org.openxdata.markup.Fixtures
+import org.openxdata.markup.Util
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,9 +25,9 @@ public class LayoutSerializerTest extends XMLTestCase {
 
         def xml = ser.generateLayout(form)
 
-      // assertEquals Fixtures.xmlOxdSampleForm,xml
+        // assertEquals Fixtures.xmlOxdSampleForm,xml
 
-        DetailedDiff myDiff = new DetailedDiff(new Diff(Fixtures.xmlOxdSampleForm,xml));
+        DetailedDiff myDiff = new DetailedDiff(new Diff(Fixtures.xmlOxdSampleForm, xml));
         List allDifferences = myDiff.getAllDifferences();
         assertEquals(myDiff.toString(), 0, allDifferences.size())
 

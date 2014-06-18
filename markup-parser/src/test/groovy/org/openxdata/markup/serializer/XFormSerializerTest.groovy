@@ -178,32 +178,32 @@ class XFormSerializerTest extends XMLTestCase {
 
     }
 
-    void testFormWithEndTime(){
+    void testFormWithEndTime() {
 
         def form = Util.createParser(Fixtures.formWithEndtime).study().forms[0]
 
         def question = form.questionMap['endtime']
 
-        assertEquals '_1endtime',question.getBinding(true)
+        assertEquals '_1endtime', question.getBinding(true)
 
-        assertEquals 'endtime',question.getBinding(false)
+        assertEquals 'endtime', question.getBinding(false)
 
         question.setType('dateTime')
 
-        assertEquals 'endtime',question.getBinding(true)
+        assertEquals 'endtime', question.getBinding(true)
 
-        assertEquals 'endtime',question.getBinding(false)
+        assertEquals 'endtime', question.getBinding(false)
 
         question.setType('time')
 
-        assertEquals 'endtime',question.getBinding(true)
+        assertEquals 'endtime', question.getBinding(true)
 
-        assertEquals 'endtime',question.getBinding(false)
+        assertEquals 'endtime', question.getBinding(false)
 
     }
 
 
-    void testFormImports(){
+    void testFormImports() {
         def study = Util.createParser(Fixtures.multipleForms).study()
 
         serializer.toStudyXml(study)
@@ -212,9 +212,9 @@ class XFormSerializerTest extends XMLTestCase {
 
 
 
-        assertEquals 6 ,formImports.size()
+        assertEquals 6, formImports.size()
 
-        assertTrue formImports.values().every {!it.isEmpty()}
+        assertTrue formImports.values().every { !it.isEmpty() }
     }
 
     void testToXFormWithAbsoluteId() {

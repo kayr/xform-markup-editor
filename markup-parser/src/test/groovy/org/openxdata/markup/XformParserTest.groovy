@@ -1,9 +1,8 @@
 package org.openxdata.markup
 
-import org.antlr.runtime.CharStream
 import org.antlr.runtime.ANTLRStringStream
+import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonTokenStream
-
 import org.openxdata.markup.exception.DuplicateQuestionException
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
@@ -99,7 +98,7 @@ jeelopo
 
         SingleSelectQuestion qn = study.forms[0].questions.find { it instanceof SingleSelectQuestion }
 
-        assertTrue qn.options.every {!it.text.contains('\n')}
+        assertTrue qn.options.every { !it.text.contains('\n') }
 
 
     }
@@ -107,7 +106,7 @@ jeelopo
     public void testTwoTxtQuestionsExist() {
         def study = parser.study()
 
-        def txtQuestions = study.forms[0].questions.findAll {it instanceof TextQuestion}
+        def txtQuestions = study.forms[0].questions.findAll { it instanceof TextQuestion }
 
         assertEquals 'Expecting 2 text questions', 2, txtQuestions.size()
     }
@@ -116,7 +115,7 @@ jeelopo
 
         def study = parser.study()
 
-        MultiSelectQuestion qn = study.forms[0].questions.find {it instanceof MultiSelectQuestion}
+        MultiSelectQuestion qn = study.forms[0].questions.find { it instanceof MultiSelectQuestion }
 
         assertNotNull 'Multi Question is expected', qn
 
@@ -127,17 +126,17 @@ jeelopo
     public void testRepeatQuestion() {
         def study = parser.study()
 
-        RepeatQuestion qn = study.forms[0].questions.find {it instanceof RepeatQuestion}
+        RepeatQuestion qn = study.forms[0].questions.find { it instanceof RepeatQuestion }
 
         assertNotNull qn
 
         assertEquals 3, qn.questions.size()
 
-        assertNotNull study.forms[0].questions.find {it instanceof SingleSelectQuestion}
+        assertNotNull study.forms[0].questions.find { it instanceof SingleSelectQuestion }
 
-        assertNotNull study.forms[0].questions.find {it instanceof MultiSelectQuestion}
+        assertNotNull study.forms[0].questions.find { it instanceof MultiSelectQuestion }
 
-        assertNotNull study.forms[0].questions.find {it instanceof RepeatQuestion}
+        assertNotNull study.forms[0].questions.find { it instanceof RepeatQuestion }
 
         def allQuestions = study.forms[0].allQuestions
         assertEquals 12, allQuestions.size()
@@ -146,7 +145,7 @@ jeelopo
     public void testDynamicQuestion() {
         def study = parser.study()
 
-        def count = study.forms[0].questions.count {it instanceof DynamicQuestion}
+        def count = study.forms[0].questions.count { it instanceof DynamicQuestion }
 
         assertEquals 'Expecting two dyn qns', 2, count
     }
@@ -154,7 +153,7 @@ jeelopo
     public void testAllFormsHaveRootStudy() {
         def study = parser.study()
 
-        assertTrue study.forms.every { it.study != null}
+        assertTrue study.forms.every { it.study != null }
     }
 
     public void testStudyHasName() {
@@ -169,13 +168,13 @@ jeelopo
         def study = parser.study()
         def questions = study.forms[0].questions
 
-        assertEquals "Expecting 1 invisile quesion", 1, questions.count {!it.visible}
+        assertEquals "Expecting 1 invisile quesion", 1, questions.count { !it.visible }
 
-        assertEquals 'Expecting 1 number questions', 1, questions.count {it.type == 'number'}
+        assertEquals 'Expecting 1 number questions', 1, questions.count { it.type == 'number' }
 
-        assertEquals 'Decimal questions', 2, questions.count {it.type == 'decimal'}
+        assertEquals 'Decimal questions', 2, questions.count { it.type == 'decimal' }
 
-        assertEquals 'Expecting 1 video question', 1, questions.count {it.type == 'video'}
+        assertEquals 'Expecting 1 video question', 1, questions.count { it.type == 'video' }
     }
 
     void testFormWithDuplicatesThrowsException() {
@@ -199,7 +198,6 @@ jeelopo
         assertEquals 'child_repeat', qn.binding
         assertEquals 'Details', qn.comment
     }
-
 
 
     void testFormWithSkipLogic() {
@@ -348,7 +346,7 @@ jeelopo
         def parser = createParser(Fixtures.skipLogicInRepeat)
         def study = parser.study()
 
-        def rptQn = study.forms[0].questions.find {it instanceof RepeatQuestion}
+        def rptQn = study.forms[0].questions.find { it instanceof RepeatQuestion }
 
         assertNotNull rptQn.questions[0].skipLogic
     }
@@ -397,24 +395,24 @@ jeelopo
 
     }
 
-    void testFormWithValidationAChildOfARepeat(){
+    void testFormWithValidationAChildOfARepeat() {
         def form = Util.createParser(Fixtures.formWithValidationOnInnerRepeat).study().forms[0]
-        assertEquals form.allQuestions.size() ,  5
+        assertEquals form.allQuestions.size(), 5
 
     }
 
-    void  testForDynamicInstanceValidation(){
-         def form = createParser(Fixtures.formWithDynamicInstanceReferences).study().forms[0]
+    void testForDynamicInstanceValidation() {
+        def form = createParser(Fixtures.formWithDynamicInstanceReferences).study().forms[0]
 
         DynamicQuestion dynamicQuestion = Form.findQuestionWithBinding("subregion", form)
 
         assertNotNull dynamicQuestion
 
-        assertEquals 'subregion',dynamicQuestion.binding
+        assertEquals 'subregion', dynamicQuestion.binding
 
-        assertEquals 'region',dynamicQuestion.parentQuestionId
+        assertEquals 'region', dynamicQuestion.parentQuestionId
 
-        assertEquals 'subregion2',dynamicQuestion.dynamicInstanceId
+        assertEquals 'subregion2', dynamicQuestion.dynamicInstanceId
 
         def oldId = dynamicQuestion.dynamicInstanceId
         dynamicQuestion.dynamicInstanceId = 'blah'
@@ -424,7 +422,7 @@ jeelopo
         } catch (ValidationException ex) {
             assertTrue ex.message.contains("Instance ID[blah] does not exit in the form")
         }
-        dynamicQuestion.dynamicInstanceId  = oldId
+        dynamicQuestion.dynamicInstanceId = oldId
 
 
 
@@ -452,16 +450,15 @@ jeelopo
 
     }
 
-    void testCSVImport(){
+    void testCSVImport() {
 
         Fixtures.setFormDirectory()
 
         def form = createParser(Fixtures.formWithCSVImport).study().forms[0]
 
         assertEquals 1, form.questions.size()
-        assertEquals 1,form.dynamicOptions.size()
+        assertEquals 1, form.dynamicOptions.size()
     }
-
 
 
     private XformParser createParser(String testString) throws IOException {

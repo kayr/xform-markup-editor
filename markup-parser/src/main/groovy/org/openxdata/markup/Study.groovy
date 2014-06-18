@@ -34,11 +34,11 @@ class Study {
         forms.each { addForm(it) }
     }
 
-     List<Form> getForms() {
+    List<Form> getForms() {
         return new ArrayList<Form>(forms)
     }
 
-    String toString(){
+    String toString() {
         name
     }
 }

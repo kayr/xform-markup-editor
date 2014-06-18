@@ -62,7 +62,7 @@ class XPathUtil {
             XPathUtil.findAllImpl(delegate, clos)
         }
 
-        Tree.metaClass.emitTailString{
+        Tree.metaClass.emitTailString {
             XPathUtil.emitTailString(delegate)
         }
 

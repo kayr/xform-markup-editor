@@ -180,7 +180,6 @@ class FormDeserializer {
             qn.required = true
         }
 
-
         //add skip logic
         String skipLogic = bindNode.@relevant.text()
         if (skipLogic) {
@@ -212,9 +211,9 @@ class FormDeserializer {
             def paths = new XPathUtil(xpath).getPathVariables()
 
             //todo do some caching to improve performance
-            paths.inject(0) { Integer offset,Map path->
+            paths.inject(0) { Integer offset, Map path ->
                 println "processing '$path.'"
-                processPath(xpath, builder, path,offset)
+                processPath(xpath, builder, path, offset)
             }
             println "****[$xpath] = [$builder]******"
             return builder.toString()
@@ -231,7 +230,7 @@ class FormDeserializer {
         if (pathArea != newPath) {
             builder.replace(path.start - offset, path.end - offset, newPath)
         }
-        return pathArea.size() - newPath.size()+offset
+        return pathArea.size() - newPath.size() + offset
     }
 
     private String getReference(String reference) {

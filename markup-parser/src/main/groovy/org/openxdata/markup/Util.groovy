@@ -3,10 +3,10 @@ package org.openxdata.markup
 import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonTokenStream
-import org.openxdata.xpath.XPathLexer
-import org.openxdata.xpath.XPathParser
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
+import org.openxdata.xpath.XPathLexer
+import org.openxdata.xpath.XPathParser
 
 /**
  * Created with IntelliJ IDEA.
@@ -127,7 +127,7 @@ class Util {
         def stop = System.currentTimeMillis()
         def time = stop - start
         def readableTime = TimeFormat.valueOf(time, TimeFormat.ROUND_TO_MILLISECOND)
-        println "Completed in ${ readableTime}"
+        println "Completed in ${readableTime}"
         return [value: rt, time: time]
     }
 
@@ -138,11 +138,11 @@ class Util {
      * @return
      */
     static String getType(String bind) {
-        boolean isBool = booleanKeys.any {bind.startsWith(it + '_')}
+        boolean isBool = booleanKeys.any { bind.startsWith(it + '_') }
         if (isBool)
             return "boolean"
 
-        boolean isDate = dates.any {bind.startsWith(it + '_')}
+        boolean isDate = dates.any { bind.startsWith(it + '_') }
         if (isDate)
             return "date"
 
@@ -188,7 +188,7 @@ class Util {
     public static void validateId(String id, int line) {
         if (!(id ==~ /[a-z][a-z0-9_]*/))
             throw new InvalidAttributeException("""You have an invalid variable [$id] .
-Attributes should start with a small letter followed by small letters and underscores""",line)
+Attributes should start with a small letter followed by small letters and underscores""", line)
     }
 
 

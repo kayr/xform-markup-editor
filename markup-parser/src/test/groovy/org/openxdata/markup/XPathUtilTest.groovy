@@ -1,10 +1,7 @@
 package org.openxdata.markup
 
 import org.antlr.runtime.tree.CommonTree
-import org.openxdata.markup.deserializer.FormDeserializer
 import org.openxdata.xpath.XPathParser
-
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
 
 /**
  * Created by kay on 6/18/14.
@@ -56,9 +53,9 @@ class XPathUtilTest extends GroovyTestCase {
             }
         }
 
-         xpathUtil.pathVariables.each {
-             println xpath.substring(it.start , it.end)
-         }
+        xpathUtil.pathVariables.each {
+            println xpath.substring(it.start, it.end)
+        }
 
     }
 }

@@ -98,7 +98,6 @@ class LayoutSerializer {
     }
 
 
-
     def synchronized getNextWidgetId() {
         return nextWidgetId++
     }

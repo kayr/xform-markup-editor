@@ -119,9 +119,8 @@ class MarkupAligner {
 
     private static boolean isOption(String s) {
         if (!s) return false
-        return s.startsWith('>')  || s.startsWith('$>')
+        return s.startsWith('>') || s.startsWith('$>')
     }
-
 
 
     private static boolean isPager(String s) {

@@ -13,7 +13,7 @@ class Option implements IOption {
     ISelectionQuestion parent
     int line
 
-    Option(){
+    Option() {
     }
 
     Option(String option) {
