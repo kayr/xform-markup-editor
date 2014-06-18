@@ -2,6 +2,7 @@ package org.openxdata.markup
 
 import org.antlr.runtime.tree.CommonTree
 import org.antlr.runtime.tree.Tree
+import org.openxdata.xpath.XPathParser
 
 /**
  * Created by kay on 6/16/14.
@@ -13,12 +14,12 @@ class XPathUtil {
 
     XPathUtil(String xpath) {
         this.xpath = xpath
-        parse()
     }
 
-    private def parse() {
+    private CommonTree parse() {
         def parser = Util.createXpathParser(xpath)
         tree = parser.eval().tree as CommonTree
+        return tree
     }
 
     String shorten(Form form) {
@@ -33,15 +34,6 @@ class XPathUtil {
         tree.findAll(filter)
     }
 
-    List<CommonTree> collectDeep(Closure filter) {
-
-        findResultsImpl(tree) { CommonTree tree ->
-            tree.children.size() == 1
-        }
-
-    }
-
-
     static {
         CommonTree.metaClass.findResults = { Closure clos ->
             XPathUtil.findResultsImpl(delegate, clos)
@@ -53,6 +45,14 @@ class XPathUtil {
 
         Tree.metaClass.emitTailString{
             XPathUtil.emitTailString(delegate)
+        }
+
+        Tree.metaClass.isCommonTree {
+            delegate instanceof CommonTree
+        }
+
+        CommonTree.metaClass.isPath {
+            delegate.token.type == XPathParser.ABSPATH || delegate.token.type == XPathParser.RELPATH
         }
     }
 

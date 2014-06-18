@@ -30,10 +30,9 @@ class XPathUtilTest extends GroovyTestCase {
         def xpathUtil = new XPathUtil("some/path = 'male'  and /other/path != 'female'")
 
         def g = xpathUtil.findResults { CommonTree ctree ->
-            if (ctree.token.type == XPathParser.ABSPATH || ctree.token.type == XPathParser.RELPATH) {
+            if (ctree.isPath()) {
                 return ctree.emitTailString()
             }
-
         }
 
         assert g.size() == 2
