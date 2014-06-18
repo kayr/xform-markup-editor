@@ -20,15 +20,8 @@ class XPathUtilTest extends GroovyTestCase {
 
         }
 
-
-
-       assert  ['/some/path', '/some/path'].every { path ->
-            g.any { it.emitString() == path }
+        assert ['/some/path', '/some/path'].every { path ->
+            g.any { it.emitTailString() == path }
         }
-
-        println xpathUtil.tree.emitString()
-
-
-
     }
 }

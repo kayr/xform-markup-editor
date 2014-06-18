@@ -51,8 +51,8 @@ class XPathUtil {
             XPathUtil.findAllImpl(delegate, clos)
         }
 
-        Tree.metaClass.emitString{
-            XPathUtil.emitString(delegate)
+        Tree.metaClass.emitTailString{
+            XPathUtil.emitTailString(delegate)
         }
     }
 
@@ -89,14 +89,15 @@ class XPathUtil {
     }
 
     /** Print out a whole tree not just a node */
-    public static String emitString(Tree tree) {
+    public static String emitTailString(Tree tree) {
         if (tree.getChildCount() == 0) {
             return tree.toString();
         }
         StringBuffer buf = new StringBuffer();
+
         for (int i = 0; i < tree.getChildCount(); i++) {
             Tree t = (Tree) tree.getChild(i);
-            buf.append(emitString(t));
+            buf.append(emitTailString(t));
         }
         return buf.toString();
     }
