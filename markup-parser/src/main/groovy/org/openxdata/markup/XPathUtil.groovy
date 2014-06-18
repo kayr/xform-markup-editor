@@ -22,11 +22,11 @@ class XPathUtil {
     }
 
     String shorten(Form form) {
-        collect {}
+        findResults {}
     }
 
-    List<CommonTree> collect(Closure filter) {
-        tree.collect(filter)
+    List<CommonTree> findResults(Closure filter) {
+        tree.findResults(filter)
     }
 
     List<CommonTree> findAll(Closure filter) {
@@ -35,7 +35,7 @@ class XPathUtil {
 
     List<CommonTree> collectDeep(Closure filter) {
 
-        collectImpl(tree) { CommonTree tree ->
+        findResultsImpl(tree) { CommonTree tree ->
             tree.children.size() == 1
         }
 
@@ -43,8 +43,8 @@ class XPathUtil {
 
 
     static {
-        CommonTree.metaClass.collect = { Closure clos ->
-            XPathUtil.collectImpl(delegate, clos)
+        CommonTree.metaClass.findResults = { Closure clos ->
+            XPathUtil.findResultsImpl(delegate, clos)
         }
 
         CommonTree.metaClass.findAll = { Closure clos ->
@@ -56,8 +56,7 @@ class XPathUtil {
         }
     }
 
-    static List<CommonTree> collectImpl(Tree tree, Closure filter) {
-        if (!(tree instanceof CommonTree)) return []
+    static List<CommonTree> findResultsImpl(Tree tree, Closure filter) {
         List<CommonTree> trees = []
         int count = tree.getChildCount()
         for (int i = 0; i < count; i++) {
@@ -66,7 +65,7 @@ class XPathUtil {
             if (result) {
                 trees << result
             } else {
-                trees.addAll(collectImpl(child, filter))
+                trees.addAll(findResultsImpl(child, filter))
             }
         }
         return trees
@@ -88,7 +87,7 @@ class XPathUtil {
         return trees
     }
 
-    /** Print out a whole tree not just a node */
+    /** Print out only the tails */
     public static String emitTailString(Tree tree) {
         if (tree.getChildCount() == 0) {
             return tree.toString();
@@ -101,24 +100,4 @@ class XPathUtil {
         }
         return buf.toString();
     }
-
-    @SuppressWarnings("unchecked")
-    private String[] combine(Object... strings) {
-        List<String> result = new ArrayList<String>();
-        for (Object o : strings) {
-            if (o instanceof String[])
-                for (String s : (String[]) o)
-                    result.add(s);
-            else if (o instanceof String)
-                result.add((String) o);
-            else if (o instanceof List<?>)
-                for (String s : (List<String>) o)
-                    result.add(s);
-            else
-                throw new RuntimeException("can't combine, unexpected type: " + o.getClass());
-        }
-        return result as String[];
-    }
-
-
 }
