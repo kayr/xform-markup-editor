@@ -122,12 +122,9 @@ class FormDeserializerTest extends GroovyTestCase {
         def questions = form.allQuestions
         assert questions.find { it.binding == 'patient_id' }.type == 'string'
         assert questions.find { it.binding == 'title' }.type == 'string'
-        assert questions.find { it.binding == 'first_name' }.type == 'string'
-        assert questions.find { it.binding == 'last_name' }.type == 'string'
         assert questions.find { it.binding == 'sex' }.type == 'string'
         assert questions.find { it.binding == 'birthdate' }.type == 'date'
         assert questions.find { it.binding == 'weightkg' }.type == 'decimal'
-        assert questions.find { it.binding == 'height' }.type == 'decimal'
         assert questions.find { it.binding == 'is_patient_pregnant' }.type == 'boolean'
         assert questions.find { it.binding == 'arvs' }.type == 'string'
         assert questions.find {
