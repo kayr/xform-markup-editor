@@ -12,6 +12,10 @@ class MarkupAligner {
     public static final String INDENT = '        '
     String markUpTxt
 
+    static String align(String form) {
+        new MarkupAligner(form).align()
+    }
+
 
     MarkupAligner(String txt) {
         this.markUpTxt = txt
