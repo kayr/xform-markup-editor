@@ -32,8 +32,20 @@ class MarkUpSerializer {
                 renderPage(builder, it)
             }
 
+            form.dynamicOptions.each {
+//                renderDynamicOptions(builder, it.key, it.value)
+            }
+
             return builder.toString()
         }
+    }
+
+    static def renderDynamicOptions(def builder, String id, List<DynamicOption> options) {
+        builder << 'dynamic{'
+
+
+        builder << '}'
+
     }
 
     static def renderPage(def builder, Page page) {
