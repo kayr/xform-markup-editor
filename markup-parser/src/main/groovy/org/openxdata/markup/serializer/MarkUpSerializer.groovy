@@ -9,8 +9,15 @@ import org.openxdata.markup.*
 class MarkUpSerializer {
 
 
-    String toStudy(Study study) {
-
+    static String toStudy(Study study) {
+        use(StringBuildCategory) {
+            StringBuilder builder = new StringBuilder()
+            builder << "### $study.name"
+            study.forms.each {
+                builder << toMarkUp(it)
+            }
+            builder.toString()
+        }
     }
 
     static String toMarkUp(Form form) {
@@ -41,7 +48,6 @@ class MarkUpSerializer {
             builder << "@id $qn.binding"
         if (qn.readOnly) builder << "@readonly"
         if (!qn.visible) builder << "@invisible"
-
 
         mayBeAddSkipLogic(builder, qn)
         mayBeAddValidationLogic(builder, qn)
@@ -112,8 +118,6 @@ class MarkUpSerializer {
         renderQuestionText builder, qn
         builder << "\$> $qn.dynamicInstanceId"
     }
-
-
 }
 
 
