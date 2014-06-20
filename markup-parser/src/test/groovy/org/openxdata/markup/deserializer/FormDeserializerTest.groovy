@@ -172,4 +172,18 @@ class FormDeserializerTest extends GroovyTestCase {
 
     }
 
+    void testEntireOxdSampleFormRoundTrip() {
+        def serializer = new XFormSerializer()
+        def mkpForm = Util.createParser(Fixtures.oxdSampleForm).study().forms[0]
+
+        def originalXform = serializer.toXForm(mkpForm)
+
+        def parsedMarkupFormModel = new FormDeserializer(originalXform).parse()
+
+
+        def otherXform = serializer.toXForm(parsedMarkupFormModel)
+
+        assertEquals originalXform, otherXform
+    }
+
 }

@@ -12,6 +12,13 @@ class FormDeserializer {
     def xForm
     Form form
 
+    FormDeserializer() {
+    }
+
+    FormDeserializer(String xml) {
+        this.xml = xml
+    }
+
     Form parse() {
         if (form)
             return form
@@ -26,7 +33,7 @@ class FormDeserializer {
         form.name = instance.'*'[0].@name
         addDynamicInstances()
         addPages()
-        Form.extractQuestions(form).each {
+        form.allQuestions.each {
             addBehaviourInfo(it)
         }
         return form
@@ -154,53 +161,69 @@ class FormDeserializer {
      */
     IQuestion addBehaviourInfo(IQuestion qn) {
         def bindNode = getBindNode(qn.binding)
-
-        //readOnly
-        String readonly = bindNode.@locked.text()
-        if (readonly && readonly.contains('true')) {
-            qn.readOnly = true
-        }
-
         /*todo implement the notion of readonly and not enabled. Readonly question can be populated with data as opposed to disabled*/
-        //disabled
-        String enabled = bindNode.@readonly.text()
-        if (enabled && enabled.contains('true')) {
-            qn.readOnly = true;
-        }
+        mayBeMakeLocked(bindNode, qn)
+        mayBeMakeReadOnly(bindNode, qn)
+        mayBeMakeInvisible(bindNode, qn)
+        mayBeMakeRequired(bindNode, qn)
 
-        //visible
-        String visible = bindNode.@visible.text()
-        if (visible && readonly.contains('false')) {
-            qn.visible = false
-        }
+        mayBeAddSkipLogic(bindNode, qn)
+        mayBeAddValidationLogic(bindNode, qn)
+        mayBeAddCalculation(bindNode, qn)
 
-        //required
-        String required = bindNode.@required.text()
-        if (required && required.contains('true')) {
-            qn.required = true
-        }
+        return qn
+    }
 
-        //add skip logic
-        String skipLogic = bindNode.@relevant.text()
-        if (skipLogic) {
-            qn.skipLogic = getXPathFormula(skipLogic)
-            qn.skipAction = bindNode.@action.text()
+    private void mayBeAddCalculation(bindNode, IQuestion qn) {
+        String calculate = bindNode.@calculate.text()
+        if (calculate) {
+            qn.calculation = getXPathFormula(calculate)
         }
+    }
 
-        //validation Logic
+    private void mayBeAddValidationLogic(bindNode, IQuestion qn) {
         String validationLogic = bindNode.@constraint.text()
         if (validationLogic) {
             qn.validationLogic = getXPathFormula(validationLogic)
             qn.message = bindNode.@message.text()
         }
+    }
 
-        //calculations
-        String calculate = bindNode.@calculate.text()
-        if (calculate) {
-            qn.calculation = getXPathFormula(calculate)
+    private void mayBeAddSkipLogic(bindNode, IQuestion qn) {
+        String skipLogic = bindNode.@relevant.text()
+        if (skipLogic) {
+            qn.skipLogic = getXPathFormula(skipLogic)
+            qn.skipAction = bindNode.@action.text()
         }
+    }
 
-        return qn
+    private static void mayBeMakeRequired(bindNode, IQuestion qn) {
+        String required = bindNode.@required.text()
+        if (required && required.contains('true')) {
+            qn.required = true
+        }
+    }
+
+    private static void mayBeMakeInvisible(bindNode, IQuestion qn) {
+        String visible = bindNode.@visible.text()
+        if (visible && visible.contains('false')) {
+            qn.visible = false
+        }
+    }
+
+    private static void mayBeMakeReadOnly(bindNode, IQuestion qn) {
+        String enabled = bindNode.@readonly.text()
+        if (enabled && enabled.contains('true')) {
+            qn.readOnly = true;
+        }
+    }
+
+    private static String mayBeMakeLocked(bindNode, IQuestion qn) {
+        String readonly = bindNode.@locked.text()
+        if (readonly && readonly.contains('true')) {
+            qn.readOnly = true
+        }
+        return readonly
     }
 
     String getXPathFormula(String xpath) {
@@ -212,10 +235,8 @@ class FormDeserializer {
 
             //todo do some caching to improve performance
             paths.inject(0) { Integer offset, Map path ->
-                println "processing '$path.'"
                 processPath(xpath, builder, path, offset)
             }
-            println "****[$xpath] = [$builder]******"
             return builder.toString()
         } catch (Exception x) {
             System.err.println("!!!!: Failed to process xpath: [$xpath]: [$x]")
@@ -234,11 +255,8 @@ class FormDeserializer {
     }
 
     private String getReference(String reference) {
-
         int idx = reference.lastIndexOf('/')
-
         if (idx < 0) return reference
-
         //todo do not resolve binding that have conflicts
         def id = XPathUtil.getNodeName(reference)
         if (Form.findQuestionWithBinding(id, form))
@@ -248,7 +266,7 @@ class FormDeserializer {
     }
 
     String resolveType(IQuestion qn) {
-        Object binding = getBindNode(qn.binding)
+        def binding = getBindNode(qn.binding)
 
         if (!binding) return 'string'
 
