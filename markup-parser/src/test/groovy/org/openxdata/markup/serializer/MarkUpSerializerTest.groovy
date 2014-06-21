@@ -10,9 +10,9 @@ import org.openxdata.markup.Util
 class MarkUpSerializerTest extends GroovyTestCase {
 
     void testTopMarkUp() {
-        Form form = Util.createParser(Fixtures.oxdSampleForm).study().forms[0]
+        def study = Util.createParser(Fixtures.formWithValidationOnInnerRepeat).study()
 
-        println MarkupAligner.align(MarkUpSerializer.toMarkUp(form))
+        println MarkupAligner.align(MarkUpSerializer.toStudy(study))
 
     }
 }

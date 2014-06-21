@@ -470,13 +470,13 @@ repeat{ Repeat 1
 
     static def normalPurcform = """###Snv Study
 ##Snv Form
->>>
+dynamic {
 Country,*District,School
 Uganda,Kampala,Macos
 Kenya,Nairobi,Machaccos
 Uganda,Kampala,Bugiroad
 Kenya,Kampala,Bugiroad
->>>
+}
 
 How are you
 what is name
@@ -490,12 +490,12 @@ Select your diseases
 >>TB
 >>Whooping cough
 
->>>>Repeat Question header
+repeat { Repeat Question header
 rpt question 1
 >sdsd
 rpt question 2
 >>dsksd
->>>>
+}
 
 @video
 Video
@@ -544,23 +544,23 @@ Select your diseases
 >>TB
 >>Whooping cough
 
->>>>Repeat Question header
+repeat { Repeat Question header
 rpt question 1
 >sdsd
 rpt question 2
 >>dsksd
->>>>
+}
 
 @video
 Video
 
->>>
+dynamic {
 $country,district,school
 Uganda,Kampala,Macos
 Kenya,Nairobi,Machaccos
 Uganda,Kampala,Bugiroad
 Kenya,Kampala,Bugiroad
->>>
+}
 ##form2
 jeelopo
 '''

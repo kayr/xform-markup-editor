@@ -1,6 +1,5 @@
 package org.openxdata.markup.deserializer
 
-import groovy.transform.CompileStatic
 import org.openxdata.markup.*
 
 /**
@@ -296,7 +295,6 @@ class FormDeserializer {
         return format == 'image' ? 'picture' : format
     }
 
-    @CompileStatic
     private static String getDynamicChildInstanceId(String nodeset) {
         if (!nodeset) return null
 
@@ -309,7 +307,6 @@ class FormDeserializer {
         return nodeset.substring(pos1 + 1, pos2)
     }
 
-    @CompileStatic
     private static String getDynamicParentInstanceId(String nodeset) {
         if (!nodeset) return null
 

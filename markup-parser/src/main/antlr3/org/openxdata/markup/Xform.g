@@ -54,9 +54,10 @@ scope						{Form scopeForm;}
 		|txt = txtQn			{rv.addQuestion(txt);}
 		|single = singleSelQn		{rv.addQuestion(single);}
 		|multi = multipleSelQn		{rv.addQuestion(multi);}
-		|dynInstance = dynamicQnInstance{rv.addQuestion(dynInstance);}
+		|dynQnInstance = dynamicQnInstance{rv.addQuestion(dynQnInstance);}
 		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
-		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}	
+		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}
+		|dynInstance = dynamicInstance			{dynInstance.addQuestionsToForm(rv);}
 		)+
 		|(pg = page)+
 		)
@@ -75,9 +76,10 @@ page returns [Page rv = new Page()]
 		|txt = txtQn			{rv.addQuestion(txt);}
 		|single = singleSelQn		{rv.addQuestion(single);}
 		|multi = multipleSelQn		{rv.addQuestion(multi);}
-		|dynInstance = dynamicQnInstance{rv.addQuestion(dynInstance);}
+		|dynQnInstance = dynamicQnInstance{rv.addQuestion(dynQnInstance);}
 		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
-		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}	
+		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}
+		|dynInstance = dynamicInstance			{dynInstance.addQuestionsToForm(rv);}
 		)+		
 	;
 
@@ -95,9 +97,19 @@ repeatQn returns [RepeatQuestion rv = new RepeatQuestion()]
 	|txt = txtQn				{rv.addQuestion(txt);}
 	|single = singleSelQn			{rv.addQuestion(single);}
 	|multi = multipleSelQn			{rv.addQuestion(multi);}
-	|dynInstance = dynamicQnInstance	{rv.addQuestion(dynInstance);}
+	|dynQnInstance = dynamicQnInstance{rv.addQuestion(dynQnInstance);}
 	|dynamic = dynamicQn			{dynamic.addQuestionsToForm(rv);}
-	)+ (ENDREPEATMARKER|LEFTBRACE)
+	|dynInstance = dynamicInstance			{dynInstance.addQuestionsToForm(rv);}
+	)+ (LEFTBRACE)
+	;
+	
+dynamicInstance returns [DynamicBuilder rv] 
+	:	dyn2 = DYNAMICINSTANCEMARKER	{
+						rv = new DynamicBuilder(true);
+						rv.setLine(dyn2.getLine());
+						}
+		(LINECONTENTS			{rv.appendLine($LINECONTENTS.text);})+ 
+		(LEFTBRACE)
 	;
 
 dynamicQn returns [DynamicBuilder rv] 
@@ -108,6 +120,8 @@ dynamicQn returns [DynamicBuilder rv]
 		(LINECONTENTS			{rv.appendLine($LINECONTENTS.text);})+ 
 		(DYNAMICMARKER|LEFTBRACE)
 	;
+	
+
 	
 csvImport returns [DynamicBuilder rv = new DynamicBuilder()]
 	:	CSVIMPORT			{
@@ -170,20 +184,21 @@ FORMNAME:	SPACE '##' LINECONTENTS		{setText(rl($LINECONTENTS.text));}
 	
 PAGE	:	SPACE '#>' LINECONTENTS		{setText(rl($LINECONTENTS.text));}
 	;
+	
+	
+DYNAMICINSTANCEMARKER
+	: 	SPACE 'dynamic_instance' SPACE '{' NEWLINE
+	;
 
 DYNAMICMARKER
-	: 	SPACE ('>>>'|'dynamic{') NEWLINE
+	: 	SPACE 'dynamic' SPACE '{' NEWLINE
 	;
 	
 LEFTBRACE
 	: 	SPACE '}' SPACE NEWLINE	
 	;
 BEGINREPEATMARKER
-	:	SPACE ('>>>>'|'repeat{') LINECONTENTS	{setText(rl($LINECONTENTS.text));}
-	;
-
-ENDREPEATMARKER
-	:	SPACE '>>>>' NEWLINE
+	:	SPACE 'repeat' SPACE '{' LINECONTENTS	{setText(rl($LINECONTENTS.text));}
 	;
 	
 MULTIPLEOPTION	

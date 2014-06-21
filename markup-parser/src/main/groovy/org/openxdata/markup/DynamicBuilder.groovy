@@ -15,6 +15,7 @@ import static org.openxdata.markup.Util.parseBind
  */
 class DynamicBuilder {
 
+    boolean instanceOnly = false
     def csvSrc = "";
     String csvFilePath = null;
     List<String[]> parsedCsv
@@ -28,13 +29,21 @@ class DynamicBuilder {
     int linesAppended = 0
     private final static int MAX_LINES = 3
 
+    DynamicBuilder() {}
+
+    DynamicBuilder(boolean instanceOnly) {
+        this.instanceOnly = instanceOnly;
+    }
+
     public void addQuestionsToForm(HasQuestions form) {
         try {
             parse()
-            if (isCsvDirectBuild()) {
-                addBuiltQnsDirectly(form)
-            } else {
-                bindOptionsToSingleSelectInstance(form)
+            if (!isInstanceOnly()) {
+                if (isCsvDirectBuild()) {
+                    addBuiltQnsDirectly(form)
+                } else {
+                    bindOptionsToSingleSelectInstance(form)
+                }
             }
             addDynamicOptions(form)
         } catch (Exception e) {

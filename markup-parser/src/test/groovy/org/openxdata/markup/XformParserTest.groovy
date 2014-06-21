@@ -32,23 +32,23 @@ Select your diseases
 >>TB
 >>Whooping cough
 
->>>>Repeat Question header
+repeat { Repeat Question header
 rpt question 1
 >sdsd
 rpt question 2
 >>dsksd
->>>>Hello
+repeat { Hello
 sdhosj
->>>>
->>>>
+}
+}
 
->>>
+dynamic {
 Country,District,School
 Uganda,Kampala,Macos
 Kenya,Nairobi,Machaccos
 Uganda,Kampala,Bugiroad
 Kenya,Kampala,Bugiroad
->>>
+}
 
 ##form2
 jeelopo
