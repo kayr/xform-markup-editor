@@ -80,15 +80,15 @@ class XPathUtil {
     /** Print out only the tails */
     public static String emitTailString(Tree tree) {
         if (tree.getChildCount() == 0) {
-            return tree.toString();
+            return tree.toString()
         }
-        StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer()
 
         for (int i = 0; i < tree.getChildCount(); i++) {
-            Tree t = (Tree) tree.getChild(i);
-            buf.append(emitTailString(t));
+            Tree t = (Tree) tree.getChild(i)
+            buf.append(emitTailString(t))
         }
-        return buf.toString();
+        return buf.toString()
     }
 
     static {
