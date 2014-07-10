@@ -89,7 +89,7 @@ class DynamicBuilder {
     }
 
     private boolean isCsvDirectBuild() {
-        return getSingleSelectReferenceIfAvailable() == null
+        return getSingleSelectReferenceIfAvailable() == null && !isInstanceOnly()
     }
 
     public void parse() {
@@ -202,7 +202,12 @@ class DynamicBuilder {
 
     private String getSingleSelectReferenceIfAvailable() {
         def topColumn = parsedCsv[0][0]
-        def question = topColumn.find(/[$][a-z][a-z0-9_]*/)
+        def question
+        if (isInstanceOnly()) {
+            question = topColumn
+        } else {
+            question = topColumn.find(/[$][a-z][a-z0-9_]*/)
+        }
         validateVariable(question, topColumn)
         return question == null ? question : question - '$'
     }

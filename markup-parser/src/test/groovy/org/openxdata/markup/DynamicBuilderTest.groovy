@@ -265,6 +265,25 @@ Kenya,Nairobi,Macos
 
     }
 
+    void testDynamicInstanceOnlyBuilding() {
+        def src = '''### stdy
+## form
+
+Qn 1
+
+dynamic_instance {
+parent,cities
+uganda,kampala
+kenya,nairobi
+uganda,entebbe
+}
+'''
+
+        def form = Util.createParser(src).study().forms[0]
+
+        form.printAll(System.out)
+    }
+
     public void ignoreTestFillUpSpace2() {
         def file = new File(/C:\Users\kay\Dropbox\OMNI\snv database\community wash\community forms\lists.csv/)
 

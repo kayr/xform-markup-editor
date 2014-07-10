@@ -89,7 +89,7 @@ class MarkupAligner {
             if (currentLine.startsWith('repeat{')) {
                 printer.incrementIndent()
                 printer.println()
-            } else if (currentLine.startsWith('dynamic{')) {//increase indent
+            } else if (currentLine.startsWith('dynamic{') ||currentLine.startsWith('dynamic_instance{') ) {//increase indent
                 printer.incrementIndent()
                 inDynamic = true
             }

@@ -74,6 +74,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@skipaction" |
   "@validif" |
   "@message" |
+  "dynamic_instance{" |
   "dynamic{"
                                 {
                                 yybegin(ATTRIB_TEXT);
