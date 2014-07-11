@@ -28,7 +28,7 @@ import static javax.swing.SwingUtilities.invokeLater
 class FormBinderPresenter {
 
     XFormImporterPresenter xFormImporter
-    MarkupForm form
+    MainWindow form
     File currentFile
     def xfmFilter
     def allowedAttribs
@@ -36,10 +36,8 @@ class FormBinderPresenter {
 
 
     FormBinderPresenter() {
-        form = new MarkupForm()
-        form.title = "OXD-Markup"
+        form = new MainWindow()
 
-        form.setLocationByPlatform(true);
         xFormImporter = new XFormImporterPresenter(this)
         init()
     }
@@ -52,7 +50,7 @@ class FormBinderPresenter {
         ] as FileFilter
 
 
-        form.btnImport.addActionListener({
+        form.menuImport.addActionListener({
             executeSafely { xFormImporter.show() }
         } as ActionListener)
 
@@ -80,19 +78,12 @@ class FormBinderPresenter {
             Thread.start { executeSafely { showXML() } }
         } as ActionListener)
 
-        form.menuAdvancedSkip.addActionListener({
-            loadWithConfirmation(addHeader(Resources.advanceSkip))
-        } as ActionListener)
+        form.formLoader = {
+            loadWithConfirmation(addHeader(it))
+        }
 
-        form.menuSimpleSkip.addActionListener({
-            loadWithConfirmation(addHeader(Resources.simpleSkip))
-        } as ActionListener)
 
-        form.menuOxdForm.addActionListener({
-            loadWithConfirmation(addHeader(Resources.oxdSampleForm))
-        } as ActionListener)
-
-        form.addWindowListener(new WindowAdapter() {
+        form.frame.addWindowListener(new WindowAdapter() {
             @Override
             void windowClosing(WindowEvent e) {
                 handleWindowCloseOperation(e)
@@ -124,12 +115,12 @@ class FormBinderPresenter {
             System.exit(0)
         }
 
-        def option = JOptionPane.showConfirmDialog(form, "Save File?")
+        def option = JOptionPane.showConfirmDialog(form.frame, "Save File?")
 
         //noinspection GroovyFallthrough
         switch (option) {
             case JOptionPane.CANCEL_OPTION:
-                break;
+                return
             case JOptionPane.OK_OPTION:
                 saveFile()
             default:
@@ -144,7 +135,7 @@ class FormBinderPresenter {
 
 
     void loadWithConfirmation(String markupTxt) {
-        def option = JOptionPane.showConfirmDialog(form, "Are You Sure you want to load this form?", 'Confirm', YES_NO_OPTION)
+        def option = JOptionPane.showConfirmDialog(form.frame, "Are You Sure you want to load this form?", 'Confirm', YES_NO_OPTION)
 
         if (option == JOptionPane.OK_OPTION) {
             mayBeSaveFile()
@@ -159,7 +150,7 @@ class FormBinderPresenter {
         XFormSerializer ser = getSerializer()
         def studyXml = ser.toStudyXml(study)
 
-        def previewFrame = XFormView.initFrame(form)
+        def previewFrame = XFormView.initFrame(form.frame)
         ser.xforms.each { frmName, xml ->
             invokeLater { previewFrame.addLockedEditor("Frm:$frmName.name", xml) }
         }
@@ -178,7 +169,7 @@ class FormBinderPresenter {
 
     void newFile() {
 
-        if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(form, "Are You Sure", 'Confirm', YES_NO_OPTION)) {
+        if (JOptionPane.OK_OPTION != JOptionPane.showConfirmDialog(form.frame, "Are You Sure", 'Confirm', YES_NO_OPTION)) {
             return
         }
 
@@ -188,7 +179,7 @@ class FormBinderPresenter {
     }
 
     private boolean mayBeSaveFile() {
-        if (!doesFileNeedSaving() && JOptionPane.showConfirmDialog(form, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+        if (!doesFileNeedSaving() && JOptionPane.showConfirmDialog(form.frame, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION) {
             currentFile.text = form.txtMarkUp.text
             return true
         }
@@ -211,7 +202,7 @@ class FormBinderPresenter {
 
             jc.fileFilter = xfmFilter
 
-            def option = jc.showSaveDialog(form)
+            def option = jc.showSaveDialog(form.frame)
 
             if (option != JFileChooser.APPROVE_OPTION)
                 return
@@ -238,7 +229,7 @@ class FormBinderPresenter {
         jc.fileFilter = xfmFilter
         if (currentFile)
             jc.selectedFile = currentFile
-        def option = jc.showOpenDialog(form)
+        def option = jc.showOpenDialog(form.frame)
 
         if (option != JFileChooser.APPROVE_OPTION)
             return
@@ -267,7 +258,7 @@ class FormBinderPresenter {
                 }
         ] as FileFilter
         fc.setSelectedFile(new File(study.name))
-        def option = fc.showSaveDialog(form)
+        def option = fc.showSaveDialog(form.frame)
 
 
         if (option != JFileChooser.APPROVE_OPTION)
@@ -294,7 +285,7 @@ class FormBinderPresenter {
         def msg = "Created study file $file.absolutePath\n" +
                 "Created ${ser.xforms.size()} Xform file(s) in folder $formFolder.absolutePath\n" +
                 "Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath"
-        JOptionPane.showMessageDialog(form, msg)
+        JOptionPane.showMessageDialog(form.frame, msg)
     }
 
     File createDirectory(String path) {
@@ -355,7 +346,7 @@ class FormBinderPresenter {
         try {
             closure.call()
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(form, ex.message, 'Error While Generating XML', JOptionPane.ERROR_MESSAGE)
+            JOptionPane.showMessageDialog(form.frame, ex.message, 'Error While Generating XML', JOptionPane.ERROR_MESSAGE)
             ex.printStackTrace()
         }
 
@@ -368,9 +359,7 @@ class FormBinderPresenter {
     }
 
     static main(args) {
-        def form = new FormBinderPresenter()
-        form.form.setVisible(true)
-        MessageConsole.init(form.form)
+        new FormBinderPresenter()
 
     }
 

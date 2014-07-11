@@ -47,7 +47,7 @@ class XFormImporterPresenter {
     }
 
     def show() {
-        ui.show(main.form.location)
+        ui.show(main.form.frame.location)
     }
 
     static boolean isForStudy(def dom) {

@@ -368,4 +368,11 @@ Start time
 @id endtime
 End time
 '''
+
+    static EXAMPLES = [
+            'Simple Form': sampleStudy,
+            'Simple Skip Validation Logic': simpleSkip,
+            'Advanced Skip Logic': advanceSkip,
+            'Oxd Sample Form': oxdSampleForm
+    ]
 }
