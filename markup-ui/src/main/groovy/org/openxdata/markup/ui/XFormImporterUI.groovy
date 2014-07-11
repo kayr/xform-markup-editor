@@ -34,19 +34,23 @@ class XFormImporterUI {
     private void init() {
         s = new SwingBuilder()
 
-//       Toolbar
+//      Toolbar
         def _toolBar = {
             s.panel(constraints: BorderLayout.NORTH) {
+                flowLayout(alignment: FlowLayout.LEFT)
                 button(text: "Browse File",
                         actionPerformed: {
                             loadFile()
                         }
                 )
+
                 button(text: "Process XML",
                         actionPerformed: {
                             Thread.start { presenter.processXml() }
                         }
                 )
+
+                label('Only OpenXData Xform Format Is Supported', foreground: Color.RED)
             }
         }
 
