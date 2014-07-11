@@ -88,12 +88,17 @@ class XFormImporterUI {
     }
 
 
-    Object show() {
-        frame.setVisible(true)
+    Object show(Point location) {
+        invokeLater {
+            frame.setLocation(location)
+            frame.setVisible(true)
+        }
     }
 
 
     Object hide() {
-        frame.setVisible(false)
+        invokeLater {
+            frame.setVisible(false)
+        }
     }
 }

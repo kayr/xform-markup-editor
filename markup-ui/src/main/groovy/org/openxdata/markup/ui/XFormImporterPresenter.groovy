@@ -3,6 +3,7 @@ package org.openxdata.markup.ui
 import org.openxdata.markup.deserializer.StudyDeSerializer
 import org.openxdata.markup.deserializer.XFormDeserializer
 import org.openxdata.markup.serializer.MarkUpSerializer
+import org.openxdata.markup.serializer.MarkupAligner
 
 /**
  * Created by kay on 7/11/14.
@@ -40,12 +41,13 @@ class XFormImporterPresenter {
             def form = ds.toForm()
             markup = "### $form.name\n${MarkUpSerializer.toFormMarkUp(form)}\n"
         }
+        markup = MarkupAligner.align(markup)
         main?.loadWithConfirmation(markup)
         ui.hide()
     }
 
     def show() {
-        ui.show()
+        ui.show(main.form.location)
     }
 
     static boolean isForStudy(def dom) {
