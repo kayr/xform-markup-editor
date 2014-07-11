@@ -34,8 +34,8 @@ class XFormImporterUI {
     private void init() {
         s = new SwingBuilder()
 
-        s.edt {}
-        def _searchPanel = {
+//       Toolbar
+        def _toolBar = {
             s.panel(constraints: BorderLayout.NORTH) {
                 button(text: "Browse File",
                         actionPerformed: {
@@ -50,18 +50,19 @@ class XFormImporterUI {
             }
         }
 
-        def _resultsPanel = {
+//      Text Panel
+        def _txtPanel = {
             s.scrollPane(constraints: BorderLayout.CENTER) {
                 txtXml = textArea()
             }
         }
 
-        frame = s.frame(title: "OXD MarkUp: Import XForm",
+        frame = s.frame(title: "Import XForm - OXD MarkUp",
                 defaultCloseOperation: JFrame.HIDE_ON_CLOSE,
                 size: [500, 400],
                 show: false) {
-            _searchPanel()
-            _resultsPanel()
+            _toolBar()
+            _txtPanel()
         }
     }
 
