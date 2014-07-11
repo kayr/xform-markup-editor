@@ -33,7 +33,7 @@ class MarkUpSerializer {
             }
 
             form.dynamicOptions.each {
-//                renderDynamicOptions(builder, it.key, it.value)
+                renderDynamicOptions(builder, it.key, it.value)
             }
 
             return builder.toString()
@@ -41,9 +41,11 @@ class MarkUpSerializer {
     }
 
     static def renderDynamicOptions(def builder, String id, List<DynamicOption> options) {
-        builder << 'dynamic{'
-
-
+        builder << 'dynamic_instance{'
+        builder << "root,$id"
+        for (o in options) {
+            builder << "$o.parentBinding, $o.markUpText"
+        }
         builder << '}'
 
     }
@@ -65,6 +67,8 @@ class MarkUpSerializer {
         mayBeAddValidationLogic(builder, qn)
 
         if (qn.calculation) builder << "@calculate $qn.calculation"
+
+        if (qn.comment) builder << "@comment $qn.comment"
 
         if (qn instanceof TextQuestion) {
             renderQuestionText builder, qn
@@ -99,6 +103,11 @@ class MarkUpSerializer {
 
 
     private static void renderQuestionText(builder, IQuestion qn) {
+
+        if (qn.type && qn.type != 'string') {
+            builder << "@$qn.type"
+        }
+
         builder << "${qn.required ? '*' : ''}$qn.text"
     }
 

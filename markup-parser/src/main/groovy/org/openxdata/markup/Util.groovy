@@ -155,12 +155,12 @@ class Util {
         if (!option) {
             bind = getBindName(option)
         } else if (option[0] == '$') {
-            def tmpBind = option.find(/[$][a-z][a-z0-9_]*\s/)
+            def tmpBind = option.find(/[$][a-z_][a-z0-9_]*\s/)
             //make sure bind is at the beginning
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
  An Id should start with lower case characters follow by low case characters, numbers or underscores""", line)
-            option = option.replaceFirst(/[$][a-z][a-z0-9_]*/, '').trim()
+            option = option.replaceFirst(/[$][a-z_][a-z0-9_]*/, '').trim()
             bind = tmpBind.trim() - '$'
         } else {
             bind = getBindName(option)

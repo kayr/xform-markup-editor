@@ -52,4 +52,12 @@ class Option implements IOption {
         return option
     }
 
+    String getMarkUpText() {
+        def bindText = Util.getBindName(text)
+
+        if (bindText == bind)
+            return text
+        return '$' + bind + ' ' + text
+    }
+
 }
