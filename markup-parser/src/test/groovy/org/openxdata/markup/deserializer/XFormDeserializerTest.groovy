@@ -9,29 +9,29 @@ import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
 /**
  * Created by kay on 6/7/14.
  */
-class FormDeserializerTest extends GroovyTestCase {
+class XFormDeserializerTest extends GroovyTestCase {
 
 
     void testToForm() {
-        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
         assert form.name == 'Snv Form'
         assert form.id == 'snv_study_snv_form_v1'
     }
 
     void testAddPages() {
-        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
         assert form.pages.size() == 1
         assert form.pages[0].name == 'Page1'
     }
 
     void testNumberOfQuestions() {
-        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
         assert form.allQuestions.size() == 11
         assert extractQuestions(form).size() == 11
     }
 
     void testSingleSelectOption() {
-        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
 
         def question = form.allQuestions.find { it.binding == 'what_is_sex' }
         assert question.class == SingleSelectQuestion
@@ -43,7 +43,7 @@ class FormDeserializerTest extends GroovyTestCase {
     }
 
     void testMultipleSelectOption() {
-        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
 
         def question = form.allQuestions.find { it.binding == 'select_your_diseases' }
         assert question instanceof MultiSelectQuestion
@@ -56,7 +56,7 @@ class FormDeserializerTest extends GroovyTestCase {
     }
 
     void testDynamicOption() {
-        def form = new FormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
 
         assert form.dynamicOptions.size() == 2
 
@@ -97,7 +97,7 @@ class FormDeserializerTest extends GroovyTestCase {
     }
 
     void testDynamicOptionAttributesInQuestions() {
-        def form = new FormDeserializer(xml: Fixtures.xmlFormWithDynamicInstanceIds).parse()
+        def form = new XFormDeserializer(xml: Fixtures.xmlFormWithDynamicInstanceIds).parse()
 
         assert form.dynamicOptions.size() == 1
 
@@ -117,7 +117,7 @@ class FormDeserializerTest extends GroovyTestCase {
         def mkpForm = Util.createParser(Fixtures.oxdSampleForm).study().forms[0]
 
         def xForm = serializer.toXForm(mkpForm)
-        def form = new FormDeserializer(xml: xForm).parse()
+        def form = new XFormDeserializer(xml: xForm).parse()
 
         def questions = form.allQuestions
         assert questions.find { it.binding == 'patient_id' }.type == 'string'
@@ -151,7 +151,7 @@ class FormDeserializerTest extends GroovyTestCase {
     }
 
     void testSkipLogic() {
-        def form = new FormDeserializer(xml: forms.advancedMarkedUp.xform).parse()
+        def form = new XFormDeserializer(xml: forms.advancedMarkedUp.xform).parse()
 
 
         form.printAll(System.out)
@@ -178,7 +178,7 @@ class FormDeserializerTest extends GroovyTestCase {
 
         def originalXform = serializer.toXForm(mkpForm)
 
-        def parsedMarkupFormModel = new FormDeserializer(originalXform).parse()
+        def parsedMarkupFormModel = new XFormDeserializer(originalXform).parse()
 
 
         def otherXform = serializer.toXForm(parsedMarkupFormModel)

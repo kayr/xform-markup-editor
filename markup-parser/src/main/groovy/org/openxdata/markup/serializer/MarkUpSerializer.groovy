@@ -9,18 +9,18 @@ import org.openxdata.markup.*
 class MarkUpSerializer {
 
 
-    static String toStudy(Study study) {
+    static String toStudyMarkup(Study study) {
         use(StringBuildCategory) {
             StringBuilder builder = new StringBuilder()
             builder << "### $study.name"
             study.forms.each {
-                builder << toMarkUp(it)
+                builder << toFormMarkUp(it)
             }
             builder.toString()
         }
     }
 
-    static String toMarkUp(Form form) {
+    static String toFormMarkUp(Form form) {
         use(StringBuildCategory) {
             StringBuilder builder = new StringBuilder()
 

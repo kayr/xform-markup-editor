@@ -63,6 +63,7 @@ public class MarkupForm extends javax.swing.JFrame {
         menuOpen = new javax.swing.JMenuItem();
         menuSave = new javax.swing.JMenuItem();
         menuNew = new javax.swing.JMenuItem();
+        btnImport = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         menuSimpleSkip = new javax.swing.JMenuItem();
         menuAdvancedSkip = new javax.swing.JMenuItem();
@@ -152,6 +153,14 @@ public class MarkupForm extends javax.swing.JFrame {
         menuNew.setText("New");
         fileMenu.add(menuNew);
 
+        btnImport.setText("Import");
+        btnImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportActionPerformed(evt);
+            }
+        });
+        fileMenu.add(btnImport);
+
         menuBar.add(fileMenu);
 
         jMenu1.setText("Examples");
@@ -202,6 +211,10 @@ public class MarkupForm extends javax.swing.JFrame {
 private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateXMLActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_btnGenerateXMLActionPerformed
+
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnImportActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -305,7 +318,10 @@ private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GE
     public JMenuItem getMenuAlign() {
         return menuAlign;
     }
-    
+
+    public JMenuItem getBtnImport() {
+        return btnImport;
+    }
     
     
     
@@ -314,6 +330,7 @@ private void btnGenerateXMLActionPerformed(java.awt.event.ActionEvent evt) {//GE
 	
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateXML;
+    private javax.swing.JMenuItem btnImport;
     private javax.swing.JButton btnShowXml;
     private javax.swing.JCheckBox chkGenerateLayout;
     private javax.swing.JCheckBox chkNumberBindings;

@@ -5,16 +5,16 @@ import org.openxdata.markup.*
 /**
  * Created by kay on 6/7/14.
  */
-class FormDeserializer {
+class XFormDeserializer {
 
     String xml
     def xForm
     Form form
 
-    FormDeserializer() {
+    XFormDeserializer() {
     }
 
-    FormDeserializer(String xml) {
+    XFormDeserializer(String xml) {
         this.xml = xml
     }
 

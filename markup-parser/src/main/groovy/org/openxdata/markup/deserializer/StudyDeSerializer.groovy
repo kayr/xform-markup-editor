@@ -37,7 +37,7 @@ class StudyDeSerializer {
     }
 
     Form toForm(String text) {
-        return new FormDeserializer(xml: text).parse()
+        return new XFormDeserializer(xml: text).parse()
     }
 
 }

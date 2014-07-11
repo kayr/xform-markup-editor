@@ -27,9 +27,10 @@ import static javax.swing.SwingUtilities.invokeLater
  */
 class FormBinderPresenter {
 
+    XFormImporterPresenter xFormImporter
     MarkupForm form
-    javax.swing.filechooser.FileFilter xfmFilter
     File currentFile
+    def xfmFilter
     def allowedAttribs
     def allowedTypes
 
@@ -39,6 +40,7 @@ class FormBinderPresenter {
         form.title = "OXD-Markup"
 
         form.setLocationByPlatform(true);
+        xFormImporter = new XFormImporterPresenter(this)
         init()
     }
 
@@ -47,7 +49,12 @@ class FormBinderPresenter {
         xfmFilter = [
                 accept: { File file -> file.name.endsWith('.xfm') || file.isDirectory() },
                 getDescription: { "XForm Markup Files" }
-        ] as javax.swing.filechooser.FileFilter
+        ] as FileFilter
+
+
+        form.btnImport.addActionListener({
+            executeSafely { xFormImporter.show() }
+        } as ActionListener)
 
         form.btnGenerateXML.addActionListener({ ActionEvent evt ->
             executeSafely { btnGenerateXMLActionPerformed(evt) };
@@ -74,15 +81,15 @@ class FormBinderPresenter {
         } as ActionListener)
 
         form.menuAdvancedSkip.addActionListener({
-            loadSampleWithConfirmation(addHeader(Resources.advanceSkip))
+            loadWithConfirmation(addHeader(Resources.advanceSkip))
         } as ActionListener)
 
         form.menuSimpleSkip.addActionListener({
-            loadSampleWithConfirmation(addHeader(Resources.simpleSkip))
+            loadWithConfirmation(addHeader(Resources.simpleSkip))
         } as ActionListener)
 
         form.menuOxdForm.addActionListener({
-            loadSampleWithConfirmation(addHeader(Resources.oxdSampleForm))
+            loadWithConfirmation(addHeader(Resources.oxdSampleForm))
         } as ActionListener)
 
         form.addWindowListener(new WindowAdapter() {
@@ -119,9 +126,10 @@ class FormBinderPresenter {
 
         def option = JOptionPane.showConfirmDialog(form, "Save File?")
 
+        //noinspection GroovyFallthrough
         switch (option) {
             case JOptionPane.CANCEL_OPTION:
-                return
+                break;
             case JOptionPane.OK_OPTION:
                 saveFile()
             default:
@@ -135,8 +143,7 @@ class FormBinderPresenter {
     }
 
 
-
-    private void loadSampleWithConfirmation(String markupTxt) {
+    void loadWithConfirmation(String markupTxt) {
         def option = JOptionPane.showConfirmDialog(form, "Are You Sure you want to load this form?", 'Confirm', YES_NO_OPTION)
 
         if (option == JOptionPane.OK_OPTION) {

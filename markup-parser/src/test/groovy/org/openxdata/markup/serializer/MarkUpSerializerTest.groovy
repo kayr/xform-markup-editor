@@ -39,7 +39,7 @@ class MarkUpSerializerTest extends GroovyTestCase {
         // get study to xml 1
         def studyXML1 = serializer.toStudyXml(studyObj1)
 
-        def form2 = MarkUpSerializer.toStudy(studyObj1)
+        def form2 = MarkUpSerializer.toStudyMarkup(studyObj1)
 
         // get study xml 2
         def studyObj2 = Util.createParser(form2).study()
