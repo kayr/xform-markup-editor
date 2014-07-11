@@ -114,14 +114,14 @@ class MarkUpSerializer {
     def static serialize(def builder, MultiSelectQuestion qn) {
         renderQuestionText(builder, qn)
         qn.options.each {
-            builder << ">>\$$it.bind $it.text"
+            builder << ">>$it.markUpText"
         }
     }
 
     def static serialize(def builder, SingleSelectQuestion qn) {
         renderQuestionText builder, qn
         qn.options.each {
-            builder << ">\$$it.bind $it.text"
+            builder << ">$it.markUpText"
         }
     }
 
