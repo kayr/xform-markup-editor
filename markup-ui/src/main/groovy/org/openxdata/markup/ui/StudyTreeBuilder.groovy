@@ -7,8 +7,9 @@ import javax.swing.event.TreeSelectionEvent
 import javax.swing.event.TreeSelectionListener
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
-import javax.swing.tree.TreeSelectionModel
 import java.awt.*
+
+import static javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,16 +34,18 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
     def init() {
         rootNode = new DefaultMutableTreeNode("Root Node");
         treeModel = new DefaultTreeModel(rootNode);
-        tree = new JTree(treeModel);
-        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        tree.addTreeSelectionListener(this)
-        tree.setShowsRootHandles(false);
-        JScrollPane scrollPane = new JScrollPane(tree);
-        tree.setFont(new Font(tree.font.name, Font.PLAIN, 11))
-        tree.setCellRenderer(new ToolTipTreeRenderer())
-        ToolTipManager.sharedInstance().registerComponent(tree)
-        add(scrollPane);
 
+        tree = new JTree(treeModel);
+        tree.with {
+            addTreeSelectionListener(owner)
+            selectionModel.selectionMode = SINGLE_TREE_SELECTION
+            showsRootHandles = false
+            font = new Font(font.name, Font.PLAIN, 11)
+            cellRenderer = new ToolTipTreeRenderer()
+        }
+
+        ToolTipManager.sharedInstance().registerComponent(tree)
+        add(new JScrollPane(tree));
     }
 
     public void clear() {
@@ -82,7 +85,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         }
     }
 
-    void showError(String error){
+    void showError(String error) {
         clear()
         rootNode.setUserObject(error)
         tree.setEnabled(false)

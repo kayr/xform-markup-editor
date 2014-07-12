@@ -79,7 +79,7 @@ class MainWindow {
                 }
 
                 scrollPane() {
-                    studyTreeBuilder = widget(new StudyTreeBuilder())
+                    studyTreeBuilder = widget(new StudyTreeBuilder()) as StudyTreeBuilder
                 }
             }
         }

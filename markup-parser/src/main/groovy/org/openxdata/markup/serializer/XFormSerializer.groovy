@@ -17,7 +17,7 @@ class XFormSerializer {
     boolean numberBindings = false
     boolean generateView = true
 
-    def xforms = [:]
+    Map<Form, String> xforms = [:]
     def studyXML
 
     public String toStudyXml(Study study) {

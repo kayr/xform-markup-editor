@@ -150,9 +150,9 @@ class FormBinderPresenter {
         XFormSerializer ser = getSerializer()
         def studyXml = ser.toStudyXml(study)
 
-        def previewFrame = XFormView.initFrame(form.frame)
+        def previewFrame = new XFormsUI(form.frame)
         ser.xforms.each { frmName, xml ->
-            invokeLater { previewFrame.addLockedEditor("Frm:$frmName.name", xml) }
+             previewFrame.addTab("Frm:$frmName.name", xml)
         }
 
 //        invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml) }
