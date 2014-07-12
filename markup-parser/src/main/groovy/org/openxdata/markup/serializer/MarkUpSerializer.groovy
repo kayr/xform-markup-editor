@@ -26,6 +26,8 @@ class MarkUpSerializer {
 
             if (form.id)
                 builder << "@id $form.id"
+            if (form.dbId && form.dbId != '0')
+                builder << "@dbid $form.dbId"
             builder << "## $form.name"
 
             form.pages.each {

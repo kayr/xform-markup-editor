@@ -15,6 +15,7 @@ class Form implements HasQuestions {
     public static final String VARIABLE_REGEX = /[$][:]?[a-zA-Z_][a-zA-Z0-9_]*/
     String name
     String id
+    String dbId
     Study study
 
     List<Page> pages = []

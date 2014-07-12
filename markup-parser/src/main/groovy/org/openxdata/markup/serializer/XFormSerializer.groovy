@@ -76,7 +76,7 @@ class XFormSerializer {
         xml.xforms {
             xml.model {
                 xml.instance(id: form.binding) {
-                    xml."$form.binding"(id: 0, name: form.name, formKey: form.binding) {
+                    xml."$form.binding"(id: form.dbId ?: 0, name: form.name, formKey: form.binding) {
 
                         form.questions.each { question ->
                             def bind = binding(question)

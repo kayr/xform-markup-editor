@@ -38,16 +38,15 @@ scope 						{ Study scopeStudy;}
 		SPACE*
 	;
 
-form returns [Form rv]
+form returns [Form rv = new Form()]
 scope						{Form scopeForm;}
-	:	(attrib = ATTRIBUTE)*	FORMNAME 
+	:	(attrib = ATTRIBUTE{Attrib.addAttributeToForm(rv,attrib.getText(),attrib.getLine());})*
+	    FORMNAME
 						{
-						rv = new Form($FORMNAME.text);
+						rv.setName($FORMNAME.text);
 						$form::scopeForm = rv;
 						rv.setStudy($study::scopeStudy);
-						if(attrib != null)
-						Attrib.addAttributeToForm(rv,attrib.getText(),attrib.getLine());
-						} 
+						}
 
 		(
 		(rpt = repeatQn			{rv.addQuestion(rpt);}

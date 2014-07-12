@@ -74,6 +74,8 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@skipaction" |
   "@validif" |
   "@message" |
+  "@dbid" |
+  "@parent" |
   "dynamic_instance{" |
   "dynamic{"
                                 {

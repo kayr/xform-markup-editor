@@ -23,8 +23,13 @@ class Attrib {
         def params = extractAttribAndParam(attribute)
         def param = params.param
         def lowCaseAttrib = params.attrib
-        if (!(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
-                (!(question instanceof DynamicQuestion) && lowCaseAttrib == 'parent')) {
+
+        //type attributes are only allowed on TextQuestions
+        def invalid = !(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
+                //parent attribute is only allowed on Dynamic Questions
+                (!(question instanceof DynamicQuestion) && lowCaseAttrib == 'parent')
+
+        if (invalid) {
             throw new InvalidAttributeException("Cannot set datatype [$attribute] on a ${question.class.simpleName}", line)
         }
 
@@ -49,13 +54,17 @@ Supported attributes include $types \n$allowedAttributes""", line)
         def attrib = params.attrib
         def param = params.param
 
-        if (attrib != 'id')
-            throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)
-
-        Util.validateId(param, line)
-
-        form.id = param
-
+        switch (attrib) {
+            case 'id':
+                Util.validateId(param, line)
+                form.id = param
+                break
+            case 'dbid':
+                form.dbId = param
+                break
+            default:
+                throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)
+        }
     }
 
     static Map extractAttribAndParam(String attribute) {

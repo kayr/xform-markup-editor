@@ -30,6 +30,8 @@ class XFormDeserializer {
         def instance = xForm.model.instance[0]
         form.id = instance.@id
         form.name = instance.'*'[0].@name
+        def dbId = instance.children()[0].@id
+        form.dbId = dbId
         addDynamicInstances()
         addPages()
         form.allQuestions.each {

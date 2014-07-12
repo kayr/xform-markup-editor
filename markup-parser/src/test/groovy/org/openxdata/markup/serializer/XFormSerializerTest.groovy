@@ -96,6 +96,7 @@ class XFormSerializerTest extends XMLTestCase {
         def form = Util.createParser(Fixtures.formWithId).study().forms[0]
 
         assertEquals 'form_v5', form.id
+        assertEquals '97', form.dbId
 
         def xml = serializer.toXForm(form)
 
