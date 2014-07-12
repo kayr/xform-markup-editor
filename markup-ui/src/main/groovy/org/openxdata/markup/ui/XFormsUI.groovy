@@ -21,7 +21,7 @@ class XFormsUI {
     private def init() {
         s.dialog(size: [525, 352], visible: true, title: 'XForm XML',
                 defaultCloseOperation: WindowConstants.DISPOSE_ON_CLOSE,
-                alwaysOnTop: true, locationRelativeTo: parent) {
+                alwaysOnTop: false, locationRelativeTo: parent) {
             tabs = tabbedPane()
         }
 

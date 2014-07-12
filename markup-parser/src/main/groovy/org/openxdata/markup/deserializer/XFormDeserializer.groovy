@@ -147,7 +147,11 @@ class XFormDeserializer {
     }
 
     static IQuestion addIdMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
-        qn.binding = elem.@bind
+        //repeats do not have a bind attribute
+        if (elem.name() == 'group')
+            qn.binding = elem.@id
+        else
+            qn.binding = elem.@bind
         qn.text = elem.label.text()
         qn.comment = elem.hint.text()
         parent.addQuestion(qn)
@@ -261,7 +265,7 @@ class XFormDeserializer {
         //todo do not resolve binding that have conflicts
         def id = XPathUtil.getNodeName(reference)
         if (Form.findQuestionWithBinding(id, form))
-            return '$' + id
+            return reference.startsWith('/') ? '$' + id : '$:' + id
         return reference
 
     }

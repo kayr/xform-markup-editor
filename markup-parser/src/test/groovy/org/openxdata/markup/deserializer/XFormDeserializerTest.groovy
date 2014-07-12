@@ -3,6 +3,25 @@ package org.openxdata.markup.deserializer
 import org.openxdata.markup.*
 import org.openxdata.markup.serializer.XFormSerializer
 
+import static org.openxdata.markup.Fixtures.getFormRepeatWithAttributesOnRepeats
+import static org.openxdata.markup.Fixtures.getFormUsingRelativeBinds
+import static org.openxdata.markup.Fixtures.getFormWithAbsoluteId
+import static org.openxdata.markup.Fixtures.getFormWithActionAttributes
+import static org.openxdata.markup.Fixtures.getFormWithCSVImport
+import static org.openxdata.markup.Fixtures.getFormWithDynamicInstanceReferences
+import static org.openxdata.markup.Fixtures.getFormWithEndtime
+import static org.openxdata.markup.Fixtures.getFormWithId
+import static org.openxdata.markup.Fixtures.getFormWithMultiplePage
+import static org.openxdata.markup.Fixtures.getFormWithSkipLogic
+import static org.openxdata.markup.Fixtures.getFormWithValidationLogic
+import static org.openxdata.markup.Fixtures.getFormWithValidationOnInnerRepeat
+import static org.openxdata.markup.Fixtures.getMultipleForms
+import static org.openxdata.markup.Fixtures.getNormalPurcform
+import static org.openxdata.markup.Fixtures.getNormalPurcform2
+import static org.openxdata.markup.Fixtures.getOxdSampleForm
+import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
+import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
+import static org.openxdata.markup.Fixtures.setFormDirectory
 import static org.openxdata.markup.Form.extractQuestions
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
 
@@ -11,6 +30,7 @@ import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
  */
 class XFormDeserializerTest extends GroovyTestCase {
 
+    def serializer = new XFormSerializer()
 
     void testToForm() {
         def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
@@ -114,7 +134,7 @@ class XFormDeserializerTest extends GroovyTestCase {
 
     void testTypeResolving() {
         def serializer = new XFormSerializer()
-        def mkpForm = Util.createParser(Fixtures.oxdSampleForm).study().forms[0]
+        def mkpForm = Util.createParser(oxdSampleForm).study().forms[0]
 
         def xForm = serializer.toXForm(mkpForm)
         def form = new XFormDeserializer(xml: xForm).parse()
@@ -172,15 +192,33 @@ class XFormDeserializerTest extends GroovyTestCase {
 
     }
 
-    void testEntireOxdSampleFormRoundTrip() {
-        def serializer = new XFormSerializer()
-        def mkpForm = Util.createParser(Fixtures.oxdSampleForm).study().forms[0]
+    void testTopRoundTrips() {
+        setFormDirectory()
+        testRoundTrip(formWithAbsoluteId)
+        testRoundTrip(multipleForms)
+        testRoundTrip(formWithEndtime)
+        testRoundTrip(oxdSampleForm)
+        testRoundTrip(formUsingRelativeBinds)
+        testRoundTrip(formWithCSVImport)
+        testRoundTrip(formWithDynamicInstanceReferences)
+        testRoundTrip(formWithValidationOnInnerRepeat)
+        testRoundTrip(skipLogicInRepeat)
+        testRoundTrip(skipLogicInRepeat)
+        testRoundTrip(formRepeatWithAttributesOnRepeats)
+        testRoundTrip(formWithMultiplePage)
+        testRoundTrip(formWithSkipLogic)
+        testRoundTrip(formWithActionAttributes)
+        testRoundTrip(formWithValidationLogic)
+        testRoundTrip(normalPurcform)
+        testRoundTrip(formWithId)
+        testRoundTrip(normalPurcform2)
+    }
 
+    void testRoundTrip(String form) {
+        def mkpForm = Util.createParser(form).study().forms[0]
         def originalXform = serializer.toXForm(mkpForm)
 
         def parsedMarkupFormModel = new XFormDeserializer(originalXform).parse()
-
-
         def otherXform = serializer.toXForm(parsedMarkupFormModel)
 
         assertEquals originalXform, otherXform
