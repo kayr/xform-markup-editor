@@ -1,10 +1,11 @@
 package org.openxdata.markup.ui;
 
-import java.io.*;
-import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /*
  *  Create a simple console to display text messages.
@@ -195,7 +196,7 @@ public class MessageConsole {
                 if (isAppend) {
                     int offset = document.getLength();
                     document.insertString(offset, line, attributes);
-                    textComponent.setCaretPosition(document.getLength());
+                    textComponent.setCaretPosition(offset + 2);
                 } else {
                     document.insertString(0, line, attributes);
                     textComponent.setCaretPosition(0);

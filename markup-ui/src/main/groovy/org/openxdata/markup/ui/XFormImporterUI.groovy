@@ -63,7 +63,7 @@ class XFormImporterUI {
 
         frame = s.frame(title: "Import XForm - OXD MarkUp",
                 defaultCloseOperation: JFrame.HIDE_ON_CLOSE,
-                size: [500, 400],
+                size: [500, 400], locationRelativeTo: null,
                 show: false) {
             _toolBar()
             _txtPanel()
@@ -93,9 +93,8 @@ class XFormImporterUI {
     }
 
 
-    Object show(Point location) {
+    Object show() {
         invokeLater {
-            frame.setLocation(location)
             frame.setVisible(true)
         }
     }
