@@ -1,11 +1,9 @@
 package org.openxdata.markup.ui
 
 import jsyntaxpane.actions.ActionUtils
-import org.openxdata.markup.Attrib
-import org.openxdata.markup.IQuestion
-import org.openxdata.markup.Study
-import org.openxdata.markup.Util
+import org.openxdata.markup.*
 import org.openxdata.markup.serializer.MarkupAligner
+import org.openxdata.markup.serializer.ODKSerializer
 import org.openxdata.markup.serializer.XFormSerializer
 
 import javax.swing.*
@@ -75,7 +73,11 @@ class FormBinderPresenter {
         } as ActionListener)
 
         form.btnShowXml.addActionListener({ ActionEvent evt ->
-            Thread.start { executeSafely { showXML() } }
+            Thread.start { executeSafely { showOxdXML() } }
+        } as ActionListener)
+
+        form.btnShowOdkXml.addActionListener({ ActionEvent evt ->
+            Thread.start { executeSafely { showOdkXML() } }
         } as ActionListener)
 
         form.formLoader = {
@@ -144,26 +146,40 @@ class FormBinderPresenter {
         }
     }
 
-    void showXML() {
 
+    void showOxdXML() {
         def study = getParsedStudy()
-        XFormSerializer ser = getSerializer()
-        def studyXml = ser.toStudyXml(study)
-
-        def previewFrame = new XFormsUI(form.frame)
-        ser.xforms.each { frmName, xml ->
-             previewFrame.addTab("Frm:$frmName.name", xml)
-        }
-
-//        invokeLater { previewFrame.addLockedEditor("Study:$study.name", studyXml) }
-
+        XFormSerializer ser = getOxdSerializer()
+        ser.toStudyXml(study)
+        renderXMLPreview(ser.xforms)
     }
 
-    private XFormSerializer getSerializer() {
+    void showOdkXML() {
+        def study = getParsedStudy()
+        def ser = getODKSerializer()
+        ser.toStudyXml(study)
+        renderXMLPreview(ser.xforms)
+    }
+
+    private void renderXMLPreview(Map<Form, String> xforms) {
+        def previewFrame = new XFormsUI(form.frame)
+        xforms.each { frmName, xml ->
+            previewFrame.addTab("Form:$frmName.name", xml)
+        }
+    }
+
+    private XFormSerializer getOxdSerializer() {
         new XFormSerializer(
                 numberQuestions: form.chkNumberLabels.model.isSelected(),
                 numberBindings: form.chkNumberBindings.isSelected(),
                 generateView: form.chkGenerateLayout.isSelected()
+        )
+    }
+
+    private ODKSerializer getODKSerializer() {
+        new ODKSerializer(
+                numberQuestions: form.chkNumberLabels.model.isSelected(),
+                numberBindings: form.chkNumberBindings.isSelected(),
         )
     }
 
@@ -245,7 +261,7 @@ class FormBinderPresenter {
 
         Study study = getParsedStudy()
 
-        XFormSerializer ser = getSerializer()
+        XFormSerializer ser = getOxdSerializer()
         def studyXML = ser.toStudyXml(study)
 
         JFileChooser fc = new JFileChooser()
