@@ -86,10 +86,10 @@ class MarkupAligner {
             printer.println currentLine
 
 
-            if (currentLine.startsWith('repeat{')) {
+            if (currentLine.matches(/repeat\s*\{.*/)) {
                 printer.incrementIndent()
                 printer.println()
-            } else if (currentLine.startsWith('dynamic{') ||currentLine.startsWith('dynamic_instance{') ) {//increase indent
+            } else if (currentLine.matches(/dynamic\s*\{/) ||currentLine.matches(/dynamic_instance\s+\{/) ) {//increase indent
                 printer.incrementIndent()
                 inDynamic = true
             }
@@ -106,8 +106,8 @@ class MarkupAligner {
         return s.startsWith('@') ||
                 s.startsWith('#') ||
                 s.startsWith('//') ||
-                s.startsWith('repeat{') ||
-                s.startsWith('dynamic{')
+                s.matches(/repeat\s*\{.*/) ||
+                s.matches(/dynamic\s*\{/)
 
     }
 

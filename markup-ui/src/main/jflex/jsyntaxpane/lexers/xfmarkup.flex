@@ -85,7 +85,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
    [:digit:]+                   {  return token(TokenType.KEYWORD2); }
 
-  "@comment"                    {
+  "@comment"|"@hint"            {
                                 yybegin(Q_COMMENT);
                                 return token(TokenType.KEYWORD);
                                 }

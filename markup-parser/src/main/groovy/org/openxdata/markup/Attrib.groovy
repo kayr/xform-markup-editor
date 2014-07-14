@@ -16,7 +16,7 @@ class Attrib {
 
     static
     def allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
-            'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent']
+            'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint']
 
 
     static void addAttribute(IQuestion question, String attribute, int line) {
@@ -87,6 +87,7 @@ Supported attributes include $types \n$allowedAttributes""", line)
                 question.visible = false
                 break
             case 'comment':
+            case 'hint':
                 question.comment = param
                 break
             case 'id':

@@ -8,6 +8,7 @@ import static java.lang.System.err
 /**
  * Created by kay on 7/13/14.
  */
+//todo add an extra attribute value e.g appearance numbers @+apperaance numbers
 class ODKSerializer {
 
     boolean numberQuestions = false
@@ -18,10 +19,6 @@ class ODKSerializer {
 
 
     ODKSerializer() {}
-
-    ODKSerializer(Study study) {
-        this.study = study
-    }
 
     public String toStudyXml(Study study) {
         def printWriter = new StringWriter();
