@@ -63,6 +63,9 @@ class ODKSerializer {
                         }
                     }
 
+                    //DYNAMIC MODEL
+                    buildDynamicModel(x, form)
+
                     //BINDINGS
                     form.allQuestions.each {
                         addBindNode(x, it)
@@ -139,8 +142,6 @@ class ODKSerializer {
 
         if (type.type) map.type = type.type
 
-        if (type.format) map.format = type.format
-
         if (question.isRequired()) map.required = "true()"
 
         if (question.isReadOnly()) map.readonly = "true()"
@@ -198,15 +199,27 @@ class ODKSerializer {
         }
     }
 
-    void buildLayout(MarkupBuilder xml, IQuestion question) {
+    void buildLayout(MarkupBuilder x, IQuestion question) {
         def qnType = getQuestionType(question)
-        if (qnType.type == 'xsd:base64Binary') {
-            xml.upload(ref: absoluteBinding(question), mediatype: "${qnType.format}/*") {
-                buildQuestionLabelAndHint(xml, question)
+        if (question.type == 'boolean') {
+            x."select1"(ref: absoluteBinding(question)) {
+                buildQuestionLabelAndHint(x, question)
+                x.item {
+                    label('Yes')
+                    value('true')
+                }
+                x.item {
+                    label('No')
+                    value('false')
+                }
+            }
+        } else if (qnType.type == 'binary') {
+            x.upload(ref: absoluteBinding(question), mediatype: "${qnType.format}/*") {
+                buildQuestionLabelAndHint(x, question)
             }
         } else {
-            xml.input(ref: absoluteBinding(question)) {
-                buildQuestionLabelAndHint(xml, question)
+            x.input(ref: absoluteBinding(question)) {
+                buildQuestionLabelAndHint(x, question)
             }
         }
     }
@@ -214,13 +227,11 @@ class ODKSerializer {
     void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
 
         xml.select1(ref: absoluteBinding(question)) {
-            //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
-            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$question.parentForm.binding')/${getDynamicParentQnId(question)}]") {
-                xml.label(ref: 'label')
+            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/dynamiclist/item[@parent=${getDynamicParentQnId(question)}]") {
                 xml.value(ref: 'value')
+                xml.label(ref: 'label')
             }
-
         }
     }
 
@@ -235,7 +246,6 @@ class ODKSerializer {
                     xml.value(option.bind)
                 }
             }
-
         }
     }
 
@@ -254,8 +264,8 @@ class ODKSerializer {
 
     private String getDynamicParentQnId(DynamicQuestion question) {
         if (numberBindings)
-            return question.indexedParentQuestionId
-        return question.parentQuestionId
+            return question.indexedAbsParentBinding
+        return question.absParentBinding
     }
 
     void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
@@ -269,21 +279,23 @@ class ODKSerializer {
     static Map getQuestionType(IQuestion question) {
         switch (question.type) {
             case 'video':
-                return [type: 'xsd:base64Binary', format: 'video']
+                return [type: 'binary', format: 'video']
             case 'picture':
-                return [type: 'xsd:base64Binary', format: 'image']
+                return [type: 'binary', format: 'image']
             case 'audio':
-                return [type: 'xsd:base64Binary', format: 'audio']
+                return [type: 'binary', format: 'audio']
             case 'number':
-                return [type: 'xsd:int']
+                return [type: 'int']
             case 'gps':
-                return [type: 'xsd:string', format: 'gps']
+                return [type: 'string', format: 'gps']
             case 'repeat':
                 return [:]
             case 'longtext':
-                return [type: 'xsd:string']
+                return [type: 'string']
+            case 'boolean':
+                return [type: 'string']
             default:
-                return [type: "xsd:$question.type"]
+                return [type: "$question.type"]
 
         }
     }

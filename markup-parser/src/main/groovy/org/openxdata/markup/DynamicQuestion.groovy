@@ -50,4 +50,12 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
     String getIndexedParentQuestionId() {
         return Form.findQuestionWithBinding(parentQuestionId, parentForm).indexedBinding
     }
+
+    String getIndexedAbsParentBinding() {
+        return Form.findQuestionWithBinding(parentQuestionId, parentForm).indexedAbsoluteBinding
+    }
+
+    String getAbsParentBinding() {
+        return Form.findQuestionWithBinding(parentQuestionId, parentForm).absoluteBinding
+    }
 }
