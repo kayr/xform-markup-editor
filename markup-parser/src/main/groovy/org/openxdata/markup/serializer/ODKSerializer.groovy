@@ -56,7 +56,7 @@ class ODKSerializer {
                 'h:title'(form.name)
                 model {
 
-                    // INSTANCE
+                    //INSTANCE
                     instance {
                         x."${vb form.binding}"(id: form.dbId ?: 0, name: form.name) {
                             buildInstance(x, form)
@@ -151,7 +151,6 @@ class ODKSerializer {
         if (question.skipLogic) {
             def xpath = getAbsoluteBindingXPath(question.skipLogic, question)
             map.relevant = xpath
-//            map.action = question.skipAction
         }
 
         if (question.validationLogic) {
@@ -174,7 +173,7 @@ class ODKSerializer {
         }
     }
 
-    void buildDynamicModel(MarkupBuilder xml, Form form) {
+    void buildDynamicModel(MarkupBuilder x, Form form) {
         def completeBinds = []
         form.allQuestions.each { question ->
             if (!(question instanceof DynamicQuestion))
@@ -183,15 +182,15 @@ class ODKSerializer {
             if (completeBinds.contains(question.dynamicInstanceId))
                 return
 
-            xml.instance(id: question.dynamicInstanceId) {
+            x.instance(id: question.dynamicInstanceId) {
                 completeBinds << question.dynamicInstanceId
-                xml.dynamiclist {
+                x.dynamiclist {
 
                     List<DynamicOption> options = question.options
                     options.each { option ->
-                        xml.item(id: option.bind, parent: option.parentBinding) {
-                            xml.label(option.child)
-                            xml.value(option.bind)
+                        x.item(id: option.bind, parent: option.parentBinding) {
+                            x.label(option.child)
+                            x.value(option.bind)
                         }
                     }
                 }
