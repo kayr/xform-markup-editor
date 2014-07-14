@@ -286,7 +286,7 @@ class ODKSerializer {
             case 'number':
                 return [type: 'int']
             case 'gps':
-                return [type: 'string', format: 'gps']
+                return [type: 'geopoint', format: 'gps']
             case 'repeat':
                 return [:]
             case 'longtext':
