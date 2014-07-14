@@ -17,7 +17,6 @@ class ODKSerializer {
     Study study
     def studyXML
 
-
     ODKSerializer() {}
 
     public String toStudyXml(Study study) {
@@ -74,7 +73,7 @@ class ODKSerializer {
             // CONTROLS AND WIDGETS
             'h:body' {
                 form.pages.eachWithIndex { page, idx ->
-                    x.group(id: idx + 1) {
+                    x.group {
                         x.label(page.name)
                         buildQuestionsLayout(page, x)
                     }
@@ -151,7 +150,7 @@ class ODKSerializer {
         if (question.skipLogic) {
             def xpath = getAbsoluteBindingXPath(question.skipLogic, question)
             map.relevant = xpath
-            map.action = question.skipAction
+//            map.action = question.skipAction
         }
 
         if (question.validationLogic) {
@@ -173,7 +172,6 @@ class ODKSerializer {
             buildLayout(xml, q)
         }
     }
-
 
     void buildDynamicModel(MarkupBuilder xml, Form form) {
         def completeBinds = []
@@ -200,30 +198,22 @@ class ODKSerializer {
         }
     }
 
-
     void buildLayout(MarkupBuilder xml, IQuestion question) {
         def qnType = getQuestionType(question)
         if (qnType.type == 'xsd:base64Binary') {
-            xml.upload(bind: binding(question), mediatype: "${qnType.format}/*") {
+            xml.upload(ref: absoluteBinding(question), mediatype: "${qnType.format}/*") {
                 buildQuestionLabelAndHint(xml, question)
             }
-        } else
-            xml.input(bind: binding(question)) {
+        } else {
+            xml.input(ref: absoluteBinding(question)) {
                 buildQuestionLabelAndHint(xml, question)
             }
-    }
-
-    void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
-
-        def label = question.getText(numberQuestions)
-        xml.label(label)
-        if (question.comment)
-            xml.hint(question.comment)
+        }
     }
 
     void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
 
-        xml.select1(bind: binding(question)) {
+        xml.select1(ref: absoluteBinding(question)) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
             xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$question.parentForm.binding')/${getDynamicParentQnId(question)}]") {
@@ -234,19 +224,13 @@ class ODKSerializer {
         }
     }
 
-    private String getDynamicParentQnId(DynamicQuestion question) {
-        if (numberBindings)
-            return question.indexedParentQuestionId
-        return question.parentQuestionId
-    }
-
     void buildLayout(MarkupBuilder xml, ISelectionQuestion question) {
 
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
-        xml."select$selectRef"(bind: binding(question)) {
+        xml."select$selectRef"(ref: absoluteBinding(question)) {
             buildQuestionLabelAndHint(xml, question)
             question.options.each { option ->
-                xml.item(id: option.bind) {
+                xml.item {
                     xml.label(option.text)
                     xml.value(option.bind)
                 }
@@ -255,10 +239,9 @@ class ODKSerializer {
         }
     }
 
-
     void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
 
-        xml.group(id: binding(question)) {
+        xml.group(ref: absoluteBinding(question)) {
             buildQuestionLabelAndHint(xml, question)
 
             xml.repeat(bind: binding(question)) {
@@ -267,6 +250,20 @@ class ODKSerializer {
 
             }
         }
+    }
+
+    private String getDynamicParentQnId(DynamicQuestion question) {
+        if (numberBindings)
+            return question.indexedParentQuestionId
+        return question.parentQuestionId
+    }
+
+    void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
+
+        def label = question.getText(numberQuestions)
+        xml.label(label)
+        if (question.comment)
+            xml.hint(question.comment)
     }
 
     static Map getQuestionType(IQuestion question) {
