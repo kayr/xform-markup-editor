@@ -8,7 +8,11 @@ import static java.lang.System.err
 /**
  * Created by kay on 7/13/14.
  */
-//todo add an extra attribute value e.g appearance numbers @+apperaance numbers
+//todo add an extra attribute value e.g appearance numbers @+apperaance + for layout numbers @+ for binds
+//todo support for notes @note
+//todo support for yes,no, or other
+//todo support for ${TEMPLATES}
+//todo support for
 class ODKSerializer {
 
     boolean numberQuestions = false
@@ -113,8 +117,8 @@ class ODKSerializer {
 
     private String getAbsoluteBindingXPath(String xPath, IQuestion question) {
         if (numberBindings)
-            return Form.getIndexedAbsoluteBindingXPath(xPath, question)
-        return Form.getAbsoluteBindingXPath(xPath, question)
+            return Form.getIndexedAbsoluteBindingXPath(xPath, question, [allowRelativePath: false])
+        return Form.getAbsoluteBindingXPath(xPath, question, [allowRelativePath: false])
     }
 
     private String absoluteBinding(IQuestion question) {
@@ -144,9 +148,10 @@ class ODKSerializer {
 
         if (question.isRequired()) map.required = "true()"
 
-        if (question.isReadOnly()) map.readonly = "true()"
-
-        if (!question.isVisible()) map.visible = "false()"
+        //ODK does not not understand visible and invisible
+        //also a question cannot be both required and disabled
+        if (question.isReadOnly() && !question.isRequired()) map.readonly = "true()"
+        if (!question.isVisible() && !question.isRequired()) map.readonly = "true()"
 
         if (question.skipLogic) {
             def xpath = getAbsoluteBindingXPath(question.skipLogic, question)

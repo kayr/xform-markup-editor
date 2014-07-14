@@ -68,28 +68,32 @@ class Form implements HasQuestions {
         }
     }
 
-    public static String getAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
+    public static String getAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
+        def logicType = config.logicType ?: 'XPATH'
+        def allAllowRelativePath = config.allAllowRelativePath ?: true
         xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def actualBinding = (it - '$') - ':'
             def tmpQn = findQuestionWithBinding(actualBinding, question.parent)
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]", question.line)
             //TODO Remember to check the XPATH for any $ signs and notify the user
-            def binding = it.contains(':') ? tmpQn.relativeBinding : tmpQn.absoluteBinding
+            def binding = it.contains(':') && allAllowRelativePath ? tmpQn.relativeBinding : tmpQn.absoluteBinding
             return binding
         }
         xpath = xpath.replace('$.', question.absoluteBinding)
         return xpath
     }
 
-    public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, String logicType = 'XPATH') {
+    public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
+        def logicType = config.logicType ?: 'XPATH'
+        def allAllowRelativePath = config.allAllowRelativePath ?: true
         xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def actualBinding = (it - '$') - ':'
             def tmpQn = findQuestionWithBinding(actualBinding, question.parent)
             if (!tmpQn)
                 throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]", question.line)
 
-            def binding = it.contains(':') ? tmpQn.indexedRelativeBinding : tmpQn.indexedAbsoluteBinding
+            def binding = it.contains(':') && allAllowRelativePath ? tmpQn.indexedRelativeBinding : tmpQn.indexedAbsoluteBinding
             return binding
         }
         xpath = xpath.replace('$.', question.indexedAbsoluteBinding)
@@ -157,7 +161,7 @@ class Form implements HasQuestions {
     }
 
     static String validateXpath(String xpath, IQuestion question, String logicType) {
-        xpath = getAbsoluteBindingXPath(xpath, question, logicType)
+        xpath = getAbsoluteBindingXPath(xpath, question, [logicType:logicType])
         try {
             XPathParser parser = Util.createXpathParser(xpath)
             parser.eval()
