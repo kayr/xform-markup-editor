@@ -23,9 +23,24 @@ class ODKSerializerTest extends GroovyTestCase {
         assertEquals toODK(timeStamp.form, true), timeStamp.xml
     }
 
+    void testFormWithRelativeValidation() {
+        assertEquals toODK(formRelativeValidation.form), formRelativeValidation.xml
+    }
+
     void testOxdSampleForm() {
-        println toODK(oxdSampleForm.form, true)
-//        assertEquals toODK(timeStamp.form,true), timeStamp.xml
+        assertEquals toODK(oxdSampleForm.form, true), oxdSampleForm.xml
+    }
+
+    void testRegex() {
+        ['length(.) = 4': '4',
+                'length(.) = "kdjjsd"': null,
+                'length(.) = "kdjjsd" and 5 = 6': null,
+                'length(.) = /ef/fr': '/ef/fr',
+                'length(.) = ef/fr': '/ef/fr'
+        ].each { reg ->
+            def jrCount = ODKSerializer.getOXDJRCountOnRepeatValidation(reg.key)
+            assertEquals reg.value, jrCount
+        }
     }
 
 

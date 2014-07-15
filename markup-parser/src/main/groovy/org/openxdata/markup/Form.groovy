@@ -70,7 +70,7 @@ class Form implements HasQuestions {
 
     public static String getAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
         def logicType = config.logicType ?: 'XPATH'
-        def allAllowRelativePath = config.allAllowRelativePath ?: true
+        boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
         xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def actualBinding = (it - '$') - ':'
             def tmpQn = findQuestionWithBinding(actualBinding, question.parent)
@@ -86,7 +86,7 @@ class Form implements HasQuestions {
 
     public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
         def logicType = config.logicType ?: 'XPATH'
-        def allAllowRelativePath = config.allAllowRelativePath ?: true
+        boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
         xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def actualBinding = (it - '$') - ':'
             def tmpQn = findQuestionWithBinding(actualBinding, question.parent)

@@ -1,7 +1,9 @@
 package org.openxdata.markup.serializer
 
 import groovy.xml.MarkupBuilder
+import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.*
+import org.openxdata.xpath.XPathParser
 
 import static java.lang.System.err
 
@@ -285,7 +287,19 @@ class ODKSerializer {
 
     void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
 
-        xml.group(ref: absoluteBinding(question)) {
+        def attr = [ref: absoluteBinding(question)]
+        if (oxdConversion) {
+            //oxd uses validation to control size of repeat while odk uses jr:count
+            def logic = question.getValidationLogic()
+            if (logic) {
+                logic = getAbsoluteBindingXPath(logic, question)
+                def jrCount = getOXDJRCountOnRepeatValidation(logic)
+                if (jrCount) attr['jr:count'] = jrCount
+            }
+
+        }
+
+        xml.group(attr) {
             buildQuestionLabelAndHint(xml, question)
 
             xml.repeat(bind: binding(question)) {
@@ -294,6 +308,33 @@ class ODKSerializer {
 
             }
         }
+    }
+
+    static String getOXDJRCountOnRepeatValidation(String reg) {
+        XPathUtil xp = new XPathUtil(reg)
+
+        def children = xp.tree.children
+
+        if (children?.size() > 0) {
+            CommonTree left = children[0] as CommonTree
+            CommonTree right = children[1] as CommonTree
+
+            def leftSide = left.emitTailString()
+
+            if (leftSide != 'length.')
+                return null
+
+            if (right.isPath()) {
+                def path = right.emitTailString()
+                path = path.startsWith('/') ? path : "/$path"
+                return path
+            }
+
+            if (right.token.type == XPathParser.NUMBER)
+                return right.emitTailString()
+
+        }
+        return null
     }
 
     private String getDynamicParentQnId(DynamicQuestion question) {
