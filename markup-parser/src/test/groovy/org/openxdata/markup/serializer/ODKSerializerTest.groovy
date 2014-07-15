@@ -1,31 +1,36 @@
 package org.openxdata.markup.serializer
 
-import org.openxdata.markup.Fixtures
-import org.openxdata.markup.Study
+import org.openxdata.markup.Form
 import org.openxdata.markup.Util
+
+import static org.openxdata.markup.serializer.ODKFixtures.*
 
 /**
  * Created by kay on 7/13/14.
  */
 class ODKSerializerTest extends GroovyTestCase {
-    private Study study
     def serializer = new ODKSerializer();
 
-    void setUp() {
+    void testReadonlyAndInvisibleIsConvertedToReadonly() {
+        println toODK(formWithInvisible.form)
+        assertEquals toODK(formWithInvisible.form), formWithInvisible.xml
+    }
 
-        def parser = Util.createParser(Fixtures.normalPurcform)
-        study = parser.study()
-
+    void testReadonlyAndSkipLogicAreProcessedOk() {
+        println toODK(formWithSkipLogicAndReadOnly.form)
+        assertEquals toODK(formWithSkipLogicAndReadOnly.form), formWithSkipLogicAndReadOnly.xml
     }
 
 
-    void testToXForm() {
-        def form = study.forms[0]
+    String toODK(String markup) {
+        toODK(toForm(markup))
+    }
 
-        def xml = serializer.toXForm(form)
+    static Form toForm(String markup) {
+        Util.createParser(markup).study().forms[0]
+    }
 
-        println xml
-
-//        assertEquals Fixtures.expectedXForm, xml
+    String toODK(Form form) {
+        serializer.toXForm(form)
     }
 }

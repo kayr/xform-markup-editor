@@ -150,11 +150,22 @@ class ODKSerializer {
 
         //ODK does not not understand visible and invisible
         //also a question cannot be both required and disabled
-        if (question.isReadOnly() && !question.isRequired()) map.readonly = "true()"
-        if (!question.isVisible() && !question.isRequired()) map.readonly = "true()"
+        if (question.isReadOnly()) map.readonly = "true()"
+        if (!question.isVisible()) map.readonly = "true()"
 
         if (question.skipLogic) {
             def xpath = getAbsoluteBindingXPath(question.skipLogic, question)
+
+            //odk also does not support skipLogic and readonly in one rule
+            //oxd will generally will override this parameter with its action attribute
+            //however odk has no actions state switching so users will get stack on this
+            //question
+            map.remove('readonly')
+
+            //odk does not have actions so hideif or disableif should be negated
+            if (question.skipAction == 'disable' || question.skipAction == 'hide')
+                xpath = "not($xpath)"
+
             map.relevant = xpath
         }
 
