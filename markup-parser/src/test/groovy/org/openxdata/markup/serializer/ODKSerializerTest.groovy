@@ -12,25 +12,33 @@ class ODKSerializerTest extends GroovyTestCase {
     def serializer = new ODKSerializer();
 
     void testReadonlyAndInvisibleIsConvertedToReadonly() {
-        println toODK(formWithInvisible.form)
         assertEquals toODK(formWithInvisible.form), formWithInvisible.xml
     }
 
     void testReadonlyAndSkipLogicAreProcessedOk() {
-        println toODK(formWithSkipLogicAndReadOnly.form)
         assertEquals toODK(formWithSkipLogicAndReadOnly.form), formWithSkipLogicAndReadOnly.xml
     }
 
+    void testStartTimeAnd() {
+        assertEquals toODK(timeStamp.form, true), timeStamp.xml
+    }
 
-    String toODK(String markup) {
-        toODK(toForm(markup))
+    void testOxdSampleForm() {
+        println toODK(oxdSampleForm.form, true)
+//        assertEquals toODK(timeStamp.form,true), timeStamp.xml
+    }
+
+
+    String toODK(String markup, boolean oxd = false) {
+        toODK(toForm(markup), oxd)
     }
 
     static Form toForm(String markup) {
         Util.createParser(markup).study().forms[0]
     }
 
-    String toODK(Form form) {
+    String toODK(Form form, boolean oxd = false) {
+        serializer.oxdConversion = oxd
         serializer.toXForm(form)
     }
 }

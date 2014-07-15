@@ -17,11 +17,16 @@ class ODKSerializer {
 
     boolean numberQuestions = false
     boolean numberBindings = false
+    boolean oxdConversion = false
     Map<Form, String> xforms = [:]
     Study study
     def studyXML
 
     ODKSerializer() {}
+
+    ODKSerializer(boolean oxdConversion) {
+        this.oxdConversion = oxdConversion
+    }
 
     public String toStudyXml(Study study) {
         def printWriter = new StringWriter();
@@ -180,7 +185,21 @@ class ODKSerializer {
             map.calculate = xpath
         }
 
+        if (oxdConversion) {
+            doPostProcessingForOxd(question, map)
+        }
+
         xml.bind(map)
+    }
+
+    static private doPostProcessingForOxd(IQuestion question, Map attr) {
+        def binding = question.binding
+        def type = question.type
+        if (binding == 'endtime' && (type == 'dateTime' || type == 'time')) {
+            attr['jr:preload'] = 'timestamp'
+            attr['jr:preloadParams'] = 'end'
+        }
+
     }
 
     private void buildQuestionsLayout(HasQuestions page, MarkupBuilder xml) {
