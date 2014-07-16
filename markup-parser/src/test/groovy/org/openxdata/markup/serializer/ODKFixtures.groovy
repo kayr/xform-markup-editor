@@ -30,16 +30,13 @@ Disabled
           <disabled />
         </std_frm_v1>
       </instance>
-      <bind id="invisible" nodeset="/std_frm_v1/invisible" type="string" readonly="true()" />
+      <bind id="invisible" nodeset="/std_frm_v1/invisible" type="string" />
       <bind id="disabled" nodeset="/std_frm_v1/disabled" type="string" readonly="true()" />
     </model>
   </h:head>
   <h:body>
     <group>
       <label>Page1</label>
-      <input ref="/std_frm_v1/invisible">
-        <label>Invisible</label>
-      </input>
       <input ref="/std_frm_v1/disabled">
         <label>Disabled</label>
       </input>
@@ -82,8 +79,8 @@ Are you a father DisableIF
       </instance>
       <bind id="sex" nodeset="/std_frm_v1/sex" type="string" />
       <bind id="is_pregnant" nodeset="/std_frm_v1/is_pregnant" type="string" relevant="/std_frm_v1/sex = 'f'" />
-      <bind id="are_you_a_father_hideif" nodeset="/std_frm_v1/are_you_a_father_hideif" type="string" relevant="not(/std_frm_v1/sex = 'f')" />
-      <bind id="are_you_a_father_disableif" nodeset="/std_frm_v1/are_you_a_father_disableif" type="string" relevant="not(/std_frm_v1/sex = 'f')" />
+      <bind id="are_you_a_father_hideif" nodeset="/std_frm_v1/are_you_a_father_hideif" type="string" readonly="true()" relevant="not(/std_frm_v1/sex = 'f')" />
+      <bind id="are_you_a_father_disableif" nodeset="/std_frm_v1/are_you_a_father_disableif" type="string" readonly="true()" relevant="not(/std_frm_v1/sex = 'f')" />
     </model>
   </h:head>
   <h:body>
@@ -525,6 +522,182 @@ Some number
       </input>
       <input ref="/dd_dsd_v1/some_number">
         <label>Some number</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>'''
+    ]
+
+    static def formSkipLogicAndActions = [
+            form: '''### d
+
+## f
+
+Sex
+>m
+>f
+
+@showif $sex = 'f\'
+[was visible] Are you pregnamt [to @showif $sex = 'f']
+
+@hideif $sex = 'm\'
+[was visible] Are you pregnamt [to @hideif $sex = 'm']
+
+@enableif $sex = 'f\'
+[was visible] Are you pregnamt [to @enableif $sex = 'f']
+
+@disableif $sex = 'm\'
+[was visible] Are you pregnamt [to @disableif $sex = 'm']
+
+@invisible
+@showif $sex = 'f\'
+[was invisible] Are you pregnamt [to @showif $sex = 'f']
+
+@invisible
+@hideif $sex = 'm\'
+[was invisible] Are you pregnamt [to @hideif $sex = 'm']
+
+@invisible
+@enableif $sex = 'f\'
+[was invisible] Are you pregnamt [to @enableif $sex = 'f']
+
+@invisible
+@disableif $sex = 'm\'
+[was invisible] Are you pregnamt [to @disableif $sex = 'm']
+
+@showif $sex = 'f\'
+[was enable] Are you pregnamt [to @showif $sex = 'f']
+
+@hideif $sex = 'm\'
+[was enable] Are you pregnamt [to @hideif $sex = 'm']
+
+@enableif $sex = 'f\'
+[was enable] Are you pregnamt [to @enableif $sex = 'f']
+
+@disableif $sex = 'm\'
+[was enable] Are you pregnamt [to @disableif $sex = 'm']
+
+@readonly
+@showif $sex = 'f\'
+[was readonly] Are you pregnamt [to @showif $sex = 'f']
+
+@readonly
+@hideif $sex = 'm\'
+[was readonly] Are you pregnamt [to @hideif $sex = 'm']
+
+@readonly
+@enableif $sex = 'f\'
+[was readonly] Are you pregnamt [to @enableif $sex = 'f']
+
+@readonly
+@disableif $sex = 'm\'
+[was readonly] Are you pregnamt [to @disableif $sex = 'm']
+'''  ,
+            xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>f</h:title>
+    <model>
+      <instance>
+        <d_f_v1 id="0" name="f">
+          <_1sex />
+          <_2was_visible_are_you_pregnamt_to_showif_sex_eq_f />
+          <_3was_visible_are_you_pregnamt_to_hideif_sex_eq_m />
+          <_4was_visible_are_you_pregnamt_to_enableif_sex_eq_f />
+          <_5was_visible_are_you_pregnamt_to_disableif_sex_eq_m />
+          <_6was_invisible_are_you_pregnamt_to_showif_sex_eq_f />
+          <_7was_invisible_are_you_pregnamt_to_hideif_sex_eq_m />
+          <_8was_invisible_are_you_pregnamt_to_enableif_sex_eq_f />
+          <_9was_invisible_are_you_pregnamt_to_disableif_sex_eq_m />
+          <_10was_enable_are_you_pregnamt_to_showif_sex_eq_f />
+          <_11was_enable_are_you_pregnamt_to_hideif_sex_eq_m />
+          <_12was_enable_are_you_pregnamt_to_enableif_sex_eq_f />
+          <_13was_enable_are_you_pregnamt_to_disableif_sex_eq_m />
+          <_14was_readonly_are_you_pregnamt_to_showif_sex_eq_f />
+          <_15was_readonly_are_you_pregnamt_to_hideif_sex_eq_m />
+          <_16was_readonly_are_you_pregnamt_to_enableif_sex_eq_f />
+          <_17was_readonly_are_you_pregnamt_to_disableif_sex_eq_m />
+        </d_f_v1>
+      </instance>
+      <bind id="_1sex" nodeset="/d_f_v1/_1sex" type="string" />
+      <bind id="_2was_visible_are_you_pregnamt_to_showif_sex_eq_f" nodeset="/d_f_v1/_2was_visible_are_you_pregnamt_to_showif_sex_eq_f" type="string" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_3was_visible_are_you_pregnamt_to_hideif_sex_eq_m" nodeset="/d_f_v1/_3was_visible_are_you_pregnamt_to_hideif_sex_eq_m" type="string" relevant="not(/d_f_v1/_1sex = 'm')" />
+      <bind id="_4was_visible_are_you_pregnamt_to_enableif_sex_eq_f" nodeset="/d_f_v1/_4was_visible_are_you_pregnamt_to_enableif_sex_eq_f" type="string" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_5was_visible_are_you_pregnamt_to_disableif_sex_eq_m" nodeset="/d_f_v1/_5was_visible_are_you_pregnamt_to_disableif_sex_eq_m" type="string" relevant="not(/d_f_v1/_1sex = 'm')" />
+      <bind id="_6was_invisible_are_you_pregnamt_to_showif_sex_eq_f" nodeset="/d_f_v1/_6was_invisible_are_you_pregnamt_to_showif_sex_eq_f" type="string" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_7was_invisible_are_you_pregnamt_to_hideif_sex_eq_m" nodeset="/d_f_v1/_7was_invisible_are_you_pregnamt_to_hideif_sex_eq_m" type="string" relevant="not(/d_f_v1/_1sex = 'm')" />
+      <bind id="_8was_invisible_are_you_pregnamt_to_enableif_sex_eq_f" nodeset="/d_f_v1/_8was_invisible_are_you_pregnamt_to_enableif_sex_eq_f" type="string" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_9was_invisible_are_you_pregnamt_to_disableif_sex_eq_m" nodeset="/d_f_v1/_9was_invisible_are_you_pregnamt_to_disableif_sex_eq_m" type="string" relevant="not(/d_f_v1/_1sex = 'm')" />
+      <bind id="_10was_enable_are_you_pregnamt_to_showif_sex_eq_f" nodeset="/d_f_v1/_10was_enable_are_you_pregnamt_to_showif_sex_eq_f" type="string" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_11was_enable_are_you_pregnamt_to_hideif_sex_eq_m" nodeset="/d_f_v1/_11was_enable_are_you_pregnamt_to_hideif_sex_eq_m" type="string" relevant="not(/d_f_v1/_1sex = 'm')" />
+      <bind id="_12was_enable_are_you_pregnamt_to_enableif_sex_eq_f" nodeset="/d_f_v1/_12was_enable_are_you_pregnamt_to_enableif_sex_eq_f" type="string" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_13was_enable_are_you_pregnamt_to_disableif_sex_eq_m" nodeset="/d_f_v1/_13was_enable_are_you_pregnamt_to_disableif_sex_eq_m" type="string" relevant="not(/d_f_v1/_1sex = 'm')" />
+      <bind id="_14was_readonly_are_you_pregnamt_to_showif_sex_eq_f" nodeset="/d_f_v1/_14was_readonly_are_you_pregnamt_to_showif_sex_eq_f" type="string" readonly="true()" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_15was_readonly_are_you_pregnamt_to_hideif_sex_eq_m" nodeset="/d_f_v1/_15was_readonly_are_you_pregnamt_to_hideif_sex_eq_m" type="string" readonly="true()" relevant="not(/d_f_v1/_1sex = 'm')" />
+      <bind id="_16was_readonly_are_you_pregnamt_to_enableif_sex_eq_f" nodeset="/d_f_v1/_16was_readonly_are_you_pregnamt_to_enableif_sex_eq_f" type="string" relevant="/d_f_v1/_1sex = 'f'" />
+      <bind id="_17was_readonly_are_you_pregnamt_to_disableif_sex_eq_m" nodeset="/d_f_v1/_17was_readonly_are_you_pregnamt_to_disableif_sex_eq_m" type="string" readonly="true()" relevant="not(/d_f_v1/_1sex = 'm')" />
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label>Page1</label>
+      <select1 ref="/d_f_v1/_1sex">
+        <label>1. Sex</label>
+        <item>
+          <label>m</label>
+          <value>m</value>
+        </item>
+        <item>
+          <label>f</label>
+          <value>f</value>
+        </item>
+      </select1>
+      <input ref="/d_f_v1/_2was_visible_are_you_pregnamt_to_showif_sex_eq_f">
+        <label>2. [was visible] Are you pregnamt [to @showif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_3was_visible_are_you_pregnamt_to_hideif_sex_eq_m">
+        <label>3. [was visible] Are you pregnamt [to @hideif $sex = 'm']</label>
+      </input>
+      <input ref="/d_f_v1/_4was_visible_are_you_pregnamt_to_enableif_sex_eq_f">
+        <label>4. [was visible] Are you pregnamt [to @enableif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_5was_visible_are_you_pregnamt_to_disableif_sex_eq_m">
+        <label>5. [was visible] Are you pregnamt [to @disableif $sex = 'm']</label>
+      </input>
+      <input ref="/d_f_v1/_6was_invisible_are_you_pregnamt_to_showif_sex_eq_f">
+        <label>6. [was invisible] Are you pregnamt [to @showif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_7was_invisible_are_you_pregnamt_to_hideif_sex_eq_m">
+        <label>7. [was invisible] Are you pregnamt [to @hideif $sex = 'm']</label>
+      </input>
+      <input ref="/d_f_v1/_8was_invisible_are_you_pregnamt_to_enableif_sex_eq_f">
+        <label>8. [was invisible] Are you pregnamt [to @enableif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_9was_invisible_are_you_pregnamt_to_disableif_sex_eq_m">
+        <label>9. [was invisible] Are you pregnamt [to @disableif $sex = 'm']</label>
+      </input>
+      <input ref="/d_f_v1/_10was_enable_are_you_pregnamt_to_showif_sex_eq_f">
+        <label>10. [was enable] Are you pregnamt [to @showif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_11was_enable_are_you_pregnamt_to_hideif_sex_eq_m">
+        <label>11. [was enable] Are you pregnamt [to @hideif $sex = 'm']</label>
+      </input>
+      <input ref="/d_f_v1/_12was_enable_are_you_pregnamt_to_enableif_sex_eq_f">
+        <label>12. [was enable] Are you pregnamt [to @enableif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_13was_enable_are_you_pregnamt_to_disableif_sex_eq_m">
+        <label>13. [was enable] Are you pregnamt [to @disableif $sex = 'm']</label>
+      </input>
+      <input ref="/d_f_v1/_14was_readonly_are_you_pregnamt_to_showif_sex_eq_f">
+        <label>14. [was readonly] Are you pregnamt [to @showif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_15was_readonly_are_you_pregnamt_to_hideif_sex_eq_m">
+        <label>15. [was readonly] Are you pregnamt [to @hideif $sex = 'm']</label>
+      </input>
+      <input ref="/d_f_v1/_16was_readonly_are_you_pregnamt_to_enableif_sex_eq_f">
+        <label>16. [was readonly] Are you pregnamt [to @enableif $sex = 'f']</label>
+      </input>
+      <input ref="/d_f_v1/_17was_readonly_are_you_pregnamt_to_disableif_sex_eq_m">
+        <label>17. [was readonly] Are you pregnamt [to @disableif $sex = 'm']</label>
       </input>
     </group>
   </h:body>

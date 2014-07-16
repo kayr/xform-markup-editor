@@ -12,11 +12,11 @@ class ODKSerializerTest extends GroovyTestCase {
     def serializer = new ODKSerializer();
 
     void testReadonlyAndInvisibleIsConvertedToReadonly() {
-        assertEquals toODK(formWithInvisible.form), formWithInvisible.xml
+        assertEquals formWithInvisible.xml, toODK(formWithInvisible.form)
     }
 
     void testReadonlyAndSkipLogicAreProcessedOk() {
-        assertEquals toODK(formWithSkipLogicAndReadOnly.form), formWithSkipLogicAndReadOnly.xml
+        assertEquals formWithSkipLogicAndReadOnly.xml, toODK(formWithSkipLogicAndReadOnly.form)
     }
 
     void testStartTimeAnd() {
@@ -24,11 +24,17 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testFormWithRelativeValidation() {
-        assertEquals toODK(formRelativeValidation.form), formRelativeValidation.xml
+        assertEquals formRelativeValidation.xml, toODK(formRelativeValidation.form)
     }
 
     void testOxdSampleForm() {
-        assertEquals toODK(oxdSampleForm.form, true), oxdSampleForm.xml
+        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, true)
+    }
+
+    void testSkipActionsAndLogic() {
+        serializer.numberBindings = true
+        serializer.numberQuestions = true
+        assertEquals formSkipLogicAndActions.xml, toODK(formSkipLogicAndActions.form, true)
     }
 
     void testRegex() {
