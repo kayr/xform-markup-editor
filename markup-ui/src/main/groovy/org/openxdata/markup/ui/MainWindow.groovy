@@ -65,7 +65,9 @@ class MainWindow {
                 chkNumberBindings = checkBox(text: 'Number IDs')
                 chkNumberLabels = checkBox(text: 'Number Labels')
                 chkGenerateLayout = checkBox(text: 'Generate Layout')
-                chkEmulateOXDConversion = checkBox(text: 'Emulate OXD Conversion')
+                chkEmulateOXDConversion = checkBox(text: 'Emulate OXD to ODK', toolTipText:
+                        'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
+                                'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
             }
         }
 

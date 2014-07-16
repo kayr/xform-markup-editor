@@ -129,7 +129,7 @@ class ODKSerializer {
     def makeXPathCompatible(String xPath, IQuestion question) {
         try {
             if (oxdConversion)
-                return ODKXpathUtil.makeODKCompatibleXPath(question.parentForm, xPath)
+                return ODKXpathUtil.makeODKCompatibleXPath(question.parentForm, xPath,numberBindings)
         } catch (Exception x) {
             //ignore
         }

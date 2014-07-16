@@ -44,7 +44,7 @@ public class ODKXpathUtil {
      * @param xpath
      * @return
      */
-    static String makeODKCompatibleXPath(Form form, String xpath) {
+    static String makeODKCompatibleXPath(Form form, String xpath, boolean numberedBindings) {
         XPathUtil xp = new XPathUtil(xpath)
 
 
@@ -55,8 +55,6 @@ public class ODKXpathUtil {
                 def start = tree.charPositionInLine + offset
                 //todo y add +1: weird will figure this out later add a one to compensate of ' or "
                 def end = XPathUtil.getLastIndex(tree.parent) + offset + 1
-
-                println "**Inserting $compatibleExpr into ($start,$end)"
                 builder.replace(start, end, compatibleExpr)
             }
         }
@@ -64,11 +62,18 @@ public class ODKXpathUtil {
         def filter = {
             if (!it.isPath())
                 return false
-            def qn = form.getQuestion(XPathUtil.getNodeName(it.emitTailString()))
+            def qnBinding = XPathUtil.getNodeName(it.emitTailString())
+            if (numberedBindings)
+                qnBinding = removeIndex(qnBinding)
+            def qn = form.getQuestion(qnBinding)
             return qn != null && qn instanceof MultiSelectQuestion
         }
         return xp.tranformXPath(filter, transFormer)
 
+    }
+
+    private static String removeIndex(String binding) {
+        return binding.replaceFirst(/(^_[0-9]+)/, '')
     }
 
     static String makeMultiSelectCompatibleExpression(CommonTree tree, String xpath) {
