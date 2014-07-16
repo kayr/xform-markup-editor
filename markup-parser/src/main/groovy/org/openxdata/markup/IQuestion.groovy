@@ -51,6 +51,8 @@ interface IQuestion {
 
     HasQuestions getParent()
 
+    Form getParentForm()
+
     String getSkipLogic()
 
     String getSkipAction()

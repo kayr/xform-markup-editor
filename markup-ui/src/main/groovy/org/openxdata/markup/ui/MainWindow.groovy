@@ -59,12 +59,13 @@ class MainWindow {
 
                 flowLayout(alignment: FlowLayout.LEFT, hgap: 1)
 
-                btnGenerateXML = button(text: "Export OXD (Study)", actionPerformed: {})
+                btnGenerateXML = button(text: "Export OXD Study", actionPerformed: {})
                 btnShowXml = button(text: "Show XML OXD", actionPerformed: {})
                 btnShowOdkXml = button(text: "Show XML ODK", actionPerformed: {})
                 chkNumberBindings = checkBox(text: 'Number IDs')
-                chkNumberLabels = checkBox(text: 'Number Number Labels')
+                chkNumberLabels = checkBox(text: 'Number Labels')
                 chkGenerateLayout = checkBox(text: 'Generate Layout')
+                chkEmulateOXDConversion = checkBox(text: 'Emulate OXD Conversion')
             }
         }
 
@@ -147,6 +148,7 @@ class MainWindow {
     JCheckBox chkGenerateLayout
     JCheckBox chkNumberBindings
     JCheckBox chkNumberLabels
+    JCheckBox chkEmulateOXDConversion
     JLabel lblCaret
 
     //menus

@@ -91,6 +91,28 @@ class XPathUtil {
         return buf.toString()
     }
 
+    String tranformXPath(Closure filter, Closure transformer) {
+        if (!xpath) return null
+
+        try {
+            def builder = new StringBuilder(xpath)
+            def trees = this.findAll(filter)
+
+
+            //todo do some caching to improve performance
+            trees.inject(0) { Integer offset, def tree ->
+                int oldSize = builder.size()
+                transformer(builder, tree, offset)
+                return builder.size() - oldSize + offset
+            }
+            return builder.toString()
+        } catch (Exception x) {
+            System.err.println("!!!!: Failed to process xpath: [$xpath]: [$x]")
+            x.printStackTrace()
+            return xpath
+        }
+    }
+
     static {
         CommonTree.metaClass.findResults = { Closure clos ->
             XPathUtil.findResultsImpl(delegate, clos)

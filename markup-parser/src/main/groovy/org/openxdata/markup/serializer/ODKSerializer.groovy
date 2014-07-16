@@ -1,9 +1,7 @@
 package org.openxdata.markup.serializer
 
 import groovy.xml.MarkupBuilder
-import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.*
-import org.openxdata.xpath.XPathParser
 
 import static java.lang.System.err
 
@@ -124,8 +122,18 @@ class ODKSerializer {
 
     private String getAbsoluteBindingXPath(String xPath, IQuestion question) {
         if (numberBindings)
-            return Form.getIndexedAbsoluteBindingXPath(xPath, question, [allowRelativePath: false])
-        return Form.getAbsoluteBindingXPath(xPath, question, [allowRelativePath: false])
+            return makeXPathCompatible(Form.getIndexedAbsoluteBindingXPath(xPath, question, [allowRelativePath: false]), question)
+        return makeXPathCompatible(Form.getAbsoluteBindingXPath(xPath, question, [allowRelativePath: false]), question)
+    }
+
+    def makeXPathCompatible(String xPath, IQuestion question) {
+        try {
+            if (oxdConversion)
+                return ODKXpathUtil.makeODKCompatibleXPath(question.parentForm, xPath)
+        } catch (Exception x) {
+            //ignore
+        }
+        return xPath
     }
 
     private String absoluteBinding(IQuestion question) {
@@ -294,7 +302,7 @@ class ODKSerializer {
             def logic = question.getValidationLogic()
             if (logic) {
                 logic = getAbsoluteBindingXPath(logic, question)
-                def jrCount = getOXDJRCountOnRepeatValidation(logic)
+                def jrCount = ODKXpathUtil.getOXDJRCountOnRepeatValidation(logic)
                 if (jrCount) attr['jr:count'] = jrCount
             }
 
@@ -311,32 +319,7 @@ class ODKSerializer {
         }
     }
 
-    static String getOXDJRCountOnRepeatValidation(String reg) {
-        XPathUtil xp = new XPathUtil(reg)
 
-        def children = xp.tree.children
-
-        if (children?.size() > 0) {
-            CommonTree left = children[0] as CommonTree
-            CommonTree right = children[1] as CommonTree
-
-            def leftSide = left.emitTailString()
-
-            if (leftSide != 'length.')
-                return null
-
-            if (right.isPath()) {
-                def path = right.emitTailString()
-                path = path.startsWith('/') ? path : "/$path"
-                return path
-            }
-
-            if (right.token.type == XPathParser.NUMBER)
-                return right.emitTailString()
-
-        }
-        return null
-    }
 
     private String getDynamicParentQnId(DynamicQuestion question) {
         if (numberBindings)

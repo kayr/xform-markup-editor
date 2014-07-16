@@ -240,7 +240,9 @@ class XFormDeserializer {
 
             //todo do some caching to improve performance
             paths.inject(0) { Integer offset, Map path ->
+                int oldSize = builder.size()
                 processPath(xpath, builder, path, offset)
+                return builder.size() - oldSize + offset
             }
             return builder.toString()
         } catch (Exception x) {
@@ -250,13 +252,12 @@ class XFormDeserializer {
         }
     }
 
-    private int processPath(String xpath, StringBuilder builder, Map path, int offset) {
+    private void processPath(String xpath, StringBuilder builder, Map path, int offset) {
         String pathArea = xpath.substring(path.start, path.end)
         String newPath = getReference(pathArea)
         if (pathArea != newPath) {
             builder.replace(path.start - offset, path.end - offset, newPath)
         }
-        return pathArea.size() - newPath.size() + offset
     }
 
     private String getReference(String reference) {

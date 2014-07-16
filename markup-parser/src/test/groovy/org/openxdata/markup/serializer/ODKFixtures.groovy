@@ -704,4 +704,23 @@ Sex
 </h:html>'''
     ]
 
+    static def multiSelectConversion = [
+            form: '''### s
+## f
+
+Subjects
+>>Physics
+>>Calculus
+>>Biology
+
+@enableif $subjects = 'physics'
+@id ps
+Physics Score
+
+@enableif $subjects = 'calculus' and ($ps != null or (3-4) = 9) and $subjects = 'biology'
+Other Qn
+
+'''
+    ]
+
 }

@@ -31,6 +31,10 @@ class ODKSerializerTest extends GroovyTestCase {
         assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, true)
     }
 
+    void testMultiSelectConversion() {
+        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, true)
+    }
+
     void testSkipActionsAndLogic() {
         serializer.numberBindings = true
         serializer.numberQuestions = true
@@ -44,8 +48,34 @@ class ODKSerializerTest extends GroovyTestCase {
                 'length(.) = /ef/fr': '/ef/fr',
                 'length(.) = ef/fr': '/ef/fr'
         ].each { reg ->
-            def jrCount = ODKSerializer.getOXDJRCountOnRepeatValidation(reg.key)
+            def jrCount = ODKXpathUtil.getOXDJRCountOnRepeatValidation(reg.key)
             assertEquals reg.value, jrCount
+        }
+    }
+
+    void testToODKMultiSelect() {
+        Form form = toForm(multiSelectConversion.form)
+
+        [
+                '$subjects = \'calculus\' and ($ps != null or (3-4) = 9 or $subjects = \'grades\') and $subjects = \'biology\'':
+                        "selected(/s_f_v1/subjects, 'calculus') and (/s_f_v1/ps != null or (3-4) = 9 or selected(/s_f_v1/subjects, 'grades')) and selected(/s_f_v1/subjects, 'biology')",
+                '$subjects = \'calculus\' and $subjects != \'biology\'':
+                        "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology'))",
+                '$subjects = \'calculus\' and $subjects != \'biology,calculus,math\'':
+                        "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology') and selected(/s_f_v1/subjects, 'calculus') and selected(/s_f_v1/subjects, 'math'))",
+                '$ps = \'calculus\' and $subjects > \'biology\'':
+                        "/s_f_v1/ps = 'calculus' and /s_f_v1/subjects > 'biology'",
+                '$subjects = calc() and $ps = true':
+                        '/s_f_v1/subjects = calc() and /s_f_v1/ps = true',
+                '$subjects = calc() and ($subjects = "calculus" or $subjects != "calculus" and ($subjects != "calculus"))and $ps = true and $subjects != "calculus"':
+                        "/s_f_v1/subjects = calc() and (selected(/s_f_v1/subjects, 'calculus') or not(selected(/s_f_v1/subjects, 'calculus')) and (not(selected(/s_f_v1/subjects, 'calculus'))))and /s_f_v1/ps = true and not(selected(/s_f_v1/subjects, 'calculus'))",
+        ].each {
+            println('evaluating: ' + it.key)
+            def path = Form.getAbsoluteBindingXPath(it.key, form.getQuestion('ps'))
+            println(path)
+            assertEquals it.value, ODKXpathUtil.makeODKCompatibleXPath(form, path)
+
+            println()
         }
     }
 

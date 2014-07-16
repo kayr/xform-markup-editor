@@ -1,0 +1,17 @@
+status,action,result,remains readonly
+visible,hide,#enableif not condtion
+visible,disable,#enableif not condtion
+visible,show,#enableif condition
+visible,enable,#enableif condition
+readonly,hide,#NA ,TRUE
+readonly,disable,#NA ,TRUE
+readonly,show,#enableif condition,FALSE
+readonly,enable,#enableif condition,FALSE
+invisible,hide,#NA
+invisible,disable,#NA
+invisible,show,#enableif condition
+invisible,enable,#enableif condition
+enable,hide,#enableif not condtion
+enable,disable,#enableif not condtion
+enable,show,#enableif condition
+enable,enable,#enableif condition
