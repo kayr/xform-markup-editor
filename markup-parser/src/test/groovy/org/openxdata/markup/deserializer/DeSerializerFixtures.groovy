@@ -175,6 +175,35 @@ Has armpain
       <label>Has armpain</label>
     </input>
   </group>
-</xforms>''']
-    ]
+</xforms>'''],
+            wssbForm: [
+                    markUp: '''
+### Tripple Study
+## WSSB Members
+
+
+@id wssbq5_1
+*who do you contact when you have a techincal problem on your scheme
+>$scheme scheme attendant
+>$technician Technician
+>$hpm HPM
+>Don't Know
+
+@id wssbq5_2
+@showif $wssbq5_1 = 'scheme' or $wssbq5_1='hpm' or $wssbq5_1='hpm\' and $wssbq5_1='hpm\'or $wssbq5_1='technician\'
+@comment When your water facility stops working, how many days does it on average take for a HPM to come and do an assessment, once you have reported the problem?
+*How many days does it take for this person to make an assessment  on reported problems
+>1
+>2
+>3
+>4
+>5
+>6-10
+>10 and above
+>Dont know
+
+'''
+            ]]
+
+
 }

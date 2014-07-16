@@ -256,7 +256,7 @@ class XFormDeserializer {
         String pathArea = xpath.substring(path.start, path.end)
         String newPath = getReference(pathArea)
         if (pathArea != newPath) {
-            builder.replace(path.start - offset, path.end - offset, newPath)
+            builder.replace(path.start + offset, path.end + offset, newPath)
         }
     }
 

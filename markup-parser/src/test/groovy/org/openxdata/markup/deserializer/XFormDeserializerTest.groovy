@@ -23,6 +23,7 @@ import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
 import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
 import static org.openxdata.markup.Fixtures.setFormDirectory
 import static org.openxdata.markup.Form.extractQuestions
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.forms
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
 
 /**
@@ -212,6 +213,8 @@ class XFormDeserializerTest extends GroovyTestCase {
         testRoundTrip(normalPurcform)
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
+        serializer.numberBindings = true
+        testRoundTrip(forms.wssbForm.markUp)
     }
 
     void testRoundTrip(String form) {
@@ -219,6 +222,7 @@ class XFormDeserializerTest extends GroovyTestCase {
         def originalXform = serializer.toXForm(mkpForm)
 
         def parsedMarkupFormModel = new XFormDeserializer(originalXform).parse()
+        serializer.numberBindings = false
         def otherXform = serializer.toXForm(parsedMarkupFormModel)
 
         assertEquals originalXform, otherXform
