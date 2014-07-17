@@ -321,7 +321,7 @@ Prefilled Date
       <bind id="sub_hyphen_region" nodeset="/example_study2_example_form2_v1/sub_hyphen_region" type="string" />
       <bind id="city" nodeset="/example_study2_example_form2_v1/city" type="string" />
       <bind id="children_number" nodeset="/example_study2_example_form2_v1/children_number" type="string" />
-      <bind id="details_of_children" nodeset="/example_study2_example_form2_v1/details_of_children" constraint="length(.) = /example_study2_example_form2_v1/children_number" jr:constraintMsg="Enter details of all children" />
+      <bind id="details_of_children" nodeset="/example_study2_example_form2_v1/details_of_children" constraint="count(.) = /example_study2_example_form2_v1/children_number" jr:constraintMsg="Enter details of all children" />
       <bind id="name" nodeset="/example_study2_example_form2_v1/details_of_children/name" type="string" />
       <bind id="age" nodeset="/example_study2_example_form2_v1/details_of_children/age" type="int" />
       <bind id="child_sex" nodeset="/example_study2_example_form2_v1/details_of_children/child_sex" type="string" />
@@ -452,9 +452,9 @@ Prefilled Date
       <input ref="/example_study2_example_form2_v1/children_number">
         <label>Number of children</label>
       </input>
-      <group ref="/example_study2_example_form2_v1/details_of_children" jr:count="/example_study2_example_form2_v1/children_number">
+      <group>
         <label>Details of Children</label>
-        <repeat bind="details_of_children">
+        <repeat nodeset="/example_study2_example_form2_v1/details_of_children" jr:count="/example_study2_example_form2_v1/children_number">
           <input ref="/example_study2_example_form2_v1/details_of_children/name">
             <label>Name</label>
           </input>
@@ -721,6 +721,95 @@ Physics Score
 Other Qn
 
 '''
+    ]
+
+    static def booleanConversion = [
+            form: '''### s
+
+## f
+
+Subjects
+>>Physics
+>>Calculus
+>>Biology
+
+@boolean
+@id c
+Continue
+
+@enableif $c=true and $c < gone() or /r/g > 9 and /p/e <= 8
+Q1
+
+@enableif  $c!=true and $c < gone() or /r/g > 9 and /p/e <= 8
+Q2
+
+
+
+@enableif   $subjects = 'cal' and (/c/ps != null or (3-4) = 9 or  $c!=true) and $c=true
+Q3
+
+
+''' , xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>f</h:title>
+    <model>
+      <instance>
+        <s_f_v1 id="0" name="f">
+          <subjects />
+          <c />
+          <q1 />
+          <q2 />
+          <q3 />
+        </s_f_v1>
+      </instance>
+      <bind id="subjects" nodeset="/s_f_v1/subjects" type="string" />
+      <bind id="c" nodeset="/s_f_v1/c" type="string" />
+      <bind id="q1" nodeset="/s_f_v1/q1" type="string" relevant="/s_f_v1/c = 'true' and /s_f_v1/c &lt; gone() or /r/g &gt; 9 and /p/e &lt;= 8" />
+      <bind id="q2" nodeset="/s_f_v1/q2" type="string" relevant="/s_f_v1/c != 'true' and /s_f_v1/c &lt; gone() or /r/g &gt; 9 and /p/e &lt;= 8" />
+      <bind id="q3" nodeset="/s_f_v1/q3" type="string" relevant="selected(/s_f_v1/subjects, 'cal') and (/c/ps != null or (3-4) = 9 or /s_f_v1/c != 'true') and /s_f_v1/c = 'true'" />
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label>Page1</label>
+      <select ref="/s_f_v1/subjects">
+        <label>Subjects</label>
+        <item>
+          <label>Physics</label>
+          <value>physics</value>
+        </item>
+        <item>
+          <label>Calculus</label>
+          <value>calculus</value>
+        </item>
+        <item>
+          <label>Biology</label>
+          <value>biology</value>
+        </item>
+      </select>
+      <select1 ref="/s_f_v1/c">
+        <label>Continue</label>
+        <item>
+          <label>Yes</label>
+          <value>true</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>false</value>
+        </item>
+      </select1>
+      <input ref="/s_f_v1/q1">
+        <label>Q1</label>
+      </input>
+      <input ref="/s_f_v1/q2">
+        <label>Q2</label>
+      </input>
+      <input ref="/s_f_v1/q3">
+        <label>Q3</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>'''
     ]
 
 }

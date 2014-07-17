@@ -4,7 +4,8 @@ import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.Form
 import org.openxdata.markup.MultiSelectQuestion
 import org.openxdata.markup.XPathUtil
-import org.openxdata.xpath.XPathParser
+
+import static org.openxdata.xpath.XPathParser.*
 
 /**
  * Created by kay on 7/16/14.
@@ -31,7 +32,7 @@ public class ODKXpathUtil {
                 return path
             }
 
-            if (right.token.type == XPathParser.NUMBER)
+            if (right.token.type == NUMBER)
                 return right.emitTailString()
 
         }
@@ -39,17 +40,18 @@ public class ODKXpathUtil {
     }
 
     /**
-     * This method mainly deals with multi-selects
+     * This method mainly deals with multi-selects.
      * @param form
      * @param xpath
      * @return
      */
+    //todo Consider using Regex instead of ANTLR
     static String makeODKCompatibleXPath(Form form, String xpath, boolean numberedBindings) {
         XPathUtil xp = new XPathUtil(xpath)
 
 
         def transFormer = { StringBuilder builder, CommonTree tree, int offset ->
-            def compatibleExpr = makeMultiSelectCompatibleExpression(tree, xpath)
+            def compatibleExpr = makeSelectionACompatibleExpression(tree, xpath)
             if (compatibleExpr) {
 
                 def start = tree.charPositionInLine + offset
@@ -66,7 +68,7 @@ public class ODKXpathUtil {
             if (numberedBindings)
                 qnBinding = removeIndex(qnBinding)
             def qn = form.getQuestion(qnBinding)
-            return qn != null && qn instanceof MultiSelectQuestion
+            return qn != null && (qn instanceof MultiSelectQuestion || qn.type?.equalsIgnoreCase('boolean'))
         }
         return xp.tranformXPath(filter, transFormer)
 
@@ -76,27 +78,33 @@ public class ODKXpathUtil {
         return binding.replaceFirst(/(^_[0-9]+)/, '')
     }
 
-    static String makeMultiSelectCompatibleExpression(CommonTree tree, String xpath) {
+    static String makeSelectionACompatibleExpression(CommonTree tree, String xpath) {
         def parent = tree.getParent() as CommonTree
 
         //make sure we have a path and literal
         List<CommonTree> children = parent.children
         def isPathAndLiteral = children.any { it.isPath() } &&
-                children.any { it.token.type == XPathParser.LITERAL }
+                children.any { it.token.type == LITERAL }
 
-        if (!isPathAndLiteral) return null
+        def isPathAndBoolean = children.any { it.isPath() } &&
+                children.any {
+                    def lastChild = XPathUtil.getLastChild(it)
+                    it.children.size() == 1 && (lastChild.type == TRUE || lastChild.type == FALSE)
+                }
+
+        if (!(isPathAndBoolean || isPathAndLiteral)) return null
 
         //we only convert != and =
-        if (parent.token.type == XPathParser.EQ || parent.token.type == XPathParser.NEQ) {
+        if (parent.token.type == EQ || parent.token.type == NEQ) {
             def start = tree.charPositionInLine
             def end = XPathUtil.getLastIndex(parent)
             def multiSelectEqExpr = xpath.substring(start, end + 1)
-            return convertToSelectedOrNotSelected(multiSelectEqExpr)
+            return transformToProperSelection(multiSelectEqExpr)
         }
         return null
     }
 
-    static String convertToSelectedOrNotSelected(String expr) {
+    static String transformToProperSelection(String expr) {
         //this is based on a assumption that '!' or '=' can never be in bindings
         def parts = expr.split(/[!]*=/)
 
@@ -104,24 +112,31 @@ public class ODKXpathUtil {
         def right = parts[1]
 
         // make sure right is a literal otherwise Swap
-        if (left.startsWith("'") || left.startsWith('"')) {
+        if (left.startsWith("'") || left.startsWith('"') || left.equals('true') || left.equals('false')) {
             (left, right) = [right, left]
         }
 
-        def rightParts = right.replaceAll(/('|")/, '').trim().split(',')
-        StringBuilder builder = new StringBuilder()
 
-        int maxParts = rightParts.size()
-        rightParts.eachWithIndex { String part, int i ->
-            builder.append("selected($left, '$part')")
-            if (i < maxParts - 1)
-                builder.append(' and ')
+        def isBooleanSelect = right == 'true' || right == 'false'
+
+        if (isBooleanSelect) {
+            return expr.contains('!') ? "$left != '$right'" : "$left = '$right'"
+        } else {
+            def rightParts = right.replaceAll(/('|")/, '').trim().split(',')
+            StringBuilder builder = new StringBuilder()
+
+            int maxParts = rightParts.size()
+            rightParts.eachWithIndex { String part, int i ->
+                builder.append("selected($left, '$part')")
+                if (i < maxParts - 1)
+                    builder.append(' and ')
+            }
+
+            if (expr.contains('!'))
+                return "not(${builder.toString()})"
+
+            return builder.toString()
         }
-
-        if (expr.contains('!'))
-            return "not(${builder.toString()})"
-
-        return builder.toString()
     }
 
 

@@ -23,8 +23,11 @@ import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
 import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
 import static org.openxdata.markup.Fixtures.setFormDirectory
 import static org.openxdata.markup.Form.extractQuestions
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.advancedMarkedUp
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.forms
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.gpsForm
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.wssbForm
 
 /**
  * Created by kay on 6/7/14.
@@ -172,7 +175,7 @@ class XFormDeserializerTest extends GroovyTestCase {
     }
 
     void testSkipLogic() {
-        def form = new XFormDeserializer(xml: forms.advancedMarkedUp.xform).parse()
+        def form = new XFormDeserializer(xml: advancedMarkedUp.xform).parse()
 
 
         form.printAll(System.out)
@@ -188,7 +191,7 @@ class XFormDeserializerTest extends GroovyTestCase {
         XFormSerializer ser = new XFormSerializer()
 
         String newForm = ser.toXForm(form)
-        String oldForm = forms.advancedMarkedUp.xform
+        String oldForm = advancedMarkedUp.xform
         assertEquals oldForm, newForm
 
     }
@@ -214,7 +217,8 @@ class XFormDeserializerTest extends GroovyTestCase {
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
         serializer.numberBindings = true
-        testRoundTrip(forms.wssbForm.markUp)
+        testRoundTrip(wssbForm.markUp)
+        testRoundTrip(gpsForm.markUp)
     }
 
     void testRoundTrip(String form) {

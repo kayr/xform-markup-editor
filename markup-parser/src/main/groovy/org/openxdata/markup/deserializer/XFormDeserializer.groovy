@@ -276,10 +276,10 @@ class XFormDeserializer {
 
         if (!binding) return 'string'
 
-        def type = binding.@type.text()?.replaceFirst('xsd:', '')
+        String type = binding.@type.text()?.replaceFirst('xsd:', '')
         def format = binding.@format
 
-        if (Attrib.types.contains(type)) {
+        if (Attrib.types.contains(type) || type?.equalsIgnoreCase('string')) {
             return format?.isEmpty() ? type : format;
         }
 

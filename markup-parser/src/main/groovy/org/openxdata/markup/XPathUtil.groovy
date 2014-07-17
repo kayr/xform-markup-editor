@@ -42,6 +42,13 @@ class XPathUtil {
         return trees.get(trees.size() - 1).token.stop
     }
 
+    static Tree getLastChild(Tree tree) {
+        List trees = tree.findAll { Tree t ->
+            t.childCount == 0
+        }
+        return trees.get(trees.size() - 1)
+    }
+
     static String getNodeName(String path) {
         new File(path).name
     }

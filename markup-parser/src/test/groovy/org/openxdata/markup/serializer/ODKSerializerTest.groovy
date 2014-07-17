@@ -73,10 +73,14 @@ class ODKSerializerTest extends GroovyTestCase {
             println('evaluating: ' + it.key)
             def path = Form.getAbsoluteBindingXPath(it.key, form.getQuestion('ps'))
             println(path)
-            assertEquals it.value, ODKXpathUtil.makeODKCompatibleXPath(form, path,false)
+            assertEquals it.value, ODKXpathUtil.makeODKCompatibleXPath(form, path, false)
 
             println()
         }
+    }
+
+    void testBooleanConversion() {
+        assertEquals toODK(booleanConversion.form, true), booleanConversion.xml
     }
 
 

@@ -5,9 +5,8 @@ package org.openxdata.markup.deserializer
  */
 class DeSerializerFixtures {
 
-    static forms = [
-            advancedMarkedUp: [
-                    markUp: '''### Study
+    static def advancedMarkedUp = [
+            markUp: '''### Study
 
 
 ## Form
@@ -175,9 +174,9 @@ Has armpain
       <label>Has armpain</label>
     </input>
   </group>
-</xforms>'''],
-            wssbForm: [
-                    markUp: '''
+</xforms>''']
+    static def wssbForm = [
+            markUp: '''
 ### Tripple Study
 ## WSSB Members
 
@@ -203,7 +202,24 @@ Has armpain
 >Dont know
 
 '''
-            ]]
+    ]
+
+    static def gpsForm = [markUp: ''' ### F
+
+## f
+
+@gps
+Gp1
+
+repeat {    ffd
+    @gps
+    Gp2
+
+    @Gps
+    Gp3
+
+}
+''']
 
 
 }

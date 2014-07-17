@@ -129,7 +129,7 @@ class ODKSerializer {
     def makeXPathCompatible(String xPath, IQuestion question) {
         try {
             if (oxdConversion)
-                return ODKXpathUtil.makeODKCompatibleXPath(question.parentForm, xPath,numberBindings)
+                return ODKXpathUtil.makeODKCompatibleXPath(question.parentForm, xPath, numberBindings)
         } catch (Exception x) {
             //ignore
         }
@@ -205,6 +205,13 @@ class ODKSerializer {
         if (binding == 'endtime' && (type == 'dateTime' || type == 'time')) {
             attr['jr:preload'] = 'timestamp'
             attr['jr:preloadParams'] = 'end'
+        }
+
+        if (question instanceof RepeatQuestion && question.validationLogic) {
+            def jrCount = ODKXpathUtil.getOXDJRCountOnRepeatValidation(attr.constraint)
+            if (jrCount) {
+                attr.constraint = "count(.) = $jrCount"
+            }
         }
 
     }
@@ -296,7 +303,7 @@ class ODKSerializer {
 
     void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
 
-        def attr = [ref: absoluteBinding(question)]
+        def attr = [nodeset: absoluteBinding(question)]
         if (oxdConversion) {
             //oxd uses validation to control size of repeat while odk uses jr:count
             def logic = question.getValidationLogic()
@@ -308,17 +315,16 @@ class ODKSerializer {
 
         }
 
-        xml.group(attr) {
+        xml.group() {
             buildQuestionLabelAndHint(xml, question)
 
-            xml.repeat(bind: binding(question)) {
+            xml.repeat(attr) {
 
                 buildQuestionsLayout(question, xml)
 
             }
         }
     }
-
 
 
     private String getDynamicParentQnId(DynamicQuestion question) {
