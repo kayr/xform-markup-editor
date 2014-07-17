@@ -299,7 +299,7 @@ Weight(Kg)
 @message Height should be between 1 and 9
 Height
 
-@enableif $sex = 'male'
+@enableif $sex = 'female'
 Is patient pregnant
 
 @comment Please select all anti-retrovirals that the patient is taking
@@ -340,7 +340,11 @@ Europe,\t    Netherlands,Netherlandis
 Europe,\t    Netherlands,Another Netherlands
 }
 
+@gps
+Location
+
 @id children_number
+@number
 Number of children
 
 
