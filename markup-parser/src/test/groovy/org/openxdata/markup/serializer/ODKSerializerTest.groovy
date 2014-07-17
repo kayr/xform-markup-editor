@@ -42,7 +42,9 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testRegex() {
-        ['length(.) = 4': '4',
+        [
+//                'length(.) = 4': '4', this is not supported in odk
+                'length(.) = 4': null,
                 'length(.) = "kdjjsd"': null,
                 'length(.) = "kdjjsd" and 5 = 6': null,
                 'length(.) = /ef/fr': '/ef/fr',

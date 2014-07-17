@@ -32,8 +32,9 @@ public class ODKXpathUtil {
                 return path
             }
 
-            if (right.token.type == NUMBER)
-                return right.emitTailString()
+            //ODK Currently does not support this
+//            if (right.token.type == NUMBER)
+//                return right.emitTailString()
 
         }
         return null

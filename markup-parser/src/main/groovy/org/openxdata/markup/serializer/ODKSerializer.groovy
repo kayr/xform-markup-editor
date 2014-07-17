@@ -2,6 +2,7 @@ package org.openxdata.markup.serializer
 
 import groovy.xml.MarkupBuilder
 import org.openxdata.markup.*
+import org.openxdata.markup.deserializer.XFormDeserializer
 
 import static java.lang.System.err
 
@@ -324,6 +325,12 @@ class ODKSerializer {
 
             }
         }
+    }
+
+    static String oxd2Odk(String oxdXform) {
+        def oxdFormObj = new XFormDeserializer(oxdXform).parse()
+        ODKSerializer serializer = new ODKSerializer(true)
+        return serializer.toXForm(oxdFormObj)
     }
 
 
