@@ -25,7 +25,7 @@ class XFormDeserializer {
         toForm()
     }
 
-    Form toForm() {
+    private Form toForm() {
         form = new Form()
         def instance = xForm.model.instance[0]
         form.id = instance.@id
@@ -40,7 +40,7 @@ class XFormDeserializer {
         return form
     }
 
-    def addDynamicInstances() {
+    private def addDynamicInstances() {
         def instances = xForm.model.instance
         instances.each {
             if (isDynamicInstanceNode(it)) {
@@ -51,7 +51,7 @@ class XFormDeserializer {
         }
     }
 
-    def buildDynamicList(String instanceId, def dynamicElem) {
+    private def buildDynamicList(String instanceId, def dynamicElem) {
         def options = dynamicElem.'*'.collect {
             def dynamicOption = new DynamicOption()
             dynamicOption.bind = it.@id.text()
@@ -62,25 +62,25 @@ class XFormDeserializer {
         form.addDynamicOptions(instanceId, options)
     }
 
-    def addPages() {
+    private def addPages() {
         def groups = xForm.group
         groups.each {
             processPage(it)
         }
     }
 
-    static boolean isDynamicInstanceNode(def elem) {
+   private static boolean isDynamicInstanceNode(def elem) {
         return elem.dynamiclist.size() > 0
     }
 
-    Page processPage(def group) {
+  private   Page processPage(def group) {
         def page = new Page(name: group.label.text())
         form.addPage(page)
         addQuestions(page, group)
         return page
     }
 
-    List<IQuestion> addQuestions(HasQuestions page, def elem) {
+    private List<IQuestion> addQuestions(HasQuestions page, def elem) {
         def qnElems = elem.'*'.findAll { it.name() != 'label' }
         qnElems.each {
             processQnElem(page, it)
@@ -88,7 +88,7 @@ class XFormDeserializer {
         page.allQuestions
     }
 
-    IQuestion processQnElem(HasQuestions page, def qnElem) {
+    private IQuestion processQnElem(HasQuestions page, def qnElem) {
         def tagName = qnElem.name()
         def method = "process_$tagName"
 
@@ -97,7 +97,7 @@ class XFormDeserializer {
         }
     }
 
-    static IQuestion process_select1(HasQuestions page, def elem) {
+    private static IQuestion process_select1(HasQuestions page, def elem) {
 
         if (isDynamicElement(elem))
             return process_Dynamic(page, elem)
@@ -107,25 +107,25 @@ class XFormDeserializer {
         return qn
     }
 
-    static IQuestion process_select(HasQuestions page, def elem) {
+    private static IQuestion process_select(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new MultiSelectQuestion(), page, elem
         qn.options.addAll(getSelectOptions(elem))
         return qn
     }
 
-    IQuestion process_input(HasQuestions page, def elem) {
+    private IQuestion process_input(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new TextQuestion(), page, elem
         qn.setType(resolveType(qn))
         return qn
     }
 
-    IQuestion process_upload(HasQuestions page, def elem) {
+    private IQuestion process_upload(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new TextQuestion(), page, elem
         qn.setType(resolveType(qn))
         return qn
     }
 
-    IQuestion process_group(HasQuestions page, def elem) {
+    private IQuestion process_group(HasQuestions page, def elem) {
         def qn = new RepeatQuestion(parent: page)
         //add questions after u have set the parent form
         addQuestions(qn, elem.repeat)
@@ -133,7 +133,7 @@ class XFormDeserializer {
         return qn
     }
 
-    static IQuestion process_Dynamic(HasQuestions page, def elem) {
+   private static IQuestion process_Dynamic(HasQuestions page, def elem) {
         def qn = addIdMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
         String nodeSet = elem.itemset.@nodeset.text()
         qn.parentQuestionId = getDynamicParentInstanceId(nodeSet)
@@ -142,11 +142,11 @@ class XFormDeserializer {
 
     }
 
-    static boolean isDynamicElement(def elem) {
+    private static boolean isDynamicElement(def elem) {
         return elem.itemset.size() > 0
     }
 
-    static IQuestion addIdMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
+    private static IQuestion addIdMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
         //repeats do not have a bind attribute
         if (elem.name() == 'group')
             qn.binding = elem.@id
@@ -164,7 +164,7 @@ class XFormDeserializer {
      * @param elem the bind element
      * @return the passed question
      */
-    IQuestion addBehaviourInfo(IQuestion qn) {
+   private IQuestion addBehaviourInfo(IQuestion qn) {
         def bindNode = getBindNode(qn.binding)
         /*todo implement the notion of readonly and not enabled. Readonly question can be populated with data as opposed to disabled*/
         mayBeMakeLocked(bindNode, qn)
@@ -231,7 +231,7 @@ class XFormDeserializer {
         return readonly
     }
 
-    String getXPathFormula(String xpath) {
+   private String getXPathFormula(String xpath) {
         if (!xpath) return null
 
         try {
@@ -271,7 +271,7 @@ class XFormDeserializer {
 
     }
 
-    String resolveType(IQuestion qn) {
+    private String resolveType(IQuestion qn) {
         def binding = getBindNode(qn.binding)
 
         if (!binding) return 'string'
@@ -327,7 +327,7 @@ class XFormDeserializer {
     }
 
 
-    static List<Option> getSelectOptions(def select) {
+   private static List<Option> getSelectOptions(def select) {
         def items = select.item
         return items.collect { new Option(it.label.text(), it.@id.text()) }
     }

@@ -227,7 +227,7 @@ class ODKSerializer {
         }
     }
 
-    void buildDynamicModel(MarkupBuilder x, Form form) {
+    private void buildDynamicModel(MarkupBuilder x, Form form) {
         def completeBinds = []
         form.allQuestions.each { question ->
             if (!(question instanceof DynamicQuestion))
@@ -252,7 +252,7 @@ class ODKSerializer {
         }
     }
 
-    void buildLayout(MarkupBuilder x, IQuestion question) {
+    private void buildLayout(MarkupBuilder x, IQuestion question) {
         def qnType = getQuestionType(question)
         if (question.type == 'boolean') {
             x."select1"(ref: absoluteBinding(question)) {
@@ -277,7 +277,7 @@ class ODKSerializer {
         }
     }
 
-    void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
+    private void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
 
         xml.select1(ref: absoluteBinding(question)) {
             buildQuestionLabelAndHint(xml, question)
@@ -288,7 +288,7 @@ class ODKSerializer {
         }
     }
 
-    void buildLayout(MarkupBuilder xml, ISelectionQuestion question) {
+    private void buildLayout(MarkupBuilder xml, ISelectionQuestion question) {
 
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
         xml."select$selectRef"(ref: absoluteBinding(question)) {
@@ -302,7 +302,7 @@ class ODKSerializer {
         }
     }
 
-    void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
+    private void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
 
         def attr = [nodeset: absoluteBinding(question)]
         if (oxdConversion) {
@@ -340,7 +340,7 @@ class ODKSerializer {
         return question.absParentBinding
     }
 
-    void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
+    private void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
 
         def label = question.getText(numberQuestions)
         xml.label(label)
@@ -348,7 +348,7 @@ class ODKSerializer {
             xml.hint(question.comment)
     }
 
-    static Map getQuestionType(IQuestion question) {
+    private static Map getQuestionType(IQuestion question) {
         switch (question.type) {
             case 'video':
                 return [type: 'binary', format: 'video']
