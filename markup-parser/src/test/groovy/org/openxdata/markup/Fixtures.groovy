@@ -19,7 +19,15 @@ class Fixtures {
     }
 
 
-    static def idFormWithDollarInString = '''### s
+    static def formWIthValue = '''### s
+
+## f
+
+@default Me
+Some question
+'''
+
+    static def formWithDollarInString = '''### s
 
 ## s
 
@@ -81,6 +89,7 @@ Other question
 @longtext
 Patient ID
 
+@default mr
 Title
 >Mr
 >Mrs

@@ -175,7 +175,7 @@ Prefilled Date
       <instance>
         <example_study2_example_form2_v1 id="0" name="Example form2">
           <patient_id />
-          <title />
+          <title>mr</title>
           <first_name />
           <last_name />
           <sex />

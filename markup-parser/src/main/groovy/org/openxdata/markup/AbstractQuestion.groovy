@@ -24,6 +24,7 @@ abstract class AbstractQuestion implements IQuestion {
     String calculation
     int line
     boolean hasAbsoluteId = false
+    def value
 
 
     AbstractQuestion() {

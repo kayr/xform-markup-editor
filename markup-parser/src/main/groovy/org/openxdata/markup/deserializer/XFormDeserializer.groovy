@@ -7,9 +7,10 @@ import org.openxdata.markup.*
  */
 class XFormDeserializer {
 
-    String xml
-    def xForm
-    Form form
+    private String xml
+    private def xForm
+    private Form form
+    private def model
 
     XFormDeserializer() {
     }
@@ -26,12 +27,13 @@ class XFormDeserializer {
     }
 
     private Form toForm() {
-        form = new Form()
         def instance = xForm.model.instance[0]
+         model = instance.'*'[0]
+
+        form = new Form()
         form.id = instance.@id
-        form.name = instance.'*'[0].@name
-        def dbId = instance.children()[0].@id
-        form.dbId = dbId
+        form.name = model.@name
+        form.dbId = model.@id
         addDynamicInstances()
         addPages()
         form.allQuestions.each {
@@ -97,7 +99,7 @@ class XFormDeserializer {
         }
     }
 
-    private static IQuestion process_select1(HasQuestions page, def elem) {
+    private IQuestion process_select1(HasQuestions page, def elem) {
 
         if (isDynamicElement(elem))
             return process_Dynamic(page, elem)
@@ -107,7 +109,7 @@ class XFormDeserializer {
         return qn
     }
 
-    private static IQuestion process_select(HasQuestions page, def elem) {
+    private IQuestion process_select(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new MultiSelectQuestion(), page, elem
         qn.options.addAll(getSelectOptions(elem))
         return qn
@@ -133,7 +135,7 @@ class XFormDeserializer {
         return qn
     }
 
-    private static IQuestion process_Dynamic(HasQuestions page, def elem) {
+    private IQuestion process_Dynamic(HasQuestions page, def elem) {
         def qn = addIdMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
         String nodeSet = elem.itemset.@nodeset.text()
         qn.parentQuestionId = getDynamicParentInstanceId(nodeSet)
@@ -146,12 +148,16 @@ class XFormDeserializer {
         return elem.itemset.size() > 0
     }
 
-    private static IQuestion addIdMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
+    private IQuestion addIdMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
         //repeats do not have a bind attribute
         if (elem.name() == 'group')
             qn.binding = elem.@id
         else
             qn.binding = elem.@bind
+
+        def value = model."$qn.binding".text()
+        if (value)
+            qn.value = value
         qn.text = elem.label.text()
         qn.comment = elem.hint.text()
         parent.addQuestion(qn)

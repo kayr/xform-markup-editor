@@ -76,6 +76,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@message" |
   "@dbid" |
   "@parent" |
+  "@default" |
   "dynamic_instance{" |
   "dynamic{"
                                 {

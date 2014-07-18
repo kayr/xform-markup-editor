@@ -83,12 +83,12 @@ class XFormSerializer {
                         form.questions.each { question ->
                             def bind = binding(question)
                             checkBindLength(bind)
-                            xml."$bind" {//Improve and use recursion when you have time
+                            xml."$bind"(question.value) {//Improve and use recursion when you have time
                                 if (question instanceof RepeatQuestion) {
                                     RepeatQuestion qn = question
                                     qn.questions.each { qnInRpt ->
                                         checkBindLength(binding(qnInRpt))
-                                        xml."${binding(qnInRpt)}"()
+                                        xml."${binding(qnInRpt)}"(qnInRpt.value)
                                     }
                                 }
                             }

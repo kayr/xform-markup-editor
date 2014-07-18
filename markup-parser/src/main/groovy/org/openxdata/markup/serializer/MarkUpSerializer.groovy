@@ -55,11 +55,11 @@ class MarkUpSerializer {
     static def renderPage(def builder, Page page) {
         builder << "#> $page.name"
         page.questions.each {
-            start(builder, it)
+            renderQuestion(builder, it)
         }
     }
 
-    def static start(def builder, IQuestion qn) {
+    def static renderQuestion(def builder, IQuestion qn) {
         if (isAssignedId(qn))
             builder << "@id $qn.binding"
         if (qn.readOnly) builder << "@readonly"
@@ -71,6 +71,8 @@ class MarkUpSerializer {
         if (qn.calculation) builder << "@calculate $qn.calculation"
 
         if (qn.comment) builder << "@comment $qn.comment"
+
+        if(qn.value) builder << "@default $qn.value"
 
         if (qn instanceof TextQuestion) {
             renderQuestionText builder, qn
@@ -130,7 +132,7 @@ class MarkUpSerializer {
     def static serialize(def builder, RepeatQuestion qn) {
         builder << "repeat{ ${qn.required ? '*' : ''}$qn.text"
         qn.questions.each {
-            start(builder, it)
+            renderQuestion(builder, it)
         }
         builder << "}"
 

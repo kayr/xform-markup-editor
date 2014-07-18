@@ -20,8 +20,7 @@ import static org.openxdata.markup.Fixtures.getNormalPurcform
 import static org.openxdata.markup.Fixtures.getNormalPurcform2
 import static org.openxdata.markup.Fixtures.getOxdSampleForm
 import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
-import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
-import static org.openxdata.markup.Fixtures.idFormWithDollarInString
+import static org.openxdata.markup.Fixtures.formWithDollarInString
 import static org.openxdata.markup.Fixtures.setFormDirectory
 import static org.openxdata.markup.Form.extractQuestions
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.advancedMarkedUp
@@ -220,13 +219,12 @@ class XFormDeserializerTest extends GroovyTestCase {
         serializer.numberBindings = true
         testRoundTrip(wssbForm.markUp)
         testRoundTrip(gpsForm.markUp)
-        testRoundTrip(idFormWithDollarInString)
+        testRoundTrip(formWithDollarInString)
     }
 
     void testRoundTrip(String form) {
         def mkpForm = Util.createParser(form).study().forms[0]
         def originalXform = serializer.toXForm(mkpForm)
-        println(originalXform)
 
         def parsedMarkupFormModel = new XFormDeserializer(originalXform).parse()
         serializer.numberBindings = false

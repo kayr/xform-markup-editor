@@ -108,7 +108,7 @@ class ODKSerializer {
                     buildInstance(x, q)
                 }
             } else {
-                x."$_bind"()
+                x."$_bind"(q.value)
             }
 
         }

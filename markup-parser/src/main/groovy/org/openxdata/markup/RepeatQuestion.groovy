@@ -57,5 +57,9 @@ class RepeatQuestion extends AbstractQuestion implements HasQuestions {
         return 'repeat'
     }
 
+    @Override
+    void setValue(Object value) {
+//        throw new UnsupportedOperationException('You cannot set a value on a repeat question')
+    }
 
 }

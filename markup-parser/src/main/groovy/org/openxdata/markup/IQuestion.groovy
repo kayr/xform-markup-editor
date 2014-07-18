@@ -89,4 +89,8 @@ interface IQuestion {
 
     boolean getHasAbsoluteId()
 
+    def getValue()
+
+    void setValue(def value)
+
 }
