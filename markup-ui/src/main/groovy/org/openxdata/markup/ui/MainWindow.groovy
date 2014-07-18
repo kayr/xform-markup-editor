@@ -3,6 +3,7 @@ package org.openxdata.markup.ui
 import groovy.swing.SwingBuilder
 import jsyntaxpane.DefaultSyntaxKit
 import jsyntaxpane.actions.CaretMonitor
+import org.openxdata.markup.Form
 
 import javax.swing.*
 import java.awt.*
@@ -22,6 +23,7 @@ class MainWindow {
     static def ICON_FORM = getIcon('FileChooser.detailsViewIcon')
 
     Closure formLoader
+    SwingBuilder s
 
     MainWindow() {
         DefaultSyntaxKit.registerContentType("text/xform", "org.openxdata.markup.ui.XFormMarkupSyntaxKit");
@@ -30,7 +32,7 @@ class MainWindow {
     }
 
     def initUi() {
-        def s = new SwingBuilder()
+        s = new SwingBuilder()
 
         def _menuBar = {
             s.menuBar() {
@@ -42,14 +44,23 @@ class MainWindow {
                     menuImport = menuItem(text: 'Import', mnemonic: 'I', icon: ICON_IMPORT)
                 }
 
-                menu(text: 'Examples', mnemonic: 'E') {
-                    Resources.EXAMPLES.each { k, v ->
-                        menuItem(text: k, icon: ICON_FORM, actionPerformed: { formLoader(v) })
-                    }
-                }
+
 
                 menu(text: 'Tools', mnemonic: 'T') {
                     menuAlign = menuItem(text: 'Align Text', mnemonic: 'A', icon: ICON_FORM)
+                }
+
+                menu(text: 'Help') {
+
+                    menuItem(text: 'Select Example Below',font: new Font(Font.SANS_SERIF,Font.BOLD,12))
+                    separator()
+
+                    Resources.EXAMPLES.each { k, v ->
+                        menuItem(text: k, icon: ICON_FORM, actionPerformed: { formLoader(v) })
+                    }
+
+                    separator()
+                    menuItem(text: 'About', actionPerformed: { showAbout() })
                 }
             }
         }
@@ -135,6 +146,20 @@ class MainWindow {
             redirectErr Color.black, System.err
         }
         new CaretMonitor(txtMarkUp, lblCaret)
+    }
+
+    private void showAbout() {
+        s.dialog(owner: frame, locationRelativeTo: frame, title: 'About OxdMarkup',
+                visible: true, defaultCloseOperation: DISPOSE_ON_CLOSE, size: [200, 100],
+                modal: true) {
+            panel {
+                gridLayout(columns: 1, rows: 3)
+                label('Developed By')
+                label('web:   http://www.omnitech.co.ug')
+                label('Email: rk@omnitech.co.ug')
+            }
+
+        }
     }
 
     void setTitle(String s) {
