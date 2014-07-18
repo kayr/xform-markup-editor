@@ -55,7 +55,8 @@ public class ODKXpathUtil {
             def compatibleExpr = makeSelectionACompatibleExpression(tree, xpath)
             if (compatibleExpr) {
 
-                def start = tree.charPositionInLine + offset
+                //make sure u get the position of the first toke in the expression
+                def start = tree.parent.children[0].charPositionInLine + offset
                 //todo y add +1: weird will figure this out later add a one to compensate of ' or "
                 def end = XPathUtil.getLastIndex(tree.parent) + offset + 1
                 builder.replace(start, end, compatibleExpr)
@@ -97,7 +98,8 @@ public class ODKXpathUtil {
 
         //we only convert != and =
         if (parent.token.type == EQ || parent.token.type == NEQ) {
-            def start = tree.charPositionInLine
+            //make sure to get the first character in the expression
+            def start = tree.parent.children[0].charPositionInLine
             def end = XPathUtil.getLastIndex(parent)
             def multiSelectEqExpr = xpath.substring(start, end + 1)
             return transformToProperSelection(multiSelectEqExpr)
@@ -105,12 +107,17 @@ public class ODKXpathUtil {
         return null
     }
 
+    /**
+     Transforms expressions like /f/q1 = true -> /f/q1 = 'true'
+     or /f/q1 = 'male' -> selected(/f/q1,'male')
+     or /f/q1 != 'male' -> not(selected(/f/q1,'male'))
+     */
     static String transformToProperSelection(String expr) {
         //this is based on a assumption that '!' or '=' can never be in bindings
         def parts = expr.split(/[!]*=/)
 
         def left = parts[0].trim()
-        def right = parts[1]
+        def right = parts[1].trim()
 
         // make sure right is a literal otherwise Swap
         if (left.startsWith("'") || left.startsWith('"') || left.equals('true') || left.equals('false')) {

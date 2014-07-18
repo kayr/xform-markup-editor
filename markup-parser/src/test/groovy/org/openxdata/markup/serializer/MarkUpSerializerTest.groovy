@@ -31,6 +31,7 @@ class MarkUpSerializerTest extends GroovyTestCase {
         testRoundTrip(normalPurcform)
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
+        testRoundTrip(idFormWithDollarInString)
     }
 
     void testRoundTrip(String form) {

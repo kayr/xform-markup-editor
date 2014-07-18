@@ -12,7 +12,7 @@ import org.openxdata.xpath.XPathParser
  */
 class Form implements HasQuestions {
 
-    public static final String VARIABLE_REGEX = /[$][:]?[a-zA-Z_][a-zA-Z0-9_]*/
+    public static final String VARIABLE_REGEX = /(?<!\\)[$][:]?[a-zA-Z_][a-zA-Z0-9_]*/
     String name
     String id
     String dbId
@@ -71,6 +71,7 @@ class Form implements HasQuestions {
     public static String getAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
         def logicType = config.logicType ?: 'XPATH'
         boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
+
         xpath = xpath.replaceAll(VARIABLE_REGEX) {
             def actualBinding = (it - '$') - ':'
             def tmpQn = findQuestionWithBinding(actualBinding, question.parent)
@@ -80,7 +81,7 @@ class Form implements HasQuestions {
             def binding = it.contains(':') && allAllowRelativePath ? tmpQn.relativeBinding : tmpQn.absoluteBinding
             return binding
         }
-        xpath = xpath.replace('$.', question.absoluteBinding)
+        xpath = xpath.replace('$.', question.absoluteBinding).replace('\\$','$')
         return xpath
     }
 
@@ -96,7 +97,7 @@ class Form implements HasQuestions {
             def binding = it.contains(':') && allAllowRelativePath ? tmpQn.indexedRelativeBinding : tmpQn.indexedAbsoluteBinding
             return binding
         }
-        xpath = xpath.replace('$.', question.indexedAbsoluteBinding)
+        xpath = xpath.replace('$.', question.indexedAbsoluteBinding).replace('\\$','$')
         return xpath
     }
 

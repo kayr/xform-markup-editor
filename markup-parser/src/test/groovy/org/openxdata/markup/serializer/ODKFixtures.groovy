@@ -745,7 +745,7 @@ Q2
 
 
 
-@enableif   $subjects = 'cal' and (/c/ps != null or (3-4) = 9 or  $c!=true) and $c=true
+@enableif   $subjects = 'cal' and (/c/ps != null or (3-4) = 9 or  true!=$c) and $c=true
 Q3
 
 

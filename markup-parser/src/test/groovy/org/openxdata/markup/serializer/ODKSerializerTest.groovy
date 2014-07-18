@@ -63,6 +63,8 @@ class ODKSerializerTest extends GroovyTestCase {
                         "selected(/s_f_v1/subjects, 'calculus') and (/s_f_v1/ps != null or (3-4) = 9 or selected(/s_f_v1/subjects, 'grades')) and selected(/s_f_v1/subjects, 'biology')",
                 '$subjects = \'calculus\' and $subjects != \'biology\'':
                         "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology'))",
+               '\'calculus\' = $subjects and $subjects != \'biology\'':
+                        "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology'))",
                 '$subjects = \'calculus\' and $subjects != \'biology,calculus,math\'':
                         "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology') and selected(/s_f_v1/subjects, 'calculus') and selected(/s_f_v1/subjects, 'math'))",
                 '$ps = \'calculus\' and $subjects > \'biology\'':

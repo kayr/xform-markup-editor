@@ -19,6 +19,17 @@ class Fixtures {
     }
 
 
+    static def idFormWithDollarInString = '''### s
+
+## s
+
+@enableif . = '\\$eiwe $'
+Q1
+
+@enableif $q1 = '\\$ kdj' and '\\$q1' = 'someDigit'
+Q2
+'''
+
     static def formWithAbsoluteId = '''
 
 ### Study

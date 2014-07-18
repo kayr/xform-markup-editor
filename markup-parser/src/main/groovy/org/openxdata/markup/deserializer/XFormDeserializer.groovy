@@ -69,11 +69,11 @@ class XFormDeserializer {
         }
     }
 
-   private static boolean isDynamicInstanceNode(def elem) {
+    private static boolean isDynamicInstanceNode(def elem) {
         return elem.dynamiclist.size() > 0
     }
 
-  private   Page processPage(def group) {
+    private Page processPage(def group) {
         def page = new Page(name: group.label.text())
         form.addPage(page)
         addQuestions(page, group)
@@ -133,7 +133,7 @@ class XFormDeserializer {
         return qn
     }
 
-   private static IQuestion process_Dynamic(HasQuestions page, def elem) {
+    private static IQuestion process_Dynamic(HasQuestions page, def elem) {
         def qn = addIdMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
         String nodeSet = elem.itemset.@nodeset.text()
         qn.parentQuestionId = getDynamicParentInstanceId(nodeSet)
@@ -164,7 +164,7 @@ class XFormDeserializer {
      * @param elem the bind element
      * @return the passed question
      */
-   private IQuestion addBehaviourInfo(IQuestion qn) {
+    private IQuestion addBehaviourInfo(IQuestion qn) {
         def bindNode = getBindNode(qn.binding)
         /*todo implement the notion of readonly and not enabled. Readonly question can be populated with data as opposed to disabled*/
         mayBeMakeLocked(bindNode, qn)
@@ -231,9 +231,10 @@ class XFormDeserializer {
         return readonly
     }
 
-   private String getXPathFormula(String xpath) {
+    private String getXPathFormula(String xpath) {
         if (!xpath) return null
 
+        xpath = xpath.replace('$', '\\$')
         try {
             def builder = new StringBuilder(xpath)
             def paths = new XPathUtil(xpath).getPathVariables()
@@ -327,7 +328,7 @@ class XFormDeserializer {
     }
 
 
-   private static List<Option> getSelectOptions(def select) {
+    private static List<Option> getSelectOptions(def select) {
         def items = select.item
         return items.collect { new Option(it.label.text(), it.@id.text()) }
     }
