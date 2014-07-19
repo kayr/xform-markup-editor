@@ -28,7 +28,7 @@ public class ODKXpathUtil {
         this.numberedBindings = numberedBindings
     }
 
-    String make() {
+    String makeCompatible() {
         return _makeODKCompatibleXPath(_xpath)
     }
 
@@ -103,6 +103,8 @@ public class ODKXpathUtil {
         def eqTree = qnTree.parent
         List<CommonTree> children = eqTree.children
 
+        if (children[1].isPath() && children[0].isPath()) return null
+
         CommonTree leftTree = qnTree
         CommonTree rightTree = children.find { it != qnTree }
 
@@ -110,8 +112,10 @@ public class ODKXpathUtil {
         def rightString = rightTree.emitTailString().replaceFirst(/\(\)/, '')
         def eq = eqTree.type == EQ ? '=' : '!='
 
-        if (rightString == 'true' || rightTree == 'false')
+        if (rightString == 'true' || rightString == 'false')
             return "$leftString $eq '$rightString'"
+        if (rightString.startsWith("'") || rightString.startsWith('"'))
+            return "$leftString $eq $rightString"
 
         //recursively make the rightString Compatible
         rightString = makeCompatibleXpath(rightTree)
@@ -165,7 +169,7 @@ public class ODKXpathUtil {
     //**************************************************//
 
     static String makeODKCompatibleXPath(Form form, String xpath, boolean numberedBindings) {
-        return new ODKXpathUtil(form, xpath, numberedBindings).make()
+        return new ODKXpathUtil(form, xpath, numberedBindings).makeCompatible()
     }
 
     static String getOXDJRCountOnRepeatValidation(String reg) {

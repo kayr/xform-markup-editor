@@ -73,20 +73,26 @@ class ODKSerializerTest extends GroovyTestCase {
                         "/f/ps = 'calculus' and /f/s > 'biology'",
                 '$s = calc() and $ps = true':
                         'selected(/f/s, calc()) and /f/ps = true',
+                '$c = true() and $c = $c2':
+                        '/f/c = \'true\' and /f/c = /f/c2',
+                '$c = \'true\' and $ps = true':
+                        '/f/c = \'true\' and /f/ps = true',
                 '$s = calc() and ($s = "calculus" or $s != "calculus" and ($s != "calculus"))and $ps = true and $s != "calculus"':
                         "selected(/f/s, calc()) and (selected(/f/s, 'calculus') or not(selected(/f/s, 'calculus')) and (not(selected(/f/s, 'calculus'))))and /f/ps = true and not(selected(/f/s, 'calculus'))",
-                '$s = $s': 'selected(/f/s, /f/s)',
-                '''$s = $s and $s = concat( if($s = 'math' and $c = true and $c = true ,'true','false'))''': "selected(/f/s, /f/s) and selected(/f/s, concat( if(selected(/f/s, 'math') and /f/c = 'true' and /f/c = 'true' ,'true','false')))",
-                '''$s = f1($c = f1($s = f1($c = true)))''': "selected(/f/s, f1(/f/c = string(f1(selected(/f/s, f1(/f/c = 'true'))))))",
-                '''$s = concat-1($c = true)''': "selected(/f/s, concat-1(/f/c = 'true'))",
+                '$s = $s':
+                        'selected(/f/s, /f/s)',
+                '''$s = $s and $s = concat( if($s = 'math' and $c = true and $c = true ,'true','false'))''':
+                        "selected(/f/s, /f/s) and selected(/f/s, concat( if(selected(/f/s, 'math') and /f/c = 'true' and /f/c = 'true' ,'true','false')))",
+                '''$s = f1($c = f1($s = f1($c = true)))''':
+                        "selected(/f/s, f1(/f/c = string(f1(selected(/f/s, f1(/f/c = 'true'))))))",
+                '''$s = concat-1($c = true)''':
+                        "selected(/f/s, concat-1(/f/c = 'true'))",
         ].each {
 
 
             def path = Form.getAbsoluteBindingXPath(it.key, form.getQuestion('ps'))
             def compatibleXPath = ODKXpathUtil.makeODKCompatibleXPath(form, path, false)
-//            println path
-//            println compatibleXPath
-//            println()
+//            println "$path \ncompatibleXPath\n\n"
             assertEquals it.value, compatibleXPath
         }
     }

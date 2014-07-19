@@ -711,7 +711,11 @@ Sex
 
 @boolean
 @id c
-Continue
+Condition 1
+
+@id c2
+@boolean
+Condition 2
 
 @id s
 Subjects
