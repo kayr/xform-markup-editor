@@ -61,39 +61,38 @@ class ODKSerializerTest extends GroovyTestCase {
         Form form = toForm(multiSelectConversion.form)
 
         [
-                '$subjects = \'calculus\' and ($ps != null or (3-4) = 9 or $subjects = \'grades\') and $subjects = \'biology\'':
-                        "selected(/s_f_v1/subjects, 'calculus') and (/s_f_v1/ps != null or (3-4) = 9 or selected(/s_f_v1/subjects, 'grades')) and selected(/s_f_v1/subjects, 'biology')",
-                '$subjects = \'calculus\' and $subjects != \'biology\'':
-                        "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology'))",
-                '\'calculus\' = $subjects and $subjects != \'biology\'':
-                        "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology'))",
-                '$subjects = \'calculus\' and $subjects != \'biology,calculus,math\'':
-                        "selected(/s_f_v1/subjects, 'calculus') and not(selected(/s_f_v1/subjects, 'biology') or selected(/s_f_v1/subjects, 'calculus') or selected(/s_f_v1/subjects, 'math'))",
-                '$ps = \'calculus\' and $subjects > \'biology\'':
-                        "/s_f_v1/ps = 'calculus' and /s_f_v1/subjects > 'biology'",
-                '$subjects = calc() and $ps = true':
-                        'selected(/s_f_v1/subjects, calc()) and /s_f_v1/ps = true',
-                '$subjects = calc() and ($subjects = "calculus" or $subjects != "calculus" and ($subjects != "calculus"))and $ps = true and $subjects != "calculus"':
-                        "selected(/s_f_v1/subjects, calc()) and (selected(/s_f_v1/subjects, 'calculus') or not(selected(/s_f_v1/subjects, 'calculus')) and (not(selected(/s_f_v1/subjects, 'calculus'))))and /s_f_v1/ps = true and not(selected(/s_f_v1/subjects, 'calculus'))",
-                '$subjects = $subjects': 'selected(/s_f_v1/subjects, /s_f_v1/subjects)'   ,
-//                '''$subjects = $subjects and $subjects = concat( if($subjects = 'math' and $c = true and $c = true ,'true','false'))''': 'selected(/s_f_v1/subjects, /s_f_v1/subjects)'   ,
-//                '''$subjects = concat-1($c = concat-2($c = true))''': 'selected(/s_f_v1/subjects, /s_f_v1/subjects)'   ,
+                '$s = \'calculus\' and ($ps != null or (3-4) = 9 or $s = \'grades\') and $s = \'biology\'':
+                        "selected(/f/s, 'calculus') and (/f/ps != null or (3-4) = 9 or selected(/f/s, 'grades')) and selected(/f/s, 'biology')",
+                '$s = \'calculus\' and $s != \'biology\'':
+                        "selected(/f/s, 'calculus') and not(selected(/f/s, 'biology'))",
+                '\'calculus\' = $s and $s != \'biology\'':
+                        "selected(/f/s, 'calculus') and not(selected(/f/s, 'biology'))",
+                '$s = \'calculus\' and $s != \'biology,calculus,math\'':
+                        "selected(/f/s, 'calculus') and not(selected(/f/s, 'biology') or selected(/f/s, 'calculus') or selected(/f/s, 'math'))",
+                '$ps = \'calculus\' and $s > \'biology\'':
+                        "/f/ps = 'calculus' and /f/s > 'biology'",
+                '$s = calc() and $ps = true':
+                        'selected(/f/s, calc()) and /f/ps = true',
+                '$s = calc() and ($s = "calculus" or $s != "calculus" and ($s != "calculus"))and $ps = true and $s != "calculus"':
+                        "selected(/f/s, calc()) and (selected(/f/s, 'calculus') or not(selected(/f/s, 'calculus')) and (not(selected(/f/s, 'calculus'))))and /f/ps = true and not(selected(/f/s, 'calculus'))",
+                '$s = $s': 'selected(/f/s, /f/s)',
+                '''$s = $s and $s = concat( if($s = 'math' and $c = true and $c = true ,'true','false'))''': "selected(/f/s, /f/s) and selected(/f/s, concat( if(selected(/f/s, 'math') and /f/c = 'true' and /f/c = 'true' ,'true','false')))",
+                '''$s = f1($c = f1($s = f1($c = true)))''': "selected(/f/s, f1(/f/c = string(f1(selected(/f/s, f1(/f/c = 'true'))))))",
+                '''$s = concat-1($c = true)''': "selected(/f/s, concat-1(/f/c = 'true'))",
         ].each {
-            def h = '''$subjects = $subjects and $subject = concat( if($subjects = 'math' and $c = true,'true','false'))'''
-            println('evaluating: ' + it.key)
+
+
             def path = Form.getAbsoluteBindingXPath(it.key, form.getQuestion('ps'))
-            println path
             def compatibleXPath = ODKXpathUtil.makeODKCompatibleXPath(form, path, false)
-
-
-            println compatibleXPath
-
+//            println path
+//            println compatibleXPath
+//            println()
             assertEquals it.value, compatibleXPath
         }
     }
 
     void testBooleanConversion() {
-        assertEquals booleanConversion.xml,toODK(booleanConversion.form, true)
+        assertEquals booleanConversion.xml, toODK(booleanConversion.form, true)
     }
 
 

@@ -32,9 +32,15 @@ public class ODKXpathUtil {
         return _makeODKCompatibleXPath(_xpath)
     }
 
-    private def clsTransformer(StringBuilder builder, CommonTree tree, int offset) {
+    /**
+     * Transform the expression associated to the path into a compatible odk path
+     * @param finalXPath The container that stores the final xpath
+     * @param tree The tree path of the expression
+     * @param offset length by how much the expression has changed
+     * @return
+     */
+    private def clsTransformer(StringBuilder finalXPath, CommonTree tree, int offset) {
         if (visitedTrees.contains(tree)) return
-
         visitedTrees.add(tree)
 
         def compatibleExpr = makeCompatibleExpression(tree)
@@ -43,10 +49,12 @@ public class ODKXpathUtil {
         //make sure u get the position of the first token in the expression
         def start = tree.parent.children[0].charPositionInLine + offset
         def end = XPathUtil.getLastIndex(tree.parent) + offset + 1
-        builder.replace(start, end, compatibleExpr)
-
+        finalXPath.replace(start, end, compatibleExpr)
     }
 
+    /**
+     * Filters out all the tree tokens
+     */
     private def clsFilter(CommonTree tree) {
         if (!tree.isPath()) return false
         def qn = findQuestion(tree, form, numberedBindings)
@@ -62,8 +70,7 @@ public class ODKXpathUtil {
 
     private static IQuestion findQuestion(CommonTree tree, Form form, boolean numberedBindings) {
         def qnBinding = XPathUtil.getNodeName(tree.emitTailString())
-        if (numberedBindings)
-            qnBinding = removeIndex(qnBinding)
+        if (numberedBindings) qnBinding = removeIndex(qnBinding)
         return form.getQuestion(qnBinding)
     }
 
@@ -106,7 +113,9 @@ public class ODKXpathUtil {
         if (rightString == 'true' || rightTree == 'false')
             return "$leftString $eq '$rightString'"
 
-        return "$leftString = string(${extractExpr(rightTree, _xpath)})"
+        //recursively make the rightString Compatible
+        rightString = makeCompatibleXpath(rightTree)
+        return "$leftString = string($rightString)"
 
     }
 
@@ -127,23 +136,28 @@ public class ODKXpathUtil {
         def rightString = extractExpr(rightTree, _xpath)
 
         def finalExpr
-
         if (rightString.startsWith('"') || rightString.startsWith("'")) {
-
             def rightParts = rightString
                     .replaceAll(/('|")/, '').trim().split(',')
 
             finalExpr = rightParts.collect { "selected($leftString, '$it')" }.join(' or ')
 
         } else {
+            rightString = makeCompatibleXpath(rightTree)
             finalExpr = "selected($leftString, $rightString)"
         }
 
-
-        if (parent.type == NEQ)
-            finalExpr = "not($finalExpr)"
+        if (parent.type == NEQ) finalExpr = "not($finalExpr)"
 
         return finalExpr
+    }
+
+    private String makeCompatibleXpath(CommonTree rightTree) {
+        def rightString = extractExpr(rightTree, _xpath)
+        List<CommonTree> trees = rightTree.findAllDeep { true }
+        visitedTrees.addAll(trees)
+        rightString = makeODKCompatibleXPath(form, rightString, numberedBindings)
+        return rightString
     }
 
     //**************************************************//

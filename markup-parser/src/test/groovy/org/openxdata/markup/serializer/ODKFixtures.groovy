@@ -706,22 +706,24 @@ Sex
 
     static def multiSelectConversion = [
             form: '''### s
+@id f
 ## f
 
 @boolean
 @id c
 Continue
 
+@id s
 Subjects
 >>Physics
 >>Calculus
 >>Biology
 
-@enableif $subjects = 'physics'
+@enableif $s = 'physics'
 @id ps
 Physics Score
 
-@enableif $subjects = 'calculus' and ($ps != null or (3-4) = 9) and $subjects = 'biology'
+@enableif $s = 'calculus' and ($ps != null or (3-4) = 9) and $s = 'biology'
 Other Qn
 
 '''

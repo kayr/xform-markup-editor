@@ -58,4 +58,13 @@ class XPathUtilTest extends GroovyTestCase {
         }
 
     }
+
+    void testFindAllDeep() {
+
+        String xpath = "/study_form_v1/weight div ((/study_form_v1/heightcm div 100.0)*(/study_form_v1/heightcm div 100.0))"
+        def xpathUtil = new XPathUtil(xpath)
+
+        assert xpathUtil.tree.findAllDeep { true }.size() == 34
+
+    }
 }

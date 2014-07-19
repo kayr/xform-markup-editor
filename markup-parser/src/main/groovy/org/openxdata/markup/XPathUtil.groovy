@@ -81,14 +81,14 @@ class XPathUtil {
     }
 
     static List<CommonTree> findResultsImpl(Tree tree, Closure filter) {
-        findResultsImpl(tree, filter, true)
+        findResultsImpl(tree, filter, true, false)
     }
 
     static List<CommonTree> findAllImpl(Tree tree, Closure filter) {
-        findResultsImpl(tree, filter, false)
+        findResultsImpl(tree, filter, false, false)
     }
 
-    static List<CommonTree> findResultsImpl(Tree tree, Closure filter, boolean transform) {
+    static List<CommonTree> findResultsImpl(Tree tree, Closure filter, boolean transform, boolean deep) {
         List<CommonTree> trees = []
         int count = tree.getChildCount()
         for (int i = 0; i < count; i++) {
@@ -96,9 +96,11 @@ class XPathUtil {
             def result = filter(child)
             if (result) {
                 trees << (transform ? result : child)
-            } else {
-                trees.addAll(findResultsImpl(child, filter, transform))
             }
+
+            if (result && !deep) continue
+
+            trees.addAll(findResultsImpl(child, filter, transform, deep))
         }
         return trees
     }
@@ -145,6 +147,10 @@ class XPathUtil {
 
         CommonTree.metaClass.findAll = { Closure clos ->
             XPathUtil.findAllImpl(delegate, clos)
+        }
+
+        CommonTree.metaClass.findAllDeep = { Closure clos ->
+            XPathUtil.findResultsImpl(delegate, clos,false,true)
         }
 
         Tree.metaClass.emitTailString {
