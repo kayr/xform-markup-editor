@@ -3,7 +3,6 @@ package org.openxdata.markup.ui
 import groovy.swing.SwingBuilder
 import jsyntaxpane.DefaultSyntaxKit
 import jsyntaxpane.actions.CaretMonitor
-import org.openxdata.markup.Form
 
 import javax.swing.*
 import java.awt.*
@@ -52,7 +51,7 @@ class MainWindow {
 
                 menu(text: 'Help') {
 
-                    menuItem(text: 'Select Example Below',font: new Font(Font.SANS_SERIF,Font.BOLD,12))
+                    menuItem(text: 'Select Example Below', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
                     separator()
 
                     Resources.EXAMPLES.each { k, v ->

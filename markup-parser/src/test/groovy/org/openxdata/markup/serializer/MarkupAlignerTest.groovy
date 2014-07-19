@@ -120,7 +120,7 @@ dynamic{
 //comment
 '''
 
-    def markUp2 = [raw:'''
+    def markUp2 = [raw: '''
 
 ### Simple Form
 
@@ -249,7 +249,7 @@ dynamic_instance{
         netherlands, Another Netherlands
 }
 ''',
-    formatted: '''
+            formatted: '''
 
 ### Simple Form
 

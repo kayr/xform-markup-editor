@@ -72,7 +72,7 @@ class MarkUpSerializer {
 
         if (qn.comment) builder << "@comment $qn.comment"
 
-        if(qn.value) builder << "@default $qn.value"
+        if (qn.value) builder << "@default $qn.value"
 
         if (qn instanceof TextQuestion) {
             renderQuestionText builder, qn

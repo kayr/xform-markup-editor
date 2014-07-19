@@ -28,7 +28,7 @@ class XFormDeserializer {
 
     private Form toForm() {
         def instance = xForm.model.instance[0]
-         model = instance.'*'[0]
+        model = instance.'*'[0]
 
         form = new Form()
         form.id = instance.@id

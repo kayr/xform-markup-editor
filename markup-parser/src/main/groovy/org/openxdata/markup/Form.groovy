@@ -81,7 +81,7 @@ class Form implements HasQuestions {
             def binding = it.contains(':') && allAllowRelativePath ? tmpQn.relativeBinding : tmpQn.absoluteBinding
             return binding
         }
-        xpath = xpath.replace('$.', question.absoluteBinding).replace('\\$','$')
+        xpath = xpath.replace('$.', question.absoluteBinding).replace('\\$', '$')
         return xpath
     }
 
@@ -97,7 +97,7 @@ class Form implements HasQuestions {
             def binding = it.contains(':') && allAllowRelativePath ? tmpQn.indexedRelativeBinding : tmpQn.indexedAbsoluteBinding
             return binding
         }
-        xpath = xpath.replace('$.', question.indexedAbsoluteBinding).replace('\\$','$')
+        xpath = xpath.replace('$.', question.indexedAbsoluteBinding).replace('\\$', '$')
         return xpath
     }
 
@@ -162,7 +162,7 @@ class Form implements HasQuestions {
     }
 
     static String validateXpath(String xpath, IQuestion question, String logicType) {
-        xpath = getAbsoluteBindingXPath(xpath, question, [logicType:logicType])
+        xpath = getAbsoluteBindingXPath(xpath, question, [logicType: logicType])
         try {
             XPathParser parser = Util.createXpathParser(xpath)
             parser.eval()

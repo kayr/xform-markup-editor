@@ -2,9 +2,7 @@ package org.openxdata.markup.serializer
 
 import groovy.xml.MarkupBuilder
 import groovy.xml.XmlUtil
-import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.*
-import org.openxdata.xpath.XPathParser
 
 /**
  * Created with IntelliJ IDEA.

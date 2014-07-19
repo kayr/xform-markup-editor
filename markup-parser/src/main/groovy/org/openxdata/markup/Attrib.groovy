@@ -16,7 +16,7 @@ class Attrib {
 
     static
     def allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
-            'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint','default']
+            'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
 
 
     static void addAttribute(IQuestion question, String attribute, int line) {

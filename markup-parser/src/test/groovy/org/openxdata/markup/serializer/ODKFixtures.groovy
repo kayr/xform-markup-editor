@@ -499,7 +499,7 @@ Num 1
 @validif . < $:n1
 @message should be less than n2
 Some number
-'''  ,
+''',
             xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
   <h:head>
     <h:title>dsd</h:title>
@@ -592,7 +592,7 @@ Sex
 @readonly
 @disableif $sex = 'm\'
 [was readonly] Are you pregnamt [to @disableif $sex = 'm']
-'''  ,
+''',
             xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
   <h:head>
     <h:title>f</h:title>
@@ -755,7 +755,7 @@ Q2
 Q3
 
 
-''' , xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+''', xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
   <h:head>
     <h:title>f</h:title>
     <model>

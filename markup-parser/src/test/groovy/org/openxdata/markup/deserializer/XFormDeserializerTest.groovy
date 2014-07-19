@@ -3,31 +3,11 @@ package org.openxdata.markup.deserializer
 import org.openxdata.markup.*
 import org.openxdata.markup.serializer.XFormSerializer
 
-import static org.openxdata.markup.Fixtures.getFormRepeatWithAttributesOnRepeats
-import static org.openxdata.markup.Fixtures.getFormUsingRelativeBinds
-import static org.openxdata.markup.Fixtures.getFormWithAbsoluteId
-import static org.openxdata.markup.Fixtures.getFormWithActionAttributes
-import static org.openxdata.markup.Fixtures.getFormWithCSVImport
-import static org.openxdata.markup.Fixtures.getFormWithDynamicInstanceReferences
-import static org.openxdata.markup.Fixtures.getFormWithEndtime
-import static org.openxdata.markup.Fixtures.getFormWithId
-import static org.openxdata.markup.Fixtures.getFormWithMultiplePage
-import static org.openxdata.markup.Fixtures.getFormWithSkipLogic
-import static org.openxdata.markup.Fixtures.getFormWithValidationLogic
-import static org.openxdata.markup.Fixtures.getFormWithValidationOnInnerRepeat
-import static org.openxdata.markup.Fixtures.getMultipleForms
-import static org.openxdata.markup.Fixtures.getNormalPurcform
-import static org.openxdata.markup.Fixtures.getNormalPurcform2
-import static org.openxdata.markup.Fixtures.getOxdSampleForm
-import static org.openxdata.markup.Fixtures.getSkipLogicInRepeat
-import static org.openxdata.markup.Fixtures.formWithDollarInString
-import static org.openxdata.markup.Fixtures.setFormDirectory
+import static org.openxdata.markup.Fixtures.*
 import static org.openxdata.markup.Form.extractQuestions
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.advancedMarkedUp
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.*
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.forms
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.gpsForm
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.wssbForm
 
 /**
  * Created by kay on 6/7/14.

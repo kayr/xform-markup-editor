@@ -150,7 +150,7 @@ class XPathUtil {
         }
 
         CommonTree.metaClass.findAllDeep = { Closure clos ->
-            XPathUtil.findResultsImpl(delegate, clos,false,true)
+            XPathUtil.findResultsImpl(delegate, clos, false, true)
         }
 
         Tree.metaClass.emitTailString {
