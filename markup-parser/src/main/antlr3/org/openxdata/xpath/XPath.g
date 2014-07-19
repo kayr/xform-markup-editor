@@ -42,7 +42,6 @@ tokens {
   FUNCTION;
   QNAME;
   UMINUS;
-  WEIRDOP;
 }
 
 @header {
@@ -102,20 +101,21 @@ abbreviatedStep
   :  DOT
   ;
 
-expr  :  orExpr
-  | weirdOpExpr
-  ;
+expr  :  orExpr  ;
 
 primaryExpr
-  :  LPAR expr RPAR -> expr
+//include brackets we need them
+  :  LPAR expr RPAR
   |  Literal -> ^(LITERAL Literal)
   |  Number  -> ^(NUMBER Number)
   |  functionCall
   ;
 
+
 functionCall
-  :  functionName LPAR functionArgs? RPAR -> ^(FUNCTION functionName functionArgs?)
-  |  booleanCompat LPAR RPAR -> ^(FUNCTION booleanCompat)
+//include brackets we need them
+  :  functionName LPAR functionArgs? RPAR -> ^(FUNCTION functionName LPAR functionArgs? RPAR)
+  |  booleanCompat LPAR RPAR -> ^(FUNCTION booleanCompat LPAR RPAR)
   |  booleanCompat -> ^(FUNCTION booleanCompat)
   ;
 
@@ -156,16 +156,6 @@ multiplicativeExpr
 unaryExprNoRoot
   :  MINUS unaryExprNoRoot -> ^(UMINUS unaryExprNoRoot)
   | pathExprNoRoot
-  ;
-
-weirdOpExpr: locationPath weirdOpPart -> ^(WEIRDOP locationPath weirdOpPart)
-  ;
-
-weirdOpPart
-  :  ntfn='not' LPAR fn='contains' LPAR Literal RPAR RPAR -> ^(FUNCTION ^(QNAME $ntfn) ^(FUNCTION ^(QNAME $fn) ^(LITERAL Literal)))
-  |  fn='contains' LPAR Literal RPAR  -> ^(FUNCTION ^(QNAME $fn) ^(LITERAL Literal))
-  |  ntfn='not' LPAR fn='starts-with' LPAR Literal RPAR RPAR -> ^(FUNCTION ^(QNAME $ntfn) ^(FUNCTION ^(QNAME $fn) ^(LITERAL Literal)))
-  |  fn='starts-with' LPAR Literal RPAR -> ^(FUNCTION ^(QNAME $fn) ^(LITERAL Literal))
   ;
 
 qName  :  pre=nCName -> ^(QNAME $pre)

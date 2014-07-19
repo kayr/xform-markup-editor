@@ -708,6 +708,10 @@ Sex
             form: '''### s
 ## f
 
+@boolean
+@id c
+Continue
+
 Subjects
 >>Physics
 >>Calculus

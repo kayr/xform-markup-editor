@@ -21,6 +21,7 @@ class XPathUtil {
     private XPathUtil parse() {
         def parser = Util.createXpathParser(xpath)
         tree = parser.eval().tree as CommonTree
+        XPathParser.NEQ
         return this
     }
 
@@ -36,10 +37,28 @@ class XPathUtil {
     }
 
     static int getLastIndex(Tree tree) {
+        if (tree.childCount == 0)
+            tree = tree.token.stop
+
         List trees = tree.findAll { Tree t ->
             t.childCount == 0
         }
         return trees.get(trees.size() - 1).token.stop
+    }
+
+    static String extractExpr(CommonTree _tree, String xpath) {
+        def start = _tree.charPositionInLine
+        List<CommonTree> children = _tree.children
+        if (children) {
+            start = children[0].charPositionInLine
+        }
+
+        def end = getLastIndex(_tree)
+        return xpath.substring(start, end + 1)
+    }
+
+    String extractExpr(CommonTree _tree) {
+        return extractExpr(_tree, xpath)
     }
 
     static Tree getLastChild(Tree tree) {
@@ -98,13 +117,12 @@ class XPathUtil {
         return buf.toString()
     }
 
-    String tranformXPath(Closure filter, Closure transformer) {
+    String transformXPath(Closure filter, Closure transformer) {
         if (!xpath) return null
 
         try {
             def builder = new StringBuilder(xpath)
             def trees = this.findAll(filter)
-
 
             //todo do some caching to improve performance
             trees.inject(0) { Integer offset, def tree ->
