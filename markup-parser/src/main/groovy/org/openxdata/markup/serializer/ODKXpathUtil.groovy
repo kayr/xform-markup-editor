@@ -18,6 +18,7 @@ public class ODKXpathUtil {
     String _xpath
     Form form
     boolean numberedBindings
+    private List<CommonTree> visitedTrees = []
 
     ODKXpathUtil() {}
 
@@ -31,27 +32,31 @@ public class ODKXpathUtil {
         return _makeODKCompatibleXPath(_xpath)
     }
 
+    private def clsTransformer(StringBuilder builder, CommonTree tree, int offset) {
+        if (visitedTrees.contains(tree)) return
+
+        visitedTrees.add(tree)
+
+        def compatibleExpr = makeCompatibleExpression(tree)
+        if (!compatibleExpr) return
+
+        //make sure u get the position of the first token in the expression
+        def start = tree.parent.children[0].charPositionInLine + offset
+        def end = XPathUtil.getLastIndex(tree.parent) + offset + 1
+        builder.replace(start, end, compatibleExpr)
+
+    }
+
+    private def clsFilter(CommonTree tree) {
+        if (!tree.isPath()) return false
+        def qn = findQuestion(tree, form, numberedBindings)
+        return (qn instanceof MultiSelectQuestion || qn?.type?.equalsIgnoreCase('boolean'))
+    }
+
 
     private String _makeODKCompatibleXPath(String xpath) {
         XPathUtil xp = new XPathUtil(xpath)
-
-        def clsTransformer = { StringBuilder builder, CommonTree tree, int offset ->
-            def compatibleExpr = makeCompatibleExpression(tree)
-            if (compatibleExpr) {
-                //make sure u get the position of the first token in the expression
-                def start = tree.parent.children[0].charPositionInLine + offset
-                def end = XPathUtil.getLastIndex(tree.parent) + offset + 1
-                builder.replace(start, end, compatibleExpr)
-            }
-        }
-
-        def clsFilter = {
-            if (!it.isPath()) return false
-            def qn = findQuestion(it, form, numberedBindings)
-            return qn != null && (qn instanceof MultiSelectQuestion || qn.type?.equalsIgnoreCase('boolean'))
-        }
-
-        return xp.transformXPath(clsFilter, clsTransformer)
+        return xp.transformXPath(this.&clsFilter, this.&clsTransformer)
     }
 
 
