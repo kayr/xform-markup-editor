@@ -95,13 +95,14 @@ class DynamicBuilder {
     public void parse() {
         List<String[]> csv = parseCsv()
 
-        def options = getUniqueValuesForFirstColumn(csv)
         def weAreBuildingQnsDirectlyFromCSV = isCsvDirectBuild()
-
-        if (weAreBuildingQnsDirectlyFromCSV) {
-            makeSingleSelectFromList(options)
-        } else {
-            generateSingleSelectOptions(options)
+        if (!isInstanceOnly()) {
+            def options = getUniqueValuesForFirstColumn(csv)
+            if (weAreBuildingQnsDirectlyFromCSV) {
+                makeSingleSelectFromList(options)
+            } else {
+                generateSingleSelectOptions(options)
+            }
         }
 
         buildModelAndQuestions(weAreBuildingQnsDirectlyFromCSV)
