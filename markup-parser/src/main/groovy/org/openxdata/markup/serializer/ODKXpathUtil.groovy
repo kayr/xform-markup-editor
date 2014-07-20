@@ -118,7 +118,7 @@ public class ODKXpathUtil {
             return "$leftString $eq $rightString"
 
         //recursively make the rightString Compatible
-        rightString = makeCompatibleXpath(rightTree)
+        rightString = makeCompatibleSubXpath(rightTree)
         return "$leftString = string($rightString)"
 
     }
@@ -147,7 +147,7 @@ public class ODKXpathUtil {
             finalExpr = rightParts.collect { "selected($leftString, '$it')" }.join(' or ')
 
         } else {
-            rightString = makeCompatibleXpath(rightTree)
+            rightString = makeCompatibleSubXpath(rightTree)
             finalExpr = "selected($leftString, $rightString)"
         }
 
@@ -156,7 +156,7 @@ public class ODKXpathUtil {
         return finalExpr
     }
 
-    private String makeCompatibleXpath(CommonTree rightTree) {
+    private String makeCompatibleSubXpath(CommonTree rightTree) {
         def rightString = extractExpr(rightTree, _xpath)
         List<CommonTree> trees = rightTree.findAllDeep { true }
         visitedTrees.addAll(trees)
