@@ -200,6 +200,7 @@ class XFormDeserializerTest extends GroovyTestCase {
         testRoundTrip(wssbForm.markUp)
         testRoundTrip(gpsForm.markUp)
         testRoundTrip(formWithDollarInString)
+        testRoundTrip(dynFormWithQuotes.markUp)
     }
 
     void testRoundTrip(String form) {

@@ -220,6 +220,24 @@ repeat {    ffd
 
 }
 ''']
+    static def dynFormWithQuotes = [markUp: ''' ### F
+
+## f
+
+@gps
+Gp1
+
+@parent gp1
+Qn 1
+$> cities
+
+dynamic_instance{
+parent,cities
+uganda,kampala
+kenya,"nairobi ""M"""
+uganda,entebbe
+}
+''']
 
 
 }

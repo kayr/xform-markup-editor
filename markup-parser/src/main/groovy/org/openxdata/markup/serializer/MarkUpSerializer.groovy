@@ -1,5 +1,6 @@
 package org.openxdata.markup.serializer
 
+import au.com.bytecode.opencsv.CSVWriter
 import org.codehaus.groovy.runtime.StringGroovyMethods
 import org.openxdata.markup.*
 
@@ -43,11 +44,15 @@ class MarkUpSerializer {
     }
 
     static def renderDynamicOptions(def builder, String id, List<DynamicOption> options) {
-        builder << 'dynamic_instance{'
-        builder << "root,$id"
+
+        def stringWriter = new StringWriter()
+        CSVWriter writer = new CSVWriter(stringWriter)
+        writer.writeNext(['root', id] as String[])
         for (o in options) {
-            builder << "$o.parentBinding, $o.markUpText"
+            writer.writeNext([o.parentBinding, o.markUpText] as String[])
         }
+        builder << 'dynamic_instance{'
+        builder << stringWriter.toString()
         builder << '}'
 
     }
