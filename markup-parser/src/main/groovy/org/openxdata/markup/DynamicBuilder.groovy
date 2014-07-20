@@ -16,7 +16,7 @@ import static org.openxdata.markup.Util.parseBind
 class DynamicBuilder {
 
     boolean instanceOnly = false
-    def csvSrc = "";
+    def csvSrc = new StringBuilder();
     String csvFilePath = null;
     List<String[]> parsedCsv
     int line = 0
@@ -222,9 +222,7 @@ class DynamicBuilder {
     public boolean appendLine(String line) {
         if (Study.quickParse.get() && line && linesAppended++ >= MAX_LINES)
             return false
-
-        line = line << "\n"
-        csvSrc = csvSrc << line
+        csvSrc << line << "\n"
         return true
     }
 
@@ -232,9 +230,10 @@ class DynamicBuilder {
         if (csvFilePath != null) {
             readCSVFile()
         }
+        csvSrc  = csvSrc.toString()
         def csv = toStringArrayList(csvSrc)
         parsedCsv = fillUpSpace(csv)
-        convertCsvToString(csv)
+//        convertCsvToString(csv)
         return parsedCsv
     }
 

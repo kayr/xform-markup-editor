@@ -274,14 +274,16 @@ Qn 1
 dynamic_instance {
 parent,cities
 uganda,kampala
-kenya,nairobi
+kenya,nairobi "M"
 uganda,entebbe
 }
 '''
 
         def form = Util.createParser(src).study().forms[0]
 
-        form.printAll(System.out)
+        assert form.questions.size() == 1
+        assert form.dynamicOptions.size() == 1
+        assert form.dynamicOptions.get('cities').size() == 3
     }
 
     public void ignoreTestFillUpSpace2() {
