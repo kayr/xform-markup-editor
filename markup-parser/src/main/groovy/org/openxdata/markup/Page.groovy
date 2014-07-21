@@ -36,12 +36,11 @@ class Page implements HasQuestions {
     }
 
     private void validate(IQuestion question) {
-        IQuestion qn = findQuestionWithBinding(question.binding, question.parent)
+        IQuestion qn = getQuestion(question.binding)
         if (qn != null) {
             throw new DuplicateQuestionException(question1: question, question2: qn)
         }
     }
-
 
     public String getBinding() {
         return null
