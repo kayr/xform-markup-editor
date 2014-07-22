@@ -108,7 +108,7 @@ class MainWindow {
         }
 
         def _textArea = {
-            s.splitPane(orientation: JSplitPane.VERTICAL_SPLIT, dividerLocation: 400) {
+            s.splitPane(orientation: JSplitPane.VERTICAL_SPLIT,resizeWeight: 0.85) {
 
                 scrollPane(constraints: 'top') {
                     txtMarkUp = editorPane()
