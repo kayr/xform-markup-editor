@@ -1,5 +1,6 @@
 package org.openxdata.markup
 
+import groovy.transform.CompileStatic
 import org.openxdata.markup.exception.InvalidAttributeException
 
 /**
@@ -9,20 +10,21 @@ import org.openxdata.markup.exception.InvalidAttributeException
  * Time: 11:42 AM
  * To change this template use File | Settings | File Templates.
  */
+@CompileStatic
 class Attrib {
 
-    static def types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
+    static List types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
             'picture', 'gps', 'barcode', 'longtext']
 
     static
-    def allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
+    List allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
             'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
 
 
     static void addAttribute(IQuestion question, String attribute, int line) {
         def params = extractAttribAndParam(attribute)
-        def param = params.param
-        def lowCaseAttrib = params.attrib
+        String param = params['param']
+        String lowCaseAttrib = params['attrib']
 
         //type attributes are only allowed on TextQuestions
         def invalid = !(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
@@ -51,8 +53,8 @@ Supported attributes include $types \n$allowedAttributes""", line)
     static void addAttributeToForm(Form form, String attribute, int line) {
         def params = extractAttribAndParam(attribute)
 
-        def attrib = params.attrib
-        def param = params.param
+        String attrib = params['attrib']
+        String param = params['param']
 
         switch (attrib) {
             case 'id':
@@ -124,7 +126,7 @@ Supported attributes include $types \n$allowedAttributes""", line)
                 break
             case 'parent':
                 Util.validateId(param, line)
-                question.parentQuestionId = param
+                (question as DynamicQuestion).parentQuestionId = param
                 break
             case 'default':
                 question.value = param
