@@ -11,13 +11,13 @@ import org.openxdata.markup.serializer.MarkupAligner
 class XFormImporterPresenter {
 
     private XFormImporterUI ui
-    private FormBinderPresenter main
+    private MainPresenter main
 
     XFormImporterPresenter() {
         ui = new XFormImporterUI(this)
     }
 
-    XFormImporterPresenter(FormBinderPresenter main) {
+    XFormImporterPresenter(MainPresenter main) {
         this()
         this.main = main
     }

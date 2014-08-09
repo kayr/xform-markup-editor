@@ -13,7 +13,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE
 /**
  * Created by kay on 7/11/14.
  */
-class MainWindow {
+class MainUI {
 
     static def ICON_OPEN = getIcon('Tree.openIcon')
     static def ICON_SAVE = getIcon('FileView.floppyDriveIcon')
@@ -24,7 +24,7 @@ class MainWindow {
     Closure formLoader
     SwingBuilder s
 
-    MainWindow() {
+    MainUI() {
         DefaultSyntaxKit.registerContentType("text/xform", "org.openxdata.markup.ui.XFormMarkupSyntaxKit");
         initUi()
 
@@ -194,7 +194,7 @@ class MainWindow {
     JFrame frame
 
     static main(args) {
-        new MainWindow()
+        new MainUI()
     }
 
 

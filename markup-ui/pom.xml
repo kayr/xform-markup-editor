@@ -69,7 +69,7 @@
                     <archive>
 
                         <manifest>
-                            <mainClass>org.openxdata.markup.ui.FormBinderPresenter</mainClass>
+                            <mainClass>org.openxdata.markup.ui.MainPresenter</mainClass>
                         </manifest>
                     </archive>
 

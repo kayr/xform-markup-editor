@@ -23,18 +23,18 @@ import static javax.swing.SwingUtilities.invokeLater
  * Time: 4:15 PM
  * To change this template use File | Settings | File Templates.
  */
-class FormBinderPresenter {
+class MainPresenter {
 
     XFormImporterPresenter xFormImporter
-    MainWindow form
+    MainUI form
     File currentFile
     def xfmFilter
     def allowedAttribs
     def allowedTypes
 
 
-    FormBinderPresenter() {
-        form = new MainWindow()
+    MainPresenter() {
+        form = new MainUI()
 
         xFormImporter = new XFormImporterPresenter(this)
         init()
@@ -376,7 +376,7 @@ class FormBinderPresenter {
     }
 
     static main(args) {
-        new FormBinderPresenter()
+        new MainPresenter()
 
     }
 
