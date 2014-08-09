@@ -2,9 +2,8 @@ package org.openxdata.markup
 
 import au.com.bytecode.opencsv.CSVReader
 import au.com.bytecode.opencsv.CSVWriter
+import groovy.transform.CompileStatic
 import org.openxdata.markup.exception.ValidationException
-
-import static org.openxdata.markup.Util.parseBind
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,10 +12,11 @@ import static org.openxdata.markup.Util.parseBind
  * Time: 11:52 PM
  * To change this template use File | Settings | File Templates.
  */
+@CompileStatic
 class DynamicBuilder {
 
     boolean instanceOnly = false
-    def csvSrc = new StringBuilder();
+    StringBuilder csvSrc = new StringBuilder();
     String csvFilePath = null;
     List<String[]> parsedCsv
     int line = 0
@@ -24,7 +24,7 @@ class DynamicBuilder {
     List<IQuestion> questions = []
     Map<String, List<DynamicOption>> dynamicOptions = [:]
     String referencedSingleSelectBinding
-    def parsedSingleSelectOptions = []
+    List parsedSingleSelectOptions = []
 
     int linesAppended = 0
     private final static int MAX_LINES = 3
@@ -70,7 +70,7 @@ class DynamicBuilder {
     }
 
     private void bindOptionsToSingleSelectInstance(HasQuestions form) {
-        def singleSelectQuestionInstance = Form.findQuestionWithBinding(referencedSingleSelectBinding, form)
+        IQuestion singleSelectQuestionInstance = Form.findQuestionWithBinding(referencedSingleSelectBinding, form)
 
         if (singleSelectQuestionInstance == null)
             throw new ValidationException("Error while parsing CSV. SingleSelect question with id [$referencedSingleSelectBinding]\ncould not be found in the form")
@@ -78,7 +78,7 @@ class DynamicBuilder {
         if (!(singleSelectQuestionInstance instanceof SingleSelectQuestion))
             throw new ValidationException("Error while parsing CSV.Question with id[$referencedSingleSelectBinding] is not a SingleSelect Question", singleSelectQuestionInstance.line)
 
-        singleSelectQuestionInstance.options = parsedSingleSelectOptions
+        (singleSelectQuestionInstance as SingleSelectQuestion).options = parsedSingleSelectOptions
     }
 
     private def addBuiltQnsDirectly(HasQuestions form) {
@@ -120,10 +120,10 @@ class DynamicBuilder {
     }
 
     private void buildModelAndQuestions(boolean weAreBuildingQnsDirectlyFromCSV) {
-        def headers = parsedCsv[0]
+        String[] headers = parsedCsv[0]
         for (int headerIdx = 1; headerIdx < headers.length; headerIdx++) {
 
-            def csvHeader = headers[headerIdx]
+            String csvHeader = headers[headerIdx]
 
             DynamicQuestion qn = new DynamicQuestion(csvHeader)
             if (weAreBuildingQnsDirectlyFromCSV) {
@@ -135,28 +135,28 @@ class DynamicBuilder {
                 validateVariable(qn.binding, qn.text)
             }
 
-            buildDynamicModel(headerIdx, qn.binding)
+            def instanceId = qn.binding as String
+            buildDynamicModel(headerIdx, instanceId)
         }
     }
 
     //todo optimise this for faster perfomance
     private void buildDynamicModel(Integer columnIdx, String instanceId) {
-
-        def createdOptions = new HashSet()
+        HashSet createdOptions = new HashSet()
         //map of visited children and parents we use a HashMap mainly for logging purposes to
         //to show the parents a specific child has
-        def visitedChildren = new HashMap()
+        Map<String, HashSet<String>> visitedChildren = new HashMap()
         dynamicOptions[instanceId] = []
 
         for (int rowIdx = 1; rowIdx < parsedCsv.size(); rowIdx++) {
 
             def currentRow = parsedCsv[rowIdx]
 
-            def childName = currentRow[columnIdx]
+            String childName = currentRow[columnIdx]
 
             //optimisation to avoid parsing text many times
             //get the parent binding it was already parsed by the previous call to this method
-            def parentBinding = columnIdx == 1 ? parseBind(currentRow[columnIdx - 1]).bind : currentRow[columnIdx - 1]
+            String parentBinding = columnIdx == 1 ? Util.parseBind(currentRow[columnIdx - 1],rowIdx)['bind'] : currentRow[columnIdx - 1]
 
 
             def option = new DynamicOption(parentBinding, childName)
@@ -197,7 +197,7 @@ class DynamicBuilder {
             if (!visitedChildren[currentBinding])
                 visitedChildren[currentBinding] = new HashSet()
             //parent bindings are mainly kept for logging purposes
-            visitedChildren[currentBinding] << option.parentBinding
+            (visitedChildren[currentBinding] as HashSet) << option.parentBinding
         }
     }
 
@@ -230,21 +230,21 @@ class DynamicBuilder {
         if (csvFilePath != null) {
             readCSVFile()
         }
-        csvSrc  = csvSrc.toString()
-        def csv = toStringArrayList(csvSrc)
+
+        def csv = toStringArrayList(csvSrc.toString())
         parsedCsv = fillUpSpace(csv)
 //        convertCsvToString(csv)
         return parsedCsv
     }
 
-    private def convertCsvToString(List<String[]> csv) {
+    private String convertCsvToString(List<String[]> csv) {
         StringWriter str = new StringWriter()
         def csvWriter = new CSVWriter(str)
         csvWriter.writeAll(csv)
-        csvSrc = str.toString()
+        str.toString()
     }
 
-    private void readCSVFile() {
+    private void readCSVFile() throws Exception {
         def file = new File(csvFilePath)
         if (!file.exists()) {
             def formDir = System.getProperty('form.dir')
@@ -259,7 +259,7 @@ class DynamicBuilder {
         if (Study.quickParse.get()) {
             readMaxLines(file)
         } else {
-            csvSrc = file.text
+            csvSrc = new StringBuilder(file.text)
         }
     }
 

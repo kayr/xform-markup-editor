@@ -1,5 +1,6 @@
 package org.openxdata.markup
 
+import groovy.transform.CompileStatic
 import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonTokenStream
@@ -16,6 +17,8 @@ import org.openxdata.xpath.XPathParser
  * To change this template use File | Settings | File Templates.
  */
 class Util {
+
+    @CompileStatic
     public static String getBindName(String question) {
 
         // if len(s) < 1, return '_blank'
@@ -96,6 +99,7 @@ class Util {
 
     }
 
+    @CompileStatic
     public static String getTextWithoutDecTemplate(String text) {
         if (text.contains('${')) {
             if (text.indexOf('}$') < text.length() - 2)
@@ -106,6 +110,7 @@ class Util {
         return text;
     }
 
+    @CompileStatic
     public static void writeToFile(String fileName, String contents) {
         File file = new File(fileName)
         while (file.exists()) {
@@ -149,7 +154,8 @@ class Util {
         return "string"
     }
 
-    static Map<String, String> parseBind(String option, int line = 0) {
+    @CompileStatic
+    static Map<String, String> parseBind(String option, int line) {
         def bind
 
         if (!option) {
@@ -185,6 +191,7 @@ class Util {
         return parser;
     }
 
+    @CompileStatic
     public static void validateId(String id, int line) {
         if (!(id ==~ /[a-z_][a-z0-9_]*/))
             throw new InvalidAttributeException("""You have an invalid variable [$id] .

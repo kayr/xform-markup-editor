@@ -59,7 +59,7 @@ Kenya,Nairobi,Macos
     DynamicBuilder builder = new DynamicBuilder();
 
     public void testParse() {
-        builder.csvSrc = csv
+        builder.csvSrc = new StringBuilder(csv)
         builder.parse()
 
         checkQuestionContent()
@@ -90,7 +90,7 @@ Kenya,Nairobi,Macos
         builder.parse()
         Study.quickParse.set(false)
 
-        assertEquals 3, builder.csvSrc.split('\n').length
+        assertEquals 3, builder.csvSrc.toString().split('\n').length
     }
 
 
@@ -106,12 +106,12 @@ Kenya,Nairobi,Macos
 
         assertNotNull builder.parsedCsv
 
-        assertEquals 3, builder.csvSrc.split('\n').length
+        assertEquals 3, builder.csvSrc.toString().split('\n').length
         Study.quickParse.set(false)
     }
 
     public void testOxdIncompatibleCSV() {
-        builder.csvSrc = oxdIncompatibleCSV
+        builder.csvSrc = new StringBuilder(oxdIncompatibleCSV)
 
         builder.parse()
 
@@ -144,7 +144,7 @@ Kenya,Nairobi,Macos
 
         DynamicBuilder builder = new DynamicBuilder();
 
-        builder.csvSrc = dynInstance
+        builder.csvSrc = new StringBuilder(dynInstance)
 
         builder.parse()
 
@@ -224,7 +224,7 @@ Kenya,Nairobi,Macos
     }
 
     public void testDynamicOptionWithVariables() {
-        builder.csvSrc = csvWithVariables
+        builder.csvSrc = new StringBuilder(csvWithVariables)
         builder.parse()
 
         assertEquals 'Expecting 3 questions', 3, builder.questions.size()
@@ -254,7 +254,7 @@ Kenya,Nairobi,Macos
                     Europe,    Kenya,    Eldoret'''
 
     public void testOxdInCompatibleCSV2() {
-        builder.csvSrc = csvWithSameChildrenDifferentParents
+        builder.csvSrc = new StringBuilder(csvWithSameChildrenDifferentParents)
 
         builder.parse()
 
