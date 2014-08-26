@@ -50,7 +50,7 @@ class DynamicBuilder {
             if (e instanceof ValidationException) throw e
 
             def newEx = new RuntimeException("Error while creating dynamic question:\n " + e.toString(), e)
-            newEx.stackTrace = e.stackTrace
+            newEx.setStackTrace(e.getStackTrace())
             throw newEx
         }
     }
