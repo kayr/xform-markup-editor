@@ -18,13 +18,9 @@ import org.openxdata.xpath.XPathParser
  */
 class Util {
 
-    public static String getBindName(String question) {
-        return memoizedGetBindName(question)
-    }
+    public static String getBindName(String question) { memoizedGetBindName(question) }
 
-    private static memoizedGetBindName = { String question ->
-        return getBindStatic(question)
-    }.memoizeAtMost(2000)
+    private static memoizedGetBindName = { String question -> return getBindStatic(question) }.memoizeAtMost(1000)
 
     @CompileStatic
     private static String getBindStatic(String question) {
@@ -161,16 +157,23 @@ class Util {
         return "string"
     }
 
-    static Map<String, String> parseBind(String option, int line) {
-        return memoizedParseBind(option, line)
+    static <T> T wrapValidationExceptionHandler(int line, Closure<T> c) {
+        try {
+            return c()
+        } catch (ValidationException ex) {
+            ex.line = line
+            throw ex
+        }
     }
 
-    private static memoizedParseBind = { String option, int line ->
-        parseBindStatic(option, line)
-    }.memoizeAtMost(2000)
+    static Map<String, String> parseBind(String option, int line) {
+        wrapValidationExceptionHandler(line) { memoizedParseBind.call(option) }
+    }
+
+    private static memoizedParseBind = { String option -> parseBindStatic(option) }.memoizeAtMost(1000)
 
     @CompileStatic
-    private static Map<String, String> parseBindStatic(String option, int line) {
+    private static Map<String, String> parseBindStatic(String option) {
         def bind
 
         if (!option) {
@@ -180,7 +183,7 @@ class Util {
             //make sure bind is at the beginning
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
- An Id should start with lower case characters follow by low case characters, numbers or underscores""", line)
+ An Id should start with lower case characters follow by low case characters, numbers or underscores""")
             option = option.replaceFirst(/[$][a-z_][a-z0-9_]*/, '').trim()
             bind = tmpBind.trim() - '$'
         } else {
@@ -207,13 +210,13 @@ class Util {
     }
 
     public static void validateId(String id, int line) {
-        memoizedValidateId(id, line)
+        wrapValidationExceptionHandler(line) { memoizedValidateId.call(id) }
     }
-    private static memoizedValidateId = { String id, int line ->
+    private static memoizedValidateId = { String id ->
         if (!(id ==~ /[a-z_][a-z0-9_]*/))
-            throw new InvalidAttributeException("""You have an invalid variable [$id] .
-Attributes should start with a small letter followed by small letters and underscores""", line)
-    }.memoizeAtMost(2000)
+            throw new InvalidAttributeException("You have an invalid variable [$id] .\n" +
+                    "Attributes should start with a small letter followed by small letters and underscores")
+    }.memoizeAtMost(1000)
 
 
     def static booleanKeys = """is
