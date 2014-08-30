@@ -18,8 +18,16 @@ import org.openxdata.xpath.XPathParser
  */
 class Util {
 
-    @CompileStatic
     public static String getBindName(String question) {
+        return memoizedGetBindName(question)
+    }
+
+    private static memoizedGetBindName = { String question ->
+        return getBindStatic(question)
+    }.memoizeAtMost(2000)
+
+    @CompileStatic
+    private static String getBindStatic(String question) {
 
         // if len(s) < 1, return '_blank'
         if (question == null || question.length() < 1)
@@ -96,7 +104,6 @@ class Util {
         }
         // return token
         return token;
-
     }
 
     @CompileStatic
@@ -154,8 +161,16 @@ class Util {
         return "string"
     }
 
-    @CompileStatic
     static Map<String, String> parseBind(String option, int line) {
+        return memoizedParseBind(option, line)
+    }
+
+    private static memoizedParseBind = { String option, int line ->
+        parseBindStatic(option, line)
+    }.memoizeAtMost(2000)
+
+    @CompileStatic
+    private static Map<String, String> parseBindStatic(String option, int line) {
         def bind
 
         if (!option) {
@@ -191,12 +206,14 @@ class Util {
         return parser;
     }
 
-    @CompileStatic
     public static void validateId(String id, int line) {
+        memoizedValidateId(id, line)
+    }
+    private static memoizedValidateId = { String id, int line ->
         if (!(id ==~ /[a-z_][a-z0-9_]*/))
             throw new InvalidAttributeException("""You have an invalid variable [$id] .
 Attributes should start with a small letter followed by small letters and underscores""", line)
-    }
+    }.memoizeAtMost(2000)
 
 
     def static booleanKeys = """is
