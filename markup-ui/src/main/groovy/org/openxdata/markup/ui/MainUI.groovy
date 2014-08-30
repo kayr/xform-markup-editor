@@ -69,9 +69,9 @@ class MainUI {
 
                 flowLayout(alignment: FlowLayout.LEFT, hgap: 1)
 
-                btnGenerateXML = button(text: "Export OXD Study", actionPerformed: {})
-                btnShowXml = button(text: "Show XML OXD", actionPerformed: {})
-                btnShowOdkXml = button(text: "Show XML ODK", actionPerformed: {})
+                btnGenerateXML = button(text: "Export OXD Study")
+                btnShowXml = button(text: "Show XML OXD")
+                btnShowOdkXml = button(text: "Show XML ODK")
                 chkNumberBindings = checkBox(text: 'Number IDs')
                 chkNumberLabels = checkBox(text: 'Number Labels')
                 chkGenerateLayout = checkBox(text: 'Generate Layout')
@@ -108,7 +108,7 @@ class MainUI {
         }
 
         def _textArea = {
-            s.splitPane(orientation: JSplitPane.VERTICAL_SPLIT,resizeWeight: 0.85) {
+            s.splitPane(orientation: JSplitPane.VERTICAL_SPLIT, resizeWeight: 0.85) {
 
                 scrollPane(constraints: 'top') {
                     txtMarkUp = editorPane()
