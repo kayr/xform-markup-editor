@@ -353,10 +353,20 @@ class MainPresenter {
     }
 
     def updateTree(Study study) {
-        form.studyTreeBuilder.updateTree(study) { IQuestion qn ->
-            invokeLater { ActionUtils.setCaretPosition(form.txtMarkUp, qn.line, 0) }
-        }
+        form.studyTreeBuilder.updateTree(study) { IQuestion qn -> selectQn(qn) }
         invokeLater { form.studyTreeBuilder.expand(3) }
+    }
+
+    private selectQn(IQuestion qn) {
+        def docPosn = ActionUtils.getDocumentPosition(form.txtMarkUp, qn.line, 0)
+        def txtLine = ActionUtils.getLineAt(form.txtMarkUp, docPosn)
+        if (!txtLine) return
+
+        def lineLength = txtLine.size()
+        invokeLater {
+            form.txtMarkUp.requestFocusInWindow()
+            form.txtMarkUp.select(docPosn, docPosn + lineLength)
+        }
     }
 
     def executeSafely(Closure closure) {
