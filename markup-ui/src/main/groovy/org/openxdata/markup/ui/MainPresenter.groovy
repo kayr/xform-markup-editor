@@ -305,7 +305,7 @@ class MainPresenter {
         JOptionPane.showMessageDialog(form.frame, msg)
     }
 
-    File createDirectory(String path) {
+    static File createDirectory(String path) {
         def directory = new File(path)
         println "Creating directory $directory.absolutePath"
         directory.mkdirs()
