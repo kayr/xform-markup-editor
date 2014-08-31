@@ -2,11 +2,14 @@ package org.openxdata.markup.ui
 
 import jsyntaxpane.actions.ActionUtils
 import org.openxdata.markup.*
+import org.openxdata.markup.exception.ValidationException
 import org.openxdata.markup.serializer.MarkupAligner
 import org.openxdata.markup.serializer.ODKSerializer
 import org.openxdata.markup.serializer.XFormSerializer
 
 import javax.swing.*
+import javax.swing.event.DocumentEvent
+import javax.swing.event.DocumentListener
 import javax.swing.filechooser.FileFilter
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
@@ -23,7 +26,7 @@ import static javax.swing.SwingUtilities.invokeLater
  * Time: 4:15 PM
  * To change this template use File | Settings | File Templates.
  */
-class MainPresenter {
+class MainPresenter implements DocumentListener {
 
     XFormImporterPresenter xFormImporter
     MainUI form
@@ -80,6 +83,8 @@ class MainPresenter {
             Thread.start { executeSafely { showOdkXML() } }
         } as ActionListener)
 
+        form.chkAutoUpdateTree.addActionListener({ ActionEvent e -> toggleDocumenListener() } as ActionListener)
+
         form.formLoader = {
             loadWithConfirmation(addHeader(it))
         }
@@ -128,7 +133,16 @@ class MainPresenter {
 
     private void loadForm(String markupTxt) {
         form.txtMarkUp.read(new StringReader(markupTxt), 'text/xform')
+        toggleDocumenListener()
         quickParseStudy()
+    }
+
+    void toggleDocumenListener() {
+        if (form.chkAutoUpdateTree.isSelected()) {
+            form.txtMarkUp.getDocument().addDocumentListener(this)
+        } else {
+            form.txtMarkUp.getDocument().removeDocumentListener(this)
+        }
     }
 
 
@@ -349,21 +363,55 @@ class MainPresenter {
     }
 
     def updateTree(Study study) {
-        form.studyTreeBuilder.updateTree(study) { IQuestion qn -> selectQn(qn) }
+        form.studyTreeBuilder.updateTree(study) { IQuestion qn -> selectLine(qn.line) }
         invokeLater { form.studyTreeBuilder.expand(3) }
     }
 
-    private selectQn(IQuestion qn) {
-        def docPosn = ActionUtils.getDocumentPosition(form.txtMarkUp, qn.line, 0)
-        def txtLine = ActionUtils.getLineAt(form.txtMarkUp, docPosn)
+    private selectLine(int line) {
+        def docPosition = ActionUtils.getDocumentPosition(form.txtMarkUp, line, 0)
+        def txtLine = ActionUtils.getLineAt(form.txtMarkUp, docPosition)
         if (!txtLine) return
 
         def lineLength = txtLine.size()
         invokeLater {
             form.txtMarkUp.requestFocusInWindow()
-            form.txtMarkUp.select(docPosn, docPosn + lineLength)
+            form.txtMarkUp.select(docPosition, docPosition + lineLength)
         }
     }
+
+    public void insertUpdate(final DocumentEvent e) {
+        refreshTreeLater()
+    }
+
+    public void removeUpdate(DocumentEvent e) {
+        refreshTreeLater()
+    }
+
+    public void changedUpdate(DocumentEvent e) {
+        refreshTreeLater()
+    }
+
+    private updating = false
+    private long updateTime = System.currentTimeMillis()
+    private TREE_UPDATE_PERIOD = 500
+
+    private void refreshTreeLater() {
+        updateTime = System.currentTimeMillis()
+        if (isUpdating()) return
+
+        toggleUpdating()
+        Thread.start {
+            while (lastUpdatePeriod() <= TREE_UPDATE_PERIOD) Thread.sleep(TREE_UPDATE_PERIOD)
+            quickParseStudy()
+            toggleUpdating()
+        }
+    }
+
+    private long lastUpdatePeriod() { System.currentTimeMillis() - updateTime }
+
+    private synchronized boolean isUpdating() { updating }
+
+    private synchronized void toggleUpdating() { updating = !updating }
 
     def executeSafely(Closure closure) {
         try {
@@ -371,6 +419,7 @@ class MainPresenter {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(form.frame, ex.message, 'Error While Generating XML', JOptionPane.ERROR_MESSAGE)
             ex.printStackTrace()
+            if (ex instanceof ValidationException) selectLine(ex.line)
         }
 
     }

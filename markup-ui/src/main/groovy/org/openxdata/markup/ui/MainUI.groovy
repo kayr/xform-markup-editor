@@ -90,6 +90,7 @@ class MainUI {
                 panel(constraints: BorderLayout.NORTH) {
                     flowLayout(alignment: FlowLayout.LEFT)
                     btnRefreshTree = button(text: 'Refresh')
+                    chkAutoUpdateTree = checkBox(text: 'Auto Refresh',selected: true)
                 }
 
                 scrollPane() {
@@ -176,6 +177,7 @@ class MainUI {
     JCheckBox chkNumberBindings
     JCheckBox chkNumberLabels
     JCheckBox chkEmulateOXDConversion
+    JCheckBox chkAutoUpdateTree
     JLabel lblCaret
 
     //menus
