@@ -88,7 +88,7 @@ class MainPresenter {
         form.frame.addWindowListener(new WindowAdapter() {
             @Override
             void windowClosing(WindowEvent e) {
-                handleWindowCloseOperation(e)
+                handleWindowCloseOperation()
             }
         })
 
@@ -110,7 +110,7 @@ class MainPresenter {
         loadForm(align)
     }
 
-    void handleWindowCloseOperation(WindowEvent evt) {
+    void handleWindowCloseOperation() {
 
         def text = form.txtMarkUp.text
         if (text == null || text.isEmpty()) {
@@ -119,14 +119,10 @@ class MainPresenter {
 
         def option = JOptionPane.showConfirmDialog(form.frame, "Save File?")
 
-        //noinspection GroovyFallthrough
         switch (option) {
-            case JOptionPane.CANCEL_OPTION:
-                return
-            case JOptionPane.OK_OPTION:
-                saveFile()
-            default:
-                System.exit(0)
+            case JOptionPane.CANCEL_OPTION: break;
+            case JOptionPane.OK_OPTION: saveFile(); System.exit(0); break;
+            default: System.exit(0)
         }
     }
 

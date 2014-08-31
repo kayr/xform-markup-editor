@@ -9,6 +9,7 @@ import java.awt.*
 
 import static javax.swing.UIManager.getIcon
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
 
 /**
  * Created by kay on 7/11/14.
@@ -121,7 +122,7 @@ class MainUI {
             }
         }
 
-        frame = s.frame(title: 'OXD-Markup', defaultCloseOperation: DISPOSE_ON_CLOSE,
+        frame = s.frame(title: 'OXD-Markup', defaultCloseOperation: DO_NOTHING_ON_CLOSE,
                 size: [800, 600], show: true, locationRelativeTo: null) {
 
             lookAndFeel('system')
