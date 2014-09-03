@@ -51,4 +51,16 @@
         <developerConnection>scm:git:file://localhost/${basedir}</developerConnection>
         <url>https://trac.openxdata.org/browser/J2ME/trunk</url>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>kayr.release</id>
+            <url>file:///C:/m2/releases</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>kayr.snapshots</id>
+            <url>file:///C:/m2/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
