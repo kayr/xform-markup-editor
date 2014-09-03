@@ -33,5 +33,22 @@
         </repository>
     </repositories>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <!--<version>2.1</version>-->
+                <configuration>
+                    <pushChanges>false</pushChanges>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
+    <scm>
+        <connection>scm:git:file://localhost/${basedir}</connection>
+        <developerConnection>scm:git:file://localhost/${basedir}</developerConnection>
+        <url>https://trac.openxdata.org/browser/J2ME/trunk</url>
+    </scm>
 </project>
