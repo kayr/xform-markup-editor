@@ -38,9 +38,9 @@ class Attrib {
 
 
         if (types.contains(lowCaseAttrib)) {
-            if (attribute == 'datetime')
-                attribute = 'dateTime'
-            question.type = attribute
+            if (lowCaseAttrib == 'datetime')
+                lowCaseAttrib = 'dateTime'
+            question.type = lowCaseAttrib
         } else if (allowedAttributes.contains(lowCaseAttrib)) {
             setQuestionAttribute(question, lowCaseAttrib, param, line)
         } else {

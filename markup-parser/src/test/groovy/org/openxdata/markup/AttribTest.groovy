@@ -21,6 +21,11 @@ class AttribTest extends GroovyTestCase {
 
         assertEquals qn.type, 'number'
 
+        //Test attributes are converted to lower case
+        Attrib.addAttribute(qn, "Number", 1)
+
+        assertEquals 'attributes are supposed to be converted to lower case', qn.type, 'number'
+
         Attrib.addAttribute(qn, 'invisible', 1)
 
         assertFalse qn.isVisible()
