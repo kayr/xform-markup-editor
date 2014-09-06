@@ -1,7 +1,6 @@
 package org.openxdata.markup
 
 import org.antlr.runtime.tree.CommonTree
-import org.openxdata.xpath.XPathParser
 
 /**
  * Created by kay on 6/18/14.

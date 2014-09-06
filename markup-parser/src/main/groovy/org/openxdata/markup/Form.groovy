@@ -1,7 +1,6 @@
 package org.openxdata.markup
 
 import org.openxdata.markup.exception.ValidationException
-import org.openxdata.xpath.XPathParser
 
 /**
  * Created with IntelliJ IDEA.

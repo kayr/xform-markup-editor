@@ -6,8 +6,8 @@ import org.openxdata.markup.IQuestion
 import org.openxdata.markup.MultiSelectQuestion
 import org.openxdata.markup.XPathUtil
 
+import static org.openxdata.markup.XPathParser.*
 import static org.openxdata.markup.XPathUtil.extractExpr
-import static org.openxdata.xpath.XPathParser.*
 
 /**
  * This class is mainly used to transform OXD XPATH Expressions to something ODK Understands

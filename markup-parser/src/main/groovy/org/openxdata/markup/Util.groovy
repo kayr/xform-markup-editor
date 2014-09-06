@@ -6,8 +6,6 @@ import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonTokenStream
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
-import org.openxdata.xpath.XPathLexer
-import org.openxdata.xpath.XPathParser
 
 /**
  * Created with IntelliJ IDEA.
