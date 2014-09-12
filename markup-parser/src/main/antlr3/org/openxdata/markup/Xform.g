@@ -170,7 +170,7 @@ txtQn	returns [TextQuestion rv = new TextQuestion()]
 	
 	
 ATTRIBUTE
-	:	SPACE '@' SPACE LINECONTENTS		{setText(rl($LINECONTENTS.text));}
+	:	SPACE '@' SPACE LINECONTENTS	{setText(rl($LINECONTENTS.text));}
 	;
 	
 	
@@ -213,7 +213,7 @@ SINGLEOPTION
 	;
 	
 CSVIMPORT
-	:	'csv:import' LINECONTENTS     	{setText(rl($LINECONTENTS.text));}	
+	: 	SPACE 'csv:import' LINECONTENTS     	{setText(rl($LINECONTENTS.text));}	
 	;
 
 SPACE	:	('\t'|' ')*
