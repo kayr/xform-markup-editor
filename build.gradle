@@ -1,0 +1,37 @@
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+
+    idea {
+        module {
+            sourceDirs += file('src/generated-sources/java')
+        }
+    }
+
+    group = 'org.openxdata'
+    version = '0.2-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'groovy'
+    project.buildDir = 'target'
+    sourceCompatibility = 1.5
+    targetCompatibility = 1.5
+	
+	sourceSets.main.java.srcDirs = []
+	sourceSets.main.groovy.srcDirs += ["src/main/java"]
+
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+
+        maven { url "https://dl.dropbox.com/u/3038882/p/m2/snapshots" }
+        maven { url "https://dl.dropbox.com/u/3038882/p/m2/releases" }
+        maven { url "http://nexus.openxdata.org/content/groups/public" }
+        maven { url "http://repo.maven.apache.org/maven2" }
+        maven { url "http://repo1.maven.apache.org/maven2" }
+    }
+
+
+}

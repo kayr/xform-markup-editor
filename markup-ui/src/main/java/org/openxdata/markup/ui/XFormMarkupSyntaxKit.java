@@ -8,7 +8,7 @@ import jsyntaxpane.DefaultSyntaxKit;
 public class XFormMarkupSyntaxKit extends DefaultSyntaxKit {
 
     public XFormMarkupSyntaxKit() {
-        super(new XFormMarkupLexer());
+        super(new org.openxdata.markup.ui.XFormMarkupLexer());
     }
 
 }

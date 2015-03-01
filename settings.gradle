@@ -1,0 +1,6 @@
+rootProject.name = 'oxdmarkup'
+include ':oxdmarkup-parser'
+include ':oxdmarkup-ui'
+
+project(':oxdmarkup-parser').projectDir = "$rootDir/markup-parser" as File
+project(':oxdmarkup-ui').projectDir = "$rootDir/markup-ui" as File

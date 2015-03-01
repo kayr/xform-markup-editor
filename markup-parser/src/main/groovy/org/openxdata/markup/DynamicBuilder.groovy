@@ -12,7 +12,7 @@ import org.openxdata.markup.exception.ValidationException
  * Time: 11:52 PM
  * To change this template use File | Settings | File Templates.
  */
-@CompileStatic
+//@CompileStatic
 class DynamicBuilder {
 
     boolean instanceOnly = false

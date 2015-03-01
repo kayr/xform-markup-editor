@@ -1,0 +1,26 @@
+apply plugin: 'jflex'
+description = 'OpenXdata Markup Editor'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "http://repo.maven.apache.org/maven2" }
+        maven { url "http://repo1.maven.apache.org/maven2" }
+    }
+
+    dependencies {
+        classpath 'co.tomlee.gradle.plugins:gradle-jflex-plugin:0.0.1'
+    }
+}
+
+dependencies {
+
+    jflex 'de.jflex:jflex:1.6.0'
+
+    compile project(':oxdmarkup-parser')
+    compile group: 'jsyntaxpane', name: 'jsyntaxpane', version: '0.9.6'
+    testCompile group: 'junit', name: 'junit', version: '3.8.1'
+}
+
+
