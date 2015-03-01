@@ -13,7 +13,8 @@ dependencies {
 
 
 sourceSets.main.java.srcDirs = []
-sourceSets.main.groovy.srcDirs += ["src/main/java","target/generated-src/antlr/main"]
+sourceSets.main.antlr.srcDirs = ['src/main/antlr3']
+sourceSets.main.groovy.srcDirs += ["src/main/java", "target/generated-src/antlr/main"]
 
 
 

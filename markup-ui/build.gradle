@@ -1,26 +1,42 @@
 apply plugin: 'jflex'
+apply plugin: 'com.github.johnrengelman.shadow'
 description = 'OpenXdata Markup Editor'
 
 buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
         maven { url "http://repo.maven.apache.org/maven2" }
         maven { url "http://repo1.maven.apache.org/maven2" }
     }
 
+
     dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
         classpath 'co.tomlee.gradle.plugins:gradle-jflex-plugin:0.0.1'
     }
 }
 
 dependencies {
 
-    jflex 'de.jflex:jflex:1.6.0'
+    jflex 'de.jflex:jflex:1.4.3'
 
     compile project(':oxdmarkup-parser')
     compile group: 'jsyntaxpane', name: 'jsyntaxpane', version: '0.9.6'
     testCompile group: 'junit', name: 'junit', version: '3.8.1'
+}
+
+
+shadowJar {
+    manifest {
+        attributes('Main-Class': 'org.openxdata.markup.ui.MainPresenter')
+    }
+
+    dependencies {
+        exclude(dependency('de.jflex:jflex'))
+        exclude(dependency('org.antlr:stringtemplate'))
+    }
 }
 
 
