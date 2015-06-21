@@ -858,7 +858,7 @@ Some other quesion
 Sex
 
 
-@showif $pif-s. = 'male'
+@showif $pif-s. = 'male'  and $. = true
 No. Kids
 >$dsd-. kdsd
 ''',
@@ -872,7 +872,7 @@ No. Kids
       </s_f_v1>
     </instance>
     <bind id="pif-s." nodeset="/s_f_v1/pif-s." type="xsd:string" />
-    <bind id="no_dot_kids" nodeset="/s_f_v1/no_dot_kids" type="xsd:string" relevant="/s_f_v1/pif-s. = 'male'" action="show" />
+    <bind id="no_dot_kids" nodeset="/s_f_v1/no_dot_kids" type="xsd:string" relevant="/s_f_v1/pif-s. = 'male' and /s_f_v1/no_dot_kids = true" action="show" />
   </model>
   <group id="1">
     <label>Page1</label>

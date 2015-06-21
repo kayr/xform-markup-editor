@@ -69,9 +69,11 @@ class XPathUtil {
 
             def markUpPath = emitTailString(tree)
 
-            def finalVar = markUpPath.replaceFirst(/\$:?/, '')
+            def isCurrentPathShortCut = markUpPath == '$.'
 
-            def qn = markUpPath == '$.' ? question : question.parentForm.getQuestion(finalVar)
+            def finalVar = isCurrentPathShortCut ? markUpPath : markUpPath.replaceFirst(/\$:?/, '')
+
+            def qn = isCurrentPathShortCut ? question : question.parentForm.getQuestion(finalVar)
 
             if (!qn) throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$finalVar]", question.line)
 

@@ -91,12 +91,14 @@ absoluteLocationPathNoroot
   :  PATHSEP relativeLocationPath
   ;
   
+  //custom
 shortenedAbsolutePath
   	: DOLLAR nodeTest
+  	| DOLLAR abbreviatedStep
   	;
-
+  //custom
 shortenedOxdAbsolutePath
-  	: DOLLAR COLON nodeTest
+  	: DOLLAR COLON nodeTest 
   	;
 
 relativeLocationPath
