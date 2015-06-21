@@ -849,4 +849,45 @@ Some other quesion
 </h:html>'''
     ]
 
+  static def formWithIncompatibleOXDId = [
+          form: '''### s
+
+## f
+
+@id pif-s.
+Sex
+
+
+@showif $pif-s. = 'male'
+No. Kids
+>$dsd-. kdsd
+''',
+
+          oxdXML : '''<xforms>
+  <model>
+    <instance id="s_f_v1">
+      <s_f_v1 id="0" name="f" formKey="s_f_v1">
+        <pif-s. />
+        <no_dot_kids />
+      </s_f_v1>
+    </instance>
+    <bind id="pif-s." nodeset="/s_f_v1/pif-s." type="xsd:string" />
+    <bind id="no_dot_kids" nodeset="/s_f_v1/no_dot_kids" type="xsd:string" relevant="/s_f_v1/pif-s. = 'male'" action="show" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="pif-s.">
+      <label>Sex</label>
+    </input>
+    <select1 bind="no_dot_kids">
+      <label>No. Kids</label>
+      <item id="dsd-.">
+        <label>kdsd</label>
+        <value>dsd-.</value>
+      </item>
+    </select1>
+  </group>
+</xforms>'''
+  ]
+
 }

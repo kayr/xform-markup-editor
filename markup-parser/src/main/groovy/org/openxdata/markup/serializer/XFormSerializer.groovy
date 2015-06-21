@@ -138,7 +138,7 @@ class XFormSerializer {
         return question.absoluteBinding
     }
 
-    private void checkBindLength(String bind) {
+    private static void checkBindLength(String bind) {
         if (bind.length() > 63)
             System.err.println "Binding: [$bind] is too long"
     }
@@ -298,7 +298,7 @@ class XFormSerializer {
         }
     }
 
-    Map getQuestionType(IQuestion question) {
+    static Map getQuestionType(IQuestion question) {
         switch (question.type) {
             case 'video':
                 return [type: 'xsd:base64Binary', format: 'video']

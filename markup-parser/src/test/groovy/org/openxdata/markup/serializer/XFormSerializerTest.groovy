@@ -18,12 +18,13 @@ import org.openxdata.markup.Util
 class XFormSerializerTest extends XMLTestCase {
 
     private Study study
-    XFormSerializer serializer = new XFormSerializer();
+    XFormSerializer serializer
 
     void setUp() {
 
         def parser = Util.createParser(Fixtures.normalPurcform)
         study = parser.study()
+        serializer = new XFormSerializer()
 
     }
 
@@ -226,6 +227,18 @@ class XFormSerializerTest extends XMLTestCase {
         def xml = serializer.toXForm(parser.study().forms[0])
 
         assertEquals Fixtures.absoluteIdXML, xml
+    }
+
+    void testNonOxdInCompatibleIDsAreAllowed() {
+
+        Study.validateWithXML.set(true)
+        def form = Util.createParser(ODKFixtures.formWithIncompatibleOXDId.form).study().forms[0]
+
+        def xml = serializer.toXForm(form)
+
+        assertEquals ODKFixtures.formWithIncompatibleOXDId.oxdXML, xml
+
+
     }
 
 

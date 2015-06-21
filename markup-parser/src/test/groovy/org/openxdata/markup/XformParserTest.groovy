@@ -460,15 +460,7 @@ jeelopo
         assertEquals 1, form.dynamicOptions.size()
     }
 
-    void testNonOxdCompatibleIDsAreAllowed() {
 
-        Study.validateWithXML.set(true)
-        def form = Util.createParser(Fixtures.formWithInvalidOXDIds).study().forms[0]
-
-        form.printAll(System.out)
-
-
-    }
 
 
     private XformParser createParser(String testString) throws IOException {

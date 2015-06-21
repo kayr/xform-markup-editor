@@ -19,19 +19,6 @@ class Fixtures {
     }
 
 
-    static def formWithInvalidOXDIds = '''### s
-
-## f
-
-@id pif-s.
-Sex
-
-
-@showif $pif-s. = 'male'
-No. Kids
->$dsd-. kdsd
-'''
-
     static def formWIthValue = '''### s
 
 ## f
