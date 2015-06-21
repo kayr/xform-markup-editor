@@ -730,6 +730,9 @@ Physics Score
 @enableif $s = 'calculus' and ($ps != null or (3-4) = 9) and $s = 'biology'
 Other Qn
 
+@id g
+Some other quesion
+
 '''
     ]
 
@@ -758,6 +761,15 @@ Q2
 @enableif   $subjects = 'cal' and (/c/ps != null or (3-4) = 9 or  true!=$c) and $c=true
 Q3
 
+@id g
+Some other quesion
+
+
+@id e
+Some other quesion
+
+@id ps
+Some other quesion
 
 ''', xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
   <h:head>
@@ -770,6 +782,9 @@ Q3
           <q1 />
           <q2 />
           <q3 />
+          <g />
+          <e />
+          <ps />
         </s_f_v1>
       </instance>
       <bind id="subjects" nodeset="/s_f_v1/subjects" type="string" />
@@ -777,6 +792,9 @@ Q3
       <bind id="q1" nodeset="/s_f_v1/q1" type="string" relevant="/s_f_v1/c = 'true' and /s_f_v1/c &lt; gone() or /r/g &gt; 9 and /p/e &lt;= 8" />
       <bind id="q2" nodeset="/s_f_v1/q2" type="string" relevant="/s_f_v1/c != 'true' and /s_f_v1/c &lt; gone() or /r/g &gt; 9 and /p/e &lt;= 8" />
       <bind id="q3" nodeset="/s_f_v1/q3" type="string" relevant="selected(/s_f_v1/subjects, 'cal') and (/c/ps != null or (3-4) = 9 or /s_f_v1/c != 'true') and /s_f_v1/c = 'true'" />
+      <bind id="g" nodeset="/s_f_v1/g" type="string" />
+      <bind id="e" nodeset="/s_f_v1/e" type="string" />
+      <bind id="ps" nodeset="/s_f_v1/ps" type="string" />
     </model>
   </h:head>
   <h:body>
@@ -816,6 +834,15 @@ Q3
       </input>
       <input ref="/s_f_v1/q3">
         <label>Q3</label>
+      </input>
+      <input ref="/s_f_v1/g">
+        <label>Some other quesion</label>
+      </input>
+      <input ref="/s_f_v1/e">
+        <label>Some other quesion</label>
+      </input>
+      <input ref="/s_f_v1/ps">
+        <label>Some other quesion</label>
       </input>
     </group>
   </h:body>

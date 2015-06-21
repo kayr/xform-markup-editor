@@ -150,12 +150,14 @@ class Form implements HasQuestions {
     }
 
     static String validateXpath(String xpath, IQuestion question, String logicType) {
-        xpath = getAbsoluteBindingXPath(xpath, question, [logicType: logicType])
         try {
-            XPathParser parser = Util.createXpathParser(xpath)
-            parser.eval()
+            XPathUtil.validateXpath(xpath, question, logicType)
+        } catch (ValidationException e) {
+            throw e
         } catch (Exception e) {
-            throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for \n [$question.text] \n $e.message", question.line, e)
+            def e1 = new ValidationException("Error parsing XPATH[$xpath] $logicType logic for \n [$question.text] \n $e.message", question.line, e)
+            e1.stackTrace = e.stackTrace
+            throw e1
         }
     }
 

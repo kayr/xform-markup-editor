@@ -26,16 +26,28 @@ class XPathUtil {
         return this
     }
 
-    List<Map> getPathVariables() {
+    List<Map> getXPathPathVariables() {
         List<CommonTree> paths = tree.findAll { CommonTree tree ->
             tree.isPath()
         }
+        convertToSimpleListOfPathMap(paths)
+    }
 
-        paths.collect {
-            String path = it.emitTailString()
-            return [path: path, name: getNodeName(path), start: it.charPositionInLine, end: getLastIndex(it) + 1]
+    List<Map> getAllPathVariables() {
+        List<CommonTree> paths = tree.findAll { CommonTree tree ->
+            tree.isPath() || isMarkUpPath(tree)
+        }
+        convertToSimpleListOfPathMap(paths)
+    }
+
+    private static List<LinkedHashMap<String, Object>> convertToSimpleListOfPathMap(List<CommonTree> paths) {
+        return paths.collect {
+            String path = emitTailString(it)
+            String lastChild = getLastChild(it)?.toString()
+            return [path: path, name: getNodeName(path), start: it.charPositionInLine, end: getLastIndex(it) + 1, varName: lastChild]
         }
     }
+
 
     String removeMarkupSyntax(IQuestion question, Map config = [:]) {
         def logicType = config.logicType ?: 'XPATH'
@@ -77,6 +89,17 @@ class XPathUtil {
         def path = transformXPath(filter, transFormer)
 
         return path
+    }
+
+    static String validateXpath(String xpath, IQuestion question, String logicType) {
+        def xp = new XPathUtil(xpath)
+        def variables = xp.getAllPathVariables()
+        for (v in variables) {
+            def name = v.varName
+            if (name == '.' || v.path == 'null') continue
+            def qn = question.parentForm.getQuestion(name)
+            if (!qn) throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for has an unknown variable [$v]", question.line)
+        }
     }
 
     static

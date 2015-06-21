@@ -243,7 +243,7 @@ class XFormDeserializer {
 //        xpath = xpath.replace('$', '\\$')
         try {
             def builder = new StringBuilder(xpath)
-            def paths = new XPathUtil(xpath).getPathVariables()
+            def paths = new XPathUtil(xpath).getXPathPathVariables()
 
             //todo do some caching to improve performance
             paths.inject(0) { Integer offset, Map path ->
