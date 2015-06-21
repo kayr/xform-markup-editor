@@ -141,7 +141,21 @@ abstract class AbstractQuestion implements IQuestion {
         while (!(form instanceof Form)) {
             form = hasQuestions.parentForm
         }
-        return form
+        return form as Form
+    }
+
+    String getAbsoluteBinding(boolean indexed, boolean relative) {
+        def var = getAbsoluteBinding()
+        if(indexed){
+            var = getIndexedAbsoluteBinding()
+        }
+
+        if(relative){
+            var = var.replaceFirst('/','')
+        }
+
+        return var
+
     }
 
     String toString() {

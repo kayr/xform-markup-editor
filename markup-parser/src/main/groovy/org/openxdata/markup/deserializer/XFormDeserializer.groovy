@@ -240,7 +240,7 @@ class XFormDeserializer {
     private String getXPathFormula(String xpath) {
         if (!xpath) return null
 
-        xpath = xpath.replace('$', '\\$')
+//        xpath = xpath.replace('$', '\\$')
         try {
             def builder = new StringBuilder(xpath)
             def paths = new XPathUtil(xpath).getPathVariables()

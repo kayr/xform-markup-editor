@@ -13,6 +13,7 @@ options {
 
 tokens {
   PATHSEP  =  '/';
+  DOLLAR  =  '$'; //added to support $ simply for the sake o
   LPAR  =  '(';
   RPAR  =  ')';
   LBRAC  =  '[';
@@ -36,6 +37,8 @@ tokens {
   TRUE = 'true';
   FALSE = 'false';
   ABSPATH;
+  SHORT_ABSPATH;
+  SHORT_OXD_ABSPATH;
   RELPATH;
   LITERAL;
   NUMBER;
@@ -80,11 +83,21 @@ eval  :  expr EOF -> expr
 locationPath
   :  relativeLocationPath -> ^(RELPATH relativeLocationPath)
   |  absoluteLocationPathNoroot -> ^(ABSPATH absoluteLocationPathNoroot)
+  | shortenedAbsolutePath -> ^(SHORT_ABSPATH shortenedAbsolutePath)
+  | shortenedOxdAbsolutePath -> ^(SHORT_OXD_ABSPATH shortenedOxdAbsolutePath)
   ;
 
 absoluteLocationPathNoroot
   :  PATHSEP relativeLocationPath
   ;
+  
+shortenedAbsolutePath
+  	: DOLLAR nodeTest
+  	;
+
+shortenedOxdAbsolutePath
+  	: DOLLAR COLON nodeTest
+  	;
 
 relativeLocationPath
   :  step (PATHSEP step)*

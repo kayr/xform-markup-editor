@@ -12,6 +12,7 @@ class Study {
      * Set this to true. So the the parser does not build the whole CSV list
      */
     public static ThreadLocal<Boolean> quickParse = new ThreadLocal<Boolean>()
+    public static ThreadLocal<Boolean> validateWithXML = new ThreadLocal<Boolean>()
 
     String name
     boolean validating = true

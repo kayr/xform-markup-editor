@@ -16,6 +16,11 @@ package  org.openxdata.markup;
 		System.err.println(msg);
 		throw new RuntimeException(msg);
 	}
+
+	public void reportError(RecognitionException e) {
+		e.printStackTrace();
+		super.reportError(e);
+	}
 }
 
 @lexer::members{

@@ -46,7 +46,7 @@ class MainPresenter implements DocumentListener {
     void init() {
 
         xfmFilter = [
-                accept: { File file -> file.name.endsWith('.xfm') || file.isDirectory() },
+                accept        : { File file -> file.name.endsWith('.xfm') || file.isDirectory() },
                 getDescription: { "XForm Markup Files" }
         ] as FileFilter
 
@@ -277,7 +277,7 @@ class MainPresenter implements DocumentListener {
 
         JFileChooser fc = new JFileChooser()
         fc.fileFilter = [
-                accept: { File f ->
+                accept        : { File f ->
                     return f.name.endsWith('.xml') || f.isDirectory()
                 },
                 getDescription: {
@@ -337,6 +337,7 @@ class MainPresenter implements DocumentListener {
     private Study getParsedStudy() {
         def result = Util.time("StudyParsing") {
             try {
+                Study.validateWithXML.set(form.chkUseXMLValidation.isSelected())
                 def text = form.txtMarkUp.text
                 def parser = Util.createParser(text)
                 def study = parser.study()
@@ -344,7 +345,10 @@ class MainPresenter implements DocumentListener {
             } catch (Exception x) {
                 invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
                 throw x
+            } finally {
+                Study.validateWithXML.set(null)
             }
+
         }
         updateTree(result.value)
         return result.value

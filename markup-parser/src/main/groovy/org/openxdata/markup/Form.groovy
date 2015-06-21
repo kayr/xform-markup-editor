@@ -11,7 +11,10 @@ import org.openxdata.markup.exception.ValidationException
  */
 class Form implements HasQuestions {
 
-    public static final String VARIABLE_REGEX = /(?<!\\)[$][:]?[a-zA-Z_][a-zA-Z0-9_]*/
+    public static final String VARIABLE_REGEX
+    static {
+        VARIABLE_REGEX = '(?<!\\\\)[\$][:]?[^\\s]+'//(?<!\\)[$][:]?[^\s]+
+    }
     String name
     String id
     String dbId
@@ -68,36 +71,22 @@ class Form implements HasQuestions {
     }
 
     public static String getAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
-        def logicType = config.logicType ?: 'XPATH'
-        boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
-
-        xpath = xpath.replaceAll(VARIABLE_REGEX) {
-            def actualBinding = (it - '$') - ':'
-            def tmpQn = findQuestionWithBinding(actualBinding, question.parent)
-            if (!tmpQn)
-                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]", question.line)
-            //TODO Remember to check the XPATH for any $ signs and notify the user
-            def binding = it.contains(':') && allAllowRelativePath ? tmpQn.relativeBinding : tmpQn.absoluteBinding
-            return binding
-        }
-        xpath = xpath.replace('$.', question.absoluteBinding).replace('\\$', '$')
-        return xpath
+        return _absoluteBindingXP(xpath, question, config + [indexed: false])
     }
 
     public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
-        def logicType = config.logicType ?: 'XPATH'
-        boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
-        xpath = xpath.replaceAll(VARIABLE_REGEX) {
-            def actualBinding = (it - '$') - ':'
-            def tmpQn = findQuestionWithBinding(actualBinding, question.parent)
-            if (!tmpQn)
-                throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$it]", question.line)
+        return _absoluteBindingXP(xpath, question, config + [indexed: true])
+    }
 
-            def binding = it.contains(':') && allAllowRelativePath ? tmpQn.indexedRelativeBinding : tmpQn.indexedAbsoluteBinding
-            return binding
+    private static _absoluteBindingXP(String xpath, IQuestion question, Map config = [:]) {
+        try {
+            def xp = new XPathUtil(xpath)
+            def result = xp.removeMarkupSyntax(question, config)
+            return result
+        } catch (Exception x) {
+            System.err.println("Could not remove markup from [$xpath]: Reason: $x")
+            return xpath
         }
-        xpath = xpath.replace('$.', question.indexedAbsoluteBinding).replace('\\$', '$')
-        return xpath
     }
 
     static IQuestion findQuestionWithBinding(String binding, HasQuestions hasQuestions) {

@@ -79,6 +79,7 @@ class MainUI {
                 chkEmulateOXDConversion = checkBox(text: 'Emulate OXD to ODK', toolTipText:
                         'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
                                 'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
+                chkUseXMLValidation = checkBox(text: 'Allow Invalid OXD IDs')
             }
         }
 
@@ -178,6 +179,7 @@ class MainUI {
     JCheckBox chkNumberLabels
     JCheckBox chkEmulateOXDConversion
     JCheckBox chkAutoUpdateTree
+    JCheckBox chkUseXMLValidation
     JLabel lblCaret
 
     //menus

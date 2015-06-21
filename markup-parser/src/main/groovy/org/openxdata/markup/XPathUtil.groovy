@@ -2,6 +2,8 @@ package org.openxdata.markup
 
 import org.antlr.runtime.tree.CommonTree
 import org.antlr.runtime.tree.Tree
+import org.codehaus.groovy.runtime.StackTraceUtils
+import org.openxdata.markup.exception.ValidationException
 
 /**
  * Created by kay on 6/16/14.
@@ -34,6 +36,56 @@ class XPathUtil {
             return [path: path, name: getNodeName(path), start: it.charPositionInLine, end: getLastIndex(it) + 1]
         }
     }
+
+    String removeMarkupSyntax(IQuestion question, Map config = [:]) {
+        def logicType = config.logicType ?: 'XPATH'
+
+        boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
+
+        boolean indexed = config.indexed ?: false
+
+        def visited = []
+
+        def filter = { CommonTree tree -> isMarkUpPath(tree) }
+
+        def transFormer = { StringBuilder finalXPath, CommonTree tree, int offset ->
+
+            if (visited.contains(tree)) return
+
+            def children = tree.findAllDeep { true } as List
+            visited.addAll([tree] + children)
+
+            def markUpPath = emitTailString(tree)
+
+            def finalVar = markUpPath.replaceFirst(/\$:?/, '')
+
+            def qn = markUpPath == '$.' ? question : question.parentForm.getQuestion(finalVar)
+
+            if (!qn) throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$finalVar]", question.line)
+
+            boolean isRelative = markUpPath.startsWith('$:') && allAllowRelativePath
+
+            def convertedPath = createFinalBinding(qn, finalVar, indexed, isRelative, config)
+
+            def start = tree.charPositionInLine + offset
+            def end = getLastIndex(tree) + offset + 1
+
+            finalXPath.replace(start, end, convertedPath)
+
+        }
+
+        def path = transformXPath(filter, transFormer)
+
+        return path
+    }
+
+    static
+    private String createFinalBinding(IQuestion qn, String variable, boolean indexed, boolean relative, Map config) {
+        if (variable == '$.') return qn.getAbsoluteBinding(indexed, relative)
+        def variableQn = qn.parentForm.getQuestion(variable)
+        return variableQn.getAbsoluteBinding(indexed,relative)
+    }
+
 
     static int getLastIndex(Tree tree) {
         if (tree.childCount == 0)
@@ -118,7 +170,7 @@ class XPathUtil {
         return buf.toString()
     }
 
-    String transformXPath(Closure filter, Closure transformer) {
+    String transformXPath(Closure filter, Closure transformer, boolean swallowException = false) {
         if (!xpath) return null
 
         try {
@@ -133,11 +185,19 @@ class XPathUtil {
             }
             return builder.toString()
         } catch (Exception x) {
+            if(!swallowException){
+                throw x
+            }
             System.err.println("!!!!: Failed to process xpath: [$xpath]: [$x]")
-            x.printStackTrace()
+            StackTraceUtils.printSanitizedStackTrace(x)
             return xpath
         }
     }
+
+    static isMarkUpPath(CommonTree tree) {
+        tree.token.type == XPathParser.SHORT_ABSPATH || tree.token.type == XPathParser.SHORT_OXD_ABSPATH
+    }
+
 
     static {
         CommonTree.metaClass.findResults = { Closure clos ->

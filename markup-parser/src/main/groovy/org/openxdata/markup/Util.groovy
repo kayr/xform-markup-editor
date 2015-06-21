@@ -1,5 +1,6 @@
 package org.openxdata.markup
 
+import com.sun.org.apache.xerces.internal.util.XMLChar
 import groovy.transform.CompileStatic
 import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CharStream
@@ -21,7 +22,8 @@ class Util {
 
     public static String getBindName(String question) { memoizedGetBindName(question) }
 
-    private static memoizedGetBindName = { String question -> return getBindStatic(question) }.memoizeBetween(CACHE_SIZE,CACHE_SIZE)
+    private
+    static memoizedGetBindName = { String question -> return getBindStatic(question) }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
 
     @CompileStatic
     private static String getBindStatic(String question) {
@@ -171,21 +173,23 @@ class Util {
         wrapValidationExceptionHandler(line) { memoizedParseBind.call(option) }
     }
 
-    private static memoizedParseBind = { String option -> parseBindStatic(option) }.memoizeBetween(CACHE_SIZE,CACHE_SIZE)
+    private
+    static memoizedParseBind = { String option -> parseBindStatic(option) }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
 
-    @CompileStatic
+//    @CompileStatic
     private static Map<String, String> parseBindStatic(String option) {
         def bind
 
         if (!option) {
             bind = getBindName(option)
         } else if (option[0] == '$') {
-            def tmpBind = option.find(/[$][a-z_][a-z0-9_]*\s/)
+            def tmpBind = option.find(/[$][^\s]*\s/)?.trim()
             //make sure bind is at the beginning
+            validateId(tmpBind?.replaceFirst(/\$/, ''), 0)
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
  An Id should start with lower case characters follow by low case characters, numbers or underscores""")
-            option = option.replaceFirst(/[$][a-z_][a-z0-9_]*/, '').trim()
+            option = option.replaceFirst(/[$][^\s]*/, '').trim()
             bind = tmpBind.trim() - '$'
         } else {
             bind = getBindName(option)
@@ -211,13 +215,25 @@ class Util {
     }
 
     public static void validateId(String id, int line) {
-        wrapValidationExceptionHandler(line) { memoizedValidateId.call(id) }
+        wrapValidationExceptionHandler(line) {
+            if (Study.validateWithXML.get())
+                memoizedValidateGeneral.call(id)
+            else
+                memoizedValidateId.call(id)
+        }
     }
     private static memoizedValidateId = { String id ->
         if (!(id ==~ /[a-z_][a-z0-9_]*/))
             throw new InvalidAttributeException("You have an invalid variable [$id] .\n" +
                     "Attributes should start with a small letter followed by small letters and underscores")
-    }.memoizeBetween(CACHE_SIZE,CACHE_SIZE)
+    }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
+
+    //TODO write unit tests for this
+    private static memoizedValidateGeneral = { String id ->
+        if (!(XMLChar.isValidName(id)))
+            throw new InvalidAttributeException("You have an invalid variable [$id] .\n" +
+                    "Attributes should start with a small letter followed by small letters and underscores")
+    }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
 
 
     def static booleanKeys = """is

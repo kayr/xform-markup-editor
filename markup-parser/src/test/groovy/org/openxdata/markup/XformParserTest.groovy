@@ -247,7 +247,7 @@ jeelopo
 
         try {
             def study = parser.study()
-            fail("Expecting unkown variable exception")
+            fail("Expecting unknown variable exception")
         } catch (ValidationException e) {
             if (!(e.message.contains('unknown variable')))
                 throw e
@@ -458,6 +458,16 @@ jeelopo
 
         assertEquals 1, form.questions.size()
         assertEquals 1, form.dynamicOptions.size()
+    }
+
+    void testNonOxdCompatibleIDsAreAllowed() {
+
+        Study.validateWithXML.set(true)
+        def form = Util.createParser(Fixtures.formWithInvalidOXDIds).study().forms[0]
+
+        form.printAll(System.out)
+
+
     }
 
 
