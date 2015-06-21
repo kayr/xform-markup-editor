@@ -1,6 +1,7 @@
 package org.openxdata.markup.ui
 
 import jsyntaxpane.actions.ActionUtils
+import org.codehaus.groovy.runtime.StackTraceUtils
 import org.openxdata.markup.*
 import org.openxdata.markup.exception.ValidationException
 import org.openxdata.markup.serializer.MarkupAligner
@@ -422,7 +423,8 @@ class MainPresenter implements DocumentListener {
             closure.call()
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(form.frame, ex.message, 'Error While Generating XML', JOptionPane.ERROR_MESSAGE)
-            ex.printStackTrace()
+            def t = StackTraceUtils.sanitize(ex)
+            t.printStackTrace()
             if (ex instanceof ValidationException) selectLine(ex.line)
         }
 

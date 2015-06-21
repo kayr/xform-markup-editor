@@ -207,7 +207,7 @@ class DynamicBuilder {
         if (isInstanceOnly()) {
             question = topColumn
         } else {
-            question = topColumn.find(/[$][a-z][a-z0-9_]*/)
+            question = topColumn.find(Form.VARIABLE_REGEX)
         }
         validateVariable(question, topColumn)
         return question == null ? question : question - '$'
