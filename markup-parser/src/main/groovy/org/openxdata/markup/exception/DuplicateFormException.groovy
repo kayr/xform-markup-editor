@@ -1,5 +1,6 @@
-package org.openxdata.markup.exception;
+package org.openxdata.markup.exception
 
+import groovy.transform.CompileStatic;
 import org.openxdata.markup.Form;
 
 /**
@@ -9,6 +10,7 @@ import org.openxdata.markup.Form;
  * Time: 5:41 PM
  * To change this template use File | Settings | File Templates.
  */
+@CompileStatic
 public class DuplicateFormException extends Exception {
     public DuplicateFormException() {
     }

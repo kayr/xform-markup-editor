@@ -1,4 +1,6 @@
-package org.openxdata.markup.exception;
+package org.openxdata.markup.exception
+
+import groovy.transform.CompileStatic;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,6 +9,7 @@ package org.openxdata.markup.exception;
  * Time: 12:30 PM
  * To change this template use File | Settings | File Templates.
  */
+@CompileStatic
 public class InvalidAttributeException extends ValidationException {
     public InvalidAttributeException() {
     }

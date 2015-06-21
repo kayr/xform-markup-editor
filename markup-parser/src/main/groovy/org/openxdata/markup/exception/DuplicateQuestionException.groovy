@@ -1,6 +1,7 @@
-package org.openxdata.markup.exception;
+package org.openxdata.markup.exception
 
-import org.openxdata.markup.IQuestion;
+import groovy.transform.CompileStatic
+import org.openxdata.markup.IQuestion
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,6 +10,7 @@ import org.openxdata.markup.IQuestion;
  * Time: 5:41 PM
  * To change this template use File | Settings | File Templates.
  */
+@CompileStatic
 public class DuplicateQuestionException extends Exception {
     public DuplicateQuestionException() {
     }
@@ -27,9 +29,11 @@ public class DuplicateQuestionException extends Exception {
 
     @Override
     public String getMessage() {
-        return "Question\n[ "
-                + question1.getText(false) + " (line:"+  question1.getLine()+")] \nand\n ["
-                + question2.getText(false)+ " (line:"+  question2.getLine()+ ")] \ngenerate the same binding.Please try to make sure the question are not duplicates ";
+        return """Question
+[ ${question1.getText(false)} (line:${question1.getLine()})]
+and
+ [${question2.getText(false)} (line:${question2.getLine()})]
+generate the same binding.Please try to make sure the question are not duplicates """;
     }
 
     public IQuestion getQuestion1() {
