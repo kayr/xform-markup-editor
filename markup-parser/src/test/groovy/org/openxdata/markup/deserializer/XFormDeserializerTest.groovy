@@ -6,8 +6,7 @@ import org.openxdata.markup.serializer.XFormSerializer
 import static org.openxdata.markup.Fixtures.*
 import static org.openxdata.markup.Form.extractQuestions
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.*
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.forms
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.getForms
+import static org.openxdata.markup.serializer.ODKFixtures.formWithIncompatibleOXDId
 
 /**
  * Created by kay on 6/7/14.
@@ -201,6 +200,9 @@ class XFormDeserializerTest extends GroovyTestCase {
         testRoundTrip(gpsForm.markUp)
         testRoundTrip(formWithDollarInString)
         testRoundTrip(dynFormWithQuotes.markUp)
+
+        Study.validateWithXML.set(true)
+        testRoundTrip(formWithIncompatibleOXDId.form)
     }
 
     void testRoundTrip(String form) {
