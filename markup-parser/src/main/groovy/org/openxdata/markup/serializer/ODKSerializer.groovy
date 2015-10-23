@@ -1,5 +1,6 @@
 package org.openxdata.markup.serializer
 
+import groovy.transform.CompileStatic
 import groovy.xml.MarkupBuilder
 import org.openxdata.markup.*
 import org.openxdata.markup.deserializer.XFormDeserializer
@@ -271,11 +272,26 @@ class ODKSerializer {
                 buildQuestionLabelAndHint(x, question)
             }
         } else {
-            x.input(ref: absoluteBinding(question)) {
+            def inputAttrs = [ref: absoluteBinding(question)]
+
+            //add external app from the question hint
+            def externalApp = mayBeExternalApp(question.comment)
+            if (oxdConversion && externalApp) {
+                inputAttrs['appearance'] = externalApp
+            }
+            x.input(inputAttrs) {
                 buildQuestionLabelAndHint(x, question)
             }
         }
     }
+
+    @CompileStatic
+    static String mayBeExternalApp(String display) {
+        if (display?.trim()?.startsWith('app:'))
+            return display.replaceFirst('app:', '')
+        return ""
+    }
+
 
     private void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
 
@@ -344,7 +360,8 @@ class ODKSerializer {
 
         def label = question.getText(numberQuestions)
         xml.label(label)
-        if (question.comment)
+        def hasExternalApp = oxdConversion && question.type == 'string' && mayBeExternalApp(question.comment)
+        if (question.comment && !hasExternalApp)
             xml.hint(question.comment)
     }
 

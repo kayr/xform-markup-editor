@@ -35,6 +35,10 @@ class ODKSerializerTest extends GroovyTestCase {
         assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, true)
     }
 
+    void testOxdExternalApp() {
+        assertEquals formWithAppearanceComment.xml, toODK(formWithAppearanceComment.form, true)
+    }
+
     void testSkipActionsAndLogic() {
         serializer.numberBindings = true
         serializer.numberQuestions = true

@@ -890,4 +890,34 @@ No. Kids
 </xforms>'''
   ]
 
+  static def formWithAppearanceComment = [
+          form: '''### Study
+                  ## Form
+
+                  @hint app:ex:org.odx.activities.OdxPrefillActivity(table_name='household',key_field='id',display_field='household_head')
+                  Question with launch''',
+
+          xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>Form</h:title>
+    <model>
+      <instance>
+        <study_form_v1 id="0" name="Form">
+          <question_with_launch />
+        </study_form_v1>
+      </instance>
+      <bind id="question_with_launch" nodeset="/study_form_v1/question_with_launch" type="string" />
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label>Page1</label>
+      <input ref="/study_form_v1/question_with_launch" appearance="ex:org.odx.activities.OdxPrefillActivity(table_name='household',key_field='id',display_field='household_head')">
+        <label>Question with launch</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>'''
+  ]
+
 }

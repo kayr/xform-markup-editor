@@ -197,8 +197,8 @@ class Util {
         return [option: option, bind: bind]
     }
 
-    public static XformParser createParser(String testString) throws IOException {
-        CharStream stream = new ANTLRStringStream(testString);
+    public static XformParser createParser(String markupString) throws IOException {
+        CharStream stream = new ANTLRStringStream( markupString);
         XformLexer lexer = new XformLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         XformParser parser = new XformParser(tokens);
@@ -228,7 +228,6 @@ class Util {
                     "Attributes should start with a small letter followed by small letters and underscores")
     }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
 
-    //TODO write unit tests for this
     private static memoizedValidateGeneral = { String id ->
         if (!(XMLChar.isValidName(id)))
             throw new InvalidAttributeException("You have an invalid variable [$id] .\n" +

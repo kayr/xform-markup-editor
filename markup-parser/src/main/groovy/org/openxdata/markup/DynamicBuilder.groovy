@@ -3,6 +3,7 @@ package org.openxdata.markup
 import au.com.bytecode.opencsv.CSVReader
 import au.com.bytecode.opencsv.CSVWriter
 import groovy.transform.CompileStatic
+import groovy.transform.TypeCheckingMode
 import org.openxdata.markup.exception.ValidationException
 
 /**
@@ -143,7 +144,7 @@ class DynamicBuilder {
     //todo optimise this for faster perfomance
     private void buildDynamicModel(Integer columnIdx, String instanceId) {
         HashSet createdOptions = new HashSet()
-        //map of visited children and parents we use a HashMap mainly for logging purposes to
+        //map of visited children and parents... we use a HashMap mainly for logging purposes to
         //to show the parents a specific child has
         Map<String, HashSet<String>> visitedChildren = new HashMap()
         dynamicOptions[instanceId] = []
@@ -264,7 +265,7 @@ class DynamicBuilder {
     }
 
     private void readMaxLines(File file) {
-        file.withReader { Reader reader ->
+        file.withReader { BufferedReader reader ->
             def line = reader.readLine()
             while (line) {
 
