@@ -19,6 +19,9 @@ class Form implements HasQuestions {
     String id
     String dbId
     Study study
+    int line
+    int dbIdLine
+    int idLine
 
     List<Page> pages = []
     Map<String, IQuestion> questionMap = [:]
@@ -211,5 +214,10 @@ class Form implements HasQuestions {
                         "           $it.message "
         }
         out.println "___________________________"
+    }
+
+    //todo test that these are set
+    int getStartLine() {
+        [dbIdLine, idLine, line].findAll().min()
     }
 }

@@ -98,6 +98,9 @@ class XFormSerializerTest extends XMLTestCase {
 
         assertEquals 'form_v5', form.id
         assertEquals '97', form.dbId
+        assertEquals 5, form.dbIdLine
+        assertEquals 4, form.idLine
+        assertEquals 4, form.startLine
 
         def xml = serializer.toXForm(form)
 

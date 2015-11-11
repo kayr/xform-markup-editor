@@ -60,9 +60,11 @@ Supported attributes include $types \n$allowedAttributes""", line)
             case 'id':
                 Util.validateId(param, line)
                 form.id = param
+                form.idLine = line
                 break
             case 'dbid':
                 form.dbId = param
+                form.dbIdLine = line
                 break
             default:
                 throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)

@@ -49,6 +49,7 @@ scope						{Form scopeForm;}
 	    FORMNAME
 						{
 						rv.setName($FORMNAME.text);
+						rv.setLine($FORMNAME.line);
 						$form::scopeForm = rv;
 						rv.setStudy($study::scopeStudy);
 						}

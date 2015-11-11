@@ -17,6 +17,7 @@ import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 
+import static javax.swing.JOptionPane.WARNING_MESSAGE
 import static javax.swing.JOptionPane.YES_NO_OPTION
 import static javax.swing.SwingUtilities.invokeLater
 
@@ -84,7 +85,7 @@ class MainPresenter implements DocumentListener {
             Thread.start { executeSafely { showOdkXML() } }
         } as ActionListener)
 
-        form.chkAutoUpdateTree.addActionListener({ ActionEvent e -> toggleDocumenListener() } as ActionListener)
+        form.chkAutoUpdateTree.addActionListener({ ActionEvent e -> toggleDocumentListener() } as ActionListener)
 
         form.formLoader = {
             loadWithConfirmation(addHeader(it))
@@ -132,13 +133,20 @@ class MainPresenter implements DocumentListener {
         }
     }
 
-    private void loadForm(String markupTxt) {
+    private void loadForm(String markupTxt, boolean reloadTree = true) {
+        //first remove the listener before you load the form this is to avoid double parsing of the study
+        form.txtMarkUp.document.removeDocumentListener(this)
+
         form.txtMarkUp.read(new StringReader(markupTxt), 'text/xform')
-        toggleDocumenListener()
-        quickParseStudy()
+
+        //put back the document listener if necessary
+        toggleDocumentListener()
+
+
+        if (reloadTree) quickParseStudy()
     }
 
-    void toggleDocumenListener() {
+    void toggleDocumentListener() {
         if (form.chkAutoUpdateTree.isSelected()) {
             form.txtMarkUp.getDocument().addDocumentListener(this)
         } else {
@@ -220,7 +228,7 @@ class MainPresenter implements DocumentListener {
 
     private void reset() {
         currentFile = null
-        form.txtMarkUp.text = ""
+        loadForm("")
         form.title = "OXD-Markup"
     }
 
@@ -335,13 +343,14 @@ class MainPresenter implements DocumentListener {
 
     }
 
-    private Study getParsedStudy() {
+    private Study getParsedStudy(boolean validateUniqueId = true) {
         def result = Util.time("StudyParsing") {
             try {
                 Study.validateWithXML.set(form.chkUseXMLValidation.isSelected())
                 def text = form.txtMarkUp.text
                 def parser = Util.createParser(text)
                 def study = parser.study()
+                if (validateUniqueId) study = mayBeAddUniqueId(study)
                 return study
             } catch (Exception x) {
                 invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
@@ -353,6 +362,28 @@ class MainPresenter implements DocumentListener {
         }
         updateTree(result.value)
         return result.value
+    }
+
+    private Study mayBeAddUniqueId(Study study) {
+        if (!form.chkEnsureUniqueIdentifier.isSelected()) return study
+
+        def uId = new UniqueIdProcessor(study: study, markup: form.txtMarkUp.text)
+
+        if (uId.hasUniqueIdentifier()) return study
+
+
+        def forms = uId.getFormsWithOutUniqueId()
+        def message = """The Forms Below have no unique IDs.Please Add Them.
+                         |${forms.join('\n')}
+                         |If you do not wish to see this message again Please Uncheck the checkbox""".stripMargin()
+
+        def answer = JOptionPane.showConfirmDialog(form.frame, message, "WARNING!!", YES_NO_OPTION, WARNING_MESSAGE)
+
+        if (answer != JOptionPane.OK_OPTION) return study
+
+        def newMarkup = uId.addUniqueIdentifier()
+        invokeLater { loadForm(newMarkup, false) }
+        return Util.createParser(newMarkup).study()
     }
 
     void quickParseStudy() {

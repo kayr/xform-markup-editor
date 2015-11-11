@@ -75,11 +75,12 @@ class MainUI {
                 btnShowOdkXml = button(text: "Show XML ODK")
                 chkNumberBindings = checkBox(text: 'Number IDs')
                 chkNumberLabels = checkBox(text: 'Number Labels')
-                chkGenerateLayout = checkBox(text: 'Generate Layout')
+                chkEnsureUniqueIdentifier = checkBox(text: 'Ensure Unique Identifier', selected: true)
+                chkUseXMLValidation = checkBox(text: 'Allow Invalid OXD IDs')
                 chkEmulateOXDConversion = checkBox(text: 'Emulate OXD to ODK', toolTipText:
                         'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
                                 'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
-                chkUseXMLValidation = checkBox(text: 'Allow Invalid OXD IDs')
+                chkGenerateLayout = checkBox(text: 'Generate Layout')
             }
         }
 
@@ -180,6 +181,7 @@ class MainUI {
     JCheckBox chkEmulateOXDConversion
     JCheckBox chkAutoUpdateTree
     JCheckBox chkUseXMLValidation
+    JCheckBox chkEnsureUniqueIdentifier
     JLabel lblCaret
 
     //menus

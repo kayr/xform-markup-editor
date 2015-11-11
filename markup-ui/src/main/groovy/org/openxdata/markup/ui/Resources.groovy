@@ -373,6 +373,11 @@ Start time
 End time
 '''
 
+    static def uniqueIdQuestion = '''@absoluteid unique_id
+                                     |@calculate once(concat('uuid:',uuid()))
+                                     |@invisible
+                                     |Unique Id'''.stripMargin()
+
     static EXAMPLES = [
             'Simple Form': sampleStudy,
             'Simple Skip Validation Logic': simpleSkip,
