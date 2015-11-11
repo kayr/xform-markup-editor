@@ -373,9 +373,9 @@ class MainPresenter implements DocumentListener {
 
 
         def forms = uId.getFormsWithOutUniqueId()
-        def message = """The Forms Below have no unique IDs.Please Add Them.
+        def message = """The Forms Below have no unique IDs.
                          |${forms.join('\n')}
-                         |If you do not wish to see this message again Please Uncheck the checkbox""".stripMargin()
+                         |Can I add the unique id question?""".stripMargin()
 
         def answer = JOptionPane.showConfirmDialog(form.frame, message, "WARNING!!", YES_NO_OPTION, WARNING_MESSAGE)
 

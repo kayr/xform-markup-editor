@@ -9,7 +9,12 @@ package org.openxdata.markup.ui
  */
 class Resources {
 
-    static def sampleStudy = '''//This is a product of http://omnitech.co.ug and http://www.openxdata.org
+    static def uniqueIdQuestion = '''@absoluteid unique_id
+                                     |@calculate once(concat('uuid:',uuid()))
+                                     |@invisible
+                                     |Unique Id'''.stripMargin()
+
+    static def sampleStudy = """//This is a product of http://omnitech.co.ug and http://www.openxdata.org
 ### Sample Markup Study
 
 ## Simple Form
@@ -87,9 +92,11 @@ Africa,\t    Kenya,\t    Eldoret
 Europe,\t    Netherlands,Netherlandis
 Europe,\t    Netherlands,Another Netherlands
 }
-'''
 
-    static def simpleSkip = '''### Markup Example Study
+$uniqueIdQuestion
+"""
+
+    static def simpleSkip = """### Markup Example Study
 
 
 ## Simple Skip Logic form
@@ -103,11 +110,11 @@ Name
 @id sex
 Sex
 >male
->$female female
+>\$female female
 
 
 @boolean
-@enableif $sex = 'female'
+@enableif \$sex = 'female'
 Is pregnant
 
 
@@ -122,14 +129,14 @@ What is your Age
 @required
 @id course
 Course units
->>$comp_sci_opt Computer Science
->>$math_opt Math
->>$history_opt History
+>>\$comp_sci_opt Computer Science
+>>\$math_opt Math
+>>\$history_opt History
 
 
 
 @number
-@enableif $course = 'math_opt'
+@enableif \$course = 'math_opt'
 @validif . > 0 and . < 100
 @message You the score has to be between 0 and 100
 @id math
@@ -138,7 +145,7 @@ Score math
 
 
 @number
-@enableif $course = 'comp_sci_opt'
+@enableif \$course = 'comp_sci_opt'
 @validif . > 0 and . < 100
 @message You the score has to be between 0 and 100
 @id comp_sci
@@ -147,7 +154,7 @@ Score Computer Science
 
 
 @number
-@enableif $course = 'history_opt'
+@enableif \$course = 'history_opt'
 @validif . > 0 and . < 100
 @message You the score has to be between 0 and 100
 @id history
@@ -156,11 +163,13 @@ Score History
 
 
 @readonly
-@calculate $math + $history + $comp_sci
+@calculate \$math + \$history + \$comp_sci
 Total score
-'''
 
-    static def advanceSkip = '''//This form was used to demostrate the new Evaluator developed by Brent
+$uniqueIdQuestion
+"""
+
+    static def advanceSkip = """//This form was used to demostrate the new Evaluator developed by Brent
 //NOTE: THIS FORM CAN CURRENTLY RUN ON THE MFORMS CLIENTS 2.0 UPWARDS
 ### Advanced Skiplogic Study
 
@@ -168,8 +177,8 @@ Total score
 
 @required
 Gender
->$male Male
->$female Female
+>\$male Male
+>\$female Female
 
 
 @required
@@ -199,7 +208,7 @@ Height
 
 @required
 @readonly
-@calculate $weight div (($heightcm div 100.0)*($heightcm div 100.0))
+@calculate \$weight div ((\$heightcm div 100.0)*(\$heightcm div 100.0))
 @id bmi
 Bio Mass Index
 
@@ -230,7 +239,7 @@ Heart health History
 
 @boolean
 @required
-@enableif $gender = 'male'
+@enableif \$gender = 'male'
 @id hypertension
 Has Suspension
 
@@ -250,7 +259,7 @@ Has angina
 
 
 
-@validif . = false() or $chestpain = true()
+@validif . = false() or \$chestpain = true()
 @message You can't have angina without chestpain!
 @boolean
 @id armpain
@@ -260,11 +269,13 @@ Has armpain
 
 @required
 @boolean
-@enableif $bmi > 30.0 or ( $chestpain = 'male' and $hypertension = true() ) or ($systolic > 180 or $diastolic > 110) or (today() - $birthdate > 365 * 35 and $hearthistory = true() ) or ($chestpain = true() and $angina != true() ) or  $armpain = true()
+@enableif \$bmi > 30.0 or ( \$chestpain = 'male' and \$hypertension = true() ) or (\$systolic > 180 or \$diastolic > 110) or (today() - \$birthdate > 365 * 35 and \$hearthistory = true() ) or (\$chestpain = true() and \$angina != true() ) or  \$armpain = true()
 Seen Cardioligist
-'''
 
-    static def oxdSampleForm = '''### Example study2
+$uniqueIdQuestion
+"""
+
+    static def oxdSampleForm = """### Example study2
 
 ## Example form2
 
@@ -280,7 +291,7 @@ First name
 Last name
 
 Sex
->$male Male
+>\$male Male
 >Female
 
 
@@ -299,7 +310,7 @@ Weight(Kg)
 @message Height should be between 1 and 9
 Height
 
-@enableif $sex = 'female'
+@enableif \$sex = 'female'
 Is patient pregnant
 
 @comment Please select all anti-retrovirals that the patient is taking
@@ -349,7 +360,7 @@ Number of children
 
 
 
-@validif length(.) =  $children_number
+@validif length(.) =  \$children_number
 @message Enter details of all children
 repeat{ Details of Children
     Name
@@ -371,12 +382,11 @@ Start time
 @time
 @id endtime
 End time
-'''
 
-    static def uniqueIdQuestion = '''@absoluteid unique_id
-                                     |@calculate once(concat('uuid:',uuid()))
-                                     |@invisible
-                                     |Unique Id'''.stripMargin()
+$uniqueIdQuestion
+"""
+
+
 
     static EXAMPLES = [
             'Simple Form': sampleStudy,
