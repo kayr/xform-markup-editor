@@ -69,7 +69,7 @@ class UniqueIdProcessor {
 
     static boolean hasUniqueIdentifier(Form form) {
         form.questions.any {
-            it.binding == 'unique_id' && it.hasAbsoluteId &&
+            it.binding == 'unique_id' && it.hasAbsoluteId && (it.readOnly || !it.visible) &&
                     it.calculation?.replaceAll(/\s+/, '') == "once(concat('uuid:',uuid()))"
         }
     }

@@ -373,7 +373,7 @@ class MainPresenter implements DocumentListener {
 
 
         def forms = uId.getFormsWithOutUniqueId()
-        def message = """The Forms Below have no unique IDs.
+        def message = """The Forms Below have no unique IDs. The Questions Should Be Hidden or Invisible
                          |${forms.join('\n')}
                          |Can I add the unique id question?""".stripMargin()
 
