@@ -50,6 +50,16 @@ class MainUI {
                     menuAlign = menuItem(text: 'Align Text', mnemonic: 'A', icon: ICON_FORM)
                 }
 
+                menu(text: 'Advanced') {
+
+                    chkUseXMLValidation = checkBox(text: 'Allow Invalid OXD IDs')
+                    chkEmulateOXDConversion = checkBox(text: 'Emulate OXD to ODK', toolTipText:
+                            'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
+                                    'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
+                    chkGenerateLayout = checkBox(text: 'Generate Layout')
+                    chkEnsureUniqueIdentifier = checkBox(text: 'Ensure Unique Identifier', selected: true)
+                }
+
                 menu(text: 'Help') {
 
                     menuItem(text: 'Select Example Below', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
@@ -75,12 +85,7 @@ class MainUI {
                 btnShowOdkXml = button(text: "Show XML ODK")
                 chkNumberBindings = checkBox(text: 'Number IDs')
                 chkNumberLabels = checkBox(text: 'Number Labels')
-                chkEnsureUniqueIdentifier = checkBox(text: 'Ensure Unique Identifier', selected: true)
-                chkUseXMLValidation = checkBox(text: 'Allow Invalid OXD IDs')
-                chkEmulateOXDConversion = checkBox(text: 'Emulate OXD to ODK', toolTipText:
-                        'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
-                                'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
-                chkGenerateLayout = checkBox(text: 'Generate Layout')
+
             }
         }
 
