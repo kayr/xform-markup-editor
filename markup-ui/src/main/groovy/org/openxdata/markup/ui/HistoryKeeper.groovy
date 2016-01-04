@@ -1,8 +1,4 @@
 package org.openxdata.markup.ui
-
-import groovy.transform.CompileStatic
-import groovy.transform.TypeCheckingMode
-
 /**
  * Created by kay on 1/4/2016.
  */
@@ -60,7 +56,11 @@ class HistoryKeeper {
     }
 
     static File getLastAccessedFile(){
-        return history.head()?.asType(File)
+        def history = history
+        if (!history)
+            return null
+        else
+            return history.head()?.asType(File)
     }
 
 }
