@@ -109,6 +109,8 @@ class MainPresenter implements DocumentListener {
 
         //loadSample study
         loadForm(addHeader(Resources.sampleStudy))
+
+        renderHistory()
     }
 
     def align() {
@@ -121,16 +123,23 @@ class MainPresenter implements DocumentListener {
 
         def text = form.txtMarkUp.text
         if (text == null || text.isEmpty()) {
-            System.exit(0)
+            doExit()
         }
 
         def option = JOptionPane.showConfirmDialog(form.frame, "Save File?")
 
         switch (option) {
-            case JOptionPane.CANCEL_OPTION: break;
-            case JOptionPane.OK_OPTION: saveFile(); System.exit(0); break;
-            default: System.exit(0)
+            case JOptionPane.CANCEL_OPTION:
+                break
+            case JOptionPane.OK_OPTION:
+                saveFile(); doExit();
+                break
+            default: doExit()
         }
+    }
+
+    private def static doExit() {
+        System.exit(0)
     }
 
     private void loadForm(String markupTxt, boolean reloadTree = true) {
@@ -230,6 +239,7 @@ class MainPresenter implements DocumentListener {
         currentFile = null
         loadForm("")
         form.title = "OXD-Markup"
+
     }
 
     void saveFile() {
@@ -237,6 +247,10 @@ class MainPresenter implements DocumentListener {
             JFileChooser jc = new JFileChooser()
 
             jc.fileFilter = xfmFilter
+
+            def selectedFile = currentFile ?: HistoryKeeper.lastAccessedFile?.parentFile
+            if (selectedFile)
+                jc.selectedFile = selectedFile
 
             def option = jc.showSaveDialog(form.frame)
 
@@ -254,6 +268,8 @@ class MainPresenter implements DocumentListener {
 
             form.title = "OXD-Markup: " + file.absolutePath
             currentFile = file
+            HistoryKeeper.registerHistory(file.absolutePath)
+            renderHistory()
         } else {
             currentFile.text = form.txtMarkUp.text
         }
@@ -263,8 +279,9 @@ class MainPresenter implements DocumentListener {
         JFileChooser jc = new JFileChooser()
 
         jc.fileFilter = xfmFilter
-        if (currentFile)
-            jc.selectedFile = currentFile
+        def selectedFile = currentFile ?: HistoryKeeper.lastAccessedFile
+        if (selectedFile)
+            jc.selectedFile = selectedFile
         def option = jc.showOpenDialog(form.frame)
 
         if (option != JFileChooser.APPROVE_OPTION)
@@ -341,6 +358,21 @@ class MainPresenter implements DocumentListener {
         currentFile = f
         form.title = "OXD-Markup: " + currentFile.absolutePath
 
+        HistoryKeeper.registerHistory(f.absolutePath)
+        renderHistory()
+    }
+
+    def renderHistory() {
+        form.renderHistory(HistoryKeeper.history) { String s ->
+            def file = s as File
+            if (file.exists()) {
+                openFile(file)
+            } else {
+                JOptionPane.showMessageDialog(form.frame, 'File Does Not Exist', 'ERROR', JOptionPane.ERROR_MESSAGE)
+                HistoryKeeper.removeHistory(s)
+                renderHistory()
+            }
+        }
     }
 
     private Study getParsedStudy(boolean validateUniqueId = true) {

@@ -6,7 +6,9 @@ import jsyntaxpane.actions.CaretMonitor
 
 import javax.swing.*
 import java.awt.*
+import java.awt.event.ActionEvent
 
+import static javax.swing.SwingUtilities.invokeLater
 import static javax.swing.UIManager.getIcon
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
@@ -40,8 +42,13 @@ class MainUI {
                 menu(text: 'File', mnemonic: 'F') {
                     menuOpen = menuItem(text: 'Open', mnemonic: 'O', icon: ICON_OPEN)
                     menuSave = menuItem(text: 'Save', mnemonic: 'S', icon: ICON_SAVE)
+                    separator()
+                    menuRecent = menu(text: 'Recent', font: new Font(Font.SANS_SERIF, Font.BOLD, 12), icon: ICON_FORM)
+                    separator()
                     menuNew = menuItem(text: 'New', mnemonic: 'N', icon: ICON_NEW)
                     menuImport = menuItem(text: 'Import', mnemonic: 'I', icon: ICON_IMPORT)
+
+
                 }
 
 
@@ -50,14 +57,14 @@ class MainUI {
                     menuAlign = menuItem(text: 'Align Text', mnemonic: 'A', icon: ICON_FORM)
                 }
 
-                menu(text: 'Advanced') {
+                menu(text: 'Preferences') {
 
-                    chkUseXMLValidation = checkBox(text: 'Allow Invalid OXD IDs')
-                    chkEmulateOXDConversion = checkBox(text: 'Emulate OXD to ODK', toolTipText:
+                    chkUseXMLValidation = checkBoxMenuItem(text: 'Allow Invalid OXD IDs')
+                    chkEmulateOXDConversion = checkBoxMenuItem(text: 'Emulate OXD to ODK', toolTipText:
                             'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
                                     'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
-                    chkGenerateLayout = checkBox(text: 'Generate Layout')
-                    chkEnsureUniqueIdentifier = checkBox(text: 'Ensure Unique Identifier', selected: true)
+                    chkGenerateLayout = checkBoxMenuItem(text: 'Generate Layout')
+                    chkEnsureUniqueIdentifier = checkBoxMenuItem(text: 'Ensure Unique Identifier', selected: true)
                 }
 
                 menu(text: 'Help') {
@@ -170,6 +177,22 @@ class MainUI {
         }
     }
 
+    def renderHistory(java.util.List<String> history, Closure doLoadFile) {
+        menuRecent.clear()
+        def s = new SwingBuilder()
+
+        def onMenuSelected = { ActionEvent e ->
+            def menuItem = e.source as JMenuItem
+            doLoadFile(menuItem.text)
+        }
+
+        invokeLater {
+            history.collect { item ->
+                menuRecent.add(s.menuItem(text: item, actionPerformed: onMenuSelected))
+            }
+        }
+    }
+
     void setTitle(String s) {
         frame.title = s
     }
@@ -180,19 +203,20 @@ class MainUI {
     JButton btnShowOdkXml
     JButton btnRefreshTree
 
-    JCheckBox chkGenerateLayout
+    JCheckBoxMenuItem chkGenerateLayout
     JCheckBox chkNumberBindings
     JCheckBox chkNumberLabels
-    JCheckBox chkEmulateOXDConversion
+    JCheckBoxMenuItem chkEmulateOXDConversion
     JCheckBox chkAutoUpdateTree
-    JCheckBox chkUseXMLValidation
-    JCheckBox chkEnsureUniqueIdentifier
+    JCheckBoxMenuItem chkUseXMLValidation
+    JCheckBoxMenuItem chkEnsureUniqueIdentifier
     JLabel lblCaret
 
     //menus
     JMenuItem menuImport
     JMenuItem menuAlign
     JMenuItem menuNew
+    JMenuItem menuRecent
     JMenuItem menuOpen
     JMenuItem menuSave
     JSplitPane spltMainPane
