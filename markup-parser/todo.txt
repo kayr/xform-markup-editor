@@ -1,0 +1,1 @@
+Support for such expression sex = 'male' is the same as $sex = 'male' and /blahblah/sex should be invalid
