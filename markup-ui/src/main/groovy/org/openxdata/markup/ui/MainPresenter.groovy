@@ -248,8 +248,13 @@ class MainPresenter implements DocumentListener {
         jc.fileFilter = xfmFilter
 
         def selectedFile = currentFile ?: lastAccessedFile
-        if (selectedFile)
-            jc.selectedFile = selectedFile
+        if (selectedFile) {
+            if (selectedFile.isDirectory())
+                jc.currentDirectory = selectedFile
+            else
+                jc.selectedFile = selectedFile
+        }
+
 
         def option = dialogChooser(jc)
 
