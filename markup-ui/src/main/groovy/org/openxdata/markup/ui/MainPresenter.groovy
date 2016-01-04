@@ -12,8 +12,6 @@ import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.filechooser.FileFilter
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 
@@ -47,49 +45,31 @@ class MainPresenter implements DocumentListener {
 
     void init() {
 
-        xfmFilter = [
-                accept        : { File file -> file.name.endsWith('.xfm') || file.isDirectory() },
-                getDescription: { "XForm Markup Files" }
-        ] as FileFilter
+        xfmFilter = [accept        : { File file -> file.name.endsWith('.xfm') || file.isDirectory() },
+                     getDescription: { "XForm Markup Files" }] as FileFilter
 
 
-        form.menuImport.addActionListener({
-            executeSafely { xFormImporter.show() }
-        } as ActionListener)
+        form.menuImport.addActionListener { executeSafely { xFormImporter.show() } }
 
-        form.btnGenerateXML.addActionListener({ ActionEvent evt ->
-            executeSafely { btnGenerateXMLActionPerformed(evt) };
-        } as ActionListener)
+        form.btnGenerateXML.addActionListener { executeSafely { btnGenerateXMLActionPerformed() } }
 
-        form.menuOpen.addActionListener({ ActionEvent evt ->
-            executeSafely { openFile() }
-        } as ActionListener)
+        form.menuOpen.addActionListener { executeSafely { openFile() } }
 
-        form.menuSave.addActionListener({ ActionEvent evt ->
-            executeSafely { saveFile() }
-        } as ActionListener)
+        form.menuSave.addActionListener { executeSafely { saveFile() } }
 
-        form.menuNew.addActionListener({ ActionEvent evt ->
-            executeSafely { newFile() }
-        } as ActionListener)
+        form.menuNew.addActionListener { executeSafely { newFile() } }
 
-        form.menuAlign.addActionListener({ ActionEvent evt ->
-            executeSafely { align() }
-        } as ActionListener)
+        form.menuAlign.addActionListener { executeSafely { align() } }
 
-        form.btnShowXml.addActionListener({ ActionEvent evt ->
-            Thread.start { executeSafely { showOxdXML() } }
-        } as ActionListener)
+        form.btnShowXml.addActionListener { Thread.start { executeSafely { showOxdXML() } } }
 
-        form.btnShowOdkXml.addActionListener({ ActionEvent evt ->
-            Thread.start { executeSafely { showOdkXML() } }
-        } as ActionListener)
+        form.btnShowOdkXml.addActionListener { Thread.start { executeSafely { showOdkXML() } } }
 
-        form.chkAutoUpdateTree.addActionListener({ ActionEvent e -> toggleDocumentListener() } as ActionListener)
+        form.chkAutoUpdateTree.addActionListener { toggleDocumentListener() }
 
-        form.formLoader = {
-            loadWithConfirmation(addHeader(it))
-        }
+        form.formLoader = { loadWithConfirmation(addHeader(it)) }
+
+        form.btnRefreshTree.addActionListener { quickParseStudy() }
 
 
         form.frame.addWindowListener(new WindowAdapter() {
@@ -98,11 +78,6 @@ class MainPresenter implements DocumentListener {
                 handleWindowCloseOperation()
             }
         })
-
-        form.btnRefreshTree.addActionListener({
-            quickParseStudy()
-        } as ActionListener)
-
 
         allowedAttribs = Attrib.allowedAttributes.collect { '@' + it }
         allowedTypes = Attrib.types.collect { '@' + it }
@@ -293,7 +268,7 @@ class MainPresenter implements DocumentListener {
         openFile(f)
     }
 
-    void btnGenerateXMLActionPerformed(ActionEvent actionEvent) {
+    void btnGenerateXMLActionPerformed() {
 
 
         Study study = getParsedStudy()
@@ -366,6 +341,7 @@ class MainPresenter implements DocumentListener {
         form.renderHistory(HistoryKeeper.history) { String s ->
             def file = s as File
             if (file.exists()) {
+                mayBeSaveFile()
                 openFile(file)
             } else {
                 JOptionPane.showMessageDialog(form.frame, 'File Does Not Exist', 'ERROR', JOptionPane.ERROR_MESSAGE)
