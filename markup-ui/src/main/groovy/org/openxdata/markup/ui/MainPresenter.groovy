@@ -219,25 +219,17 @@ class MainPresenter implements DocumentListener {
 
     void saveFile() {
         if (currentFile == null) {
-            JFileChooser jc = new JFileChooser()
 
-            jc.fileFilter = xfmFilter
 
-            def selectedFile = currentFile ?: HistoryKeeper.lastAccessedFile?.parentFile
-            if (selectedFile)
-                jc.selectedFile = selectedFile
+            File file = chooseFile(HistoryKeeper.lastAccessedFile?.parentFile) { JFileChooser jc ->
+                jc.showSaveDialog(form.frame)
+            }
 
-            def option = jc.showSaveDialog(form.frame)
-
-            if (option != JFileChooser.APPROVE_OPTION)
-                return
-
-            File file = jc.getSelectedFile()
+            if (!file) return
 
             if (!file.name.endsWith('.xfm')) {
                 file = new File(file.absolutePath + '.xfm')
             }
-
 
             file.text = form.txtMarkUp.text
 
@@ -250,19 +242,28 @@ class MainPresenter implements DocumentListener {
         }
     }
 
-    void openFile() {
+    private File chooseFile(File lastAccessedFile, Closure<Integer> dialogChooser) {
         JFileChooser jc = new JFileChooser()
 
         jc.fileFilter = xfmFilter
-        def selectedFile = currentFile ?: HistoryKeeper.lastAccessedFile
+
+        def selectedFile = currentFile ?: lastAccessedFile
         if (selectedFile)
             jc.selectedFile = selectedFile
-        def option = jc.showOpenDialog(form.frame)
 
-        if (option != JFileChooser.APPROVE_OPTION)
-            return
+        def option = dialogChooser(jc)
 
-        File f = jc.getSelectedFile()
+        if (option != JFileChooser.APPROVE_OPTION) return null
+
+        return jc.selectedFile
+    }
+
+    void openFile() {
+        File f = chooseFile(HistoryKeeper.lastAccessedFile) { JFileChooser jc ->
+            jc.showOpenDialog(form.frame)
+        }
+
+        if (!f) return
 
         mayBeSaveFile()
         openFile(f)
@@ -276,23 +277,14 @@ class MainPresenter implements DocumentListener {
         XFormSerializer ser = getOxdSerializer()
         def studyXML = ser.toStudyXml(study)
 
-        JFileChooser fc = new JFileChooser()
-        fc.fileFilter = [
-                accept        : { File f ->
-                    return f.name.endsWith('.xml') || f.isDirectory()
-                },
-                getDescription: {
-                    return 'XML File'
-                }
-        ] as FileFilter
-        fc.setSelectedFile(new File(study.name))
-        def option = fc.showSaveDialog(form.frame)
+        def file = chooseFile(null) { JFileChooser jc ->
+            jc.fileFilter = [accept        : { File f -> return f.name.endsWith('.xml') || f.isDirectory() },
+                             getDescription: { return 'XML File' }] as FileFilter
+            jc.showSaveDialog(form.frame)
+        }
 
+        if (!file) return
 
-        if (option != JFileChooser.APPROVE_OPTION)
-            return
-
-        def file = fc.selectedFile
         if (!file.name.endsWith('.xml')) {
             file = new File(file.absolutePath + '.xml')
         }
