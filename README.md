@@ -203,7 +203,7 @@ To number the questions automatically check the ***Number Labels checkbox*** on 
 # For Power Users 
 Before the markup editor was for basically generating form content(questions) but it was extended to also support adding of skip/validation/calculation logic. This comes in a little handy if you have to write complex formulas only handled by mforms that the visual form designer cannot handle. You get a little benefit of basic validation of your formulas and variables. All the formulas are based on plain XPATH syntax. But with simpler question referencing as compared to the raw XML way.
 
-***Referencing question IDs:*** You reference a question in a formula like this = ***$<question-id>***. To reference the current question variable use the ***"."***
+***Referencing question IDs:*** You reference a question in a formula like this ***$\<question-id\>***. To reference the current question variable use the ***"."***
 
 In special circumstances you may want to use ***$.*** to reference the current question, this is because in the generated xform XML the "***$.***" will be replaced by the current question binding which looks like this /forminstance/questionvariable. It is rare for that you will ever need to use "***$.***" usually the dot(.) is enough.
 
