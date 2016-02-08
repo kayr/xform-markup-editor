@@ -103,7 +103,7 @@ repeat{ Child details
   Child Age
 }
 ```
-#### Dynamic Single Select Questions
+#### Dynamic Single Select or Cascading Select Questions
 Dynamic questions are questions whose options change dynamically depending on other questions input.
 
 ##### Option 1
