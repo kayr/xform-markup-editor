@@ -1,15 +1,26 @@
-## Designing forms in plain text 
-You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK)](https://opendatakit.org/) forms or study using this editor fast and easy.
+## Designing Xforms in simple plain text 
+You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK)](https://opendatakit.org/) forms using this editor fast and easy.
 
 A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit.ly/1OvDOoO).
 
+### Features:
+ - Simple XPath Variable references e.g instead of `/instance/path_id` you use `$path_id`
+ - On the fly simple validation of xpath
+ - Autocompletion of words using Ctrl-K
+ - Easy creation of cascading selects using by referencing a CSV. The CSV will data will be baked into the generated XFORM.
+ - Auto-numbering of labels and IDS
+ - If you are designing forms for OpenXData you can select the *Emulate OXD to ODK* preference to convert OXD Xpath to ODK.
+   e.g `$multiselect_qn = 'option'` is converted to `selected($multiselect_qn,'option')`     
+
 ### Instructions 
 
-You start with entering the study name which starts with '''###'''
+You start with entering the study name which starts with ***###***
 
-Followed by the form name which starts with''' ##'''
+Followed by the form name which starts with ***##***
 
-Followed by the questions (one question per line)
+Followed by the questions (one question per line).
+
+When you are done simply click the *Show ODK XML* or *Show OXD XML* button to view the XFORM source code. 
 
 E.g
 
