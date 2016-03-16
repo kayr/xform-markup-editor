@@ -16,7 +16,7 @@ A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit
  - Simple XPath Variable references e.g instead of `/instance/path_id` you use `$path_id`
  - On the fly simple validation of xpath
  - Autocompletion of words using Ctrl-K
- - Easy creation of cascading selects using by referencing a CSV. The CSV will data will be baked into the generated XFORM.
+ - Easy creation of cascading selects by referencing a CSV. The CSV will data will be baked into the generated XFORM.
  - Auto-numbering of labels and IDS
  - If you are designing forms for OpenXData you can select the *Emulate OXD to ODK* preference to convert OXD Xpath to ODK.
    e.g `$multiselect_qn = 'option'` is converted to `selected($multiselect_qn,'option')`     
@@ -196,12 +196,12 @@ First name
 Only lowercase id names are allowed followed by a mix of numbers and underscores like ***first_name_1*** but not ***1_first_name***
 
 #### Adding hints/help text to questions 
-You can add a hint or help text using the ***@comment*** attribute like this
+You can add a hint or help text using the ***@hint*** attribute like this
 
 E.g
 
 ```
-@comment This is help text for first name question
+@hint This is help text for first name question
 First name
 ```
 
