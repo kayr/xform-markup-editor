@@ -3,6 +3,15 @@ You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK
 
 A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit.ly/1OvDOoO).
 
+### Screenshots
+
+#### Main window
+![Editor][main_window]
+
+#### XML Preview
+![Editor][show_xml]
+
+
 ### Features:
  - Simple XPath Variable references e.g instead of `/instance/path_id` you use `$path_id`
  - On the fly simple validation of xpath
@@ -302,3 +311,6 @@ An example that calculates that total drugs taken i.e [Pain killers taken] + [An
 @calculate $antibiotics + $pain_killers
 Total drugs taken
 ```
+
+[main_window]: https://github.com/kayr/xform-markup-editor/blob/master/images/main_window.PNG?raw=true
+[show_xml]: https://github.com/kayr/xform-markup-editor/blob/master/images/show_xml.PNG?raw=true
