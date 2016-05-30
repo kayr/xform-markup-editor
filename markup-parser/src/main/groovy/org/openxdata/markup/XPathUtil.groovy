@@ -1,5 +1,8 @@
 package org.openxdata.markup
 
+import org.antlr.runtime.ANTLRStringStream
+import org.antlr.runtime.CharStream
+import org.antlr.runtime.CommonTokenStream
 import org.antlr.runtime.tree.CommonTree
 import org.antlr.runtime.tree.Tree
 import org.codehaus.groovy.runtime.StackTraceUtils
@@ -20,11 +23,20 @@ class XPathUtil {
     }
 
     private XPathUtil parse() {
-        def parser = Util.createXpathParser(xpath)
+        def parser = createXpathParser(xpath)
         tree = parser.eval().tree as CommonTree
         XPathParser.NEQ
         return this
     }
+
+    public static XPathParser createXpathParser(String testString) throws IOException {
+        CharStream stream = new ANTLRStringStream(testString);
+        XPathLexer lexer = new XPathLexer(stream);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        XPathParser parser = new XPathParser(tokens);
+        return parser;
+    }
+
 
     List<Map> getXPathPathVariables() {
         List<CommonTree> paths = tree.findAll { CommonTree tree ->

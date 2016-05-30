@@ -48,6 +48,7 @@ class Form implements HasQuestions {
 
     void addPage(Page page) {
         def dupPage = pages.find { it.name.equalsIgnoreCase(page.name) }
+        //todo delay validation
         if (dupPage != null)
             throw new ValidationException("Duplicate pages[$page.name] found in form [$name]");
         page.setForm(this)
@@ -71,6 +72,15 @@ class Form implements HasQuestions {
             if (it instanceof DynamicQuestion)
                 it.validate()
         }
+        validatePages()
+    }
+
+    void validatePages() {
+
+        def pageNames = pages*.name
+        def duplicatePages = pageNames.findAll { pageNames.count(it) > 1 }.unique()
+        if (duplicatePages)
+            throw new ValidationException("Duplicate pages($duplicatePages) in Form[$name]")
     }
 
     public static String getAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {

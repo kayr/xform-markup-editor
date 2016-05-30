@@ -1,6 +1,7 @@
 package org.openxdata.markup.ui
 
 import org.openxdata.markup.*
+import org.openxdata.markup.deserializer.MarkupDeserializer
 
 import javax.swing.*
 import javax.swing.event.TreeSelectionEvent
@@ -124,7 +125,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         f.setSize(400, 500)
         f.setVisible(true)
 
-        def parser = Util.createParser(Resources.oxdSampleForm)
+        def parser = new MarkupDeserializer(Resources.oxdSampleForm)
         SwingUtilities.invokeLater { b.updateTree(parser.study()) { println it } }
     }
 }

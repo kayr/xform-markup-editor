@@ -1,5 +1,23 @@
 grammar Xform;
 
+options{
+  output = AST;
+}
+
+tokens {
+  T_TEXT;
+  T_QN;
+  T_MULTI_QN;
+  T_SINGLE_QN;
+  T_DYNAMIC_QN;
+  T_REPEAT_QN;
+  T_DYNAMIC_OPTIONS;
+  T_DYNAMIC_INSTANCE;
+  T_STUDY;
+  T_FORM;
+  T_PAGE;
+}
+
 @header {
 package org.openxdata.markup;
 }
@@ -11,7 +29,7 @@ package  org.openxdata.markup;
 }
 
 @parser::members{
-	
+
 	public void emitErrorMessage(String msg) {
 		System.err.println(msg);
 		throw new RuntimeException(msg);
@@ -24,7 +42,7 @@ package  org.openxdata.markup;
 }
 
 @lexer::members{
-	
+
 	public String rl(String s){
 		if(s == null) return s;
 		return s.replaceAll("\n","").trim();
@@ -33,145 +51,94 @@ package  org.openxdata.markup;
 
 
 
-study returns [Study result = new Study()]
-scope 						{ Study scopeStudy;}
-	:	NEWLINE* STUDYNAME		{
-						$study::scopeStudy = result;
-						result.setName($STUDYNAME.text);
-						}
-		(frm = form			{result.addForm(frm);})+
-		SPACE*
+study 	: 	NEWLINE*
+	 	STUDYNAME
+	 	form+
+	 	SPACE*
+	 	-> ^(STUDYNAME form+)
 	;
 
-form returns [Form rv = new Form()]
-scope						{Form scopeForm;}
-	:	(attrib = ATTRIBUTE{Attrib.addAttributeToForm(rv,attrib.getText(),attrib.getLine());})*
-	    FORMNAME
-						{
-						rv.setName($FORMNAME.text);
-						rv.setLine($FORMNAME.line);
-						$form::scopeForm = rv;
-						rv.setStudy($study::scopeStudy);
-						}
+form 	: 	ATTRIBUTE*
+	   	FORMNAME
+	   	formContent+
+	   	-> ^(T_FORM FORMNAME ATTRIBUTE* formContent+)
+	   	|
+	   	ATTRIBUTE*
+	   	FORMNAME
+	   	page+
+		-> ^(T_FORM FORMNAME ATTRIBUTE* page+)
 
-		(
-		(rpt = repeatQn			{rv.addQuestion(rpt);}
-		|txt = txtQn			{rv.addQuestion(txt);}
-		|single = singleSelQn		{rv.addQuestion(single);}
-		|multi = multipleSelQn		{rv.addQuestion(multi);}
-		|dynQnInstance = dynamicQnInstance{rv.addQuestion(dynQnInstance);}
-		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
-		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}
-		|dynInstance = dynamicInstance			{dynInstance.addQuestionsToForm(rv);}
-		)+
-		|(pg = page)+
-		)
 	;
-	
-page returns [Page rv = new Page()]
+
+page
 	:	PAGE
-		
-						{
-						rv.setName($PAGE.text);
-						($form::scopeForm).addPage(rv);
-						rv.setStudy($study::scopeStudy);
-						} 
-
-		(rpt = repeatQn			{rv.addQuestion(rpt);}
-		|txt = txtQn			{rv.addQuestion(txt);}
-		|single = singleSelQn		{rv.addQuestion(single);}
-		|multi = multipleSelQn		{rv.addQuestion(multi);}
-		|dynQnInstance = dynamicQnInstance{rv.addQuestion(dynQnInstance);}
-		|dynamic = dynamicQn		{dynamic.addQuestionsToForm(rv);}
-		|csvImp = csvImport		{csvImp.addQuestionsToForm(rv);}
-		|dynInstance = dynamicInstance			{dynInstance.addQuestionsToForm(rv);}
-		)+		
+		formContent+
+		-> ^(T_PAGE PAGE formContent+)
 	;
 
-
-repeatQn returns [RepeatQuestion rv = new RepeatQuestion()]
-	:	
-	(ATTRIBUTE				{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
-	BEGINREPEATMARKER  			{
-						rv.setText($BEGINREPEATMARKER.text);
-						rv.setLine($BEGINREPEATMARKER.line);
-						rv.setParent($form::scopeForm);
-						}
-	(
-	 rpt = repeatQn				{rv.addQuestion(rpt);}
-	|txt = txtQn				{rv.addQuestion(txt);}
-	|single = singleSelQn			{rv.addQuestion(single);}
-	|multi = multipleSelQn			{rv.addQuestion(multi);}
-	|dynQnInstance = dynamicQnInstance{rv.addQuestion(dynQnInstance);}
-	|dynamic = dynamicQn			{dynamic.addQuestionsToForm(rv);}
-	|dynInstance = dynamicInstance			{dynInstance.addQuestionsToForm(rv);}
-	)+ (LEFTBRACE)
-	;
-	
-dynamicInstance returns [DynamicBuilder rv] 
-	:	dyn2 = DYNAMICINSTANCEMARKER	{
-						rv = new DynamicBuilder(true);
-						rv.setLine(dyn2.getLine());
-						}
-		(LINECONTENTS			{rv.appendLine($LINECONTENTS.text);})+ 
-		(LEFTBRACE)
+formContent
+	:	question|dynamicInstance
 	;
 
-dynamicQn returns [DynamicBuilder rv] 
-	:	dyn1 = DYNAMICMARKER		{
-						rv = new DynamicBuilder();
-						rv.setLine(dyn1.getLine());
-						}
-		(LINECONTENTS			{rv.appendLine($LINECONTENTS.text);})+ 
+question
+	:	repeatQn|txtQn|singleSelQn|multipleSelQn|dynamicOptionsBlock|dynamicQn|csvImport
+	;
+
+repeatQn
+	:
+		ATTRIBUTE*
+		BEGINREPEATMARKER
+		question+
+		LEFTBRACE
+		-> ^( T_REPEAT_QN ATTRIBUTE* BEGINREPEATMARKER question+)
+	;
+
+dynamicInstance
+	:	DYNAMICINSTANCEMARKER
+		LINECONTENTS+
+		LEFTBRACE
+		-> ^(T_DYNAMIC_INSTANCE LINECONTENTS+)
+	;
+
+dynamicOptionsBlock
+	:	 DYNAMICMARKER
+		 LINECONTENTS+
 		(DYNAMICMARKER|LEFTBRACE)
+		->^(T_DYNAMIC_OPTIONS LINECONTENTS+)
 	;
-	
 
-	
-csvImport returns [DynamicBuilder rv = new DynamicBuilder()]
-	:	CSVIMPORT			{
-						rv.setCsvFilePath($CSVIMPORT.text);
-						rv.setLine($CSVIMPORT.line);
-						}
+
+
+csvImport
+	:	CSVIMPORT
 	;
-	
-singleSelQn returns [SingleSelectQuestion rv = new SingleSelectQuestion() ]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
-		LINECONTENTS 			{
-						rv.setText($LINECONTENTS.text);
-						rv.setLine($LINECONTENTS.line);
-						}
-		(SINGLEOPTION			{rv.getOptions().add(new Option($SINGLEOPTION.text,$SINGLEOPTION.line));})+
-					
+
+singleSelQn
+	:	txtQn
+		SINGLEOPTION+
+		->^(T_SINGLE_QN txtQn SINGLEOPTION+)
 	;
-	
-	
-dynamicQnInstance returns [DynamicQuestion rv = new DynamicQuestion() ]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
-		LINECONTENTS 			{
-						rv.setText($LINECONTENTS.text);
-						rv.setLine($LINECONTENTS.line);
-						}
-		DYNAMICOPTION			{rv.setDynamicInstanceId($DYNAMICOPTION.text);}
-					
+
+
+dynamicQn
+	:	txtQn
+		DYNAMICOPTION
+		-> ^(T_DYNAMIC_QN txtQn DYNAMICOPTION)
+
 	;
-	
-multipleSelQn returns [MultiSelectQuestion rv = new MultiSelectQuestion()]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
-		LINECONTENTS 			{
-						rv.setText($LINECONTENTS.text);
-						rv.setLine($LINECONTENTS.line);
-						}
-		(MULTIPLEOPTION			{rv.addOption(new Option($MULTIPLEOPTION.text,$MULTIPLEOPTION.line));})+
+
+multipleSelQn
+	:	txtQn
+		MULTIPLEOPTION+
+		->^(T_MULTI_QN txtQn MULTIPLEOPTION+)
+
 	;
-	
-	
-txtQn	returns [TextQuestion rv = new TextQuestion()]
-	:	(ATTRIBUTE			{Attrib.addAttribute(rv,$ATTRIBUTE.text,$ATTRIBUTE.line);})*
-		LINECONTENTS 			{
-						rv.setText($LINECONTENTS.text);
-						rv.setLine($LINECONTENTS.line);
-						}
+
+
+txtQn
+	:	ATTRIBUTE*
+		LINECONTENTS
+		-> ^(T_QN ATTRIBUTE* LINECONTENTS )
 	;
 	
 	

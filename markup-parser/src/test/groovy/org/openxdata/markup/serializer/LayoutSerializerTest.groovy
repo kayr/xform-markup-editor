@@ -5,6 +5,7 @@ import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLTestCase
 import org.openxdata.markup.Fixtures
 import org.openxdata.markup.Util
+import org.openxdata.markup.deserializer.MarkupDeserializer
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,9 +20,8 @@ public class LayoutSerializerTest extends XMLTestCase {
 
         LayoutSerializer ser = new LayoutSerializer()
 
-        def parser = Util.createParser(Fixtures.oxdSampleForm)
 
-        def form = parser.study().forms[0]
+        def form = new MarkupDeserializer(Fixtures.oxdSampleForm).study().forms[0]
 
         def xml = ser.generateLayout(form)
 

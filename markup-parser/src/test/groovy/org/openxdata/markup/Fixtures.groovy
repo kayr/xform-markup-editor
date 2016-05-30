@@ -88,7 +88,6 @@ Other question
 
 @longtext
 Patient ID
-
 @default mr
 Title
 >Mr
@@ -139,7 +138,6 @@ Sound
 
 @video
 Record video
-
 dynamic{
 Region,\tSub-Region,\t    City
 Washington,\tKing,\t    Seattle
@@ -160,6 +158,7 @@ Africa,\t    Kenya,\t    Eldoret
 Europe,\t    Netherlands,Netherlandis
 Europe,\t    Netherlands,Another Netherlands
 }
+
 
 @id children_number
 Number of children

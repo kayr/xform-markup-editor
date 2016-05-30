@@ -2,6 +2,7 @@ package org.openxdata.markup.serializer
 
 import org.openxdata.markup.Form
 import org.openxdata.markup.Util
+import org.openxdata.markup.deserializer.MarkupDeserializer
 
 import static org.openxdata.markup.serializer.ODKFixtures.*
 
@@ -111,7 +112,7 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     static Form toForm(String markup) {
-        Util.createParser(markup).study().forms[0]
+        new MarkupDeserializer(markup).study().forms[0]
     }
 
     String toODK(Form form, boolean oxd = false) {

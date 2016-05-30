@@ -1,6 +1,7 @@
 package org.openxdata.markup.serializer
 
 import org.openxdata.markup.Util
+import org.openxdata.markup.deserializer.MarkupDeserializer
 
 import static org.openxdata.markup.Fixtures.*
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.getDynFormWithQuotes
@@ -37,7 +38,7 @@ class MarkUpSerializerTest extends GroovyTestCase {
     }
 
     void testRoundTrip(String form) {
-        def studyObj1 = Util.createParser(form).study()
+        def studyObj1 = new MarkupDeserializer(form).study()
 
         // get study to xml 1
         def studyXML1 = serializer.toStudyXml(studyObj1)
@@ -45,7 +46,7 @@ class MarkUpSerializerTest extends GroovyTestCase {
         def form2 = MarkUpSerializer.toStudyMarkup(studyObj1)
 
         // get study xml 2
-        def studyObj2 = Util.createParser(form2).study()
+        def studyObj2 = new MarkupDeserializer(form2).study()
         def studyXML2 = serializer.toStudyXml(studyObj2)
 
         assertEquals studyXML1, studyXML2

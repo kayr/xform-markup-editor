@@ -31,12 +31,14 @@ class RepeatQuestion extends AbstractQuestion implements HasQuestions {
 
         def dupeQuestion = Form.findQuestionWithBinding(question.binding, hasQuestions)
 
+        //todo delay validations
         if (dupeQuestion) {
             throw new DuplicateQuestionException(question1: question, question2: dupeQuestion)
         }
 
         question.setParent(this)
 
+        //todo delay validation
         validateSkipLogic(question)
         validateValidationLogic(question)
         validateCalculation(question)

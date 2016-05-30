@@ -1,5 +1,6 @@
 package org.openxdata.markup
 
+import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.InvalidAttributeException
 
 /**
@@ -121,34 +122,34 @@ class AttribTest extends GroovyTestCase {
     }
 
     void testLineNumbers() {
-        def parser = Util.createParser(Fixtures.oxdSampleForm)
+        def parser = new MarkupDeserializer(Fixtures.oxdSampleForm)
         def form = parser.study().forms[0]
 
         def questions = form.allQuestions
 
-        questions.find { it.binding == 'patient_id' }.line == 6
-        questions.find { it.binding == 'title' }.line == 8
-        questions.find { it.binding == 'first_name' }.line == 13
-        questions.find { it.binding == 'last_name' }.line == 16
-        questions.find { it.binding == 'sex' }.line == 18
-        questions.find { it.binding == 'birthdate' }.line == 26
-        questions.find { it.binding == 'weightkg' }.line == 31
-        questions.find { it.binding == 'height' }.line == 36
-        questions.find { it.binding == 'is_patient_pregnant' }.line == 39
-        questions.find { it.binding == 'arvs' }.line == 42
-        questions.find { it.binding == 'picture' }.line == 50
-        questions.find { it.binding == 'sound' }.line == 53
-        questions.find { it.binding == 'record_video' }.line == 56
-        questions.find { it.binding == 'region' }.line == 58
-        questions.find { it.binding == 'sub_hyphen_region' }.line == 58
-        questions.find { it.binding == 'city' }.line == 58
-        questions.find { it.binding == 'children_number' }.line == 80
-        questions.find { it.binding == 'details_of_children' }.line == 86
-        questions.find { it.binding == 'name' }.line == 87
-        questions.find { it.binding == 'age' }.line == 90
-        questions.find { it.binding == 'child_sex' }.line == 93
-        questions.find { it.binding == 'start_time' }.line == 101
-        questions.find { it.binding == 'endtime' }.line == 105
+        assert questions.find { it.binding == 'patient_id' }.line == 6
+        assert questions.find { it.binding == 'title' }.line == 8
+        assert questions.find { it.binding == 'first_name' }.line == 13
+        assert questions.find { it.binding == 'last_name' }.line == 16
+        assert questions.find { it.binding == 'sex' }.line == 18
+        assert questions.find { it.binding == 'birthdate' }.line == 26
+        assert questions.find { it.binding == 'weightkg' }.line == 31
+        assert questions.find { it.binding == 'height' }.line == 36
+        assert questions.find { it.binding == 'is_patient_pregnant' }.line == 39
+        assert questions.find { it.binding == 'arvs' }.line == 42
+        assert questions.find { it.binding == 'picture' }.line == 50
+        assert questions.find { it.binding == 'sound' }.line == 53
+        assert questions.find { it.binding == 'record_video' }.line == 56
+        assert questions.find { it.binding == 'region' }.line == 58
+        assert questions.find { it.binding == 'sub_hyphen_region' }.line == 58
+        assert questions.find { it.binding == 'city' }.line == 58
+        assert questions.find { it.binding == 'children_number' }.line == 80
+        assert questions.find { it.binding == 'details_of_children' }.line == 86
+        assert questions.find { it.binding == 'name' }.line == 87
+        assert questions.find { it.binding == 'age' }.line == 90
+        assert questions.find { it.binding == 'child_sex' }.line == 93
+        assert questions.find { it.binding == 'start_time' }.line == 101
+        assert questions.find { it.binding == 'endtime' }.line == 105
 
 //        form.allQuestions.each {
 //            println "form.questions.find {it.binding == '$it.binding' }.line == $it.line"

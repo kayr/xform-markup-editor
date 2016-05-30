@@ -117,7 +117,7 @@ class XFormDeserializerTest extends GroovyTestCase {
 
     void testTypeResolving() {
         def serializer = new XFormSerializer()
-        def mkpForm = Util.createParser(oxdSampleForm).study().forms[0]
+        def mkpForm = new MarkupDeserializer(oxdSampleForm).study().forms[0]
 
         def xForm = serializer.toXForm(mkpForm)
         def form = new XFormDeserializer(xml: xForm).parse()
@@ -206,7 +206,7 @@ class XFormDeserializerTest extends GroovyTestCase {
     }
 
     void testRoundTrip(String form) {
-        def mkpForm = Util.createParser(form).study().forms[0]
+        def mkpForm = new MarkupDeserializer(form).study().forms[0]
         def originalXform = serializer.toXForm(mkpForm)
 
         def parsedMarkupFormModel = new XFormDeserializer(originalXform).parse()

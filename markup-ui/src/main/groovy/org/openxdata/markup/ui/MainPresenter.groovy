@@ -3,6 +3,7 @@ package org.openxdata.markup.ui
 import jsyntaxpane.actions.ActionUtils
 import org.codehaus.groovy.runtime.StackTraceUtils
 import org.openxdata.markup.*
+import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.ValidationException
 import org.openxdata.markup.serializer.MarkupAligner
 import org.openxdata.markup.serializer.ODKSerializer
@@ -353,7 +354,7 @@ class MainPresenter implements DocumentListener {
             try {
                 Study.validateWithXML.set(form.chkUseXMLValidation.isSelected())
                 def text = form.txtMarkUp.text
-                def parser = Util.createParser(text)
+                def parser = new MarkupDeserializer(text)
                 def study = parser.study()
                 if (validateUniqueId) study = mayBeAddUniqueId(study)
                 return study
@@ -388,7 +389,7 @@ class MainPresenter implements DocumentListener {
 
         def newMarkup = uId.addUniqueIdentifier()
         invokeLater { loadForm(newMarkup, false) }
-        return Util.createParser(newMarkup).study()
+        return new MarkupDeserializer(newMarkup).study()
     }
 
     void quickParseStudy() {

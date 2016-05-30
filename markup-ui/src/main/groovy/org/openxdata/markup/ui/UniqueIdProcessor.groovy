@@ -3,6 +3,7 @@ package org.openxdata.markup.ui
 import org.openxdata.markup.Form
 import org.openxdata.markup.Study
 import org.openxdata.markup.Util
+import org.openxdata.markup.deserializer.MarkupDeserializer
 
 /**
  * Created by kay on 11/10/2015.
@@ -52,7 +53,7 @@ class UniqueIdProcessor {
     private def quickParse() {
         try {
             Study.quickParse.set(true)
-            def parser = Util.createParser(markup)
+            def parser = new MarkupDeserializer(markup)
             study = parser.study()
         } finally {
             Study.quickParse.set(false)

@@ -197,23 +197,6 @@ class Util {
         return [option: option, bind: bind]
     }
 
-    public static XformParser createParser(String markupString) throws IOException {
-        CharStream stream = new ANTLRStringStream( markupString);
-        XformLexer lexer = new XformLexer(stream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        XformParser parser = new XformParser(tokens);
-
-        return parser;
-    }
-
-    public static XPathParser createXpathParser(String testString) throws IOException {
-        CharStream stream = new ANTLRStringStream(testString);
-        XPathLexer lexer = new XPathLexer(stream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        XPathParser parser = new XPathParser(tokens);
-        return parser;
-    }
-
     public static void validateId(String id, int line) {
         wrapValidationExceptionHandler(line) {
             if (Study.validateWithXML.get())

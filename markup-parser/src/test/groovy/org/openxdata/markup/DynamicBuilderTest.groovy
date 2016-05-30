@@ -1,6 +1,7 @@
 package org.openxdata.markup
 
 import au.com.bytecode.opencsv.CSVWriter
+import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.ValidationException
 
 /**
@@ -279,7 +280,7 @@ uganda,entebbe
 }
 '''
 
-        def form = Util.createParser(src).study().forms[0]
+        def form = new MarkupDeserializer(src).study().forms[0]
 
         assert form.questions.size() == 1
         assert form.dynamicOptions.size() == 1

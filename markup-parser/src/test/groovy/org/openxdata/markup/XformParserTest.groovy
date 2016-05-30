@@ -3,6 +3,7 @@ package org.openxdata.markup
 import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonTokenStream
+import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.DuplicateQuestionException
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
@@ -53,7 +54,7 @@ Kenya,Kampala,Bugiroad
 ##form2
 jeelopo
 """
-    XformParser parser;
+    MarkupDeserializer parser;
 
     public void setUp() {
         parser = createParser(xform)
@@ -381,9 +382,9 @@ jeelopo
     }
 
     void testDynamicWithInstanceVariables() {
-        def form1 = Util.createParser(Fixtures.normalPurcform).study().forms[0]
+        def form1 = new MarkupDeserializer(Fixtures.normalPurcform).study().forms[0]
 
-        def form2 = Util.createParser(Fixtures.normalPurcform2).study().forms[0]
+        def form2 = new MarkupDeserializer(Fixtures.normalPurcform2).study().forms[0]
 
         XFormSerializer ser = new XFormSerializer()
 
@@ -396,7 +397,7 @@ jeelopo
     }
 
     void testFormWithValidationAChildOfARepeat() {
-        def form = Util.createParser(Fixtures.formWithValidationOnInnerRepeat).study().forms[0]
+        def form = new MarkupDeserializer(Fixtures.formWithValidationOnInnerRepeat).study().forms[0]
         assertEquals form.allQuestions.size(), 5
 
     }
@@ -463,13 +464,8 @@ jeelopo
 
 
 
-    private XformParser createParser(String testString) throws IOException {
-        CharStream stream = new ANTLRStringStream(testString);
-        XformLexer lexer = new XformLexer(stream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        XformParser parser = new XformParser(tokens);
-
-        return parser;
+    private MarkupDeserializer createParser(String testString) throws IOException {
+      return new MarkupDeserializer(testString)
     }
 
 

@@ -28,7 +28,7 @@ class Page implements HasQuestions {
 
     void addQuestion(IQuestion question) {
         question.setParent(form)
-        validate(question)
+        validate(question)//todo do not validate to early
         form.questionMap[question.binding] = question
         if (question instanceof RepeatQuestion)
             question.allQuestions.each { form.questionMap[it.binding] = it }

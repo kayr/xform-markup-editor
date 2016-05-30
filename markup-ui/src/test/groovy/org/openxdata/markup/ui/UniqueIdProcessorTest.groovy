@@ -1,6 +1,7 @@
 package org.openxdata.markup.ui
 
 import org.openxdata.markup.Util
+import org.openxdata.markup.deserializer.MarkupDeserializer
 
 /**
  * Created by kay on 11/10/2015.
@@ -14,7 +15,7 @@ class FormGuidanceTest extends GroovyTestCase {
                    |q1
                    |## f2
                    |q1'''.stripMargin()
-        def study = Util.createParser(studyMarkup).study()
+        def study = new MarkupDeserializer(studyMarkup).study()
 
         UniqueIdProcessor fg = new UniqueIdProcessor(study: study, markup: studyMarkup)
 
@@ -47,7 +48,7 @@ class FormGuidanceTest extends GroovyTestCase {
                    |Unique Id
                    |## f2
                    |q1'''.stripMargin()
-        def study = Util.createParser(studyMarkup).study()
+        def study =new MarkupDeserializer(studyMarkup).study()
 
         UniqueIdProcessor fg = new UniqueIdProcessor(study: study, markup: studyMarkup)
 
@@ -74,7 +75,7 @@ class FormGuidanceTest extends GroovyTestCase {
         def studyMarkup = '''### Study
                    |## f1
                    |q1'''.stripMargin()
-        def study = Util.createParser(studyMarkup).study()
+        def study =new MarkupDeserializer(studyMarkup).study()
 
         UniqueIdProcessor fg = new UniqueIdProcessor(study: study, markup: studyMarkup)
 
@@ -97,7 +98,7 @@ class FormGuidanceTest extends GroovyTestCase {
                    |q1
                    |## f2
                    |q1'''.stripMargin()
-        def study = Util.createParser(studyMarkup).study()
+        def study = new MarkupDeserializer(studyMarkup).study()
 
         UniqueIdProcessor fg = new UniqueIdProcessor(study: study, markup: studyMarkup)
 

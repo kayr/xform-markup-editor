@@ -7,6 +7,7 @@ import org.custommonkey.xmlunit.XMLTestCase
 import org.openxdata.markup.Fixtures
 import org.openxdata.markup.Study
 import org.openxdata.markup.Util
+import org.openxdata.markup.deserializer.MarkupDeserializer
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +23,7 @@ class XFormSerializerTest extends XMLTestCase {
 
     void setUp() {
 
-        def parser = Util.createParser(Fixtures.normalPurcform)
+        def parser = new MarkupDeserializer(Fixtures.normalPurcform)
         study = parser.study()
         serializer = new XFormSerializer()
 
@@ -62,14 +63,14 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testToXformWithDataTypes() {
-        def parser = Util.createParser(Fixtures.formWithAttribs)
+        def parser = new MarkupDeserializer(Fixtures.formWithAttribs)
 
         def xml = serializer.toXForm(parser.study().forms[0])
         assertEquals Fixtures.xformWithAttribsXML, xml
     }
 
     void testToXFormWithSkipLogic() {
-        def parser = Util.createParser(Fixtures.formWithSkipLogic)
+        def parser = new MarkupDeserializer(Fixtures.formWithSkipLogic)
 
         def xml = serializer.toXForm(parser.study().forms[0])
 
@@ -77,7 +78,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testToXFormWithValidationLogic() {
-        def parser = Util.createParser(Fixtures.formWithValidationLogic)
+        def parser = new MarkupDeserializer(Fixtures.formWithValidationLogic)
 
         def xml = serializer.toXForm(parser.study().forms[0])
 
@@ -85,7 +86,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testRepeatWithAttributes() {
-        def parser = Util.createParser(Fixtures.formRepeatWithAttributesOnRepeats)
+        def parser = new MarkupDeserializer(Fixtures.formRepeatWithAttributesOnRepeats)
 
         def xml = serializer.toXForm(parser.study().forms[0])
 
@@ -94,7 +95,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testFormWithId() {
-        def form = Util.createParser(Fixtures.formWithId).study().forms[0]
+        def form = new MarkupDeserializer(Fixtures.formWithId).study().forms[0]
 
         assertEquals 'form_v5', form.id
         assertEquals '97', form.dbId
@@ -108,7 +109,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testFormWithPages() {
-        def parser = Util.createParser(Fixtures.formWithMultiplePage)
+        def parser = new MarkupDeserializer(Fixtures.formWithMultiplePage)
 
         def xml = serializer.toXForm(parser.study().forms[0])
 
@@ -116,7 +117,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testFormWithDynamicInstance() {
-        def parser = Util.createParser(Fixtures.formWithDynamicInstanceReferences)
+        def parser = new MarkupDeserializer(Fixtures.formWithDynamicInstanceReferences)
 
         def xml = serializer.toXForm(parser.study().forms[0])
 
@@ -137,7 +138,7 @@ class XFormSerializerTest extends XMLTestCase {
 
 
     void testToXFormWithSkipLogicNumbered() {
-        def parser = Util.createParser(Fixtures.formWithSkipLogic)
+        def parser = new MarkupDeserializer(Fixtures.formWithSkipLogic)
 
         serializer.numberBindings = true
         serializer.numberQuestions = true
@@ -150,7 +151,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testToXFormWithValidationLogicNumbered() {
-        def parser = Util.createParser(Fixtures.formWithValidationLogic)
+        def parser = new MarkupDeserializer(Fixtures.formWithValidationLogic)
         serializer.numberBindings = true
         serializer.numberQuestions = true
         def form = parser.study().forms[0]
@@ -166,7 +167,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testRelativePathInVariableNames() {
-        def form = Util.createParser(Fixtures.formUsingRelativeBinds).study().forms[0]
+        def form = new MarkupDeserializer(Fixtures.formUsingRelativeBinds).study().forms[0]
 
         def qn = form.questionMap.two
 
@@ -185,7 +186,7 @@ class XFormSerializerTest extends XMLTestCase {
 
     void testFormWithEndTime() {
 
-        def form = Util.createParser(Fixtures.formWithEndtime).study().forms[0]
+        def form = new MarkupDeserializer(Fixtures.formWithEndtime).study().forms[0]
 
         def question = form.questionMap['endtime']
 
@@ -209,7 +210,7 @@ class XFormSerializerTest extends XMLTestCase {
 
 
     void testFormImports() {
-        def study = Util.createParser(Fixtures.multipleForms).study()
+        def study = new MarkupDeserializer(Fixtures.multipleForms).study()
 
         serializer.toStudyXml(study)
 
@@ -223,7 +224,7 @@ class XFormSerializerTest extends XMLTestCase {
     }
 
     void testToXFormWithAbsoluteId() {
-        def parser = Util.createParser(Fixtures.formWithAbsoluteId)
+        def parser = new MarkupDeserializer(Fixtures.formWithAbsoluteId)
 
         serializer.numberBindings = true
         serializer.numberQuestions = true
@@ -235,7 +236,7 @@ class XFormSerializerTest extends XMLTestCase {
     void testNonOxdInCompatibleIDsAreAllowed() {
 
         Study.validateWithXML.set(true)
-        def form = Util.createParser(ODKFixtures.formWithIncompatibleOXDId.form).study().forms[0]
+        def form = new MarkupDeserializer(ODKFixtures.formWithIncompatibleOXDId.form).study().forms[0]
 
         def xml = serializer.toXForm(form)
 
