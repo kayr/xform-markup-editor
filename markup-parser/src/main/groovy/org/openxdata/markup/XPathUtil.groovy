@@ -108,7 +108,7 @@ class XPathUtil {
     private String createFinalBinding(IQuestion qn, String variable, boolean indexed, boolean relative, Map config) {
         if (variable == '$.') return qn.getAbsoluteBinding(indexed, relative)
         def variableQn = qn.parentForm.getQuestion(variable)
-        return variableQn.getAbsoluteBinding(indexed,relative)
+        return variableQn.getAbsoluteBinding(indexed, relative)
     }
 
 
@@ -149,7 +149,7 @@ class XPathUtil {
     }
 
     List<Tree> findResults(Closure filter) {
-        tree.findResults(filter)
+        findResultsImpl(tree, filter)
     }
 
     List<CommonTree> findAll(Closure filter) {
@@ -210,7 +210,7 @@ class XPathUtil {
             }
             return builder.toString()
         } catch (Exception x) {
-            if(!swallowException){
+            if (!swallowException) {
                 throw x
             }
             System.err.println("!!!!: Failed to process xpath: [$xpath]: [$x]")
@@ -223,6 +223,18 @@ class XPathUtil {
         tree.token.type == XPathParser.SHORT_ABSPATH || tree.token.type == XPathParser.SHORT_OXD_ABSPATH
     }
 
+    static findAllDeep(CommonTree tree, Closure filter) {
+        findResultsImpl(tree, filter, false, true)
+    }
+
+    static findAll(CommonTree tree, Closure filter) {
+        findAllImpl(tree, filter)
+    }
+
+    static isPath(CommonTree tree) {
+        tree.token.type == XPathParser.ABSPATH || tree.token.type == XPathParser.RELPATH
+    }
+
 
     static {
         CommonTree.metaClass.findResults = { Closure clos ->
@@ -230,11 +242,11 @@ class XPathUtil {
         }
 
         CommonTree.metaClass.findAll = { Closure clos ->
-            XPathUtil.findAllImpl(delegate, clos)
+            XPathUtil.findAll(delegate, clos)
         }
 
         CommonTree.metaClass.findAllDeep = { Closure clos ->
-            XPathUtil.findResultsImpl(delegate, clos, false, true)
+            XPathUtil.findAllDeep(delegate, clos)
         }
 
         Tree.metaClass.emitTailString {
@@ -246,7 +258,7 @@ class XPathUtil {
         }
 
         CommonTree.metaClass.isPath {
-            delegate.token.type == XPathParser.ABSPATH || delegate.token.type == XPathParser.RELPATH
+          XPathUtil.isPath(delegate)
         }
     }
 }
