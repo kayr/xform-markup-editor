@@ -10,7 +10,6 @@ class Page implements HasQuestions {
 
 
     Page() {}
-    Form form
 
     Page(String name) {
         this.name = name
