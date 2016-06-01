@@ -1,5 +1,6 @@
 package org.openxdata.markup
 
+import org.openxdata.markup.exception.DuplicateQuestionException
 import org.openxdata.markup.exception.ValidationException
 
 /**
@@ -15,8 +16,7 @@ class Form implements HasQuestions {
     static {
         VARIABLE_REGEX = '(?<!\\\\)[\$][:]?[^\\s]+'//(?<!\\)[$][:]?[^\s]+
     }
-    String name
-    String id
+
     String dbId
     Study study
     int line
@@ -41,27 +41,34 @@ class Form implements HasQuestions {
     List<IQuestion> getQuestions() {
         def questions = []
         pages.each {
-            it.questions.each { questions << it }
+            questions.addAll(it.questions)
         }
         return questions
     }
 
+
     void addPage(Page page) {
-        def dupPage = pages.find { it.name.equalsIgnoreCase(page.name) }
-        //todo delay validation
-        if (dupPage != null)
-            throw new ValidationException("Duplicate pages[$page.name] found in form [$name]");
-        page.setForm(this)
+        page.parent = this
         pages << page
     }
 
+
     void addQuestion(IQuestion question) {
+        question.setParent(this)
+        firstPage.addQuestion(question)
+    }
+
+    List<IQuestion> getAllQuestions() {
+        def allQuestions = questionMap.values() as List
+        return allQuestions
+    }
+
+    Page getFirstPage() {
         if (pages.isEmpty()) {
             def page = new Page("Page1")
             addPage(page)
         }
-        question.setParent(this)
-        pages[0].addQuestion(question)
+        return pages[0]
     }
 
     void validate() {
@@ -69,10 +76,21 @@ class Form implements HasQuestions {
             validateSkipLogic(it)
             validateCalculation(it)
             validateValidationLogic(it)
+
             if (it instanceof DynamicQuestion)
                 it.validate()
+
+            validateNotDuplicate(it)
+
         }
         validatePages()
+    }
+
+    void validateNotDuplicate(IQuestion qn) {
+        def otherQns = getQuestions(qn.binding)
+
+        if (otherQns.size() > 1)
+            throw new DuplicateQuestionException(question1: qn, question2: otherQns[0])
     }
 
     void validatePages() {
@@ -102,34 +120,15 @@ class Form implements HasQuestions {
         }
     }
 
+    @Deprecated
     static IQuestion findQuestionWithBinding(String binding, HasQuestions hasQuestions) {
-
-        Form parentForm
-        if (!(hasQuestions instanceof Form))
-            parentForm = hasQuestions.parentForm
-        else
-            parentForm = hasQuestions
-
-        def dupeQuestion = parentForm.questionMap[binding]
-
-        return dupeQuestion
+        return hasQuestions.parentForm.getQuestion(binding)
     }
 
-    List<IQuestion> getAllQuestions() {
-        def allQuestions = questionMap.values() as List
-        return allQuestions
-    }
 
-    static List<IQuestion> extractQuestions(HasQuestions questions) {
-        def allQuestions = []
-        questions.questions.each {
-            allQuestions.add(it)
-            if (it instanceof RepeatQuestion) {
-                def moreQuestions = extractQuestions(it)
-                allQuestions.addAll(moreQuestions)
-            }
-        }
-        return allQuestions
+    @Deprecated
+    static List<IQuestion> extractQuestions(HasQuestions hasQuestions) {
+        return hasQuestions.allQuestions
     }
 
     static void validateCalculation(IQuestion iQuestion) {
@@ -174,25 +173,33 @@ class Form implements HasQuestions {
         }
     }
 
-    public String getBinding() {
-        if (id == null)
-            id = Util.getBindName("${study.name}_${name}_v1")
-        return id
-    }
 
-    @Override
-    String getAbsoluteBinding() {
-        return '/' + binding
-    }
-
-    @Override
     Form getParentForm() {
         return this
     }
 
-    @Override
     IQuestion getQuestion(String binding) {
-        return findQuestionWithBinding(binding, this)
+        IQuestion qn = pages.findResult { it.getQuestion(binding) }
+        return qn
+    }
+
+    List<IQuestion> getQuestions(String binding) {
+        List<IQuestion> questions = []
+        pages.each { Page p ->
+            def pageQuestions = p.getQuestions(binding)
+            if (pageQuestions) {
+                questions.addAll(pageQuestions)
+            }
+        }
+
+        return questions
+
+    }
+
+    public String getBinding() {
+        if (id == null)
+            id = Util.getBindName("${study.name}_${name}_v1")
+        return id
     }
 
     String toString() {

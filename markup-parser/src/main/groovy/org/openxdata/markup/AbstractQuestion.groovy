@@ -7,16 +7,13 @@ package org.openxdata.markup
  * Time: 9:54 PM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractQuestion implements IQuestion {
+abstract class AbstractQuestion implements IQuestion, HasIdentifier {
 
-    HasQuestions hasQuestions
-    String question
     String comment
     boolean readOnly
     String type
     boolean required
     boolean visible = true
-    String binding
     String skipLogic
     String skipAction
     String validationLogic
@@ -37,18 +34,18 @@ abstract class AbstractQuestion implements IQuestion {
 
     @Override
     String getText() {
-        return question
+        return name
     }
 
     def getQuestionIdx() {
-        if (hasQuestions instanceof Form)
-            return '' + (hasQuestions.questions.indexOf(this) + 1)
-        else if (hasQuestions instanceof RepeatQuestion)
-            return "${hasQuestions.getQuestionIdx()}.${hasQuestions.questions.indexOf(this) + 1}"
+        if (parent instanceof Page)
+            return '' + (parent.parentForm.questions.indexOf(this) + 1)
+        else if (parent instanceof IQuestion)
+            return "${parent.getQuestionIdx()}.${parent.questions.indexOf(this) + 1}"
     }
 
     def getContextIdx() {
-        return "${hasQuestions.questions.indexOf(this) + 1}"
+        return "${parent.questions.indexOf(this) + 1}"
     }
 
     @Override
@@ -57,7 +54,7 @@ abstract class AbstractQuestion implements IQuestion {
             text = text[1..text.length() - 1]
             required = true
         }
-        this.question = text
+        this.name = text
         def tempBind = Util.getBindName(text)
         if (!binding)
             binding = tempBind
@@ -73,21 +70,13 @@ abstract class AbstractQuestion implements IQuestion {
         return hasAbsoluteId
     }
 
-    @Override
-    String getBinding() {
-        return binding
-    }
 
-    @Override
-    String getAbsoluteBinding() {
-        return "$hasQuestions.absoluteBinding/$binding"
-    }
 
     @Override
     String getIndexedAbsoluteBinding() {
-        if (hasQuestions instanceof IQuestion)
-            return "$hasQuestions.indexedAbsoluteBinding/$indexedBinding"
-        return "$hasQuestions.absoluteBinding/$indexedBinding"
+        if (parent instanceof IQuestion)
+            return "$parent.indexedAbsoluteBinding/$indexedBinding"
+        return "$parent.absoluteBinding/$indexedBinding"
     }
 
     String getRelativeBinding() {
@@ -127,31 +116,15 @@ abstract class AbstractQuestion implements IQuestion {
         return comment
     }
 
-    @Override
-    void setParent(HasQuestions hasQuestions) {
-        this.hasQuestions = hasQuestions
-    }
-
-    HasQuestions getParent() {
-        return hasQuestions
-    }
-
-    Form getParentForm() {
-        def form = hasQuestions
-        while (!(form instanceof Form)) {
-            form = hasQuestions.parentForm
-        }
-        return form as Form
-    }
 
     String getAbsoluteBinding(boolean indexed, boolean relative) {
         def var = getAbsoluteBinding()
-        if(indexed){
+        if (indexed) {
             var = getIndexedAbsoluteBinding()
         }
 
-        if(relative){
-            var = var.replaceFirst('/','')
+        if (relative) {
+            var = var.replaceFirst('/', '')
         }
 
         return var

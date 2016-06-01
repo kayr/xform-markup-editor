@@ -1,10 +1,4 @@
 package org.openxdata.markup
-
-import org.openxdata.markup.exception.DuplicateQuestionException
-
-import static org.openxdata.markup.Form.extractQuestions
-import static org.openxdata.markup.Form.findQuestionWithBinding
-
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -14,60 +8,25 @@ import static org.openxdata.markup.Form.findQuestionWithBinding
  */
 class Page implements HasQuestions {
 
-    String name
-    Study study
-    Form form
-
-    List<IQuestion> questions = []
 
     Page() {}
+    Form form
 
     Page(String name) {
         this.name = name
     }
 
-    void addQuestion(IQuestion question) {
-        question.setParent(form)
-        validate(question)//todo do not validate to early
-        form.questionMap[question.binding] = question
-        if (question instanceof RepeatQuestion)
-            question.allQuestions.each { form.questionMap[it.binding] = it }
-        questions.add(question)
-    }
-
-    private void validate(IQuestion question) {
-        IQuestion qn = getQuestion(question.binding)
-        if (qn != null) {
-            throw new DuplicateQuestionException(question1: question, question2: qn)
-        }
-    }
-
-    public String getBinding() {
-        return null
-    }
-
-    @Override
-    String getAbsoluteBinding() {
-        return null
-    }
-
-    @Override
-    List<IQuestion> getAllQuestions() {
-        return extractQuestions(this)
-    }
-
-    @Override
-    Form getParentForm() {
-        return form
-    }
-
-    @Override
-    IQuestion getQuestion(String binding) {
-        return findQuestionWithBinding(binding, this)
-    }
 
     String toString() {
         name
+    }
+
+    String getAbsoluteBinding() {
+        return "$parent.absoluteBinding"
+    }
+
+    String getBinding() {
+        return null
     }
 
 }

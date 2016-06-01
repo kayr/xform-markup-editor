@@ -61,7 +61,7 @@ study 	: 	NEWLINE*
 form 	: 	ATTRIBUTE*
 	   	FORMNAME
 	   	formContent+
-	   	-> ^(T_FORM FORMNAME ATTRIBUTE* formContent+)
+	   	-> ^(T_FORM FORMNAME ATTRIBUTE* ^(T_PAGE PAGE["Page1"] formContent+))
 	   	|
 	   	ATTRIBUTE*
 	   	FORMNAME

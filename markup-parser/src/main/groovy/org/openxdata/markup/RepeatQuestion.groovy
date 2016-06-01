@@ -1,9 +1,4 @@
 package org.openxdata.markup
-
-import org.openxdata.markup.exception.DuplicateQuestionException
-
-import static org.openxdata.markup.Form.*
-
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -13,7 +8,6 @@ import static org.openxdata.markup.Form.*
  */
 class RepeatQuestion extends AbstractQuestion implements HasQuestions {
 
-    List<IQuestion> questions = []
 
     RepeatQuestion() {}
 
@@ -21,38 +15,6 @@ class RepeatQuestion extends AbstractQuestion implements HasQuestions {
         super(question)
     }
 
-    @Override
-    List<IQuestion> getQuestions() {
-        return questions
-    }
-
-    @Override
-    void addQuestion(IQuestion question) {
-
-        def dupeQuestion = Form.findQuestionWithBinding(question.binding, hasQuestions)
-
-        //todo delay validations
-        if (dupeQuestion) {
-            throw new DuplicateQuestionException(question1: question, question2: dupeQuestion)
-        }
-
-        question.setParent(this)
-
-        //todo delay validation
-        validateSkipLogic(question)
-        validateValidationLogic(question)
-        validateCalculation(question)
-        questions << question
-    }
-
-    List<IQuestion> getAllQuestions() {
-        return Form.extractQuestions(this)
-    }
-
-    @Override
-    IQuestion getQuestion(String binding) {
-        return findQuestionWithBinding(binding, this)
-    }
 
     @Override
     String getType() {

@@ -1,26 +1,96 @@
 package org.openxdata.markup
 
-/**
- * Created with IntelliJ IDEA.
- * User: kay
- * Date: 2/1/13
- * Time: 11:22 PM
- * To change this template use File | Settings | File Templates.
- */
-interface HasQuestions {
+trait HasQuestions implements HasIdentifier {
 
-    List<IQuestion> getQuestions()
+    //Map to speed up question look up
+    private Map<String, Object> questionMap = [:]
+    private List<IQuestion> questions = []
+    private List<HasQuestions> hasQuestions = []
 
-    void addQuestion(IQuestion question)
 
-    String getBinding()
+    List<IQuestion> getQuestions() {
+        questions
+    }
 
-    String getAbsoluteBinding()
+    void addQuestion(IQuestion question) {
+        question.setParent(this)
+        cacheQuestion(question)
+        questions << question
+    }
 
-    List<IQuestion> getAllQuestions()
+    private void cacheQuestion(IQuestion question) {
+        def qnBinding = question.binding
 
-    Form getParentForm()
+        def existingEntity = questionMap[qnBinding]
 
-    IQuestion getQuestion(String binding)
+        if (existingEntity) {
+            if (existingEntity instanceof List) {
+                existingEntity << question
+            } else {
+                questionMap[qnBinding] = [existingEntity] << question
+            }
+        } else {
+            questionMap[qnBinding] = question
+        }
+
+        parentForm.questionMap[qnBinding] = question
+
+        if (question instanceof HasQuestions) {
+            hasQuestions << question
+        }
+    }
+
+
+    List<IQuestion> getAllQuestions() {
+        def allQuestions = []
+        questions.each {
+            allQuestions.add(it)
+            if (it instanceof HasQuestions) {
+                def moreQuestions = it.getAllQuestions()
+                allQuestions.addAll(moreQuestions)
+            }
+        }
+        return allQuestions
+    }
+
+
+    IQuestion getQuestion(String binding) {
+        def question = questionMap[binding]
+
+        if (question instanceof List) {
+            return question[0] as IQuestion
+        }
+
+        if (question) {
+            return question as IQuestion
+        }
+
+        for (hq in hasQuestions) {
+            def qn = hq.getQuestion(binding)
+            if (qn) return qn
+        }
+
+    }
+
+    List<IQuestion> getQuestions(String binding) {
+        List<IQuestion> rt = []
+        def question = questionMap[binding]
+
+        if (question instanceof List) {
+            rt.addAll(question)
+        }
+
+        if (question) {
+            rt << (question as IQuestion)
+        }
+
+        for (hq in hasQuestions) {
+            def qns = hq.getQuestions(binding)
+            if (qns) rt.addAll(qns)
+        }
+
+        return rt.unique()
+    }
+
 
 }

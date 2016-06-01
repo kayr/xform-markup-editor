@@ -25,17 +25,18 @@ class ParserUtils {
         findResultsImpl(tree, filter, false, false)
     }
 
-    //todo returns one element
-    static def <T extends Tree> List<T> find(T tree, @CP(FirstGenericType) Closure filter) {
-        findResultsImpl(tree, filter, false, true)
+    static def <T extends Tree> T find(T tree, @CP(FirstGenericType) Closure filter) {
+        findResultsImpl(tree, filter, false, true)?.get(0) as T
     }
 
     static def <T extends Tree> void each(T tree, @CP(FirstGenericType) Closure filter) {
         eachImpl(tree, filter, false)
     }
 
-    //todo quick browsing of this class seems like this method should search down the tree till
-    //it finds something
+    /**
+     * Walks down a tree till it finds an element the closure matches then finds similar
+     * elements at that same level
+     */
     static def <T extends Tree> List findResultsImpl(T tree,
                                                      @CP(FirstGenericType) Closure filter,
                                                      boolean transform,

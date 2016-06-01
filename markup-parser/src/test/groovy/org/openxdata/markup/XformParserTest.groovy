@@ -1,8 +1,5 @@
 package org.openxdata.markup
 
-import org.antlr.runtime.ANTLRStringStream
-import org.antlr.runtime.CharStream
-import org.antlr.runtime.CommonTokenStream
 import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.DuplicateQuestionException
 import org.openxdata.markup.exception.InvalidAttributeException
@@ -301,9 +298,15 @@ jeelopo
 
         assertEquals 2, form.pages.size()
 
+
         assertEquals 3, form.pages[0].questions.size()
 
         assertEquals 4, form.pages[1].questions.size()
+
+        assertEquals '_1gender', form.getQuestion('gender').indexedBinding
+        assertEquals '_3_1child_name', form.getQuestion('child_name').indexedBinding
+        assertEquals '_3lol', form.getQuestion('lol').indexedBinding
+        assertEquals '_6district', form.getQuestion('district').indexedBinding
 
     }
 
@@ -462,10 +465,8 @@ jeelopo
     }
 
 
-
-
     private MarkupDeserializer createParser(String testString) throws IOException {
-      return new MarkupDeserializer(testString)
+        return new MarkupDeserializer(testString)
     }
 
 

@@ -76,12 +76,8 @@ class MarkupDeserializer {
                     form.addPage(page)
                     addQuestions(page, child)
                     break
-
-
             }
-
         }
-        addQuestions(form, tree)
 
         return form
     }
@@ -134,8 +130,8 @@ class MarkupDeserializer {
                     def q = new RepeatQuestion()
                     q.setParent(parent)
                     processRepeatQuestion(child, q)
-                    addQuestions(q, child)
                     parent.addQuestion(q)
+                    addQuestions(q, child)
                     break
 
                 case XformParser.PAGE:
