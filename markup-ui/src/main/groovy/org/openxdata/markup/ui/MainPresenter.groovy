@@ -15,6 +15,8 @@ import javax.swing.event.DocumentListener
 import javax.swing.filechooser.FileFilter
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 import static javax.swing.JOptionPane.WARNING_MESSAGE
 import static javax.swing.JOptionPane.YES_NO_OPTION
@@ -35,6 +37,7 @@ class MainPresenter implements DocumentListener {
     def xfmFilter
     def allowedAttribs
     def allowedTypes
+    Executor e = Executors.newSingleThreadExecutor()
 
 
     MainPresenter() {
@@ -393,15 +396,18 @@ class MainPresenter implements DocumentListener {
     }
 
     void quickParseStudy() {
-        Thread.start {
-            Study.quickParse.set(true)
-            try {
-                getParsedStudy()
-            } catch (Exception x) {
-                println('error parsing study')
-                invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
+        invokeLater {//start this thread when u r sure all UI events are done
+            e.execute {
+                Study.quickParse.set(true)
+                try {
+                    getParsedStudy()
+                } catch (Exception x) {
+                    println('error parsing study')
+                    invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
+                }
             }
         }
+
     }
 
     def updateTree(Study study) {
@@ -442,7 +448,7 @@ class MainPresenter implements DocumentListener {
         if (isUpdating()) return
 
         toggleUpdating()
-        Thread.start {
+        e.execute {
             while (lastUpdatePeriod() <= TREE_UPDATE_PERIOD) Thread.sleep(TREE_UPDATE_PERIOD)
             quickParseStudy()
             toggleUpdating()
