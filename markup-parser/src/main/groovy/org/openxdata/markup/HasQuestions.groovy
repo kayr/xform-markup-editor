@@ -1,5 +1,8 @@
 package org.openxdata.markup
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 trait HasQuestions implements HasIdentifier {
 
     //Map to speed up question look up
@@ -25,7 +28,7 @@ trait HasQuestions implements HasIdentifier {
 
         if (existingEntity) {
             if (existingEntity instanceof List) {
-                existingEntity << question
+                (existingEntity as List) << question
             } else {
                 questionMap[qnBinding] = [existingEntity] << question
             }
@@ -36,7 +39,7 @@ trait HasQuestions implements HasIdentifier {
         parentForm.questionMap[qnBinding] = question
 
         if (question instanceof HasQuestions) {
-            hasQuestions << question
+            (hasQuestions as List) << question as HasQuestions
         }
     }
 
@@ -58,7 +61,7 @@ trait HasQuestions implements HasIdentifier {
         def question = questionMap[binding]
 
         if (question instanceof List) {
-            return question[0] as IQuestion
+            return (question as List)[0] as IQuestion
         }
 
         if (question) {
@@ -70,14 +73,16 @@ trait HasQuestions implements HasIdentifier {
             if (qn) return qn
         }
 
+        return null
+
     }
 
     List<IQuestion> getQuestions(String binding) {
         List<IQuestion> rt = []
         def question = questionMap[binding]
 
-        if (question instanceof List) {
-            rt.addAll(question)
+        if (question instanceof List<IQuestion>) {
+            rt.addAll(question as List<IQuestion>)
         }
 
         if (question) {
@@ -89,7 +94,7 @@ trait HasQuestions implements HasIdentifier {
             if (qns) rt.addAll(qns)
         }
 
-        return rt.unique()
+        return rt.unique() as List<IQuestion>
     }
 
 
