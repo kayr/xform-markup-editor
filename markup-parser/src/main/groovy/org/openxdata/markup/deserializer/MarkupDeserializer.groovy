@@ -15,16 +15,22 @@ class MarkupDeserializer {
 
     CommonTree tree
     String text
+    boolean validating = true
 
     MarkupDeserializer(String text) {
         this.text = text
+    }
+
+    MarkupDeserializer(String text,boolean validating) {
+        this.text = text
+        this.validating = validating
     }
 
 
     @CS
     Study parse() {
         tree = createAST(text)
-        def study = constructStudy(tree)
+        def study = constructStudy(tree,validating)
         return study
     }
 
@@ -40,9 +46,9 @@ class MarkupDeserializer {
 
 
     @CS
-    private static Study constructStudy(CommonTree tree) {
+    private static Study constructStudy(CommonTree tree, Boolean validating) {
 
-        def study = new Study()
+        def study = new Study(validating: validating)
         study.setName(tree.text)
         each(tree) { CommonTree it ->
             switch (it.type) {

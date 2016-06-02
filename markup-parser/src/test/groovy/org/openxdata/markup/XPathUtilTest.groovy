@@ -1,6 +1,8 @@
 package org.openxdata.markup
 
 import org.antlr.runtime.tree.CommonTree
+import org.openxdata.markup.deserializer.MarkupDeserializer
+import org.openxdata.markup.exception.ValidationException
 
 /**
  * Created by kay on 6/18/14.
@@ -64,6 +66,35 @@ class XPathUtilTest extends GroovyTestCase {
         def xpathUtil = new XPathUtil(xpath)
 
         assert xpathUtil.tree.findAllDeep { true }.size() == 34
+
+    }
+
+    void testVariableResolving() {
+
+        def simpleForm = '''
+### study
+
+## form
+
+one
+
+two
+
+repeat{ repeat
+  @showif $jfdjf = true
+  rone
+}
+
+'''
+
+
+        shouldFail(ValidationException) {
+            new MarkupDeserializer(simpleForm).study().forms.first()
+        }
+
+
+        Study study = new MarkupDeserializer(simpleForm, false).study()
+        assert study.forms.size() > 0
 
     }
 }
