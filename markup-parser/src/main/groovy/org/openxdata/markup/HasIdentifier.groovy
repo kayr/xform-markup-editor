@@ -1,6 +1,9 @@
 package org.openxdata.markup
 
+import groovy.transform.CompileStatic
 
+
+@CompileStatic
 trait HasIdentifier {
     String name
     String id
