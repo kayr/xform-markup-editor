@@ -59,12 +59,24 @@ class MainUI {
 
                 menu(text: 'Preferences') {
 
+                    menuItem(text: '  General:', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
+                    separator()
                     chkUseXMLValidation = checkBoxMenuItem(text: 'Allow Invalid OXD IDs')
+                    chkEnsureUniqueIdentifier = checkBoxMenuItem(text: 'Ensure Unique Identifier', selected: true)
+
+
+                    separator()
+                    menuItem(text: '  OpenData Kit:', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
+                    separator()
                     chkEmulateOXDConversion = checkBoxMenuItem(text: 'Emulate OXD to ODK', toolTipText:
                             'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
                                     'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
+
+
+                    separator()
+                    menuItem(text: '  OpenXData:', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
+                    separator()
                     chkGenerateLayout = checkBoxMenuItem(text: 'Generate Layout')
-                    chkEnsureUniqueIdentifier = checkBoxMenuItem(text: 'Ensure Unique Identifier', selected: true)
                 }
 
                 menu(text: 'Help') {
@@ -104,7 +116,7 @@ class MainUI {
                 panel(constraints: BorderLayout.NORTH) {
                     flowLayout(alignment: FlowLayout.LEFT)
                     btnRefreshTree = button(text: 'Refresh')
-                    chkAutoUpdateTree = checkBox(text: 'Auto Refresh',selected: true)
+                    chkAutoUpdateTree = checkBox(text: 'Auto Refresh', selected: true)
                 }
 
                 scrollPane() {
