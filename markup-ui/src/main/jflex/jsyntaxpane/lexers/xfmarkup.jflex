@@ -20,8 +20,9 @@ import jsyntaxpane.TokenType;
 %state Q_COMMENT
 %state ATTRIB_TEXT
 %state STRING_DOUBLE
-%state  STRING_SINGLE
-%state  FILE_TEXT
+%state STRING_SINGLE
+%state FILE_TEXT
+%state QN_TEXT
 
 %{
     /**
@@ -41,6 +42,10 @@ import jsyntaxpane.TokenType;
 StartComment = "//"
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
+WhiteSpace = [ \t\f]+
+Identifier = [a-zA-Z][a-zA-Z0-9_]*
+BindId = "@bind:"{Identifier}
+LayoutId = "@layout:"{Identifier}
 
 Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
@@ -48,7 +53,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 <YYINITIAL> {
   /*keywords */
-  "@"|
+   "@"|
   "@number"|
   "@boolean"|
   "@video"|
@@ -77,14 +82,14 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@dbid" |
   "@parent" |
   "@default" |
+  {LayoutId} |
+  {BindId} |
   "dynamic_instance{" |
   "dynamic{"
                                 {
                                 yybegin(ATTRIB_TEXT);
                                 return token(TokenType.KEYWORD);
                                 }
-
-   [:digit:]+                   {  return token(TokenType.KEYWORD2); }
 
   "@comment"|"@hint"            {
                                 yybegin(Q_COMMENT);
@@ -112,34 +117,49 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
   /* comments */
   {Comment}                      { return token(TokenType.COMMENT); }
-  . | {LineTerminator}           { return token(TokenType.TYPE2);  }
+
+  {WhiteSpace}                  {}
+  {LineTerminator}              {}
+
+
+  .                             {
+                                  yybegin(QN_TEXT);
+                                  return token(TokenType.TYPE2);
+                                 }
+
+
 }
 
 
 
 <ATTRIB_TEXT> {
   . *                           { return token(TokenType.DEFAULT); }
-  {LineTerminator}              { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yybegin(YYINITIAL) ; }
 }
 
 <ID_TEXT> {
   . *                           { return token(TokenType.STRING); }
-  {LineTerminator}              { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yybegin(YYINITIAL) ; }
 }
 
 <OPTIONS>{
   . *                           { return token(TokenType.TYPE); }
- {LineTerminator}               { yybegin(YYINITIAL) ; }
+ {LineTerminator}+              { yybegin(YYINITIAL) ; }
 }
 
 <Q_COMMENT>{
   . *                           { return token(TokenType.COMMENT2); }
-  {LineTerminator}              { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yybegin(YYINITIAL) ; }
 }
 
 <FILE_TEXT>{
   . *                           {  return token(TokenType.KEYWORD2); }
-  {LineTerminator}              { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yybegin(YYINITIAL) ; }
 }
 
-<<EOF>>                          { return null; }
+<QN_TEXT>{
+ . *                            {return token(TokenType.TYPE2);}
+ {LineTerminator}+              { yybegin(YYINITIAL) ; }
+}
+
+<<EOF>>                         { return null; }
