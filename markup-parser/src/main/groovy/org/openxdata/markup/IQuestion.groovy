@@ -37,7 +37,7 @@ interface IQuestion {
 
     String getIndexedBinding()
 
-    String getAbsoluteBinding(boolean indexed,boolean relative)
+    String getAbsoluteBinding(boolean indexed, boolean relative)
 
     String getComment()
 
@@ -94,5 +94,9 @@ interface IQuestion {
     def getValue()
 
     void setValue(def value)
+
+    Map getBindAttributes()
+
+    Map getLayoutAttributes()
 
 }

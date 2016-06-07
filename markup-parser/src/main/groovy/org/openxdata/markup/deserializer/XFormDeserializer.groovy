@@ -1,5 +1,6 @@
 package org.openxdata.markup.deserializer
 
+import groovy.json.JsonSlurper
 import org.openxdata.markup.*
 
 /**
@@ -11,6 +12,8 @@ class XFormDeserializer {
     private def xForm
     private Form form
     private def model
+    private final static def COMMON_BIND_ATTRIBUTES = ['locked', 'readonly', 'visible', 'required', 'relevant', 'constraint', 'calculate'] as HashSet
+
 
     XFormDeserializer() {
     }
@@ -160,8 +163,59 @@ class XFormDeserializer {
             qn.value = value
         qn.text = elem.label.text()
         qn.comment = elem.hint.text()
+        mayBeParseCommentAttribute(qn)
+
+
         parent.addQuestion(qn)
+        mayBeAddLayoutAttributes(qn, elem)
         return qn
+    }
+
+    private static mayBeAddLayoutAttributes(IQuestion qn, def elem) {
+        Map layoutAttributes = elem.attributes()
+        if (qn instanceof RepeatQuestion) {
+            layoutAttributes = elem.repeat[0].attributes()
+        }
+
+        layoutAttributes.remove('bind')
+        qn.layoutAttributes.putAll(layoutAttributes)
+    }
+
+    private static mayBeParseCommentAttribute(IQuestion qn) {
+
+        def jsonComment = qn.comment?.trim()
+
+        if (!(jsonComment?.startsWith('json:'))) {
+            return
+        }
+
+        jsonComment = Util.replaceFirst(jsonComment, 'json:', '')
+
+        def json = new JsonSlurper().parseText(jsonComment)
+
+
+        def comment = json.comment
+        if (comment) {
+            qn.comment = comment
+        } else {
+            qn.comment = null
+        }
+
+        def bindAttributes = json.bind
+        if (bindAttributes instanceof Map) {
+            for (e in bindAttributes) {
+                if (qn.bindAttributes.containsKey(e.key)) continue
+                qn.bindAttributes.put(e.key, e.value)
+            }
+        }
+
+        def layoutAttributes = json.layout
+        if (layoutAttributes instanceof Map) {
+            for (e in layoutAttributes) {
+                if (qn.layoutAttributes.containsKey(e.key)) continue
+                qn.layoutAttributes.put(e.key, e.value)
+            }
+        }
     }
 
     /**
@@ -181,6 +235,14 @@ class XFormDeserializer {
         mayBeAddSkipLogic(bindNode, qn)
         mayBeAddValidationLogic(bindNode, qn)
         mayBeAddCalculation(bindNode, qn)
+
+        Map bindAttributes = bindNode.attributes()
+
+        for (kv in bindAttributes) {
+            if (!COMMON_BIND_ATTRIBUTES.contains(kv.key)) {
+                qn.bindAttributes[kv.key] = kv.value
+            }
+        }
 
         return qn
     }

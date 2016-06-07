@@ -1649,4 +1649,368 @@ repeat{ *Required repeat
     </input>
   </group>
 </xforms>'''
+
+    def static formWithLayoutAndBindAttributes= '''
+### Sample Markup Study
+
+
+## Simple Form
+
+
+@bind:name 1
+@layout:name lo 1
+Name
+
+
+@bind:name 2
+@layout:name lo 2
+Sex
+  >male
+  >female
+
+
+@boolean
+@bind:name 3
+@layout:name lo 3
+Is pregnant
+
+
+@number
+@bind:name 4
+@layout:name lo 4
+What is your Age
+
+
+@bind:name 5
+@layout:name lo 5
+@hint Course unit hint
+Course units
+  >>Computer Science
+  >>Math
+  >>History
+
+
+@number
+@bind:name 6
+@layout:name lo 6
+Score math
+
+
+@number
+@bind:name 7
+@layout:name lo 7
+Score Computer Science
+
+
+@number
+@bind:name 8
+@layout:name lo 8
+Score History
+
+
+@bind:name 9
+@layout:name lo 9
+Total score
+
+
+@number
+@bind:name 10
+@layout:name lo 10
+Number of children
+
+
+@bind:name 11
+@layout:name lo 11
+repeat{ Child details
+
+        @bind:name 11.1
+        @layout:name lo 11.1
+        Child Name
+
+}
+
+
+@hint Please select you district
+District
+  >nill
+
+
+@bind:name 13
+@layout:name lo 13
+@parent district
+Subregion
+$>subregion
+
+
+dynamic{
+        $district, subregion
+        Washington, King
+        Washington, Kings
+}
+'''
+  def static formWithLayoutAndBindAttributesXML = '''<xforms>
+  <model>
+    <instance id="sample_markup_study_simple_form_v1">
+      <sample_markup_study_simple_form_v1 id="0" name="Simple Form" formKey="sample_markup_study_simple_form_v1">
+        <name />
+        <sex />
+        <is_pregnant />
+        <what_is_your_age />
+        <course_units />
+        <score_math />
+        <score_computer_science />
+        <score_history />
+        <total_score />
+        <number_of_children />
+        <child_details>
+          <child_name />
+        </child_details>
+        <district />
+        <subregion />
+      </sample_markup_study_simple_form_v1>
+    </instance>
+    <instance id="subregion">
+      <dynamiclist>
+        <item id="king" parent="washington">
+          <label>King</label>
+          <value>king</value>
+        </item>
+        <item id="kings" parent="washington">
+          <label>Kings</label>
+          <value>kings</value>
+        </item>
+      </dynamiclist>
+    </instance>
+    <bind id="name" nodeset="/sample_markup_study_simple_form_v1/name" name="1" type="xsd:string" />
+    <bind id="sex" nodeset="/sample_markup_study_simple_form_v1/sex" name="2" type="xsd:string" />
+    <bind id="is_pregnant" nodeset="/sample_markup_study_simple_form_v1/is_pregnant" name="3" type="xsd:boolean" />
+    <bind id="what_is_your_age" nodeset="/sample_markup_study_simple_form_v1/what_is_your_age" name="4" type="xsd:int" />
+    <bind id="course_units" nodeset="/sample_markup_study_simple_form_v1/course_units" name="5" type="xsd:string" />
+    <bind id="score_math" nodeset="/sample_markup_study_simple_form_v1/score_math" name="6" type="xsd:int" />
+    <bind id="score_computer_science" nodeset="/sample_markup_study_simple_form_v1/score_computer_science" name="7" type="xsd:int" />
+    <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="xsd:int" />
+    <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="xsd:string" />
+    <bind id="number_of_children" nodeset="/sample_markup_study_simple_form_v1/number_of_children" name="10" type="xsd:int" />
+    <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
+    <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="xsd:string" />
+    <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
+    <bind id="subregion" nodeset="/sample_markup_study_simple_form_v1/subregion" name="13" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="name" name="lo 1">
+      <label>Name</label>
+    </input>
+    <select1 bind="sex" name="lo 2">
+      <label>Sex</label>
+      <item id="male">
+        <label>male</label>
+        <value>male</value>
+      </item>
+      <item id="female">
+        <label>female</label>
+        <value>female</value>
+      </item>
+    </select1>
+    <input bind="is_pregnant" name="lo 3">
+      <label>Is pregnant</label>
+    </input>
+    <input bind="what_is_your_age" name="lo 4">
+      <label>What is your Age</label>
+    </input>
+    <select bind="course_units" name="lo 5">
+      <label>Course units</label>
+      <hint>Course unit hint</hint>
+      <item id="computer_science">
+        <label>Computer Science</label>
+        <value>computer_science</value>
+      </item>
+      <item id="math">
+        <label>Math</label>
+        <value>math</value>
+      </item>
+      <item id="history">
+        <label>History</label>
+        <value>history</value>
+      </item>
+    </select>
+    <input bind="score_math" name="lo 6">
+      <label>Score math</label>
+    </input>
+    <input bind="score_computer_science" name="lo 7">
+      <label>Score Computer Science</label>
+    </input>
+    <input bind="score_history" name="lo 8">
+      <label>Score History</label>
+    </input>
+    <input bind="total_score" name="lo 9">
+      <label>Total score</label>
+    </input>
+    <input bind="number_of_children" name="lo 10">
+      <label>Number of children</label>
+    </input>
+    <group id="child_details">
+      <label>Child details</label>
+      <repeat bind="child_details" name="lo 11">
+        <input bind="child_name" name="lo 11.1">
+          <label>Child Name</label>
+        </input>
+      </repeat>
+    </group>
+    <select1 bind="district">
+      <label>District</label>
+      <hint>Please select you district</hint>
+      <item id="washington">
+        <label>Washington</label>
+        <value>washington</value>
+      </item>
+    </select1>
+    <select1 bind="subregion" name="lo 13">
+      <label>Subregion</label>
+      <itemset nodeset="instance('subregion')/item[@parent=instance('sample_markup_study_simple_form_v1')/district]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+  </group>
+</xforms>'''
+  def static formWithLayoutAndBindAttributesToCommentsXML = '''<xforms>
+  <model>
+    <instance id="sample_markup_study_simple_form_v1">
+      <sample_markup_study_simple_form_v1 id="0" name="Simple Form" formKey="sample_markup_study_simple_form_v1">
+        <name />
+        <sex />
+        <is_pregnant />
+        <what_is_your_age />
+        <course_units />
+        <score_math />
+        <score_computer_science />
+        <score_history />
+        <total_score />
+        <number_of_children />
+        <child_details>
+          <child_name />
+        </child_details>
+        <district />
+        <subregion />
+      </sample_markup_study_simple_form_v1>
+    </instance>
+    <instance id="subregion">
+      <dynamiclist>
+        <item id="king" parent="washington">
+          <label>King</label>
+          <value>king</value>
+        </item>
+        <item id="kings" parent="washington">
+          <label>Kings</label>
+          <value>kings</value>
+        </item>
+      </dynamiclist>
+    </instance>
+    <bind id="name" nodeset="/sample_markup_study_simple_form_v1/name" name="1" type="xsd:string" />
+    <bind id="sex" nodeset="/sample_markup_study_simple_form_v1/sex" name="2" type="xsd:string" />
+    <bind id="is_pregnant" nodeset="/sample_markup_study_simple_form_v1/is_pregnant" name="3" type="xsd:boolean" />
+    <bind id="what_is_your_age" nodeset="/sample_markup_study_simple_form_v1/what_is_your_age" name="4" type="xsd:int" />
+    <bind id="course_units" nodeset="/sample_markup_study_simple_form_v1/course_units" name="5" type="xsd:string" />
+    <bind id="score_math" nodeset="/sample_markup_study_simple_form_v1/score_math" name="6" type="xsd:int" />
+    <bind id="score_computer_science" nodeset="/sample_markup_study_simple_form_v1/score_computer_science" name="7" type="xsd:int" />
+    <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="xsd:int" />
+    <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="xsd:string" />
+    <bind id="number_of_children" nodeset="/sample_markup_study_simple_form_v1/number_of_children" name="10" type="xsd:int" />
+    <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
+    <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="xsd:string" />
+    <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
+    <bind id="subregion" nodeset="/sample_markup_study_simple_form_v1/subregion" name="13" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="name" name="lo 1">
+      <label>Name</label>
+      <hint>json:{"bind":{"name":"1"},"layout":{"name":"lo 1"}}</hint>
+    </input>
+    <select1 bind="sex" name="lo 2">
+      <label>Sex</label>
+      <hint>json:{"bind":{"name":"2"},"layout":{"name":"lo 2"}}</hint>
+      <item id="male">
+        <label>male</label>
+        <value>male</value>
+      </item>
+      <item id="female">
+        <label>female</label>
+        <value>female</value>
+      </item>
+    </select1>
+    <input bind="is_pregnant" name="lo 3">
+      <label>Is pregnant</label>
+      <hint>json:{"bind":{"name":"3"},"layout":{"name":"lo 3"}}</hint>
+    </input>
+    <input bind="what_is_your_age" name="lo 4">
+      <label>What is your Age</label>
+      <hint>json:{"bind":{"name":"4"},"layout":{"name":"lo 4"}}</hint>
+    </input>
+    <select bind="course_units" name="lo 5">
+      <label>Course units</label>
+      <hint>json:{"bind":{"name":"5"},"layout":{"name":"lo 5"},"comment":"Course unit hint"}</hint>
+      <item id="computer_science">
+        <label>Computer Science</label>
+        <value>computer_science</value>
+      </item>
+      <item id="math">
+        <label>Math</label>
+        <value>math</value>
+      </item>
+      <item id="history">
+        <label>History</label>
+        <value>history</value>
+      </item>
+    </select>
+    <input bind="score_math" name="lo 6">
+      <label>Score math</label>
+      <hint>json:{"bind":{"name":"6"},"layout":{"name":"lo 6"}}</hint>
+    </input>
+    <input bind="score_computer_science" name="lo 7">
+      <label>Score Computer Science</label>
+      <hint>json:{"bind":{"name":"7"},"layout":{"name":"lo 7"}}</hint>
+    </input>
+    <input bind="score_history" name="lo 8">
+      <label>Score History</label>
+      <hint>json:{"bind":{"name":"8"},"layout":{"name":"lo 8"}}</hint>
+    </input>
+    <input bind="total_score" name="lo 9">
+      <label>Total score</label>
+      <hint>json:{"bind":{"name":"9"},"layout":{"name":"lo 9"}}</hint>
+    </input>
+    <input bind="number_of_children" name="lo 10">
+      <label>Number of children</label>
+      <hint>json:{"bind":{"name":"10"},"layout":{"name":"lo 10"}}</hint>
+    </input>
+    <group id="child_details">
+      <label>Child details</label>
+      <hint>json:{"bind":{"name":"11"},"layout":{"name":"lo 11"}}</hint>
+      <repeat bind="child_details" name="lo 11">
+        <input bind="child_name" name="lo 11.1">
+          <label>Child Name</label>
+          <hint>json:{"bind":{"name":"11.1"},"layout":{"name":"lo 11.1"}}</hint>
+        </input>
+      </repeat>
+    </group>
+    <select1 bind="district">
+      <label>District</label>
+      <hint>Please select you district</hint>
+      <item id="washington">
+        <label>Washington</label>
+        <value>washington</value>
+      </item>
+    </select1>
+    <select1 bind="subregion" name="lo 13">
+      <label>Subregion</label>
+      <hint>json:{"bind":{"name":"13"},"layout":{"name":"lo 13"}}</hint>
+      <itemset nodeset="instance('subregion')/item[@parent=instance('sample_markup_study_simple_form_v1')/district]">
+        <label ref="label" />
+        <value ref="value" />
+      </itemset>
+    </select1>
+  </group>
+</xforms>'''
+
 }

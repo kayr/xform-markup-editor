@@ -22,6 +22,9 @@ abstract class AbstractQuestion implements IQuestion, HasIdentifier {
     int line
     boolean hasAbsoluteId = false
     def value
+    //todo test not setting conflicting attributes eg bind attributes cannot have bind,locked,relevant etc
+    Map<String, String> bindAttributes = [:]
+    Map<String, String> layoutAttributes = [:]
 
 
     AbstractQuestion() {
@@ -69,7 +72,6 @@ abstract class AbstractQuestion implements IQuestion, HasIdentifier {
     boolean getHasAbsoluteId() {
         return hasAbsoluteId
     }
-
 
 
     @Override

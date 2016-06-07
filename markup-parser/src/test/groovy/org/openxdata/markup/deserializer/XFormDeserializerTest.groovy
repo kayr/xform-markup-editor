@@ -216,4 +216,16 @@ class XFormDeserializerTest extends GroovyTestCase {
         assertEquals originalXform, otherXform
     }
 
+    void testDeSerializingWithLayoutAttributesInComment() {
+        def form = new XFormDeserializer(formWithLayoutAndBindAttributesToCommentsXML).parse()
+
+        assertEquals formWithLayoutAndBindAttributesXML, new XFormSerializer().toXForm(form)
+    }
+
+    void testDeSerializingWithLayoutAttributes() {
+        def form = new XFormDeserializer(formWithLayoutAndBindAttributesXML).parse()
+
+        assertEquals formWithLayoutAndBindAttributesXML, new XFormSerializer().toXForm(form)
+    }
+
 }

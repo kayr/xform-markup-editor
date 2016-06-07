@@ -2,6 +2,7 @@ package org.openxdata.markup
 
 import groovy.transform.CompileStatic
 import org.openxdata.markup.exception.InvalidAttributeException
+import org.openxdata.markup.exception.ValidationException
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,17 +15,29 @@ import org.openxdata.markup.exception.InvalidAttributeException
 class Attrib {
 
     static List types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
-            'picture', 'gps', 'barcode', 'longtext']
+                         'picture', 'gps', 'barcode', 'longtext']
 
     static
     List allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
-            'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
+                              'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
 
 
     static void addAttribute(IQuestion question, String attribute, int line) {
         def params = extractAttribAndParam(attribute)
         String param = params['param']
         String lowCaseAttrib = params['attrib']
+        boolean isBind = params['isBind']
+        boolean isLayout = params['isLayout']
+
+        if (isBind) {
+            setBindAttribute(question, lowCaseAttrib, param, line)
+            return
+        }
+
+        if (isLayout) {
+            setLayoutAttribute(question, lowCaseAttrib, param, line)
+            return
+        }
 
         //type attributes are only allowed on TextQuestions
         def invalid = !(question instanceof TextQuestion) && types.contains(lowCaseAttrib) ||
@@ -35,17 +48,18 @@ class Attrib {
             throw new InvalidAttributeException("Cannot set datatype [$attribute] on a ${question.class.simpleName}", line)
         }
 
-
-
         if (types.contains(lowCaseAttrib)) {
-            if (lowCaseAttrib == 'datetime')
+
+            if (lowCaseAttrib == 'datetime') {
                 lowCaseAttrib = 'dateTime'
+            }
+
             question.type = lowCaseAttrib
         } else if (allowedAttributes.contains(lowCaseAttrib)) {
             setQuestionAttribute(question, lowCaseAttrib, param, line)
         } else {
-            throw new InvalidAttributeException("""Attibute [@$attribute] has no meaning.
-Supported attributes include $types \n$allowedAttributes""", line)
+            throw new InvalidAttributeException("""Attibute [@$attribute] has no meaning.\n""" +
+                    """Supported attributes include $types \n$allowedAttributes""", line)
         }
 
     }
@@ -73,10 +87,55 @@ Supported attributes include $types \n$allowedAttributes""", line)
 
     static Map extractAttribAndParam(String attribute) {
         attribute = attribute.trim().replaceAll(/\s+/, ' ')
-        def lowCaseAttrib = attribute.toLowerCase().split(/\s+/)[0]
 
-        def param = lowCaseAttrib.length() == attribute.length() ? "" : (attribute[lowCaseAttrib.length()..attribute.length() - 1]).trim()
-        [attrib: lowCaseAttrib, param: param]
+
+
+        def attributeName = attribute.split(/\s+/)[0]
+
+
+        def isBind = attribute.startsWith('bind:')
+        def isLayout = attribute.startsWith('layout:')
+        if (!(isBind || isLayout)) {
+            attributeName = attributeName.toLowerCase()
+        }
+        def param = attributeName.length() == attribute.length() ? "" : (attribute[attributeName.length()..attribute.length() - 1]).trim()
+        [attrib: attributeName, param: param, isBind: isBind, isLayout: isLayout]
+    }
+
+    static void setBindAttribute(IQuestion question, String attribute, String param, int line) {
+        putAttribute(
+                question.bindAttributes, 'bind:',
+                attribute, param, 'Bind', line
+        )
+    }
+
+    static void setLayoutAttribute(IQuestion question, String attribute, String param, int line) {
+        putAttribute(
+                question.layoutAttributes, 'layout:',
+                attribute, param, 'Layout', line
+        )
+    }
+
+    private static putAttribute(Map container,
+                                String qualifier,
+                                String attribute,
+                                String param,
+                                String type,
+                                int line) {
+        String newAttribute = Util.replaceFirst(attribute, qualifier, '')
+
+        if (!newAttribute) {
+            throw new ValidationException("Invalid $type Attribute", line)
+        }
+
+        Util.validateId(newAttribute, line, true)
+
+        if (!param) {
+            param = true
+        }
+
+        container.put(newAttribute, param)
+
     }
 
     static void setQuestionAttribute(IQuestion question, String attribute, String param, int line) {

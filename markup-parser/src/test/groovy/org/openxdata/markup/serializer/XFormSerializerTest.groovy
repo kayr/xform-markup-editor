@@ -1,12 +1,12 @@
 package org.openxdata.markup.serializer
 
+import groovy.json.JsonOutput
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.DifferenceListener
 import org.custommonkey.xmlunit.IgnoreTextAndAttributeValuesDifferenceListener
 import org.custommonkey.xmlunit.XMLTestCase
 import org.openxdata.markup.Fixtures
 import org.openxdata.markup.Study
-import org.openxdata.markup.Util
 import org.openxdata.markup.deserializer.MarkupDeserializer
 
 /**
@@ -61,6 +61,7 @@ class XFormSerializerTest extends XMLTestCase {
         assertTrue("test XML matches control skeleton XML", myDiff.similar());
         //assertEquals Fixtures.snvStudyXML, studyXml
     }
+
 
     void testToXformWithDataTypes() {
         def parser = new MarkupDeserializer(Fixtures.formWithAttribs)
@@ -233,7 +234,7 @@ class XFormSerializerTest extends XMLTestCase {
         assertEquals Fixtures.absoluteIdXML, xml
     }
 
-    void testNonOxdInCompatibleIDsAreAllowed() {
+    void testInCompatibleOxdIDsAreAllowed() {
 
         Study.validateWithXML.set(true)
         def form = new MarkupDeserializer(ODKFixtures.formWithIncompatibleOXDId.form).study().forms[0]
@@ -242,6 +243,22 @@ class XFormSerializerTest extends XMLTestCase {
 
         assertEquals ODKFixtures.formWithIncompatibleOXDId.oxdXML, xml
 
+
+    }
+
+    void testLayoutAttributesAndBindAttributesAreSerialized() {
+        def study = new MarkupDeserializer(Fixtures.formWithLayoutAndBindAttributes).study()
+
+        def xForm = new XFormSerializer().toXForm(study.forms.first())
+        assertEquals Fixtures.formWithLayoutAndBindAttributesXML, xForm
+
+    }
+
+    void testLayoutAttributesAndBindAttributesAreSerializedToComments() {
+        def study = new MarkupDeserializer(Fixtures.formWithLayoutAndBindAttributes).study()
+
+        def xForm = new XFormSerializer(putExtraAttributesInComments: true).toXForm(study.forms.first())
+        assertEquals Fixtures.formWithLayoutAndBindAttributesToCommentsXML, xForm
 
     }
 

@@ -97,6 +97,38 @@ class AttribTest extends GroovyTestCase {
 
     }
 
+    void testAddLayoutAndBindAttributes() {
+        Attrib.addAttribute(qn, 'bind:bind', 1)
+        assert qn.bindAttributes['bind'] == 'true'
+
+        Attrib.addAttribute(qn, 'layout:layout', 1)
+        assert qn.layoutAttributes['layout'] == 'true'
+
+        Attrib.addAttribute(qn, 'layout:layout2 value two', 1)
+        assert qn.layoutAttributes['layout2'] == 'value two'
+
+        Attrib.addAttribute(qn, 'bind:bind2 anyval', 1)
+        assert qn.bindAttributes['bind2'] == 'anyval'
+
+
+        try {
+            Attrib.addAttribute(qn, 'bind: bind3 anyval', 1)
+            fail('Expecting invalid bind attribute')
+        } catch (Exception x) {
+            assert x.message.contains('Invalid Bind Attribute')
+        }
+
+        try {
+            Attrib.addAttribute(qn, 'layout: layout anyval', 1)
+            fail('Expecting invalid layout attribute')
+        } catch (Exception x) {
+            assert x.message.contains('Invalid Layout Attribute')
+        }
+
+
+
+    }
+
     void testSetAttribOnForm() {
 
         Form form = new Form("form")

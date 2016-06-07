@@ -1,5 +1,6 @@
 package org.openxdata.markup.serializer
 
+import groovy.json.JsonOutput
 import groovy.xml.MarkupBuilder
 import groovy.xml.XmlUtil
 import org.openxdata.markup.*
@@ -13,8 +14,10 @@ import org.openxdata.markup.*
  */
 class XFormSerializer {
 
+
     boolean numberQuestions = false
     boolean numberBindings = false
+    boolean putExtraAttributesInComments = false
     boolean generateView = true
 
     Map<Form, String> xforms = [:]
@@ -81,7 +84,7 @@ class XFormSerializer {
                         form.questions.each { question ->
                             def bind = binding(question)
                             checkBindLength(bind)
-                            xml."$bind"(question.value) {//Improve and use recursion when you have time
+                            xml."$bind"(question.value) {//todo Improve and use recursion when you have time
                                 if (question instanceof RepeatQuestion) {
                                     RepeatQuestion qn = question
                                     qn.questions.each { qnInRpt ->
@@ -147,7 +150,7 @@ class XFormSerializer {
 
         def type = getQuestionType(question)
 
-        def map = [id: binding(question), nodeset: absoluteBinding(question)]
+        def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
 
         if (type.type) map.type = type.type
 
@@ -233,26 +236,53 @@ class XFormSerializer {
     void buildQuestionLayout(MarkupBuilder xml, IQuestion question) {
         def qnType = getQuestionType(question)
         if (qnType.type == 'xsd:base64Binary') {
-            xml.upload(bind: binding(question), mediatype: "${qnType.format}/*") {
+            def map = [bind: binding(question), mediatype: "${qnType.format}/*"] + question.layoutAttributes
+            xml.upload(map) {
                 buildQuestionLabelAndHint(xml, question)
             }
-        } else
-            xml.input(bind: binding(question)) {
+        } else {
+            def map = [bind: binding(question)] + question.layoutAttributes
+            xml.input(map) {
                 buildQuestionLabelAndHint(xml, question)
             }
+        }
     }
 
     void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
 
         def label = question.getText(numberQuestions)
         xml.label(label)
-        if (question.comment)
-            xml.hint(question.comment)
+        def comment = question.comment
+
+        if (putExtraAttributesInComments) {
+            def commentMap = [:]
+
+            if (question.bindAttributes) {
+                commentMap['bind'] = question.bindAttributes
+            }
+
+            if (question.layoutAttributes) {
+                commentMap['layout'] = question.layoutAttributes
+            }
+
+            if (commentMap) {
+
+                if (comment) commentMap['comment'] = comment
+
+                comment = "json:${JsonOutput.toJson(commentMap)}"
+            }
+
+        }
+
+        if (comment) {
+            xml.hint(comment)
+        }
     }
 
     void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, HasQuestions page) {
 
-        xml.select1(bind: binding(question)) {
+        def map = [bind: binding(question)] + question.layoutAttributes
+        xml.select1(map) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
             xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$page.parentForm.binding')/${getDynamicParentQnId(question)}]") {
@@ -272,7 +302,8 @@ class XFormSerializer {
     void buildSelectionLayout(MarkupBuilder xml, ISelectionQuestion question) {
 
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
-        xml."select$selectRef"(bind: binding(question)) {
+        def map = [bind: binding(question)] + question.layoutAttributes
+        xml."select$selectRef"(map) {
             buildQuestionLabelAndHint(xml, question)
             question.options.each { option ->
                 xml.item(id: option.bind) {
@@ -290,8 +321,9 @@ class XFormSerializer {
         xml.group(id: binding(question)) {
             buildQuestionLabelAndHint(xml, question)
 
-            xml.repeat(bind: binding(question)) {
 
+            def map = [bind: binding(question)] + question.layoutAttributes
+            xml.repeat(map) {
                 buildQuestionsLayout(question, xml)
 
             }

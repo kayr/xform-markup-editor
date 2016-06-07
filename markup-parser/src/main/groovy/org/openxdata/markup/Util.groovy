@@ -2,9 +2,6 @@ package org.openxdata.markup
 
 import com.sun.org.apache.xerces.internal.util.XMLChar
 import groovy.transform.CompileStatic
-import org.antlr.runtime.ANTLRStringStream
-import org.antlr.runtime.CharStream
-import org.antlr.runtime.CommonTokenStream
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
 
@@ -160,17 +157,51 @@ class Util {
         return "string"
     }
 
-    static <T> T wrapValidationExceptionHandler(int line, Closure<T> c) {
+
+    public static replaceFirst(String self, String searchString, String replacement) {
+        replace(self, searchString, replacement, 1)
+    }
+
+    public static final int INDEX_NOT_FOUND = -1;
+    //copied from apache commons
+    public static String replace(final String text, final String searchString, final String replacement, int max) {
+        if (isEmpty(text) || isEmpty(searchString) || replacement == null || max == 0) {
+            return text;
+        }
+        int start = 0;
+        int end = text.indexOf(searchString, start);
+        if (end == INDEX_NOT_FOUND) {
+            return text;
+        }
+        final int replLength = searchString.length();
+        int increase = replacement.length() - replLength;
+        increase = increase < 0 ? 0 : increase;
+        increase *= max < 0 ? 16 : max > 64 ? 64 : max;
+        final StringBuilder buf = new StringBuilder(text.length() + increase);
+        while (end != INDEX_NOT_FOUND) {
+            buf.append(text.substring(start, end)).append(replacement);
+            start = end + replLength;
+            if (--max == 0) {
+                break;
+            }
+            end = text.indexOf(searchString, start);
+        }
+        buf.append(text.substring(start));
+        return buf.toString();
+    }
+
+    public static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
+    static Map<String, String> parseBind(String option, int line) {
         try {
-            return c()
+            memoizedParseBind.call(option)
         } catch (ValidationException ex) {
             ex.line = line
             throw ex
         }
-    }
 
-    static Map<String, String> parseBind(String option, int line) {
-        wrapValidationExceptionHandler(line) { memoizedParseBind.call(option) }
     }
 
     private
@@ -188,7 +219,7 @@ class Util {
             validateId(tmpBind?.replaceFirst(/\$/, ''), 0)
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
- An Id should start with lower case characters follow by low case characters, numbers or underscores""")
+                                                 |An Id should start with lower case characters follow by low case characters, numbers or underscores""".stripMargin())
             option = option.replaceFirst(/[$][^\s]*/, '').trim()
             bind = tmpBind.trim() - '$'
         } else {
@@ -197,21 +228,32 @@ class Util {
         return [option: option, bind: bind]
     }
 
+    @CompileStatic
     public static void validateId(String id, int line) {
-        wrapValidationExceptionHandler(line) {
-            if (Study.validateWithXML.get())
+        validateId(id, line, false)
+    }
+
+    @CompileStatic
+    public static void validateId(String id, int line, boolean useXml) {
+        try {
+            if (Study.validateWithXML.get() || useXml)
                 memoizedValidateGeneral.call(id)
             else
                 memoizedValidateId.call(id)
+        } catch (ValidationException ex) {
+            ex.line = line
+            throw ex
         }
     }
-    private static memoizedValidateId = { String id ->
+
+
+    private static Closure memoizedValidateId = { String id ->
         if (!(id ==~ /[a-z_][a-z0-9_]*/))
             throw new InvalidAttributeException("You have an invalid variable [$id] .\n" +
                     "Attributes should start with a small letter followed by small letters and underscores")
     }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
 
-    private static memoizedValidateGeneral = { String id ->
+    private static Closure memoizedValidateGeneral = { String id ->
         if (!(XMLChar.isValidName(id)))
             throw new InvalidAttributeException("You have an invalid variable [$id] .\n" +
                     "Attributes should start with a small letter followed by small letters and underscores")
@@ -227,8 +269,8 @@ class Util {
                    """.split(/\s+/)
 
     def static dates = """period
-                  date
-        """.split(/\s+/)
+                          date
+                       """.split(/\s+/)
 
 
 }
