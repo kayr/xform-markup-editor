@@ -12,7 +12,8 @@ class XFormDeserializer {
     private def xForm
     private Form form
     private def model
-    private final static def COMMON_BIND_ATTRIBUTES = ['locked', 'readonly', 'visible', 'required', 'relevant', 'constraint', 'calculate'] as HashSet
+    private final static
+    def COMMON_BIND_ATTRIBUTES = ['locked', 'message', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
 
 
     XFormDeserializer() {
