@@ -77,6 +77,8 @@ class MainUI {
                     menuItem(text: '  OpenXData:', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
                     separator()
                     chkGenerateLayout = checkBoxMenuItem(text: 'Generate Layout')
+                    chkSerializeExtraAttributesToComment = checkBoxMenuItem(text: 'Store Extra Attributes in Comment', selected: true,
+                            toolTipText: 'This is a compatibility hack when converting openxdata xform to odk where extra bind and layout attributes are stored in the openxdata comment section')
                 }
 
                 menu(text: 'Help') {
@@ -222,6 +224,7 @@ class MainUI {
     JCheckBox chkAutoUpdateTree
     JCheckBoxMenuItem chkUseXMLValidation
     JCheckBoxMenuItem chkEnsureUniqueIdentifier
+    JCheckBoxMenuItem chkSerializeExtraAttributesToComment
     JLabel lblCaret
 
     //menus

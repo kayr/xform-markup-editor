@@ -44,9 +44,9 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 WhiteSpace = [ \t\f]+
 Identifier = [a-zA-Z][a-zA-Z0-9_]*
-BindId = "@bind:"{Identifier}
-LayoutId = "@layout:"{Identifier}
-
+XmlId = {Identifier}(":"{Identifier})?
+BindId = "@bind:"{XmlId}
+LayoutId = "@layout:"{XmlId}
 Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 %%

@@ -179,7 +179,8 @@ class MainPresenter implements DocumentListener {
         new XFormSerializer(
                 numberQuestions: form.chkNumberLabels.model.isSelected(),
                 numberBindings: form.chkNumberBindings.isSelected(),
-                generateView: form.chkGenerateLayout.isSelected()
+                generateView: form.chkGenerateLayout.isSelected(),
+                putExtraAttributesInComments: form.chkSerializeExtraAttributesToComment
         )
     }
 
