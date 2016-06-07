@@ -205,6 +205,30 @@ E.g
 First name
 ```
 
+
+#### Adding Bind Attributes and Layout Attributes(e.g appearance)
+You can add layout attributes(like appearance,jr:count etc) to you questions. See below:
+ 
+E.g
+To make a select-one question with search
+```
+@layout:appearance search
+Select one option
+ >option one
+ >option two
+ >option three
+ >option four
+```
+
+To preload the username configured in ODK Collect settings page do the following. These properties will be added to the bind section of the xform
+```
+@bind:jr:preload property
+@bind:jr:preloadParams username
+@readonly
+User name
+```
+
+
 #### Numbering The Questions Automatically 
 
 To number the questions automatically check the ***Number Labels checkbox*** on the toolbar. If you want the numbers to be propagated to the binding then you can also check the ***Number IDs checkbox***.
