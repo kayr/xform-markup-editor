@@ -106,6 +106,10 @@ class ODKSerializerTest extends GroovyTestCase {
         assertEquals booleanConversion.xml, toODK(booleanConversion.form, true)
     }
 
+    void testAppearanceAndLayoutAttributes() {
+        assertEquals formWithLayoutAttributes.xml, toODK(Fixtures.formWithLayoutAndBindAttributes)
+    }
+
 
     String toODK(String markup, boolean oxd = false) {
         toODK(toForm(markup), oxd)

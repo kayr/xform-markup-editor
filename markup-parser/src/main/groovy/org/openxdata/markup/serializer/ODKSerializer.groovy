@@ -159,7 +159,7 @@ class ODKSerializer {
 
         def type = getQuestionType(question)
 
-        def map = [id: binding(question), nodeset: absoluteBinding(question)]
+        def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
 
         if (type.type) map.type = type.type
 
@@ -255,8 +255,10 @@ class ODKSerializer {
 
     private void buildLayout(MarkupBuilder x, IQuestion question) {
         def qnType = getQuestionType(question)
+        def inputAttrs = [ref: absoluteBinding(question)] + question.layoutAttributes
+
         if (question.type == 'boolean') {
-            x."select1"(ref: absoluteBinding(question)) {
+            x."select1"(inputAttrs) {
                 buildQuestionLabelAndHint(x, question)
                 x.item {
                     label('Yes')
@@ -268,11 +270,11 @@ class ODKSerializer {
                 }
             }
         } else if (qnType.type == 'binary') {
-            x.upload(ref: absoluteBinding(question), mediatype: "${qnType.format}/*") {
+            inputAttrs['mediatype'] = "${qnType.format}/*"
+            x.upload(inputAttrs) {
                 buildQuestionLabelAndHint(x, question)
             }
         } else {
-            def inputAttrs = [ref: absoluteBinding(question)]
 
             //add external app from the question hint
             def externalApp = mayBeExternalApp(question.comment)
@@ -294,8 +296,8 @@ class ODKSerializer {
 
 
     private void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
-
-        xml.select1(ref: absoluteBinding(question)) {
+        def inputAttrs = [ref: absoluteBinding(question)] + question.layoutAttributes
+        xml.select1(inputAttrs) {
             buildQuestionLabelAndHint(xml, question)
             xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/dynamiclist/item[@parent=${getDynamicParentQnId(question)}]") {
                 xml.value(ref: 'value')
@@ -306,8 +308,9 @@ class ODKSerializer {
 
     private void buildLayout(MarkupBuilder xml, ISelectionQuestion question) {
 
+        def inputAttrs = [ref: absoluteBinding(question)] + question.layoutAttributes
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
-        xml."select$selectRef"(ref: absoluteBinding(question)) {
+        xml."select$selectRef"(inputAttrs) {
             buildQuestionLabelAndHint(xml, question)
             question.options.each { option ->
                 xml.item {
@@ -320,7 +323,7 @@ class ODKSerializer {
 
     private void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
 
-        def attr = [nodeset: absoluteBinding(question)]
+        def attr = [nodeset: absoluteBinding(question)] + question.layoutAttributes
         if (oxdConversion) {
             //oxd uses validation to control size of repeat while odk uses jr:count
             def logic = question.getValidationLogic()
@@ -332,7 +335,7 @@ class ODKSerializer {
 
         }
 
-        xml.group() {
+        xml.group{
             buildQuestionLabelAndHint(xml, question)
 
             xml.repeat(attr) {

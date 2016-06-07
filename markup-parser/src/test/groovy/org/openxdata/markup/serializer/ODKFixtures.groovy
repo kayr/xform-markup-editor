@@ -920,4 +920,148 @@ No. Kids
 </h:html>'''
   ]
 
+
+    static def  formWithLayoutAttributes = [
+            form: Fixtures.formWithLayoutAndBindAttributes,
+            xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>Simple Form</h:title>
+    <model>
+      <instance>
+        <sample_markup_study_simple_form_v1 id="0" name="Simple Form">
+          <name />
+          <sex />
+          <is_pregnant />
+          <what_is_your_age />
+          <course_units />
+          <score_math />
+          <score_computer_science />
+          <score_history />
+          <total_score />
+          <number_of_children />
+          <child_details>
+            <child_name />
+          </child_details>
+          <district />
+          <subregion />
+        </sample_markup_study_simple_form_v1>
+      </instance>
+      <instance id="subregion">
+        <dynamiclist>
+          <item id="king" parent="washington">
+            <label>King</label>
+            <value>king</value>
+          </item>
+          <item id="kings" parent="washington">
+            <label>Kings</label>
+            <value>kings</value>
+          </item>
+        </dynamiclist>
+      </instance>
+      <bind id="name" nodeset="/sample_markup_study_simple_form_v1/name" name="1" type="string" />
+      <bind id="sex" nodeset="/sample_markup_study_simple_form_v1/sex" name="2" type="string" />
+      <bind id="is_pregnant" nodeset="/sample_markup_study_simple_form_v1/is_pregnant" name="3" type="string" />
+      <bind id="what_is_your_age" nodeset="/sample_markup_study_simple_form_v1/what_is_your_age" name="4" type="int" />
+      <bind id="course_units" nodeset="/sample_markup_study_simple_form_v1/course_units" name="5" type="string" />
+      <bind id="score_math" nodeset="/sample_markup_study_simple_form_v1/score_math" name="6" type="int" />
+      <bind id="score_computer_science" nodeset="/sample_markup_study_simple_form_v1/score_computer_science" name="7" type="int" />
+      <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="int" />
+      <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="string" />
+      <bind id="number_of_children" nodeset="/sample_markup_study_simple_form_v1/number_of_children" name="10" type="int" />
+      <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
+      <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="string" />
+      <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="string" />
+      <bind id="subregion" nodeset="/sample_markup_study_simple_form_v1/subregion" name="13" type="string" />
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label>Page1</label>
+      <input ref="/sample_markup_study_simple_form_v1/name" name="lo 1">
+        <label>Name</label>
+      </input>
+      <select1 ref="/sample_markup_study_simple_form_v1/sex" name="lo 2">
+        <label>Sex</label>
+        <item>
+          <label>male</label>
+          <value>male</value>
+        </item>
+        <item>
+          <label>female</label>
+          <value>female</value>
+        </item>
+      </select1>
+      <select1 ref="/sample_markup_study_simple_form_v1/is_pregnant" name="lo 3">
+        <label>Is pregnant</label>
+        <item>
+          <label>Yes</label>
+          <value>true</value>
+        </item>
+        <item>
+          <label>No</label>
+          <value>false</value>
+        </item>
+      </select1>
+      <input ref="/sample_markup_study_simple_form_v1/what_is_your_age" name="lo 4">
+        <label>What is your Age</label>
+      </input>
+      <select ref="/sample_markup_study_simple_form_v1/course_units" name="lo 5">
+        <label>Course units</label>
+        <hint>Course unit hint</hint>
+        <item>
+          <label>Computer Science</label>
+          <value>computer_science</value>
+        </item>
+        <item>
+          <label>Math</label>
+          <value>math</value>
+        </item>
+        <item>
+          <label>History</label>
+          <value>history</value>
+        </item>
+      </select>
+      <input ref="/sample_markup_study_simple_form_v1/score_math" name="lo 6">
+        <label>Score math</label>
+      </input>
+      <input ref="/sample_markup_study_simple_form_v1/score_computer_science" name="lo 7">
+        <label>Score Computer Science</label>
+      </input>
+      <input ref="/sample_markup_study_simple_form_v1/score_history" name="lo 8">
+        <label>Score History</label>
+      </input>
+      <input ref="/sample_markup_study_simple_form_v1/total_score" name="lo 9">
+        <label>Total score</label>
+      </input>
+      <input ref="/sample_markup_study_simple_form_v1/number_of_children" name="lo 10">
+        <label>Number of children</label>
+      </input>
+      <group>
+        <label>Child details</label>
+        <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" name="lo 11">
+          <input ref="/sample_markup_study_simple_form_v1/child_details/child_name" name="lo 11.1">
+            <label>Child Name</label>
+          </input>
+        </repeat>
+      </group>
+      <select1 ref="/sample_markup_study_simple_form_v1/district">
+        <label>District</label>
+        <hint>Please select you district</hint>
+        <item>
+          <label>Washington</label>
+          <value>washington</value>
+        </item>
+      </select1>
+      <select1 ref="/sample_markup_study_simple_form_v1/subregion" name="lo 13">
+        <label>Subregion</label>
+        <itemset nodeset="instance('subregion')/dynamiclist/item[@parent=/sample_markup_study_simple_form_v1/district]">
+          <value ref="value" />
+          <label ref="label" />
+        </itemset>
+      </select1>
+    </group>
+  </h:body>
+</h:html>'''
+    ]
+
 }
