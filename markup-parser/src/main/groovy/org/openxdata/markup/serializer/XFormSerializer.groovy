@@ -152,31 +152,31 @@ class XFormSerializer {
 
         def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
 
-        if (type.type) map.type = type.type
+        if (type.type) map['type'] = type.type
 
-        if (type.format) map.format = type.format
+        if (type.format) map['format'] = type.format
 
-        if (question.isRequired()) map.required = "true()"
+        if (question.isRequired()) map['required'] = "true()"
 
-        if (question.isReadOnly()) map.locked = "true()"
+        if (question.isReadOnly()) map['locked'] = "true()"
 
-        if (!question.isVisible()) map.visible = "false()"
+        if (!question.isVisible()) map['visible'] = "false()"
 
         if (question.skipLogic) {
             def xpath = getAbsoluteBindingXPath(question.skipLogic, question)
-            map.relevant = xpath
-            map.action = question.skipAction
+            map['relevant'] = xpath
+            map['action'] = question.skipAction
         }
 
         if (question.validationLogic) {
             def xpath = getAbsoluteBindingXPath(question.validationLogic, question)
-            map.constraint = xpath
-            map.message = question.message
+            map['constraint'] = xpath
+            map['message'] = question.message
         }
 
         if (question.calculation) {
             def xpath = getAbsoluteBindingXPath(question.calculation, question)
-            map.calculate = xpath
+            map['calculate'] = xpath
         }
 
         xml.bind(map)
