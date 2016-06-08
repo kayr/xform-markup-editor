@@ -9,7 +9,7 @@ package org.openxdata.markup
  */
 abstract class AbstractSelectionQuestion extends AbstractQuestion implements ISelectionQuestion {
 
-    def options = []
+    List<IOption> options = []
 
     AbstractSelectionQuestion() {}
 
@@ -21,6 +21,9 @@ abstract class AbstractSelectionQuestion extends AbstractQuestion implements ISe
         options
     }
 
+    List<IOption> setOptions(List<Option> options) {
+        this.options = options
+    }
     @Override
     void addOption(IOption option) {
         option.setParent(this)
