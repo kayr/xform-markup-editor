@@ -2,6 +2,7 @@ package org.openxdata.markup
 
 import com.sun.org.apache.xerces.internal.util.XMLChar
 import groovy.transform.CompileStatic
+import groovy.transform.Memoized
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
 
@@ -15,16 +16,12 @@ import org.openxdata.markup.exception.ValidationException
 class Util {
 
 
-    public static final int CACHE_SIZE = 50
+    public static final Integer CACHE_SIZE = 50
 
-    public static String getBindName(String question) { memoizedGetBindName(question) }
-
-    private
-    static memoizedGetBindName = { String question -> return getBindStatic(question) }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
-
+    @SuppressWarnings("UnnecessaryQualifiedReference")
     @CompileStatic
-    private static String getBindStatic(String question) {
-
+    @Memoized(protectedCacheSize = Util.CACHE_SIZE, maxCacheSize = Util.CACHE_SIZE)
+    public static String getBindName(String question) {
         // if len(s) < 1, return '_blank'
         if (question == null || question.length() < 1)
             return "_blank";
@@ -164,6 +161,7 @@ class Util {
 
     public static final int INDEX_NOT_FOUND = -1;
     //copied from apache commons
+    @CompileStatic
     public static String replace(final String text, final String searchString, final String replacement, int max) {
         if (isEmpty(text) || isEmpty(searchString) || replacement == null || max == 0) {
             return text;
@@ -190,13 +188,14 @@ class Util {
         return buf.toString();
     }
 
+    @CompileStatic
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;
     }
 
     static Map<String, String> parseBind(String option, int line) {
         try {
-            memoizedParseBind.call(option)
+            parseBindStatic(option)
         } catch (ValidationException ex) {
             ex.line = line
             throw ex
@@ -204,12 +203,10 @@ class Util {
 
     }
 
-    private
-    static memoizedParseBind = { String option -> parseBindStatic(option) }.memoizeBetween(CACHE_SIZE, CACHE_SIZE)
-
-//    @CompileStatic
+    @CompileStatic
+    @Memoized(maxCacheSize = Util.CACHE_SIZE, protectedCacheSize = Util.CACHE_SIZE)
     private static Map<String, String> parseBindStatic(String option) {
-        def bind
+        String bind
 
         if (!option) {
             bind = getBindName(option)
@@ -219,7 +216,7 @@ class Util {
             validateId(tmpBind?.replaceFirst(/\$/, ''), 0)
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
-                                                 |An Id should start with lower case characters follow by low case characters, numbers or underscores""".stripMargin())
+                                                 |An Id should start with lower case characters follow by low case characters, numbers or underscores""".stripMargin().toString())
             option = option.replaceFirst(/[$][^\s]*/, '').trim()
             bind = tmpBind.trim() - '$'
         } else {
