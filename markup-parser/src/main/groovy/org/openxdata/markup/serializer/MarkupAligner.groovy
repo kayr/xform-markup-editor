@@ -31,12 +31,20 @@ class MarkupAligner {
 
         String prevLine = null
         boolean inDynamic = false
+        boolean inMultiline = false
 
         def lines = markUpTxt.trim().readLines()
 
         def size = lines.size()
         for (int i = 0; i < size; i++) {
+
+
             def currentLine = lines.get(i).trim()
+
+            if (inMultiline && !currentLine.endsWith("'''")) {
+                printer.println(lines.get(i))
+                continue
+            }
 
             if (currentLine.isEmpty()) continue
 
@@ -51,14 +59,27 @@ class MarkupAligner {
                 currentLine = currentLine.replaceFirst(/>>?\s+/) { it.toString().trim() }
                 printer.println "  $currentLine"
                 prevLine = currentLine
+
+                if (isMultiLine(currentLine)) {
+                    inMultiline = true
+                }
+
                 continue
             }
 
+            boolean justQuitMultiQn = false
             if (currentLine == '}') {
                 printer.decrementIndent()
                 if (inDynamic) {
                     inDynamic = false
                 }
+
+            } else if (currentLine.endsWith("'''")) {
+                if (inMultiline) {
+                    inMultiline = false
+                    justQuitMultiQn = true
+                }
+
 
             }
             //print a new line if its a new question , page or form
@@ -68,8 +89,15 @@ class MarkupAligner {
                     || isPager(prevLine) && isKeyLine(currentLine)
                     || (isPager(currentLine)))
                     && (!inDynamic && currentLine != '}') // don't print in dynamic qn brace
+                    && (!inMultiline && !justQuitMultiQn) // don't print in multiline
                     && (!isAttribute(prevLine) || !isPager(currentLine)) //attributes for pagers
                     && !isComment(currentLine)) {//no new lines for all comments
+                printer.println()
+                printer.println()
+            }
+
+            if (isMultiLine(currentLine) && !justQuitMultiQn) {
+                inMultiline = true
                 printer.println()
                 printer.println()
             }
@@ -100,6 +128,10 @@ class MarkupAligner {
         }
         printer.flush()
         return writer.toString()
+    }
+
+    private static boolean isMultiLine(String currentLine) {
+        return currentLine.matches(/((''')|(>>?\s*''')).*/)
     }
 
     private static boolean isKeyLine(String s) {

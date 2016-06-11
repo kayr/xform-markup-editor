@@ -368,6 +368,299 @@ dynamic_instance{
 }
 ''']
 
+    def mulitineMarkup2 = [
+            raw: """
+
+### Simple Form
+
+
+@id sample_markup_study_simple_form_v1
+## Simple Form
+
+
+#> Page1
+
+
+Name
+
+
+'''
+Sex
+''''
+  > ''' male
+  this is a male teacher
+
+  ''''
+  >''''
+  female
+  ''''
+
+  sinqle question
+
+
+@boolean
+'''this is a multiine
+question
+check it out
+
+'''''
+
+
+@number
+What is your Age
+
+
+Course units
+  >>Computer Science
+  >>            Math
+  >>History
+
+
+@number
+Score math
+
+
+@number
+Score Computer Science
+
+
+@number
+Score History
+
+
+Total score
+
+
+@number
+Number of children
+
+
+repeat{ Child details
+
+ Child Name
+
+
+        '''
+        Child Sex
+        Child Sex
+        Child Sex
+        '''
+          >'''
+          male
+          male
+          male'''
+          >female
+
+
+        @number
+        Child Age
+}
+
+
+Region
+  >Washington
+  >Texas
+  >Africa
+
+
+
+>Europe
+
+
+@parent region
+Sub-Region
+
+
+
+
+\$> sub_hyphen_region
+
+
+@parent sub_hyphen_region
+City
+\$> city
+
+
+dynamic_instance{
+        root,sub_hyphen_region
+        washington, King
+        washington, Pierce
+        texas, King-Texas
+        texas, Cameron
+        africa, Uganda
+        africa, Kenya
+        europe, Netherlands
+}
+
+
+dynamic_instance{
+        root,city
+        king, Seattle
+        king,               Redmond
+        pierce, Tacoma
+
+             pierce, Puyallup
+        king_hyphen_texas, Dumont
+        king_hyphen_texas, Finney
+        cameron,             brownsville
+        cameron, harlingen
+
+            uganda, Kampala
+        uganda, Masaka
+
+             uganda,                        Mbale
+        uganda, Mbarara
+
+             kenya, Nairobi
+        kenya, Kisumu
+        kenya, Eldoret
+        netherlands, Netherlandis
+        netherlands, Another Netherlands
+}
+""",
+            formatted: """
+
+### Simple Form
+
+
+@id sample_markup_study_simple_form_v1
+## Simple Form
+
+
+#> Page1
+
+
+Name
+
+
+'''
+Sex
+''''
+  >''' male
+  this is a male teacher
+
+''''
+  >''''
+  female
+''''
+
+
+sinqle question
+
+
+@boolean
+
+
+'''this is a multiine
+question
+check it out
+
+'''''
+
+
+@number
+What is your Age
+
+
+Course units
+  >>Computer Science
+  >>Math
+  >>History
+
+
+@number
+Score math
+
+
+@number
+Score Computer Science
+
+
+@number
+Score History
+
+
+Total score
+
+
+@number
+Number of children
+
+
+repeat{ Child details
+
+        Child Name
+
+
+        '''
+        Child Sex
+        Child Sex
+        Child Sex
+        '''
+          >'''
+          male
+          male
+        male'''
+          >female
+
+
+        @number
+        Child Age
+}
+
+
+Region
+  >Washington
+  >Texas
+  >Africa
+  >Europe
+
+
+@parent region
+Sub-Region
+\$> sub_hyphen_region
+
+
+@parent sub_hyphen_region
+City
+\$> city
+
+
+dynamic_instance{
+        root,sub_hyphen_region
+        washington, King
+        washington, Pierce
+        texas, King-Texas
+        texas, Cameron
+        africa, Uganda
+        africa, Kenya
+        europe, Netherlands
+}
+
+
+dynamic_instance{
+        root,city
+        king, Seattle
+        king, Redmond
+        pierce, Tacoma
+        pierce, Puyallup
+        king_hyphen_texas, Dumont
+        king_hyphen_texas, Finney
+        cameron, brownsville
+        cameron, harlingen
+        uganda, Kampala
+        uganda, Masaka
+        uganda, Mbale
+        uganda, Mbarara
+        kenya, Nairobi
+        kenya, Kisumu
+        kenya, Eldoret
+        netherlands, Netherlandis
+        netherlands, Another Netherlands
+}
+"""
+    ]
+
     void testAlign() {
 
         MarkupAligner formatter = new MarkupAligner(inpurt)
@@ -379,5 +672,10 @@ dynamic_instance{
 
     void testDynamicInstance() {
         assertEquals markUp2.formatted, MarkupAligner.align(markUp2.raw)
+    }
+
+    void testMultiline() {
+        println(MarkupAligner.align(mulitineMarkup2.raw))
+        assertEquals mulitineMarkup2.formatted, MarkupAligner.align(mulitineMarkup2.raw)
     }
 }
