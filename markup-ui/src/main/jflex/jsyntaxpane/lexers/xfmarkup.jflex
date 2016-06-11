@@ -4,6 +4,7 @@ package org.openxdata.markup.ui;
 
 import jsyntaxpane.Token;
 import jsyntaxpane.TokenType;
+import java.util.Stack;
 
 %%
 
@@ -23,6 +24,9 @@ import jsyntaxpane.TokenType;
 %state STRING_SINGLE
 %state FILE_TEXT
 %state QN_TEXT
+%state XPATH_TEXT
+%state STRING_SINGLE
+%state STRING_DOUBLE
 
 %{
     /**
@@ -37,6 +41,22 @@ import jsyntaxpane.TokenType;
     public int yychar() {
         return yychar;
     }
+
+    private Stack<Integer> stack = new Stack<Integer>();
+
+    public void yypushState(int newState) {
+      stack.push(yystate());
+      yybegin(newState);
+    }
+
+    public void yypopState() {
+      yybegin(stack.pop());
+    }
+
+     public Token yypopState(TokenType tokenType) {
+       yypopState();
+       return token(tokenType);
+    }
 %}
 
 StartComment = "//"
@@ -47,6 +67,8 @@ Identifier = [a-zA-Z][a-zA-Z0-9_]*
 XmlId = {Identifier}(":"{Identifier})?
 BindId = "@bind:"{XmlId}
 LayoutId = "@layout:"{XmlId}
+VariableReference = "$" {Identifier}
+
 Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 %%
@@ -63,7 +85,6 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@required"|
   "@invisible"|
   "repeat{"|
-  "@calculate"|
   "@barcode"|
   "@gps"|
   "@readonly"|
@@ -71,13 +92,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@datetime"|
   "@time"|
   "}"|
-  "@hideif"|
-  "@showif"|
-  "@disableif" |
-  "@enableif"|
-  "@skiplogic" |
   "@skipaction" |
-  "@validif" |
   "@message" |
   "@dbid" |
   "@parent" |
@@ -87,12 +102,23 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "dynamic_instance{" |
   "dynamic{"
                                 {
-                                yybegin(ATTRIB_TEXT);
+                                yypushState(ATTRIB_TEXT);
                                 return token(TokenType.KEYWORD);
                                 }
 
+  "@hideif"|
+  "@showif"|
+  "@disableif" |
+  "@enableif"|
+  "@skiplogic" |
+  "@validif" |
+  "@calculate"                  {
+                                 yypushState(XPATH_TEXT);
+                                 return token(TokenType.KEYWORD);
+                                }
+
   "@comment"|"@hint"            {
-                                yybegin(Q_COMMENT);
+                                yypushState(Q_COMMENT);
                                 return token(TokenType.KEYWORD);
                                 }
 
@@ -100,17 +126,17 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   /* labels */
   "@id"|"###"|"##"|"#>"|"@absoluteid"
                                 {
-                                yybegin(ID_TEXT);
+                                yypushState(ID_TEXT);
                                 return token(TokenType.TYPE3);
                                 }
 
- ">"|"$>"                       {
-                                yybegin(OPTIONS);
-                                return token(TokenType.OPERATOR);
+ ">"|">>"|"$>"                       {
+                                yypushState(OPTIONS);
+                                return token(TokenType.TYPE);
                                 }
 
  "csv:import"                    {
-                                 yybegin(FILE_TEXT);
+                                 yypushState(FILE_TEXT);
                                  return token(TokenType.TYPE3);
                                  }
 
@@ -123,7 +149,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 
   .                             {
-                                  yybegin(QN_TEXT);
+                                  yypushState(QN_TEXT);
                                   return token(TokenType.TYPE2);
                                  }
 
@@ -134,32 +160,62 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
 <ATTRIB_TEXT> {
   . *                           { return token(TokenType.DEFAULT); }
-  {LineTerminator}+             { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yypopState() ; }
 }
 
 <ID_TEXT> {
   . *                           { return token(TokenType.STRING); }
-  {LineTerminator}+             { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yypopState() ; }
 }
 
 <OPTIONS>{
   . *                           { return token(TokenType.TYPE); }
- {LineTerminator}+              { yybegin(YYINITIAL) ; }
+ {LineTerminator}+              { yypopState() ; }
+}
+
+<XPATH_TEXT> {
+
+"and" | "or" | "mod" | "div" |  "*" |  "/" | "//" | "|" | "+" | "-" | "=" | "!=" | "<" | "<=" | ">" | ">="
+                                {return token(TokenType.TYPE);}
+
+   [:digit:] | "false" | "true" {return token(TokenType.NUMBER);}
+
+
+
+
+   {VariableReference}          { return token(TokenType.STRING);}
+  \"                            {
+                                    yypushState(STRING_DOUBLE);
+                                    return token(TokenType.COMMENT);
+                                }
+  \'                            {yypushState(STRING_SINGLE); return token(TokenType.COMMENT);}
+  .                             { return token(TokenType.DEFAULT); }
+  {LineTerminator}+             { yypopState() ; }
+}
+
+<STRING_SINGLE>{
+\'                                {return yypopState(TokenType.COMMENT);}
+[^\']                             { return token(TokenType.COMMENT);}
+}
+
+<STRING_DOUBLE>{
+\"                               { return yypopState(TokenType.COMMENT);}
+[^\"]                            { return token(TokenType.COMMENT); }
 }
 
 <Q_COMMENT>{
   . *                           { return token(TokenType.COMMENT2); }
-  {LineTerminator}+             { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yypopState() ; }
 }
 
 <FILE_TEXT>{
   . *                           {  return token(TokenType.KEYWORD2); }
-  {LineTerminator}+             { yybegin(YYINITIAL) ; }
+  {LineTerminator}+             { yypopState() ; }
 }
 
 <QN_TEXT>{
  . *                            {return token(TokenType.TYPE2);}
- {LineTerminator}+              { yybegin(YYINITIAL) ; }
+ {LineTerminator}+              { yypopState() ; }
 }
 
 <<EOF>>                         { return null; }
