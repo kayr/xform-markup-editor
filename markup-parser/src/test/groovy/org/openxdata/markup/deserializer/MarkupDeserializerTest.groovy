@@ -1,8 +1,4 @@
 package org.openxdata.markup.deserializer
-
-import org.openxdata.markup.Fixtures
-import org.openxdata.markup.Study
-
 /**
  * Created by kay on 5/26/2016.
  */
@@ -11,11 +7,20 @@ class MarkupDeserializerTest extends GroovyTestCase {
 
     void testParse() {
 
-        println("""""")
-        def ser = new MarkupDeserializer(Fixtures.formWithDynamicInstanceReferences)
+        def erraticForm = """### fkfkf
+
+## fjfjf
+uu
+   '''sdsdsd
+ONew
+
+sdsdsd''"""
+        def ser = new MarkupDeserializer(erraticForm)
 
 
-        def parse = ser.parse()
+        shouldFail(RuntimeException) {
+            ser.parse()
+        }
 
     }
 }

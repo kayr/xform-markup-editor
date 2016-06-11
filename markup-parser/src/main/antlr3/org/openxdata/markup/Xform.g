@@ -34,11 +34,12 @@ package  org.openxdata.markup;
 		System.err.println(msg);
 		throw new RuntimeException(msg);
 	}
-
+	
 	public void reportError(RecognitionException e) {
 		e.printStackTrace();
 		super.reportError(e);
 	}
+
 }
 
 @lexer::members{
@@ -46,6 +47,21 @@ package  org.openxdata.markup;
 	public String rl(String s){
 		if(s == null) return s;
 		return s.replaceAll("\n","").trim();
+	}
+	
+    	public  String unwrap(String text, String wrapper) {
+        	int wrapperLength = wrapper.length();
+	        return text.substring(wrapperLength, text.length() - wrapperLength);
+        
+	}
+	
+	public  String unwrap(String text) {
+		return unwrap(text.trim(), "'''").trim();
+	}
+	
+	public void emitErrorMessage(String msg) {
+		System.err.println(msg);
+		throw new RuntimeException(msg);
 	}
 }
 
@@ -115,8 +131,8 @@ csvImport
 
 singleSelQn
 	:	txtQn
-		SINGLEOPTION+
-		->^(T_SINGLE_QN txtQn SINGLEOPTION+)
+		(SINGLEOPTION|SINGLEOPTION_MULTI)+
+		->^(T_SINGLE_QN txtQn SINGLEOPTION* SINGLEOPTION_MULTI*)
 	;
 
 
@@ -129,16 +145,17 @@ dynamicQn
 
 multipleSelQn
 	:	txtQn
-		MULTIPLEOPTION+
-		->^(T_MULTI_QN txtQn MULTIPLEOPTION+)
+		(MULTIPLEOPTION|MULTIPLEOPTION_MULTI)+
+		->^(T_MULTI_QN txtQn MULTIPLEOPTION* MULTIPLEOPTION_MULTI*)
 
 	;
 
 
 txtQn
 	:	ATTRIBUTE*
-		LINECONTENTS
-		-> ^(T_QN ATTRIBUTE* LINECONTENTS )
+		(LINECONTENTS| MULTILINE_TEXT)
+		-> ^(T_QN ATTRIBUTE* LINECONTENTS* MULTILINE_TEXT*)
+		
 	;
 	
 	
@@ -157,10 +174,13 @@ FORMNAME:	SPACE '##' LINECONTENTS		{setText(rl($LINECONTENTS.text));}
 PAGE	:	SPACE '#>' LINECONTENTS		{setText(rl($LINECONTENTS.text));}
 	;
 	
+MULTILINE_TEXT
+	:	SPACE '\'\'\'' ( options {greedy=false;} : . )* '\'\'\'' SPACE NEWLINE {setText(unwrap(getText()));}
+	;
 	
 DYNAMICINSTANCEMARKER
 	: 	SPACE 'dynamic_instance' SPACE '{' NEWLINE
-	;
+		;
 
 DYNAMICMARKER
 	: 	SPACE 'dynamic' SPACE '{' NEWLINE
@@ -172,18 +192,27 @@ LEFTBRACE
 BEGINREPEATMARKER
 	:	SPACE 'repeat' SPACE '{' LINECONTENTS	{setText(rl($LINECONTENTS.text));}
 	;
+
+SINGLEOPTION_MULTI 
+	: 	SPACE '>' SPACE MULTILINE_TEXT		{setText(unwrap($MULTILINE_TEXT.text));}
+	;
+	
+MULTIPLEOPTION_MULTI
+	:	SPACE '>>' SPACE MULTILINE_TEXT 	{setText(unwrap($MULTILINE_TEXT.text));}
+	;
 	
 MULTIPLEOPTION	
-	:	SPACE '>>' LINECONTENTS 	{setText(rl($LINECONTENTS.text));}
+	:	SPACE '>>' LINECONTENTS 		{setText(rl($LINECONTENTS.text));}
 	;
 	
 DYNAMICOPTION	
-	:	SPACE '$>' LINECONTENTS 	{setText(rl($LINECONTENTS.text));}
+	:	SPACE '$>' LINECONTENTS 		{setText(rl($LINECONTENTS.text));}
 	;
 
 SINGLEOPTION	
-	:	SPACE '>' LINECONTENTS 		{setText(rl($LINECONTENTS.text));}
+	: 	SPACE '>' LINECONTENTS 			{setText(rl($LINECONTENTS.text));}
 	;
+
 	
 CSVIMPORT
 	: 	SPACE 'csv:import' LINECONTENTS     	{setText(rl($LINECONTENTS.text));}	
@@ -194,12 +223,12 @@ SPACE	:	('\t'|' ')*
 
 	
 EMPTYLINECOMMENT
-	:	('\t'|' ')+ (NEWLINE) 		{$channel=HIDDEN;}
-	|	SPACE '//' (NEWLINE | LINECONTENTS){$channel=HIDDEN;}
+	:	('\t'|' ')+ (NEWLINE) 			{$channel=HIDDEN;}
+	|	SPACE '//' (NEWLINE | LINECONTENTS)	{$channel=HIDDEN;}
 	;
 	
 LINECONTENTS 
-	:	LINEXTERS+ NEWLINE  		{setText(rl(getText()));}
+	:	LINEXTERS+ NEWLINE  			{setText(rl(getText()));}
 	;
 
 NEWLINE :	    ((('\r')? '\n' )+) | EOF
@@ -208,3 +237,4 @@ NEWLINE :	    ((('\r')? '\n' )+) | EOF
 fragment LINEXTERS 
 	:	~('\r'|'\n')
 	;
+	

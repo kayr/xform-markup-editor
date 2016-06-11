@@ -2013,4 +2013,186 @@ dynamic{
   </group>
 </xforms>'''
 
+    static def form_With_Multiline = """
+### Study name
+
+## form
+
+'''Single Select
+Question'''
+> Normal Option
+> ''' Quoted Option '''
+> ''' Multiline
+Quoted Option '''
+> ''' \$variable Quoted
+Option '''
+
+'''Text
+Question '''
+
+''' Multi Select
+Question'''
+> Normal Option
+> ''' Quoted Option '''
+> ''' Multiline
+Quoted Option '''
+> ''' \$variable Quoted
+Option '''
+
+repeat { Repeat
+@id single_one
+'''Single Select
+Question'''
+> Normal Option
+> ''' Quoted Option '''
+> ''' Multiline
+Quoted Option '''
+> ''' \$variable Quoted
+Option '''
+
+@id text_two
+'''Text
+Question '''
+
+@id multi_three
+''' Multi Select
+Question'''
+> Normal Option
+> ''' Quoted Option '''
+> ''' Multiline
+Quoted Option '''
+> ''' \$variable Quoted
+Option '''
+
+}
+
+"""
+    static def form_With_Multiline_XML = """<xforms>
+  <model>
+    <instance id="study_name_form_v1">
+      <study_name_form_v1 id="0" name="form" formKey="study_name_form_v1">
+        <single_select_question />
+        <text_question />
+        <multi_select_question />
+        <repeat>
+          <single_one />
+          <text_two />
+          <multi_three />
+        </repeat>
+      </study_name_form_v1>
+    </instance>
+    <bind id="single_select_question" nodeset="/study_name_form_v1/single_select_question" type="xsd:string" />
+    <bind id="text_question" nodeset="/study_name_form_v1/text_question" type="xsd:string" />
+    <bind id="multi_select_question" nodeset="/study_name_form_v1/multi_select_question" type="xsd:string" />
+    <bind id="repeat" nodeset="/study_name_form_v1/repeat" />
+    <bind id="single_one" nodeset="/study_name_form_v1/repeat/single_one" type="xsd:string" />
+    <bind id="text_two" nodeset="/study_name_form_v1/repeat/text_two" type="xsd:string" />
+    <bind id="multi_three" nodeset="/study_name_form_v1/repeat/multi_three" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <select1 bind="single_select_question">
+      <label>Single Select
+Question</label>
+      <item id="normal_option">
+        <label>Normal Option</label>
+        <value>normal_option</value>
+      </item>
+      <item id="quoted_option">
+        <label>Quoted Option</label>
+        <value>quoted_option</value>
+      </item>
+      <item id="multiline_quoted_option">
+        <label>Multiline
+Quoted Option</label>
+        <value>multiline_quoted_option</value>
+      </item>
+      <item id="variable">
+        <label>Quoted
+Option</label>
+        <value>variable</value>
+      </item>
+    </select1>
+    <input bind="text_question">
+      <label>Text
+Question</label>
+    </input>
+    <select1 bind="multi_select_question">
+      <label>Multi Select
+Question</label>
+      <item id="normal_option">
+        <label>Normal Option</label>
+        <value>normal_option</value>
+      </item>
+      <item id="quoted_option">
+        <label>Quoted Option</label>
+        <value>quoted_option</value>
+      </item>
+      <item id="multiline_quoted_option">
+        <label>Multiline
+Quoted Option</label>
+        <value>multiline_quoted_option</value>
+      </item>
+      <item id="variable">
+        <label>Quoted
+Option</label>
+        <value>variable</value>
+      </item>
+    </select1>
+    <group id="repeat">
+      <label>Repeat</label>
+      <repeat bind="repeat">
+        <select1 bind="single_one">
+          <label>Single Select
+Question</label>
+          <item id="normal_option">
+            <label>Normal Option</label>
+            <value>normal_option</value>
+          </item>
+          <item id="quoted_option">
+            <label>Quoted Option</label>
+            <value>quoted_option</value>
+          </item>
+          <item id="multiline_quoted_option">
+            <label>Multiline
+Quoted Option</label>
+            <value>multiline_quoted_option</value>
+          </item>
+          <item id="variable">
+            <label>Quoted
+Option</label>
+            <value>variable</value>
+          </item>
+        </select1>
+        <input bind="text_two">
+          <label>Text
+Question</label>
+        </input>
+        <select1 bind="multi_three">
+          <label>Multi Select
+Question</label>
+          <item id="normal_option">
+            <label>Normal Option</label>
+            <value>normal_option</value>
+          </item>
+          <item id="quoted_option">
+            <label>Quoted Option</label>
+            <value>quoted_option</value>
+          </item>
+          <item id="multiline_quoted_option">
+            <label>Multiline
+Quoted Option</label>
+            <value>multiline_quoted_option</value>
+          </item>
+          <item id="variable">
+            <label>Quoted
+Option</label>
+            <value>variable</value>
+          </item>
+        </select1>
+      </repeat>
+    </group>
+  </group>
+</xforms>"""
+
 }

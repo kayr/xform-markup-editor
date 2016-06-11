@@ -21,7 +21,7 @@ class MarkupDeserializer {
         this.text = text
     }
 
-    MarkupDeserializer(String text,boolean validating) {
+    MarkupDeserializer(String text, boolean validating) {
         this.text = text
         this.validating = validating
     }
@@ -30,7 +30,7 @@ class MarkupDeserializer {
     @CS
     Study parse() {
         tree = createAST(text)
-        def study = constructStudy(tree,validating)
+        def study = constructStudy(tree, validating)
         return study
     }
 
@@ -158,6 +158,8 @@ class MarkupDeserializer {
             switch (child.type) {
                 case XformParser.SINGLEOPTION:
                 case XformParser.MULTIPLEOPTION:
+                case XformParser.MULTIPLEOPTION_MULTI:
+                case XformParser.SINGLEOPTION_MULTI:
                     q.addOption(new Option(child.text, child.line))
                     break
                 case XformParser.T_QN:
@@ -177,6 +179,7 @@ class MarkupDeserializer {
                     Attrib.addAttribute(qn, child.text, child.line)
                     break
                 case XformParser.LINECONTENTS:
+                case XformParser.MULTILINE_TEXT:
                     qn.text = child.text
                     qn.line = child.line
                     break

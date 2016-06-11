@@ -261,6 +261,14 @@ class XFormSerializerTest extends XMLTestCase {
         assertEquals Fixtures.formWithLayoutAndBindAttributesToCommentsXML, xForm
 
     }
+    void testSerializingMultilineQuestionsAndOptions() {
+        def study = new MarkupDeserializer(Fixtures.form_With_Multiline).study()
+
+        def xForm = new XFormSerializer().toXForm(study.forms.first())
+
+        assertEquals Fixtures.form_With_Multiline_XML, xForm
+
+    }
 
 
 }

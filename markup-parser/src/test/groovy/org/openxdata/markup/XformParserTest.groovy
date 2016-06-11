@@ -464,6 +464,13 @@ jeelopo
         assertEquals 1, form.dynamicOptions.size()
     }
 
+    void testMultilineParsing() {
+
+        def form = createParser(Fixtures.form_With_Multiline).study().forms.first()
+
+        assertEquals form.allQuestions.size(), 7
+    }
+
 
     private MarkupDeserializer createParser(String testString) throws IOException {
         return new MarkupDeserializer(testString)

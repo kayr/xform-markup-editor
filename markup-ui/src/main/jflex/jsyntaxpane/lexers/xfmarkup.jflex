@@ -27,6 +27,8 @@ import java.util.Stack;
 %state XPATH_TEXT
 %state STRING_SINGLE
 %state STRING_DOUBLE
+%state LONG_TEXT
+%state LONG_OPTION
 
 %{
     /**
@@ -140,6 +142,12 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
                                  return token(TokenType.TYPE3);
                                  }
 
+  \'{3}                         {
+                                    yypushState(LONG_TEXT);
+                                     tokenStart = yychar;
+                                     tokenLength = 3;
+                                 }
+
 
   /* comments */
   {Comment}                      { return token(TokenType.COMMENT); }
@@ -169,9 +177,15 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 }
 
 <OPTIONS>{
-  . *                           { return token(TokenType.TYPE); }
+  \'{3}                         {
+                                    yypushState(LONG_OPTION);
+                                    tokenStart = yychar;
+                                    tokenLength = 3;
+                                 }
+  .                             { return token(TokenType.TYPE); }
  {LineTerminator}+              { yypopState() ; }
 }
+
 
 <XPATH_TEXT> {
 
@@ -216,6 +230,22 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 <QN_TEXT>{
  . *                            {return token(TokenType.TYPE2);}
  {LineTerminator}+              { yypopState() ; }
+}
+
+<LONG_TEXT>{
+ \'{3}                          {
+                                   yypopState();
+                                   return token(TokenType.TYPE3, tokenStart, tokenLength + 3);
+                                }
+ .|{LineTerminator}            { tokenLength += yylength();}
+}
+
+<LONG_OPTION>{
+ \'{3}                          {
+                                   yypopState();
+                                   return token(TokenType.TYPE, tokenStart, tokenLength + 3);
+                                }
+ .|{LineTerminator}            { tokenLength += yylength();}
 }
 
 <<EOF>>                         { return null; }
