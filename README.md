@@ -21,6 +21,7 @@ A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit
  - Adding arbitrary layout and bind attributes using `@bind:<bindParameter> value` or `@layout:<layoutParameter> value`
  - If you are designing forms for OpenXData you can select the *Emulate OXD to ODK* preference to convert OXD Xpath to ODK.
    e.g `$multiselect_qn = 'option'` is converted to `selected($multiselect_qn,'option')`
+ - Multiline Questions which make it easier to write markdown spanning multiple lines
 
 ### Instructions
 
@@ -51,7 +52,13 @@ Is pregnant
 
 Drugs taken
 
+'''This is a question
+that spans
+multiple lines '''
+
 ```
+
+
 The above will generate a study named **Sample Study** containing one Form(Sample Form). All questions will be of type Text
 
 #### Adding pages
@@ -102,6 +109,9 @@ Drugs taken
 '''You can assign variables to the options too'''
 
 e.g ">> $pain_killers Pain Killers" will assign variable '''pain_killers''' to this option
+
+
+
 
 #### Repeat Questions
 E.g
@@ -239,6 +249,29 @@ To preload the username configured in ODK Collect settings page do the following
 @bind:jr:preloadParams username
 @readonly
 User name
+```
+
+#### Multiline Questions/Options
+
+To write questions that span multiple lines simply wrap the question text in triple quotes
+
+E.g
+```
+'''This is a question
+that spans
+multiple lines '''
+```
+
+You can also have options that span multiple line
+
+E.g
+```
+'''
+Question text
+> '''This is an option
+that spans multiple lines'''
+'''
+>Option 1
 ```
 
 ##### A compatibility not about OpenXdata generated XForm and Layout and Bind Attributes (OpenXdata Users Only)
