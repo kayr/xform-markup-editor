@@ -251,6 +251,10 @@ To preload the username configured in ODK Collect settings page do the following
 User name
 ```
 
+##### A compatibility not about OpenXdata generated XForm and Layout and Bind Attributes (OpenXdata Users Only)
+OpenXdata Form Designer does not support layout and bind attributes and therefore these attributes will disappear once you load the form into the openxdata form designer. To work around this, in the editor select the ***Store extra attributes in Comment***  preference then these attributes will be embedded into the hint section of a question. This is important when you are using this editor's library as a bridge between OpenXdata and OpenDataKit. When converting an openXdata xform to OpenDataKit XForm these attributes will be picked up and reinserted into the form.
+
+
 #### Multiline Questions/Options
 
 To write questions that span multiple lines simply wrap the question text in triple quotes
@@ -273,9 +277,6 @@ that spans multiple lines'''
 '''
 >Option 1
 ```
-
-##### A compatibility not about OpenXdata generated XForm and Layout and Bind Attributes (OpenXdata Users Only)
-OpenXdata Form Designer does not support layout and bind attributes and therefore these attributes will disappear once you load the form into the openxdata form designer. To work around this, in the editor select the ***Store extra attributes in Comment***  preference then these attributes will be embedded into the hint section of a question. This is important when you are using this editor's library as a bridge between OpenXdata and OpenDataKit. When converting an openXdata xform to OpenDataKit XForm these attributes will be picked up and reinserted into the form.
 
 
 #### Numbering The Questions Automatically
