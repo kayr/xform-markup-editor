@@ -274,7 +274,6 @@ E.g
 Question text
 > '''This is an option
 that spans multiple lines'''
-'''
 >Option 1
 ```
 
