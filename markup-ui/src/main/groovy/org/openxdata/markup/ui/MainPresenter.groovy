@@ -188,7 +188,8 @@ class MainPresenter implements DocumentListener {
         new ODKSerializer(
                 numberQuestions: form.chkNumberLabels.model.isSelected(),
                 numberBindings: form.chkNumberBindings.isSelected(),
-                oxdConversion: form.chkEmulateOXDConversion.isSelected()
+                oxdConversion: form.chkEmulateOXDConversion.isSelected(),
+                addMetaInstanceId: form.chkAutoAddInstanceId.isSelected()
         )
     }
 

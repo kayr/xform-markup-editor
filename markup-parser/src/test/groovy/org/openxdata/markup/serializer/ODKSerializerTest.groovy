@@ -110,17 +110,22 @@ class ODKSerializerTest extends GroovyTestCase {
         assertEquals formWithLayoutAttributes.xml, toODK(Fixtures.formWithLayoutAndBindAttributes)
     }
 
+    void testAddingMetaInstanceId() {
+        assertEquals oxdSampleForm.xmlWithMeta, toODK(oxdSampleForm.form, true, true)
+    }
 
-    String toODK(String markup, boolean oxd = false) {
-        toODK(toForm(markup), oxd)
+
+    String toODK(String markup, boolean oxd = false, boolean addMetaInstance = false) {
+        toODK(toForm(markup), oxd, addMetaInstance)
     }
 
     static Form toForm(String markup) {
         new MarkupDeserializer(markup).study().forms[0]
     }
 
-    String toODK(Form form, boolean oxd = false) {
+    String toODK(Form form, boolean oxd = false,boolean addMetaInstance) {
         serializer.oxdConversion = oxd
+        serializer.addMetaInstanceId = addMetaInstance
         serializer.toXForm(form)
     }
 }

@@ -61,8 +61,8 @@ class MainUI {
 
                     menuItem(text: '  General:', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
                     separator()
-                    chkUseXMLValidation = checkBoxMenuItem(text: 'Allow Invalid OXD IDs')
-                    chkEnsureUniqueIdentifier = checkBoxMenuItem(text: 'Ensure Unique Identifier', selected: true)
+                    chkUseXMLValidation = checkBoxMenuItem(text: 'Allow Invalid OXD IDs(OpenXData Lower Case Ids Only)')
+                    chkEnsureUniqueIdentifier = checkBoxMenuItem(text: 'Ensure Unique Identifier Question Exists', selected: true)
 
 
                     separator()
@@ -71,6 +71,7 @@ class MainUI {
                     chkEmulateOXDConversion = checkBoxMenuItem(text: 'Emulate OXD to ODK', toolTipText:
                             'Make extra effort to make sure the XPath formulas are ODK Compatible.\n ' +
                                     'e.g XPath formulas are parsed and references to multi-select are corrected using the right odk syntax')
+                    chkAutoAddInstanceId = checkBoxMenuItem(text: 'Automatically Add Meta InstanceID', selected: true)
 
 
                     separator()
@@ -221,6 +222,7 @@ class MainUI {
     JCheckBox chkNumberBindings
     JCheckBox chkNumberLabels
     JCheckBoxMenuItem chkEmulateOXDConversion
+    JCheckBoxMenuItem chkAutoAddInstanceId
     JCheckBox chkAutoUpdateTree
     JCheckBoxMenuItem chkUseXMLValidation
     JCheckBoxMenuItem chkEnsureUniqueIdentifier

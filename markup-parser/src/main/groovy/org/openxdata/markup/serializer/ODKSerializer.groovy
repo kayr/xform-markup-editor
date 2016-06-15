@@ -20,6 +20,7 @@ class ODKSerializer {
     boolean numberQuestions = false
     boolean numberBindings = false
     boolean oxdConversion = false
+    boolean addMetaInstanceId = false
     Map<Form, String> xforms = [:]
     Study study
     def studyXML
@@ -71,6 +72,11 @@ class ODKSerializer {
                     instance {
                         x."${vb form.binding}"(id: form.dbId ?: 0, name: form.name) {
                             buildInstance(x, form)
+                            if(addMetaInstanceId){
+                                x.meta{
+                                    x.instanceID()
+                                }
+                            }
                         }
                     }
 
@@ -80,6 +86,10 @@ class ODKSerializer {
                     //BINDINGS
                     form.allQuestions.each {
                         addBindNode(x, it)
+                    }
+
+                    if (addMetaInstanceId) {
+                        x.bind(calculate: "concat('uuid:', uuid())", nodeset: "/$form.binding/meta/instanceID", readonly: "true()", type: "string")
                     }
                 }
             }
@@ -111,8 +121,9 @@ class ODKSerializer {
             } else {
                 x."$_bind"(q.value)
             }
-
         }
+
+
     }
 
     private String binding(IQuestion question) {
@@ -346,9 +357,10 @@ class ODKSerializer {
         }
     }
 
-    static String oxd2Odk(String oxdXform) {
+    static String oxd2Odk(String oxdXform,boolean addMetaInstanceId = false) {
         def oxdFormObj = new XFormDeserializer(oxdXform).parse()
         ODKSerializer serializer = new ODKSerializer(true)
+        serializer.addMetaInstanceId = addMetaInstanceId
         return serializer.toXForm(oxdFormObj)
     }
 
