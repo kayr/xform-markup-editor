@@ -61,6 +61,7 @@ class MainUI {
 
                     menuItem(text: '  General:', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
                     separator()
+                    chkNumberBindings = checkBoxMenuItem(text: 'Number IDs')
                     chkUseXMLValidation = checkBoxMenuItem(text: 'Allow Invalid OXD IDs(OpenXData Lower Case Ids Only)')
                     chkEnsureUniqueIdentifier = checkBoxMenuItem(text: 'Ensure Unique Identifier Question Exists', selected: true)
 
@@ -105,7 +106,6 @@ class MainUI {
                 btnGenerateXML = button(text: "Export OXD Study")
                 btnShowXml = button(text: "Show XML OXD")
                 btnShowOdkXml = button(text: "Show XML ODK")
-                chkNumberBindings = checkBox(text: 'Number IDs')
                 chkNumberLabels = checkBox(text: 'Number Labels')
 
             }
@@ -219,7 +219,7 @@ class MainUI {
     JButton btnRefreshTree
 
     JCheckBoxMenuItem chkGenerateLayout
-    JCheckBox chkNumberBindings
+    JCheckBoxMenuItem chkNumberBindings
     JCheckBox chkNumberLabels
     JCheckBoxMenuItem chkEmulateOXDConversion
     JCheckBoxMenuItem chkAutoAddInstanceId
