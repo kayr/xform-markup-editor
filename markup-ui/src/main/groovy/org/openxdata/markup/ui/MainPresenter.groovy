@@ -13,6 +13,10 @@ import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.filechooser.FileFilter
+import java.awt.Desktop
+import java.awt.Toolkit
+import java.awt.datatransfer.Clipboard
+import java.awt.datatransfer.StringSelection
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.util.concurrent.Executor
@@ -74,6 +78,8 @@ class MainPresenter implements DocumentListener {
         form.formLoader = { loadWithConfirmation(addHeader(it)) }
 
         form.btnRefreshTree.addActionListener { quickParseStudy() }
+
+        form.btnPreviewXml.addActionListener { Thread.start { executeSafely { previewOdkXML() } } }
 
 
         form.frame.addWindowListener(new WindowAdapter() {
@@ -167,6 +173,80 @@ class MainPresenter implements DocumentListener {
         ser.toStudyXml(study)
         renderXMLPreview(ser.xforms)
     }
+
+
+    void previewOdkXML() {
+        def study = getParsedStudy()
+        def ser = getODKSerializer()
+        ser.toStudyXml(study)
+        def params = formatXML(ser.xforms)
+        def uploadUrl = "http://forms.omnitech.co.ug/clipboard/add_text.php"
+
+        String xmlUrl = ''
+        try {
+            Util.time("====== Uploading XML to server"){
+                xmlUrl = httpPost(uploadUrl, params)
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to connect to server: [${e.message}]", e)
+        }
+
+        if (!(xmlUrl ==~ 'http(s)?:.*'))
+            throw new RuntimeException("Server could not process request: reason[${xmlUrl}]")
+
+        def enketoUrl = "http://forms.omnitech.co.ug:7005/preview?form=$xmlUrl"
+
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.desktop.browse(new URI(enketoUrl))
+            } catch (Exception e) {
+                copyUrlToClipBoard(enketoUrl)
+            }
+        } else {
+            copyUrlToClipBoard(enketoUrl)
+        }
+
+    }
+
+    private void copyUrlToClipBoard(String url) {
+        setClipboardContents( url)
+        def msg = "The url has been copied to your clipboard, please paste it to your preferred browser"
+        invokeLater {
+            JOptionPane.showMessageDialog(form.frame, msg)
+        }
+    }
+
+    static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+
+    static void setClipboardContents(final String contents){
+        clipboard.setContents(new StringSelection(contents), null)
+    }
+
+
+    static formatXML(Map<Form, String> xforms) {
+        def urlParams = [:]
+        xforms.each { frmName, xml ->
+            urlParams = [comment: xml]
+        }
+        urlParams
+    }
+
+    static httpPost(String url, Map<String, Object> params) {
+        def url1 = new URL(url)
+        def connection = url1.openConnection()
+        connection.requestMethod = "POST"
+        def urlParameters = params.collect { k, v ->
+            URLEncoder.encode(k, 'UTF-8') + '=' + URLEncoder.encode(v.toString(), "UTF-8")
+        }.join('&')
+        //send post request
+        connection.doOutput = true
+        connection.outputStream << urlParameters
+        //get http response
+        String response = connection.inputStream.text
+        return response
+    }
+
 
     private void renderXMLPreview(Map<Form, String> xforms) {
         def previewFrame = new XFormsUI(form.frame)
@@ -409,7 +489,6 @@ class MainPresenter implements DocumentListener {
                 }
             }
         }
-
     }
 
     def updateTree(Study study) {
