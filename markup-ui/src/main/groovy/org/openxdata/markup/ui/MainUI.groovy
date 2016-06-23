@@ -106,6 +106,7 @@ class MainUI {
                 btnGenerateXML = button(text: "Export OXD Study")
                 btnShowXml = button(text: "Show XML OXD")
                 btnShowOdkXml = button(text: "Show XML ODK")
+                btnPreviewXml = button(text: "Preview XML ODK")
                 chkNumberLabels = checkBox(text: 'Number Labels')
 
             }
@@ -217,6 +218,7 @@ class MainUI {
     JButton btnShowXml
     JButton btnShowOdkXml
     JButton btnRefreshTree
+    JButton btnPreviewXml
 
     JCheckBoxMenuItem chkGenerateLayout
     JCheckBoxMenuItem chkNumberBindings
