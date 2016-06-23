@@ -179,7 +179,7 @@ class MainPresenter implements DocumentListener {
         def study = getParsedStudy()
         def ser = getODKSerializer()
         ser.toStudyXml(study)
-        def params = formatXML(ser.xforms)
+        def params = [comment:  ser.xforms.values().first()]
         def uploadUrl = "http://forms.omnitech.co.ug/clipboard/add_text.php"
 
         String xmlUrl = ''
@@ -221,15 +221,6 @@ class MainPresenter implements DocumentListener {
 
     static void setClipboardContents(final String contents){
         clipboard.setContents(new StringSelection(contents), null)
-    }
-
-
-    static formatXML(Map<Form, String> xforms) {
-        def urlParams = [:]
-        xforms.each { frmName, xml ->
-            urlParams = [comment: xml]
-        }
-        urlParams
     }
 
     static httpPost(String url, Map<String, Object> params) {
