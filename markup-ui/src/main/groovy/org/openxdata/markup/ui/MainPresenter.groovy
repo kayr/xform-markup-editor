@@ -179,12 +179,12 @@ class MainPresenter implements DocumentListener {
         def study = getParsedStudy()
         def ser = getODKSerializer()
         ser.toStudyXml(study)
-        def params = [comment:  ser.xforms.values().first()]
-        def uploadUrl = "http://forms.omnitech.co.ug/clipboard/add_text.php"
+        def params = [comment: ser.xforms.values().first()]
+        def uploadUrl = "http://clip.omnitech.co.ug/clip/add_text.php"
 
         String xmlUrl = ''
         try {
-            Util.time("====== Uploading XML to server"){
+            Util.time("====== Uploading XML to server") {
                 xmlUrl = httpPost(uploadUrl, params)
             }
 
@@ -210,7 +210,7 @@ class MainPresenter implements DocumentListener {
     }
 
     private void copyUrlToClipBoard(String url) {
-        setClipboardContents( url)
+        setClipboardContents(url)
         def msg = "The url has been copied to your clipboard, please paste it to your preferred browser"
         invokeLater {
             JOptionPane.showMessageDialog(form.frame, msg)
@@ -219,7 +219,7 @@ class MainPresenter implements DocumentListener {
 
     static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 
-    static void setClipboardContents(final String contents){
+    static void setClipboardContents(final String contents) {
         clipboard.setContents(new StringSelection(contents), null)
     }
 
@@ -277,7 +277,7 @@ class MainPresenter implements DocumentListener {
 
     private boolean mayBeSaveFile() {
         if (!doesFileNeedSaving() && JOptionPane.showConfirmDialog(form.frame, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-            currentFile.text = form.txtMarkUp.text
+            currentFile.setText(form.txtMarkUp.text, 'UTF-8')
             return true
         }
         return false
@@ -308,14 +308,14 @@ class MainPresenter implements DocumentListener {
                 file = new File(file.absolutePath + '.xfm')
             }
 
-            file.text = form.txtMarkUp.text
+            file.setText(form.txtMarkUp.text, 'UTF-8')
 
             form.title = "OXD-Markup: " + file.absolutePath
             currentFile = file
             HistoryKeeper.registerHistory(file.absolutePath)
             renderHistory()
         } else {
-            currentFile.text = form.txtMarkUp.text
+            currentFile.setText(form.txtMarkUp.text, 'UTF-8')
         }
     }
 
@@ -371,17 +371,17 @@ class MainPresenter implements DocumentListener {
             file = new File(file.absolutePath + '.xml')
         }
 
-        file.text = studyXML
+        file.setText(studyXML, 'UTF-8')
 
         def formFolder = createDirectory(file.parentFile.absolutePath + "/xforms")
         ser.xforms.each { key, value ->
-            new File(formFolder, key.name + '.xml').text = value
+            new File(formFolder, key.name + '.xml').setText(value, 'UTF-8')
         }
 
         def importsFolder = createDirectory(file.parentFile.absolutePath + "/xform-imports")
         def imports = ser.formImports
         imports.each { key, value ->
-            new File(importsFolder, key + '.xml').text = value
+            new File(importsFolder, key + '.xml').setText(value, 'UTF-8')
         }
 
         def msg = "Created study file $file.absolutePath\n" +

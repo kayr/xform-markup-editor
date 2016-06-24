@@ -121,7 +121,7 @@ class Util {
                 e.printStackTrace()
             }
         }
-        file.text = contents
+        file.setText(contents, 'UTF-8')
 
     }
 

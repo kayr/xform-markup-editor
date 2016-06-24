@@ -48,14 +48,14 @@ class HistoryKeeper {
     }
 
     private static void writeHistory(List<String> history) {
-        loadHistoryFile().text =  history.unique().join(System.lineSeparator())
+        loadHistoryFile().setText(history.unique().join(System.lineSeparator()), 'UTF-8')
     }
 
     private static File getUserHome() {
         System.getProperty('user.home') as File
     }
 
-    static File getLastAccessedFile(){
+    static File getLastAccessedFile() {
         def history = history
         if (!history)
             return null
