@@ -7,7 +7,7 @@ package org.openxdata.markup
  * Time: 9:30 PM
  * To change this template use File | Settings | File Templates.
  */
-interface IQuestion {
+interface IQuestion extends HasLayoutAttributes,HasBindAttributes{
 
     void setReadOnly(boolean readOnly)
 

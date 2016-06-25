@@ -70,6 +70,7 @@ class Attrib {
         String attrib = params['attrib']
         String param = params['param']
 
+
         switch (attrib) {
             case 'id':
                 Util.validateId(param, line)
@@ -82,6 +83,35 @@ class Attrib {
                 break
             default:
                 throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)
+        }
+    }
+
+    static void addAttributeToPage(Page page, String attribute, int line) {
+        def params = extractAttribAndParam(attribute)
+
+        String attrib = params['attrib']
+        String param = params['param']
+        boolean isBind = params['isBind']
+        boolean isLayout = params['isLayout']
+
+        if (isBind) {
+            setBindAttribute(page, attrib, param, line)
+            return
+        }
+
+        if (isLayout) {
+            setLayoutAttribute(page, attrib, param, line)
+            return
+        }
+
+        switch (attrib) {
+            case 'id':
+                Util.validateId(param, line)
+                page.id = param
+                page.id = line
+                break
+            default:
+                throw new InvalidAttributeException("Attribute $attrib on form $page.name in not supported", line)
         }
     }
 
@@ -102,14 +132,14 @@ class Attrib {
         [attrib: attributeName, param: param, isBind: isBind, isLayout: isLayout]
     }
 
-    static void setBindAttribute(IQuestion question, String attribute, String param, int line) {
+    static void setBindAttribute(HasBindAttributes question, String attribute, String param, int line) {
         putAttribute(
                 question.bindAttributes, 'bind:',
                 attribute, param, 'Bind', line
         )
     }
 
-    static void setLayoutAttribute(IQuestion question, String attribute, String param, int line) {
+    static void setLayoutAttribute(HasLayoutAttributes question, String attribute, String param, int line) {
         putAttribute(
                 question.layoutAttributes, 'layout:',
                 attribute, param, 'Layout', line

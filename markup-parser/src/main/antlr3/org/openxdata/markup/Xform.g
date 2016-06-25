@@ -16,6 +16,7 @@ tokens {
   T_STUDY;
   T_FORM;
   T_PAGE;
+  T_GROUP;
 }
 
 @header {
@@ -87,7 +88,8 @@ form 	: 	ATTRIBUTE*
 	;
 
 page
-	:	PAGE
+	:	ATTRIBUTE*
+		PAGE
 		formContent+
 		-> ^(T_PAGE PAGE formContent+)
 	;
@@ -97,7 +99,7 @@ formContent
 	;
 
 question
-	:	repeatQn|txtQn|singleSelQn|multipleSelQn|dynamicOptionsBlock|dynamicQn|csvImport
+	:	repeatQn|txtQn|singleSelQn|multipleSelQn|dynamicOptionsBlock|dynamicQn|csvImport|groupQn
 	;
 
 repeatQn
@@ -108,6 +110,17 @@ repeatQn
 		LEFTBRACE
 		-> ^( T_REPEAT_QN ATTRIBUTE* BEGINREPEATMARKER question+)
 	;
+	
+groupQn
+	:
+		ATTRIBUTE*
+		GROUP_MARKER
+		question+
+		LEFTBRACE
+		-> ^( T_GROUP ATTRIBUTE* BEGINREPEATMARKER question+)
+	;
+	
+
 
 dynamicInstance
 	:	DYNAMICINSTANCEMARKER
@@ -186,6 +199,10 @@ DYNAMICMARKER
 	: 	SPACE 'dynamic' SPACE '{' NEWLINE
 	;
 	
+GROUP_MARKER
+	: 	SPACE 'group' SPACE '{' TEXT_OR_NOT	{setText(rl($TEXT_OR_NOT.text));}	
+	;
+	
 LEFTBRACE
 	: 	SPACE '}' SPACE NEWLINE	
 	;
@@ -236,5 +253,9 @@ NEWLINE :	    ((('\r')? '\n' )+) | EOF
 	
 fragment LINEXTERS 
 	:	~('\r'|'\n')
+	;
+	
+fragment TEXT_OR_NOT
+	: 	LINEXTERS* NEWLINE	
 	;
 	

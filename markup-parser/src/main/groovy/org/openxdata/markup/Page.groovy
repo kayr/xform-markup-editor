@@ -6,7 +6,7 @@ package org.openxdata.markup
  * Time: 11:21 PM
  * To change this template use File | Settings | File Templates.
  */
-class Page implements HasQuestions {
+class Page implements HasQuestions,HasLayoutAttributes,HasBindAttributes {
 
 
     Page() {}
@@ -23,9 +23,4 @@ class Page implements HasQuestions {
     String getAbsoluteBinding() {
         return "$parent.absoluteBinding"
     }
-
-    String getBinding() {
-        return null
-    }
-
 }

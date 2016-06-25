@@ -7,7 +7,7 @@ package org.openxdata.markup
  * Time: 9:54 PM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractQuestion implements IQuestion, HasIdentifier {
+abstract class AbstractQuestion implements IQuestion, HasIdentifier,HasLayoutAttributes,HasBindAttributes {
 
     String comment
     boolean readOnly
@@ -19,12 +19,9 @@ abstract class AbstractQuestion implements IQuestion, HasIdentifier {
     String validationLogic
     String message
     String calculation
-    int line
     boolean hasAbsoluteId = false
     def value
     //todo test not setting conflicting attributes eg bind attributes cannot have bind,locked,relevant etc
-    Map<String, String> bindAttributes = [:]
-    Map<String, String> layoutAttributes = [:]
 
 
     AbstractQuestion() {

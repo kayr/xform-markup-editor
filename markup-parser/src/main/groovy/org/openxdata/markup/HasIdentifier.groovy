@@ -7,6 +7,8 @@ import groovy.transform.CompileStatic
 trait HasIdentifier {
     String name
     String id
+    int line
+
 
     HasQuestions parent
 

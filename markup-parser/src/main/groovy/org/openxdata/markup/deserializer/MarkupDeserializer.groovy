@@ -40,7 +40,7 @@ class MarkupDeserializer {
     }
 
     @CS
-    private static CommonTree createAST(String markup) {
+     static CommonTree createAST(String markup) {
         return createXpathParser(markup).study().tree as CommonTree
     }
 
@@ -145,9 +145,25 @@ class MarkupDeserializer {
                     page.setName(child.text)
                     break
 
+                case XformParser.T_PAGE:
+                    def group = new Page()
+                    prcessPage(child,group)
+                    break
+
 
             }
 
+        }
+
+    }
+
+    static def Page prcessPage(CommonTree tree, Page q){
+        each(tree){CommonTree child->
+            switch (child.type){
+                case XformParser.ATTRIBUTE:
+                    break
+
+            }
         }
 
     }
