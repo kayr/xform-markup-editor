@@ -7,96 +7,44 @@ package org.openxdata.markup
  * Time: 9:30 PM
  * To change this template use File | Settings | File Templates.
  */
-interface IQuestion extends HasLayoutAttributes,HasBindAttributes{
+trait IQuestion implements IFormElement {
 
-    void setReadOnly(boolean readOnly)
+    String comment
+    String type
+    boolean required
+    boolean readOnly
+    String calculation
+    def value
 
-    boolean isReadOnly()
 
-    void setRequired(boolean required)
+    void setText(String text) {
+        if (text.startsWith('*')) {
+            text = text[1..text.length() - 1]
+            required = true
+        }
+        setName text
+        def tempBind = Util.getBindName(text)
+        if (!binding)
+            binding = tempBind
+        if (!type)
+            type = Util.getType(tempBind)
+    }
 
-    boolean isRequired()
+    String getText(boolean number) {
+        if (number)
+            return getNumberedText()
+        return text
 
-    String getText()
+    }
 
-    void setText(String text)
 
-    String getBinding()
+    String getComment() {
+        return comment
+    }
 
-    void setBinding(String binding)
 
-    void setComment(String comment)
-
-    String getAbsoluteBinding()
-
-    String getIndexedAbsoluteBinding()
-
-    String getIndexedRelativeBinding()
-
-    String getRelativeBinding()
-
-    String getIndexedBinding()
-
-    String getAbsoluteBinding(boolean indexed, boolean relative)
-
-    String getComment()
-
-    String getType()
-
-    void setType(String type)
-
-    boolean isVisible()
-
-    void setVisible(boolean visible)
-
-    void setParent(HasQuestions hasQuestions)
-
-    HasQuestions getParent()
-
-    Form getParentForm()
-
-    String getSkipLogic()
-
-    String getSkipAction()
-
-    void setSkipLogic(String skipLogic)
-
-    void setSkipAction(String skipAction)
-
-    String getValidationLogic()
-
-    void setValidationLogic(String validationLogic)
-
-    String getMessage()
-
-    void setMessage(String message)
-
-    void setCalculation(String calculation)
-
-    String getCalculation()
-
-    def getQuestionIdx()
-
-    def getContextIdx()
-
-    String getBinding(boolean numbered)
-
-    String getText(boolean number)
-
-    int getLine()
-
-    void setLine(int i)
-
-    void setHasAbsoluteId(boolean hasAbsoluteId)
-
-    boolean getHasAbsoluteId()
-
-    def getValue()
-
-    void setValue(def value)
-
-    Map getBindAttributes()
-
-    Map getLayoutAttributes()
+    String toString() {
+        return "$questionIdx. $text"
+    }
 
 }

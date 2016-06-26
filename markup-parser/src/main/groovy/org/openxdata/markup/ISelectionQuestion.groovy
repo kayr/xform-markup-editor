@@ -7,10 +7,14 @@ package org.openxdata.markup
  * Time: 10:19 PM
  * To change this template use File | Settings | File Templates.
  */
-interface ISelectionQuestion extends IQuestion {
+trait ISelectionQuestion implements IQuestion {
 
-    List<IOption> getOptions()
+    List<IOption> options = []
 
-    void addOption(IOption option)
+
+    void addOption(IOption option) {
+        option.setParent(this)
+        options << option
+    }
 
 }

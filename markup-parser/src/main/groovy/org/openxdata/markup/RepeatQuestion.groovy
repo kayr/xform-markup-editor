@@ -6,13 +6,15 @@ package org.openxdata.markup
  * Time: 11:21 PM
  * To change this template use File | Settings | File Templates.
  */
-class RepeatQuestion extends AbstractQuestion implements HasQuestions {
+
+@SuppressWarnings("ClashingTraitMethods")
+class RepeatQuestion implements HasQuestions,IQuestion{
 
 
     RepeatQuestion() {}
 
     RepeatQuestion(String question) {
-        super(question)
+        setText(question)
     }
 
 

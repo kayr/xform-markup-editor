@@ -3,25 +3,25 @@ package org.openxdata.markup
 import groovy.transform.CompileStatic
 
 @CompileStatic
-trait HasQuestions implements HasIdentifier {
+trait HasQuestions implements IFormElement {
 
     //Map to speed up question look up
     private Map<String, Object> questionMap = [:]
-    private List<IQuestion> questions = []
+    private List<IFormElement> questions = []
     private List<HasQuestions> hasQuestions = []
 
 
-    List<IQuestion> getQuestions() {
+    List<IFormElement> getQuestions() {
         questions
     }
 
-    void addQuestion(IQuestion question) {
+    void addQuestion(IFormElement question) {
         question.setParent(this)
         cacheQuestion(question)
         questions << question
     }
 
-    private void cacheQuestion(IQuestion question) {
+    private void cacheQuestion(IFormElement question) {
         def qnBinding = question.binding
 
         def existingEntity = questionMap[qnBinding]
@@ -57,7 +57,7 @@ trait HasQuestions implements HasIdentifier {
     }
 
 
-    IQuestion getQuestion(String binding) {
+    IFormElement getQuestion(String binding) {
         def question = questionMap[binding]
 
         if (question instanceof List) {
@@ -77,11 +77,11 @@ trait HasQuestions implements HasIdentifier {
 
     }
 
-    List<IQuestion> getQuestions(String binding) {
-        List<IQuestion> rt = []
+    List<IFormElement> getQuestions(String binding) {
+        List<IFormElement> rt = []
         def question = questionMap[binding]
 
-        if (question instanceof List<IQuestion>) {
+        if (question instanceof List<IFormElement>) {
             rt.addAll(question as List<IQuestion>)
         }
 

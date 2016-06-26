@@ -6,7 +6,7 @@ package org.openxdata.markup
  * Time: 11:21 PM
  * To change this template use File | Settings | File Templates.
  */
-class Page implements HasQuestions,HasLayoutAttributes,HasBindAttributes {
+class Page implements HasQuestions {
 
 
     Page() {}
@@ -22,5 +22,11 @@ class Page implements HasQuestions,HasLayoutAttributes,HasBindAttributes {
 
     String getAbsoluteBinding() {
         return "$parent.absoluteBinding"
+    }
+
+
+    //pages should not trying to generate ids
+    String getBinding() {
+        return this.id
     }
 }

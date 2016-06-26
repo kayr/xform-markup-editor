@@ -7,11 +7,11 @@ package org.openxdata.markup
  * Time: 9:30 PM
  * To change this template use File | Settings | File Templates.
  */
-class TextQuestion extends AbstractQuestion {
+class TextQuestion implements IQuestion {
 
     TextQuestion() {}
 
     TextQuestion(String question) {
-        super(question)
+        setText(question)
     }
 }

@@ -132,14 +132,14 @@ class Attrib {
         [attrib: attributeName, param: param, isBind: isBind, isLayout: isLayout]
     }
 
-    static void setBindAttribute(HasBindAttributes question, String attribute, String param, int line) {
+    static void setBindAttribute(IFormElement question, String attribute, String param, int line) {
         putAttribute(
                 question.bindAttributes, 'bind:',
                 attribute, param, 'Bind', line
         )
     }
 
-    static void setLayoutAttribute(HasLayoutAttributes question, String attribute, String param, int line) {
+    static void setLayoutAttribute(IFormElement question, String attribute, String param, int line) {
         putAttribute(
                 question.layoutAttributes, 'layout:',
                 attribute, param, 'Layout', line
@@ -185,7 +185,7 @@ class Attrib {
                 break
             case 'id':
                 Util.validateId(param, line)
-                question.binding = param
+                question.setBinding param
                 break
             case 'absoluteid':
                 Util.validateId(param, line)

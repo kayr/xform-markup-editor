@@ -40,7 +40,7 @@ class MarkupDeserializer {
     }
 
     @CS
-     static CommonTree createAST(String markup) {
+    static CommonTree createAST(String markup) {
         return createXpathParser(markup).study().tree as CommonTree
     }
 
@@ -112,6 +112,10 @@ class MarkupDeserializer {
 
                 case XformParser.T_QN:
                     def q = addAttributes(child, new TextQuestion())
+                    if (q.binding == 'endtime' &&
+                            (q.type == 'dateTime' || q.type == 'time')) {
+                        q.hasAbsoluteId = true
+                    }
                     parent.addQuestion(q)
                     break
 
@@ -147,7 +151,7 @@ class MarkupDeserializer {
 
                 case XformParser.T_PAGE:
                     def group = new Page()
-                    prcessPage(child,group)
+                    prcessPage(child, group)
                     break
 
 
@@ -157,9 +161,9 @@ class MarkupDeserializer {
 
     }
 
-    static def Page prcessPage(CommonTree tree, Page q){
-        each(tree){CommonTree child->
-            switch (child.type){
+    static def Page prcessPage(CommonTree tree, Page q) {
+        each(tree) { CommonTree child ->
+            switch (child.type) {
                 case XformParser.ATTRIBUTE:
                     break
 
@@ -201,6 +205,8 @@ class MarkupDeserializer {
                     break
             }
         }
+
+
         return qn
     }
 

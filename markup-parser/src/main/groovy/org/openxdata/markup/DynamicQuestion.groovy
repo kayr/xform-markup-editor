@@ -10,7 +10,7 @@ import org.openxdata.markup.exception.ValidationException
  * Time: 11:09 AM
  * To change this template use File | Settings | File Templates.
  */
-class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
+class DynamicQuestion  implements ISelectionQuestion {
 
     String dynamicInstanceId
     String parentQuestionId
@@ -18,7 +18,7 @@ class DynamicQuestion extends AbstractQuestion implements ISelectionQuestion {
     DynamicQuestion() {}
 
     DynamicQuestion(String question) {
-        super(question)
+        setText(question)
     }
 
     @Override

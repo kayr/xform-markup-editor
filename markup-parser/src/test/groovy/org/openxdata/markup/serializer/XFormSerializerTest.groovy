@@ -170,7 +170,7 @@ class XFormSerializerTest extends XMLTestCase {
     void testRelativePathInVariableNames() {
         def form = new MarkupDeserializer(Fixtures.formUsingRelativeBinds).study().forms[0]
 
-        def qn = form.questionMap.two
+        def qn = form.getQuestion('two')
 
         def xml = serializer.toXForm(form)
 
@@ -185,27 +185,50 @@ class XFormSerializerTest extends XMLTestCase {
 
     }
 
-    void testFormWithEndTime() {
+    void testFormWithEndTimeThatIsNotADate() {
 
-        def form = new MarkupDeserializer(Fixtures.formWithEndtime).study().forms[0]
-
-        def question = form.questionMap['endtime']
-
+        def formText = '''### Study
+                      |## Form
+                      |@id endtime
+                      |End time'''.stripMargin()
+        def form = new MarkupDeserializer(formText).study().forms[0]
+        def question = form.getQuestion('endtime')
         assertEquals '_1endtime', question.getBinding(true)
+    }
 
-        assertEquals 'endtime', question.getBinding(false)
+    void testFormWithEndTimeThatIsADate() {
 
-        question.setType('dateTime')
+        def formText = '''### Study
+                      |## Form
+                      |@id endtime
+                      |@date
+                      |End time'''.stripMargin()
+        def form = new MarkupDeserializer(formText).study().forms[0]
+        def question = form.getQuestion('endtime')
+        assertEquals '_1endtime', question.getBinding(true)
+    }
 
+    void testFormWithEndTimeThatIsADateTime() {
+
+        def formText = '''### Study
+                      |## Form
+                      |@id endtime
+                      |@datetime
+                      |End time'''.stripMargin()
+        def form = new MarkupDeserializer(formText).study().forms[0]
+        def question = form.getQuestion('endtime')
         assertEquals 'endtime', question.getBinding(true)
+    }
 
-        assertEquals 'endtime', question.getBinding(false)
-
-        question.setType('time')
-
+    void testFormWithEndTimeThatIsATime() {
+        def formText = '''### Study
+                      |## Form
+                      |@id endtime
+                      |@time
+                      |End time'''.stripMargin()
+        def form = new MarkupDeserializer(formText).study().forms[0]
+        def question = form.getQuestion('endtime')
         assertEquals 'endtime', question.getBinding(true)
-
-        assertEquals 'endtime', question.getBinding(false)
 
     }
 
@@ -261,6 +284,7 @@ class XFormSerializerTest extends XMLTestCase {
         assertEquals Fixtures.formWithLayoutAndBindAttributesToCommentsXML, xForm
 
     }
+
     void testSerializingMultilineQuestionsAndOptions() {
         def study = new MarkupDeserializer(Fixtures.form_With_Multiline).study()
 

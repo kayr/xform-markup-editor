@@ -7,12 +7,12 @@ package org.openxdata.markup
  * Time: 4:01 PM
  * To change this template use File | Settings | File Templates.
  */
-class SingleSelectQuestion extends AbstractSelectionQuestion implements ISelectionQuestion {
+class SingleSelectQuestion implements ISelectionQuestion {
 
     SingleSelectQuestion() {}
 
     SingleSelectQuestion(String question) {
-        super(question)
+        setText(question)
     }
 
 

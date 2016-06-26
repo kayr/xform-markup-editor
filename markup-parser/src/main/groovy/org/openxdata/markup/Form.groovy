@@ -24,7 +24,7 @@ class Form implements HasQuestions {
     int idLine
 
     List<Page> pages = []
-    Map<String, IQuestion> questionMap = [:]
+    Map<String, IFormElement> questionMap = [:]
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
 

@@ -7,12 +7,12 @@ package org.openxdata.markup
  * Time: 9:27 PM
  * To change this template use File | Settings | File Templates.
  */
-class MultiSelectQuestion extends AbstractSelectionQuestion implements ISelectionQuestion {
+class MultiSelectQuestion  implements ISelectionQuestion {
 
     MultiSelectQuestion() {}
 
     MultiSelectQuestion(String question) {
-        super(question)
+        setText(question)
     }
 
     @Override
