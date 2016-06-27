@@ -77,14 +77,14 @@ jeelopo
         def study = parser.study()
 
         study.forms.each {
-            assertFalse it.questions.isEmpty()
+            assertFalse it.allQuestions.isEmpty()
         }
     }
 
     public void testSingleSelectExits() {
         def study = parser.study()
 
-        SingleSelectQuestion qn = study.forms[0].questions.find { it instanceof SingleSelectQuestion }
+        SingleSelectQuestion qn = study.forms[0].allQuestions.find { it instanceof SingleSelectQuestion }
 
         assertNotNull qn
 
@@ -94,7 +94,7 @@ jeelopo
     public void testSingleSelectDoesNotNewLines() {
         def study = parser.study()
 
-        SingleSelectQuestion qn = study.forms[0].questions.find { it instanceof SingleSelectQuestion }
+        SingleSelectQuestion qn = study.forms[0].allQuestions.find { it instanceof SingleSelectQuestion }
 
         assertTrue qn.options.every { !it.text.contains('\n') }
 
@@ -104,7 +104,7 @@ jeelopo
     public void testTwoTxtQuestionsExist() {
         def study = parser.study()
 
-        def txtQuestions = study.forms[0].questions.findAll { it instanceof TextQuestion }
+        def txtQuestions = study.forms[0].firstPage.questions.findAll { it instanceof TextQuestion }
 
         assertEquals 'Expecting 2 text questions', 2, txtQuestions.size()
     }
@@ -113,7 +113,7 @@ jeelopo
 
         def study = parser.study()
 
-        MultiSelectQuestion qn = study.forms[0].questions.find { it instanceof MultiSelectQuestion }
+        MultiSelectQuestion qn = study.forms[0].allQuestions.find { it instanceof MultiSelectQuestion }
 
         assertNotNull 'Multi Question is expected', qn
 
@@ -124,17 +124,17 @@ jeelopo
     public void testRepeatQuestion() {
         def study = parser.study()
 
-        RepeatQuestion qn = study.forms[0].questions.find { it instanceof RepeatQuestion }
+        RepeatQuestion qn = study.forms[0].allElements.find { it instanceof RepeatQuestion }
 
         assertNotNull qn
 
         assertEquals 3, qn.questions.size()
 
-        assertNotNull study.forms[0].questions.find { it instanceof SingleSelectQuestion }
+        assertNotNull study.forms[0].allElements.find  { it instanceof SingleSelectQuestion }
 
-        assertNotNull study.forms[0].questions.find { it instanceof MultiSelectQuestion }
+        assertNotNull study.forms[0].allElements.find  { it instanceof MultiSelectQuestion }
 
-        assertNotNull study.forms[0].questions.find { it instanceof RepeatQuestion }
+        assertNotNull study.forms[0].allElements.find  { it instanceof RepeatQuestion }
 
         def allQuestions = study.forms[0].allQuestions
         assertEquals 12, allQuestions.size()
@@ -143,7 +143,7 @@ jeelopo
     public void testDynamicQuestion() {
         def study = parser.study()
 
-        def count = study.forms[0].questions.count { it instanceof DynamicQuestion }
+        def count = study.forms[0].allElements.count { it instanceof DynamicQuestion }
 
         assertEquals 'Expecting two dyn qns', 2, count
     }
@@ -164,7 +164,7 @@ jeelopo
     public void testTypeParsing() {
         def parser = createParser(Fixtures.formWithAttribs)
         def study = parser.study()
-        def questions = study.forms[0].questions
+        def questions = study.forms[0].allQuestions
 
         assertEquals "Expecting 1 invisile quesion", 1, questions.count { !it.visible }
 
@@ -192,7 +192,7 @@ jeelopo
 
         def study = parser.study()
 
-        def qn = study.forms[0].questions[0]
+        def qn = study.forms[0].allQuestions[0]
         assertEquals 'child_repeat', qn.binding
         assertEquals 'Details', qn.comment
     }
@@ -350,7 +350,7 @@ jeelopo
         def parser = createParser(Fixtures.skipLogicInRepeat)
         def study = parser.study()
 
-        def rptQn = study.forms[0].questions.find { it instanceof RepeatQuestion }
+        def rptQn = study.forms[0].allQuestions.find { it instanceof RepeatQuestion }
 
         assertNotNull rptQn.questions[0].skipLogic
     }
@@ -460,7 +460,7 @@ jeelopo
 
         def form = createParser(Fixtures.formWithCSVImport).study().forms[0]
 
-        assertEquals 1, form.questions.size()
+        assertEquals 1, form.allQuestions.size()
         assertEquals 1, form.dynamicOptions.size()
     }
 

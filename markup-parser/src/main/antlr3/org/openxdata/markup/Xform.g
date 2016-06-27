@@ -16,7 +16,6 @@ tokens {
   T_STUDY;
   T_FORM;
   T_PAGE;
-  T_GROUP;
 }
 
 @header {
@@ -117,7 +116,7 @@ groupQn
 		GROUP_MARKER
 		question+
 		LEFTBRACE
-		-> ^( T_GROUP ATTRIBUTE* BEGINREPEATMARKER question+)
+		-> ^( T_PAGE ATTRIBUTE* GROUP_MARKER question+)
 	;
 	
 

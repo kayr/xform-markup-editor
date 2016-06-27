@@ -18,7 +18,7 @@ class UniqueIdProcessor {
         //incase the form is one
         def formSize = study.forms.size()
         if (formSize == 1) {
-            return markup + '\n' + Resources.uniqueIdQuestion
+            return markup + '\n\n' + Resources.uniqueIdQuestion
         }
 
         for (int i = 0; i < formSize; i++) {

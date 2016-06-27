@@ -85,7 +85,7 @@ class DynamicBuilder {
     private def addBuiltQnsDirectly(HasQuestions form) {
         for (qn in questions) {
             qn.line = line
-            form.addQuestion(qn)
+            form.addElement(qn)
         }
     }
 

@@ -61,7 +61,7 @@ class XPathUtil {
     }
 
 
-    String removeMarkupSyntax(IQuestion question, Map config = [:]) {
+    String removeMarkupSyntax(IFormElement question, Map config = [:]) {
         def logicType = config.logicType ?: 'XPATH'
 
         boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
@@ -105,7 +105,7 @@ class XPathUtil {
         return path
     }
 
-    static String validateXpath(String xpath, IQuestion question, String logicType) {
+    static String validateXpath(String xpath, IFormElement question, String logicType) {
         def xp = new XPathUtil(xpath)
         def variables = xp.getAllPathVariables()
         for (v in variables) {
@@ -117,7 +117,7 @@ class XPathUtil {
     }
 
     static
-    private String createFinalBinding(IQuestion qn, String variable, boolean indexed, boolean relative, Map config) {
+    private String createFinalBinding(IFormElement qn, String variable, boolean indexed, boolean relative, Map config) {
         if (variable == '$.') return qn.getAbsoluteBinding(indexed, relative)
         def variableQn = qn.parentForm.getQuestion(variable)
         return variableQn.getAbsoluteBinding(indexed, relative)

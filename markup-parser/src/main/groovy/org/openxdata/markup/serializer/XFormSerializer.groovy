@@ -5,6 +5,8 @@ import groovy.xml.MarkupBuilder
 import groovy.xml.XmlUtil
 import org.openxdata.markup.*
 
+import static java.lang.System.err
+
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -80,31 +82,12 @@ class XFormSerializer {
             xml.model {
                 xml.instance(id: form.binding) {
                     xml."$form.binding"(id: form.dbId ?: 0, name: form.name, formKey: form.binding) {
-
-                        form.questions.each { question ->
-                            def bind = binding(question)
-                            checkBindLength(bind)
-                            xml."$bind"(question.value) {//todo Improve and use recursion when you have time
-                                if (question instanceof RepeatQuestion) {
-                                    RepeatQuestion qn = question
-                                    qn.questions.each { qnInRpt ->
-                                        checkBindLength(binding(qnInRpt))
-                                        xml."${binding(qnInRpt)}"(qnInRpt.value)
-                                    }
-                                }
-                            }
-                        }
+                        buildInstance(xml, form)
                     }
                 }
                 buildDynamicModel(xml, form)
-                form.questions.each {
-                    if (it instanceof RepeatQuestion) {    //We do not support recursion. repeats with in repeats
-                        addBindNode(xml, it)
-                        it.questions.each {
-                            addBindNode(xml, it)
-                        }
-                    } else
-                        addBindNode(xml, it)
+                form.allElementsWithIds.each {
+                    addBindNode(xml, it)
                 }
             }
 
@@ -122,60 +105,91 @@ class XFormSerializer {
         return xFormXml
     }
 
-    private String binding(IQuestion question) {
+    private buildInstance(def x, HasQuestions parent) {
+        parent.elements.each { q ->
+            def _bind = vb binding(q)
+
+            if (!_bind && q instanceof HasQuestions) {
+                buildInstance(x, q)
+                return
+            }
+
+            if (q instanceof HasQuestions) {
+                x."$_bind" {
+                    buildInstance(x, q)
+                }
+            } else {
+                x."$_bind"(q.value)
+            }
+        }
+
+
+    }
+
+    private String binding(IFormElement question) {
+
+        if (!question.binding) return null
+
         if (numberBindings)
             return question.getBinding(numberBindings)
         return question.binding
 
     }
 
-    private String getAbsoluteBindingXPath(String xPath, IQuestion question) {
+    private String getAbsoluteBindingXPath(String xPath, IFormElement question) {
         if (numberBindings)
             return Form.getIndexedAbsoluteBindingXPath(xPath, question)
         return Form.getAbsoluteBindingXPath(xPath, question)
     }
 
-    private String absoluteBinding(IQuestion question) {
+    private String absoluteBinding(IFormElement question) {
         if (numberBindings)
             return question.indexedAbsoluteBinding
         return question.absoluteBinding
     }
 
-    private static void checkBindLength(String bind) {
-        if (bind.length() > 63)
-            System.err.println "Binding: [$bind] is too long"
+    private static String checkBindLength(String bind) {
+        if (bind?.length() > 63)
+            err.println "Binding: [$bind] is too long"
+        return bind
     }
 
-    private void addBindNode(MarkupBuilder xml, IQuestion question) {
+    private static String vb(String bind) {
+        checkBindLength(bind)
+    }
 
-        def type = getQuestionType(question)
+    private void addBindNode(MarkupBuilder xml, IFormElement element) {
 
-        def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
+        def map = [id: binding(element), nodeset: absoluteBinding(element)] + element.bindAttributes
 
-        if (type.type) map['type'] = type.type
+        if (element instanceof IQuestion) {
+            def type = getQuestionType(element)
+            if (type.type) map['type'] = type.type
 
-        if (type.format) map['format'] = type.format
+            if (type.format) map['format'] = type.format
 
-        if (question.isRequired()) map['required'] = "true()"
+            if (element.isRequired()) map['required'] = "true()"
 
-        if (question.isReadOnly()) map['locked'] = "true()"
+            if (element.isReadOnly()) map['locked'] = "true()"
+        }
 
-        if (!question.isVisible()) map['visible'] = "false()"
 
-        if (question.skipLogic) {
-            def xpath = getAbsoluteBindingXPath(question.skipLogic, question)
+        if (!element.isVisible()) map['visible'] = "false()"
+
+        if (element.skipLogic) {
+            def xpath = getAbsoluteBindingXPath(element.skipLogic, element)
             map['relevant'] = xpath
-            map['action'] = question.skipAction
+            map['action'] = element.skipAction
         }
 
-        if (question.validationLogic) {
-            def xpath = getAbsoluteBindingXPath(question.validationLogic, question)
+        if (element.validationLogic) {
+            def xpath = getAbsoluteBindingXPath(element.validationLogic, element)
             map['constraint'] = xpath
-            map['message'] = question.message
+            map['message'] = element.message
         }
 
-        if (question.calculation) {
-            def xpath = getAbsoluteBindingXPath(question.calculation, question)
+        if (element instanceof IQuestion && element.calculation) {
+            def xpath = getAbsoluteBindingXPath(element.calculation, element)
             map['calculate'] = xpath
         }
 

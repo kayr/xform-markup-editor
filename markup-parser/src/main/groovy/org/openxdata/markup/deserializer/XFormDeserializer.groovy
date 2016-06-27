@@ -81,7 +81,7 @@ class XFormDeserializer {
 
     private Page processPage(def group) {
         def page = new Page(name: group.label.text())
-        form.addPage(page)
+        form.addElement(page)
         addQuestions(page, group)
         return page
     }
@@ -167,7 +167,7 @@ class XFormDeserializer {
         mayBeParseCommentAttribute(qn)
 
 
-        parent.addQuestion(qn)
+        parent.addElement(qn)
         mayBeAddLayoutAttributes(qn, elem)
         return qn
     }

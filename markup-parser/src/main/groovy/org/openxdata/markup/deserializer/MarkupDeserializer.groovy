@@ -55,6 +55,7 @@ class MarkupDeserializer {
                 case XformParser.T_FORM:
                     def form = constructForm(it)
                     study.addForm(form)
+                    form.buildIndex()
                     break
 
             }
@@ -79,7 +80,7 @@ class MarkupDeserializer {
 
                 case XformParser.T_PAGE:
                     def page = new Page()
-                    form.addPage(page)
+                    form.addElement(page)
                     addQuestions(page, child)
                     break
             }
@@ -97,26 +98,25 @@ class MarkupDeserializer {
             switch (child.type) {
                 case XformParser.T_MULTI_QN:
                     def q = processSelect(child, new MultiSelectQuestion())
-                    parent.addQuestion(q)
+                    parent.addElement(q)
                     break
 
                 case XformParser.T_SINGLE_QN:
                     def q = processSelect(child, new SingleSelectQuestion())
-                    parent.addQuestion(q)
+                    parent.addElement(q)
                     break
 
                 case XformParser.T_DYNAMIC_QN:
                     def q = processDynamicQuestion(child, new DynamicQuestion())
-                    parent.addQuestion(q)
+                    parent.addElement(q)
                     break
 
                 case XformParser.T_QN:
                     def q = addAttributes(child, new TextQuestion())
-                    if (q.binding == 'endtime' &&
-                            (q.type == 'dateTime' || q.type == 'time')) {
+                    if (q.binding == 'endtime' && (q.type == 'dateTime' || q.type == 'time')) {
                         q.hasAbsoluteId = true
                     }
-                    parent.addQuestion(q)
+                    parent.addElement(q)
                     break
 
                 case XformParser.T_DYNAMIC_INSTANCE:
@@ -140,7 +140,7 @@ class MarkupDeserializer {
                     def q = new RepeatQuestion()
                     q.setParent(parent)
                     processRepeatQuestion(child, q)
-                    parent.addQuestion(q)
+                    parent.addElement(q)
                     addQuestions(q, child)
                     break
 
@@ -151,7 +151,10 @@ class MarkupDeserializer {
 
                 case XformParser.T_PAGE:
                     def group = new Page()
-                    prcessPage(child, group)
+                    group.line = child.line
+                    processPage(child, group)
+                    parent.addElement(group)
+                    addQuestions(group,child)
                     break
 
 
@@ -161,10 +164,15 @@ class MarkupDeserializer {
 
     }
 
-    static def Page prcessPage(CommonTree tree, Page q) {
+    static def Page processPage(CommonTree tree, Page p) {
         each(tree) { CommonTree child ->
             switch (child.type) {
                 case XformParser.ATTRIBUTE:
+                    Attrib.addAttributeToPage(p, child.text, child.line)
+                    break
+
+                case XformParser.GROUP_MARKER:
+                    p.name = child.text
                     break
 
             }

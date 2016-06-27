@@ -1,6 +1,8 @@
 package org.openxdata.markup
 
 import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FirstParam
 
 @CompileStatic
 trait HasQuestions implements IFormElement {
@@ -11,18 +13,39 @@ trait HasQuestions implements IFormElement {
     private List<HasQuestions> hasQuestions = []
 
 
-    List<IFormElement> getQuestions() {
+    List<IFormElement> getElements() {
         questions
     }
 
-    void addQuestion(IFormElement question) {
+    List<IFormElement> getElementsWithIds() {
+        questions.findAll { IFormElement it -> it.id != null && !it.id.isEmpty()} as List<IFormElement>
+    }
+
+    /**
+     * Get the first level questions. This method is used mostly by the serializer
+     * @return all fist level questions
+     */
+    List<IQuestion> getQuestions() {
+        questions.findAll { it instanceof IQuestion } as List<IQuestion>
+    }
+
+    void addElement(IFormElement question) {
         question.setParent(this)
         cacheQuestion(question)
         questions << question
     }
 
     private void cacheQuestion(IFormElement question) {
+
+        //first store the Container
+        if (question instanceof HasQuestions) {
+            (hasQuestions as List) << question as HasQuestions
+        }
+
+        //cache question for future reference
         def qnBinding = question.binding
+
+        if (!qnBinding) return
 
         def existingEntity = questionMap[qnBinding]
 
@@ -36,20 +59,33 @@ trait HasQuestions implements IFormElement {
             questionMap[qnBinding] = question
         }
 
-        parentForm.questionMap[qnBinding] = question
+        parentForm.elementCache[qnBinding] = question
 
-        if (question instanceof HasQuestions) {
-            (hasQuestions as List) << question as HasQuestions
-        }
+
     }
 
 
     List<IQuestion> getAllQuestions() {
+        def allQuestions = getAllElements { it instanceof IQuestion }
+        return allQuestions
+    }
+
+
+    List<IFormElement> getAllElements() {
+        getAllElements(Closure.IDENTITY)
+    }
+
+    List<IFormElement> getAllElementsWithIds() {
+        getAllElements{IFormElement e -> e.id != null && !e.id.isEmpty()}
+    }
+
+    List<IQuestion> getAllElements(@ClosureParams(FirstParam.FirstGenericType) Closure filter) {
         def allQuestions = []
-        questions.each {
-            allQuestions.add(it)
+        for (IFormElement it in questions) {
+            if (filter(it))
+                allQuestions.add(it)
             if (it instanceof HasQuestions) {
-                def moreQuestions = it.getAllQuestions()
+                def moreQuestions = (it as HasQuestions).getAllElements(filter)
                 allQuestions.addAll(moreQuestions)
             }
         }
@@ -96,6 +132,5 @@ trait HasQuestions implements IFormElement {
 
         return rt.unique() as List<IQuestion>
     }
-
 
 }

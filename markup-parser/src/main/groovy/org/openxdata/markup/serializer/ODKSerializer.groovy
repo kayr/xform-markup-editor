@@ -112,7 +112,7 @@ class ODKSerializer {
     }
 
     private buildInstance(def x, HasQuestions parent) {
-        parent.questions.each { q ->
+        parent.elements.each { q ->
             def _bind = vb binding(q)
             if (q instanceof HasQuestions) {
                 x."$_bind" {

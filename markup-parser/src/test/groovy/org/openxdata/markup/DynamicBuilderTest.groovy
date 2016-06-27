@@ -153,7 +153,7 @@ Kenya,Nairobi,Macos
         assertEquals 0, builder.questions.size()
 
         Form form = new Form("Form")
-        form.addQuestion(new SingleSelectQuestion("Root"))
+        form.addElement(new SingleSelectQuestion("Root"))
         builder.addQuestionsToForm(form)
 
         assertEquals 2, form.dynamicOptions.size()
@@ -162,7 +162,7 @@ Kenya,Nairobi,Macos
 
         try {
             form = new Form("Form")
-            form.addQuestion(new SingleSelectQuestion("Blah"))
+            form.addElement(new SingleSelectQuestion("Blah"))
             builder.addQuestionsToForm(form)
             fail("Expection a not found validation exception")
         } catch (ValidationException ex) {
@@ -171,7 +171,7 @@ Kenya,Nairobi,Macos
 
         try {
             form = new Form("Form")
-            form.addQuestion(new TextQuestion("Root"))
+            form.addElement(new TextQuestion("Root"))
             builder.addQuestionsToForm(form)
             fail("Expection a not found validation exception")
         } catch (ValidationException ex) {
@@ -181,7 +181,7 @@ Kenya,Nairobi,Macos
 
         try {
             form = new Form("Form")
-            form.addQuestion(new SingleSelectQuestion("Root"))
+            form.addElement(new SingleSelectQuestion("Root"))
             form.dynamicOptions.put('school', [])
             builder.addQuestionsToForm(form)
             fail("Expection a not found validation exception")
@@ -282,7 +282,7 @@ uganda,entebbe
 
         def form = new MarkupDeserializer(src).study().forms[0]
 
-        assert form.questions.size() == 1
+        assert form.firstPage.questions.size() == 1
         assert form.dynamicOptions.size() == 1
         assert form.dynamicOptions.get('cities').size() == 3
     }

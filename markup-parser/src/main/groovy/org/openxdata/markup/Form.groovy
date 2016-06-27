@@ -23,8 +23,8 @@ class Form implements HasQuestions {
     int dbIdLine
     int idLine
 
-    List<Page> pages = []
-    Map<String, IFormElement> questionMap = [:]
+    Map<String, IFormElement> elementCache = [:]
+    Map<IFormElement, String> idxCache = [:]
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
 
@@ -34,18 +34,6 @@ class Form implements HasQuestions {
         this.name = name
     }
 
-    /**
-     * Get the first level questions. This method is used mostly by the serializer
-     * @return all fist level questions
-     */
-    List<IQuestion> getQuestions() {
-        def questions = []
-        pages.each {
-            questions.addAll(it.questions)
-        }
-        return questions
-    }
-
 
     void addPage(Page page) {
         page.parent = this
@@ -53,15 +41,14 @@ class Form implements HasQuestions {
     }
 
 
-    void addQuestion(IQuestion question) {
-        question.setParent(this)
-        firstPage.addQuestion(question)
+    List<Page> getPages() {
+        return elements.findAll { it instanceof Page }
     }
 
-    List<IQuestion> getAllQuestions() {
-        def allQuestions = questionMap.values() as List
-        return allQuestions
-    }
+//    List<IQuestion> getAllQuestions() {
+//        def allQuestions = questionMap.values() as List
+//        return allQuestions
+//    }
 
     Page getFirstPage() {
         if (pages.isEmpty()) {
@@ -72,10 +59,12 @@ class Form implements HasQuestions {
     }
 
     void validate() {
-        allQuestions.each {
+        allElements.each {
             validateSkipLogic(it)
-            validateCalculation(it)
             validateValidationLogic(it)
+
+            if (it instanceof IQuestion)
+                validateCalculation(it)
 
             if (it instanceof DynamicQuestion)
                 it.validate()
@@ -86,9 +75,9 @@ class Form implements HasQuestions {
         validatePages()
     }
 
-    void validateNotDuplicate(IQuestion qn) {
+    void validateNotDuplicate(IFormElement qn) {
+        if (!qn.binding) return
         def otherQns = getQuestions(qn.binding)
-
         if (otherQns.size() > 1)
             throw new DuplicateQuestionException(question1: qn, question2: otherQns[0])
     }
@@ -101,15 +90,15 @@ class Form implements HasQuestions {
             throw new ValidationException("Duplicate pages($duplicatePages) in Form[$name]")
     }
 
-    public static String getAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
+    public static String getAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {
         return _absoluteBindingXP(xpath, question, config + [indexed: false])
     }
 
-    public static String getIndexedAbsoluteBindingXPath(String xpath, IQuestion question, Map config = [:]) {
+    public static String getIndexedAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {
         return _absoluteBindingXP(xpath, question, config + [indexed: true])
     }
 
-    private static _absoluteBindingXP(String xpath, IQuestion question, Map config = [:]) {
+    private static _absoluteBindingXP(String xpath, IFormElement question, Map config = [:]) {
         try {
             def xp = new XPathUtil(xpath)
             def result = xp.removeMarkupSyntax(question, config)
@@ -121,8 +110,8 @@ class Form implements HasQuestions {
     }
 
     @Deprecated
-    static IQuestion findQuestionWithBinding(String binding, HasQuestions hasQuestions) {
-        return hasQuestions.parentForm.getQuestion(binding)
+    static IQuestion findQuestionWithBinding(String binding, IFormElement hasQuestions) {
+        return hasQuestions.parentForm.getQuestion(binding) as IQuestion
     }
 
 
@@ -138,7 +127,7 @@ class Form implements HasQuestions {
         validateXpath(iQuestion.calculation, iQuestion, 'Calculation')
     }
 
-    static void validateValidationLogic(IQuestion question) {
+    static void validateValidationLogic(IFormElement question) {
 
         if (!question.validationLogic)
             return
@@ -150,7 +139,7 @@ class Form implements HasQuestions {
 
     }
 
-    static void validateSkipLogic(IQuestion question) {
+    static void validateSkipLogic(IFormElement question) {
 
         if (!question.skipLogic)
             return
@@ -161,7 +150,7 @@ class Form implements HasQuestions {
         validateXpath(question.skipLogic, question, 'Skip')
     }
 
-    static String validateXpath(String xpath, IQuestion question, String logicType) {
+    static String validateXpath(String xpath, IFormElement question, String logicType) {
         try {
             XPathUtil.validateXpath(xpath, question, logicType)
         } catch (ValidationException e) {
@@ -178,10 +167,6 @@ class Form implements HasQuestions {
         return this
     }
 
-    IQuestion getQuestion(String binding) {
-        IQuestion qn = pages.findResult { it.getQuestion(binding) }
-        return qn
-    }
 
     List<IQuestion> getQuestions(String binding) {
         List<IQuestion> questions = []
@@ -211,6 +196,41 @@ class Form implements HasQuestions {
             this.dynamicOptions[instanceId] = []
         }
         this.dynamicOptions[instanceId].addAll(dynamicOptions)
+    }
+
+    String getIndex(IFormElement element) {
+        return idxCache[element]
+    }
+
+
+
+
+
+
+    void buildIndex() {
+        buildIndex(null, this, 0)
+    }
+
+    Integer buildIndex(String parent, HasQuestions p, int currentIdx) {
+
+        int idx = currentIdx
+        for (e in p.elements) {
+            String newId = null
+            if (e.id) {
+                idx++
+                newId = parent ? parent + '.' + idx : idx.toString()
+                idxCache[e] = newId
+            }
+
+            if (e instanceof HasQuestions) {
+                if (e.id) {
+                     buildIndex(newId, e, 0)
+                } else {
+                    idx = buildIndex(parent, e, idx)
+                }
+            }
+        }
+        return idx
     }
 
     def printAll(PrintStream out) {

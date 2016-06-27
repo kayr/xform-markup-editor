@@ -25,15 +25,6 @@ public class LayoutSerializerTest extends XMLTestCase {
 
         def xml = ser.generateLayout(form)
 
-        // assertEquals Fixtures.xmlOxdSampleForm,xml
-
-        DetailedDiff myDiff = new DetailedDiff(new Diff(Fixtures.xmlOxdSampleForm, xml));
-        List allDifferences = myDiff.getAllDifferences();
-        assertEquals(myDiff.toString(), 0, allDifferences.size())
-
-//        assertXMLEqual Fixtures.xmlOxdSampleForm,xml
-
-//        XFormSerializer serializer = new XFormSerializer()
-//        println serializer.toXForm(form)
+        assertXMLEqual(Fixtures.xmlOxdSampleForm, xml)
     }
 }
