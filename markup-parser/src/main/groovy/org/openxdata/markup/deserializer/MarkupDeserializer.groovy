@@ -80,6 +80,7 @@ class MarkupDeserializer {
 
                 case XformParser.T_PAGE:
                     def page = new Page()
+                    processPage(child, page)
                     form.addElement(page)
                     addQuestions(page, child)
                     break
@@ -154,7 +155,7 @@ class MarkupDeserializer {
                     group.line = child.line
                     processPage(child, group)
                     parent.addElement(group)
-                    addQuestions(group,child)
+                    addQuestions(group, child)
                     break
 
 

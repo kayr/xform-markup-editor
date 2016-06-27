@@ -90,7 +90,7 @@ page
 	:	ATTRIBUTE*
 		PAGE
 		formContent+
-		-> ^(T_PAGE PAGE formContent+)
+		-> ^(T_PAGE ATTRIBUTE* PAGE formContent+)
 	;
 
 formContent

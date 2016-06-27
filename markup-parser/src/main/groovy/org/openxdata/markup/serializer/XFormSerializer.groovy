@@ -91,12 +91,8 @@ class XFormSerializer {
                 }
             }
 
-            form.pages.eachWithIndex { page, idx ->
-                xml.group(id: idx + 1) {
-                    xml.label(page.name)
-                    buildQuestionsLayout(page, xml)
-
-                }
+            form.elements.each { element ->
+                buildLayout(xml, element)
             }
         }
 
@@ -196,30 +192,6 @@ class XFormSerializer {
         xml.bind(map)
     }
 
-    private void buildQuestionsLayout(HasQuestions page, MarkupBuilder xml) {
-        page.questions.each { question ->
-            def questionClass = question.class
-
-            switch (questionClass) {
-                case RepeatQuestion.class:
-                    buildRepeatLayout(xml, question, page)
-                    break
-                case MultiSelectQuestion.class:
-                    buildSelectionLayout(xml, question)
-                    break
-                case SingleSelectQuestion.class:
-                    buildSelectionLayout(xml, question)
-                    break
-                case DynamicQuestion.class:
-                    buildDynamicLayout(xml, question, page)
-                    break
-                default:
-                    buildQuestionLayout(xml, question)
-                    break
-            }
-        }
-    }
-
 
     void buildDynamicModel(MarkupBuilder xml, Form form) {
         def completeBinds = []
@@ -247,7 +219,7 @@ class XFormSerializer {
     }
 
 
-    void buildQuestionLayout(MarkupBuilder xml, IQuestion question) {
+    void buildLayout(MarkupBuilder xml, IQuestion question) {
         def qnType = getQuestionType(question)
         if (qnType.type == 'xsd:base64Binary') {
             def map = [bind: binding(question), mediatype: "${qnType.format}/*"] + question.layoutAttributes
@@ -262,11 +234,11 @@ class XFormSerializer {
         }
     }
 
-    void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
+    void buildQuestionLabelAndHint(MarkupBuilder xml, IFormElement question) {
 
         def label = question.getText(numberQuestions)
         xml.label(label)
-        def comment = question.comment
+        def comment = question instanceof IQuestion ? question.comment : null
 
         if (putExtraAttributesInComments) {
             def commentMap = [:]
@@ -293,13 +265,13 @@ class XFormSerializer {
         }
     }
 
-    void buildDynamicLayout(MarkupBuilder xml, DynamicQuestion question, HasQuestions page) {
+    void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
 
         def map = [bind: binding(question)] + question.layoutAttributes
         xml.select1(map) {
             //"instance('district')/item[@parent=instance('brent_study_fsdfsd_v1')/country]
             buildQuestionLabelAndHint(xml, question)
-            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$page.parentForm.binding')/${getDynamicParentQnId(question)}]") {
+            xml.itemset(nodeset: "instance('$question.dynamicInstanceId')/item[@parent=instance('$question.parentForm.binding')/${getDynamicParentQnId(question)}]") {
                 xml.label(ref: 'label')
                 xml.value(ref: 'value')
             }
@@ -313,7 +285,7 @@ class XFormSerializer {
         return question.parentQuestionId
     }
 
-    void buildSelectionLayout(MarkupBuilder xml, ISelectionQuestion question) {
+    void buildLayout(MarkupBuilder xml, ISelectionQuestion question) {
 
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
         def map = [bind: binding(question)] + question.layoutAttributes
@@ -330,7 +302,7 @@ class XFormSerializer {
     }
 
 
-    void buildRepeatLayout(MarkupBuilder xml, RepeatQuestion question, HasQuestions page) {
+    void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
 
         xml.group(id: binding(question)) {
             buildQuestionLabelAndHint(xml, question)
@@ -338,11 +310,31 @@ class XFormSerializer {
 
             def map = [bind: binding(question)] + question.layoutAttributes
             xml.repeat(map) {
-                buildQuestionsLayout(question, xml)
-
+                question.elements.each { e ->
+                    buildLayout(xml, e)
+                }
             }
         }
     }
+
+    void buildLayout(MarkupBuilder xml, Page page) {
+        def pageId = page.id ?: page.parentForm.elements.indexOf(page) + 1
+
+        def map = [id: pageId] + page.layoutAttributes
+
+        if (page.id) {
+            map['binding'] = pageId
+        }
+
+        xml.group(map) {
+            buildQuestionLabelAndHint(xml, page)
+            page.elements.each { e ->
+                buildLayout(xml, e)
+            }
+
+        }
+    }
+
 
     static Map getQuestionType(IQuestion question) {
         switch (question.type) {
@@ -365,5 +357,6 @@ class XFormSerializer {
 
         }
     }
+
 
 }

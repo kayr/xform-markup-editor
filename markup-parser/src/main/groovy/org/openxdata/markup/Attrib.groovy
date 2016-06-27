@@ -108,7 +108,7 @@ class Attrib {
             case 'id':
                 Util.validateId(param, line)
                 page.id = param
-                page.id = line
+                page.line = line
                 break
             default:
                 throw new InvalidAttributeException("Attribute $attrib on form $page.name in not supported", line)

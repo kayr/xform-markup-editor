@@ -79,7 +79,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
     }
 
     def renderQuestions(DefaultMutableTreeNode rootNode2, HasQuestions hasQuestions) {
-        for (qn in hasQuestions.questions) {
+        for (qn in hasQuestions.elements) {
             DefaultMutableTreeNode childNode = addObject(rootNode2, qn)
             if (qn instanceof HasQuestions)
                 renderQuestions(childNode, qn)
