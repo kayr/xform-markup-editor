@@ -85,7 +85,7 @@ class XPathUtil {
 
             def finalVar = isCurrentPathShortCut ? markUpPath : markUpPath.replaceFirst(/\$:?/, '')
 
-            def qn = isCurrentPathShortCut ? question : question.parentForm.getQuestion(finalVar)
+            def qn = isCurrentPathShortCut ? question : question.parentForm.getElement(finalVar)
 
             if (!qn) throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$finalVar]", question.line)
 
@@ -111,7 +111,7 @@ class XPathUtil {
         for (v in variables) {
             def name = v.varName
             if (name == '.' || v.path == 'null') continue
-            def qn = question.parentForm.getQuestion(name)
+            def qn = question.parentForm.getElement(name)
             if (!qn) throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for has an unknown variable [$v]", question.line)
         }
     }
@@ -119,7 +119,7 @@ class XPathUtil {
     static
     private String createFinalBinding(IFormElement qn, String variable, boolean indexed, boolean relative, Map config) {
         if (variable == '$.') return qn.getAbsoluteBinding(indexed, relative)
-        def variableQn = qn.parentForm.getQuestion(variable)
+        def variableQn = qn.parentForm.getElement(variable)
         return variableQn.getAbsoluteBinding(indexed, relative)
     }
 

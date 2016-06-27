@@ -77,7 +77,7 @@ class Form implements HasQuestions {
 
     void validateNotDuplicate(IFormElement qn) {
         if (!qn.binding) return
-        def otherQns = getQuestions(qn.binding)
+        def otherQns = getElements(qn.binding)
         if (otherQns.size() > 1)
             throw new DuplicateQuestionException(question1: qn, question2: otherQns[0])
     }
@@ -111,7 +111,7 @@ class Form implements HasQuestions {
 
     @Deprecated
     static IQuestion findQuestionWithBinding(String binding, IFormElement hasQuestions) {
-        return hasQuestions.parentForm.getQuestion(binding) as IQuestion
+        return hasQuestions.parentForm.getElement(binding) as IQuestion
     }
 
 
@@ -168,10 +168,10 @@ class Form implements HasQuestions {
     }
 
 
-    List<IQuestion> getQuestions(String binding) {
+    List<IQuestion> getElements(String binding) {
         List<IQuestion> questions = []
         pages.each { Page p ->
-            def pageQuestions = p.getQuestions(binding)
+            def pageQuestions = p.getElements(binding)
             if (pageQuestions) {
                 questions.addAll(pageQuestions)
             }

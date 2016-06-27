@@ -11,7 +11,6 @@ trait IFormElement {
     boolean hasAbsoluteId = false
     String skipAction
 
-
     //use this map to store common bind attributes to work around groovy trait bug
     //where traits with > 10 fields cannot compile
     private Map _bindAttr = [visible: true]
@@ -135,11 +134,19 @@ trait IFormElement {
 
 
     String getNumberedText() {
-        return "${getQuestionIdx()}. $name"
+        def idx = getQuestionIdx()
+        return idx ? "${idx}. $name" : name
     }
 
     String getText() {
         return name
+    }
+
+    String getText(boolean number) {
+        if (number)
+            return getNumberedText()
+        return text
+
     }
 
 }

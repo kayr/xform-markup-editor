@@ -1,6 +1,5 @@
 package org.openxdata.markup.serializer
 
-import groovy.json.JsonOutput
 import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.DifferenceListener
 import org.custommonkey.xmlunit.IgnoreTextAndAttributeValuesDifferenceListener
@@ -170,7 +169,7 @@ class XFormSerializerTest extends XMLTestCase {
     void testRelativePathInVariableNames() {
         def form = new MarkupDeserializer(Fixtures.formUsingRelativeBinds).study().forms[0]
 
-        def qn = form.getQuestion('two')
+        def qn = form.getElement('two')
 
         def xml = serializer.toXForm(form)
 
@@ -192,7 +191,7 @@ class XFormSerializerTest extends XMLTestCase {
                       |@id endtime
                       |End time'''.stripMargin()
         def form = new MarkupDeserializer(formText).study().forms[0]
-        def question = form.getQuestion('endtime')
+        def question = form.getElement('endtime')
         assertEquals '_1endtime', question.getBinding(true)
     }
 
@@ -204,7 +203,7 @@ class XFormSerializerTest extends XMLTestCase {
                       |@date
                       |End time'''.stripMargin()
         def form = new MarkupDeserializer(formText).study().forms[0]
-        def question = form.getQuestion('endtime')
+        def question = form.getElement('endtime')
         assertEquals '_1endtime', question.getBinding(true)
     }
 
@@ -216,7 +215,7 @@ class XFormSerializerTest extends XMLTestCase {
                       |@datetime
                       |End time'''.stripMargin()
         def form = new MarkupDeserializer(formText).study().forms[0]
-        def question = form.getQuestion('endtime')
+        def question = form.getElement('endtime')
         assertEquals 'endtime', question.getBinding(true)
     }
 
@@ -227,7 +226,7 @@ class XFormSerializerTest extends XMLTestCase {
                       |@time
                       |End time'''.stripMargin()
         def form = new MarkupDeserializer(formText).study().forms[0]
-        def question = form.getQuestion('endtime')
+        def question = form.getElement('endtime')
         assertEquals 'endtime', question.getBinding(true)
 
     }

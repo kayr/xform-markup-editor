@@ -64,16 +64,16 @@ class ODKSerializer {
                 'xmlns:xsd': 'http://www.w3.org/2001/XMLSchema',
                 'xmlns:jr': 'http://openrosa.org/javarosa') {
 
-            'h:head' {
+            x.'h:head' {
                 'h:title'(form.name)
-                model {
+                x.model {
 
                     //INSTANCE
-                    instance {
+                    x.instance {
                         x."${vb form.binding}"(id: form.dbId ?: 0, name: form.name) {
                             buildInstance(x, form)
-                            if(addMetaInstanceId){
-                                x.meta{
+                            if (addMetaInstanceId) {
+                                x.meta {
                                     x.instanceID()
                                 }
                             }
@@ -95,13 +95,11 @@ class ODKSerializer {
             }
 
             // CONTROLS AND WIDGETS
-            'h:body' {
-                form.pages.eachWithIndex { page, idx ->
-                    x.group {
-                        x.label(page.name)
-                        buildQuestionsLayout(page, x)
-                    }
+            x.'h:body' {
+                form.elements.each {
+                    mayBeBuildLayout(x, it)
                 }
+
             }
         }
 
@@ -114,6 +112,12 @@ class ODKSerializer {
     private buildInstance(def x, HasQuestions parent) {
         parent.elements.each { q ->
             def _bind = vb binding(q)
+
+            if (!_bind && q instanceof HasQuestions) {
+                buildInstance(x, q)
+                return
+            }
+
             if (q instanceof HasQuestions) {
                 x."$_bind" {
                     buildInstance(x, q)
@@ -122,11 +126,12 @@ class ODKSerializer {
                 x."$_bind"(q.value)
             }
         }
-
-
     }
 
-    private String binding(IQuestion question) {
+    private String binding(IFormElement question) {
+
+        if (!question.binding) return null
+
         if (numberBindings)
             return question.getBinding(numberBindings)
         return question.binding
@@ -149,7 +154,10 @@ class ODKSerializer {
         return xPath
     }
 
-    private String absoluteBinding(IQuestion question) {
+    private String absoluteBinding(IFormElement question) {
+
+        if (!question.binding) return null
+
         if (numberBindings)
             return question.indexedAbsoluteBinding
         return question.absoluteBinding
@@ -161,7 +169,7 @@ class ODKSerializer {
      * @return
      */
     private static String vb(String bind) {
-        if (bind.length() > 63)
+        if (bind?.length() > 63)
             err.println "Binding: [$bind] is too long"
         return bind
     }
@@ -229,14 +237,12 @@ class ODKSerializer {
 
     }
 
-    private void buildQuestionsLayout(HasQuestions page, MarkupBuilder xml) {
-        page.questions.each { q ->
-            // implement visibility here
-            // if a question is invisible and has no skipLogic do not render its layout
-            if (!q.visible && !q.skipLogic)
-                return
-            buildLayout(xml, q)
-        }
+    private void mayBeBuildLayout(MarkupBuilder xml, IFormElement q) {
+        // implement visibility here
+        // if a question is invisible and has no skipLogic do not render its layout
+        if (!q.visible && !q.skipLogic)
+            return
+        buildLayout(xml, q)
     }
 
     private void buildDynamicModel(MarkupBuilder x, Form form) {
@@ -334,6 +340,8 @@ class ODKSerializer {
 
     private void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
 
+        if (!question.isVisible()) return
+
         def attr = [nodeset: absoluteBinding(question)] + question.layoutAttributes
         if (oxdConversion) {
             //oxd uses validation to control size of repeat while odk uses jr:count
@@ -346,18 +354,32 @@ class ODKSerializer {
 
         }
 
-        xml.group{
+        xml.group {
             buildQuestionLabelAndHint(xml, question)
-
             xml.repeat(attr) {
-
-                buildQuestionsLayout(question, xml)
-
+                question.elements.each { child ->
+                    mayBeBuildLayout(xml, child)
+                }
             }
         }
     }
 
-    static String oxd2Odk(String oxdXform,boolean addMetaInstanceId = false) {
+    private void buildLayout(MarkupBuilder xml, Page page) {
+
+        if (!page.isVisible()) return
+
+        def attr = page.id ? [ref: absoluteBinding(page)] : [:]
+        attr = attr + page.layoutAttributes
+
+        xml.group(attr) {
+            buildQuestionLabelAndHint(xml, page)
+            page.elements.each { e ->
+                mayBeBuildLayout(xml, e)
+            }
+        }
+    }
+
+    static String oxd2Odk(String oxdXform, boolean addMetaInstanceId = false) {
         def oxdFormObj = new XFormDeserializer(oxdXform).parse()
         ODKSerializer serializer = new ODKSerializer(true)
         serializer.addMetaInstanceId = addMetaInstanceId
@@ -371,13 +393,15 @@ class ODKSerializer {
         return question.absParentBinding
     }
 
-    private void buildQuestionLabelAndHint(MarkupBuilder xml, IQuestion question) {
+    private void buildQuestionLabelAndHint(MarkupBuilder xml, IFormElement element) {
 
-        def label = question.getText(numberQuestions)
+        def label = element.getText(numberQuestions)
         xml.label(label)
-        def hasExternalApp = oxdConversion && question.type == 'string' && mayBeExternalApp(question.comment)
-        if (question.comment && !hasExternalApp)
-            xml.hint(question.comment)
+        if (element instanceof IQuestion) {
+            def hasExternalApp = oxdConversion && element.type == 'string' && mayBeExternalApp(element.comment)
+            if (element.comment && !hasExternalApp)
+                xml.hint(element.comment)
+        }
     }
 
     private static Map getQuestionType(IQuestion question) {

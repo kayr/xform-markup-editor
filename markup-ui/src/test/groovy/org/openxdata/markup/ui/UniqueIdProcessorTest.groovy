@@ -38,7 +38,7 @@ class FormGuidanceTest extends GroovyTestCase {
 
     }
 
-    void testAddOnStudyWithOneOfTheFormsHavingAndId() {
+    void testAddOnStudyWithOneOfTheFormsHavingAnId() {
         def studyMarkup = '''### Study
                    |## f1
                    |q1
@@ -85,6 +85,7 @@ class FormGuidanceTest extends GroovyTestCase {
         assertEquals newMarkup, '''### Study
                                 |## f1
                                 |q1
+                                |
                                 |@absoluteid unique_id
                                 |@calculate once(concat('uuid:',uuid()))
                                 |@invisible

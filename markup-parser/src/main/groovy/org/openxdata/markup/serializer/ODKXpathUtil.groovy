@@ -71,7 +71,7 @@ public class ODKXpathUtil {
     private static IQuestion findQuestion(CommonTree tree, Form form, boolean numberedBindings) {
         def qnBinding = XPathUtil.getNodeName(tree.emitTailString())
         if (numberedBindings) qnBinding = removeIndex(qnBinding)
-        return form.getQuestion(qnBinding)
+        return form.getElement(qnBinding)
     }
 
     private static String removeIndex(String binding) {

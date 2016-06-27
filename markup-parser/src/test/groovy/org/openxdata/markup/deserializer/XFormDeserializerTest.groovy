@@ -159,13 +159,13 @@ class XFormDeserializerTest extends GroovyTestCase {
 
         form.printAll(System.out)
 
-        IQuestion question = form.getQuestion('armpain')
+        IQuestion question = form.getElement('armpain')
         assert question.validationLogic == '. = false() or $chestpain = true()'
         assert question.message == "You can't have angina without chestpain!"
-        assert form.getQuestion('hypertension').skipLogic == '$gender = \'male\''
-        assert form.getQuestion('hypertension').skipAction == 'enable'
-        assert form.getQuestion('diastolic').validationLogic == '. >= 10 and . <= 150'
-        assert form.getQuestion('birthdate').validationLogic == '(today() - .) > (365*18)'
+        assert form.getElement('hypertension').skipLogic == '$gender = \'male\''
+        assert form.getElement('hypertension').skipAction == 'enable'
+        assert form.getElement('diastolic').validationLogic == '. >= 10 and . <= 150'
+        assert form.getElement('birthdate').validationLogic == '(today() - .) > (365*18)'
 
         XFormSerializer ser = new XFormSerializer()
 

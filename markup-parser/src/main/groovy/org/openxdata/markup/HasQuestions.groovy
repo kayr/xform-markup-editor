@@ -9,16 +9,16 @@ trait HasQuestions implements IFormElement {
 
     //Map to speed up question look up
     private Map<String, Object> questionMap = [:]
-    private List<IFormElement> questions = []
+    private List<IFormElement> elements = []
     private List<HasQuestions> hasQuestions = []
 
 
     List<IFormElement> getElements() {
-        questions
+        elements
     }
 
     List<IFormElement> getElementsWithIds() {
-        questions.findAll { IFormElement it -> it.id != null && !it.id.isEmpty()} as List<IFormElement>
+        elements.findAll { IFormElement it -> it.id != null && !it.id.isEmpty()} as List<IFormElement>
     }
 
     /**
@@ -26,13 +26,13 @@ trait HasQuestions implements IFormElement {
      * @return all fist level questions
      */
     List<IQuestion> getQuestions() {
-        questions.findAll { it instanceof IQuestion } as List<IQuestion>
+        elements.findAll { it instanceof IQuestion } as List<IQuestion>
     }
 
     void addElement(IFormElement question) {
         question.setParent(this)
         cacheQuestion(question)
-        questions << question
+        elements << question
     }
 
     private void cacheQuestion(IFormElement question) {
@@ -81,7 +81,7 @@ trait HasQuestions implements IFormElement {
 
     List<IQuestion> getAllElements(@ClosureParams(FirstParam.FirstGenericType) Closure filter) {
         def allQuestions = []
-        for (IFormElement it in questions) {
+        for (IFormElement it in elements) {
             if (filter(it))
                 allQuestions.add(it)
             if (it instanceof HasQuestions) {
@@ -93,7 +93,7 @@ trait HasQuestions implements IFormElement {
     }
 
 
-    IFormElement getQuestion(String binding) {
+    IFormElement getElement(String binding) {
         def question = questionMap[binding]
 
         if (question instanceof List) {
@@ -105,15 +105,14 @@ trait HasQuestions implements IFormElement {
         }
 
         for (hq in hasQuestions) {
-            def qn = hq.getQuestion(binding)
+            def qn = hq.getElement(binding)
             if (qn) return qn
         }
 
         return null
-
     }
 
-    List<IFormElement> getQuestions(String binding) {
+    List<IFormElement> getElements(String binding) {
         List<IFormElement> rt = []
         def question = questionMap[binding]
 
@@ -126,7 +125,7 @@ trait HasQuestions implements IFormElement {
         }
 
         for (hq in hasQuestions) {
-            def qns = hq.getQuestions(binding)
+            def qns = hq.getElements(binding)
             if (qns) rt.addAll(qns)
         }
 

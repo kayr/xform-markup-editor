@@ -1,8 +1,8 @@
 package org.openxdata.markup.ui
 
 import org.openxdata.markup.Form
+import org.openxdata.markup.IQuestion
 import org.openxdata.markup.Study
-import org.openxdata.markup.Util
 import org.openxdata.markup.deserializer.MarkupDeserializer
 
 /**
@@ -69,10 +69,12 @@ class UniqueIdProcessor {
     }
 
     static boolean hasUniqueIdentifier(Form form) {
-        form.questions.any {
-            it.binding == 'unique_id' && it.hasAbsoluteId && (it.readOnly || !it.visible) &&
-                    it.calculation?.replaceAll(/\s+/, '') == "once(concat('uuid:',uuid()))"
-        }
+        def it = form.getElement('unique_id')
+
+        if (!it || !(it instanceof IQuestion)) return false
+
+        return it.hasAbsoluteId && (it.readOnly || !it.visible) &&
+                it.calculation?.replaceAll(/\s+/, '') == "once(concat('uuid:',uuid()))"
     }
 
 }

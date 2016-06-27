@@ -303,10 +303,10 @@ jeelopo
 
         assertEquals 4, form.pages[1].questions.size()
 
-        assertEquals '_1gender', form.getQuestion('gender').indexedBinding
-        assertEquals '_3_1child_name', form.getQuestion('child_name').indexedBinding
-        assertEquals '_3lol', form.getQuestion('lol').indexedBinding
-        assertEquals '_6district', form.getQuestion('district').indexedBinding
+        assertEquals '_1gender', form.getElement('gender').indexedBinding
+        assertEquals '_3_1child_name', form.getElement('child_name').indexedBinding
+        assertEquals '_3lol', form.getElement('lol').indexedBinding
+        assertEquals '_6district', form.getElement('district').indexedBinding
 
     }
 

@@ -30,12 +30,7 @@ trait IQuestion implements IFormElement {
             type = Util.getType(tempBind)
     }
 
-    String getText(boolean number) {
-        if (number)
-            return getNumberedText()
-        return text
 
-    }
 
 
     String getComment() {
