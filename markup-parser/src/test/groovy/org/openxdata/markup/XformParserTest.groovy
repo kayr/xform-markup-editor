@@ -1,7 +1,7 @@
 package org.openxdata.markup
 
 import org.openxdata.markup.deserializer.MarkupDeserializer
-import org.openxdata.markup.exception.DuplicateQuestionException
+import org.openxdata.markup.exception.DuplicateElementException
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
 import org.openxdata.markup.serializer.XFormSerializer
@@ -182,7 +182,7 @@ jeelopo
         try {
             def study = parser.study()
             fail('An exception is expected here')
-        } catch (DuplicateQuestionException ex) {
+        } catch (DuplicateElementException ex) {
 
         }
     }
@@ -310,14 +310,13 @@ jeelopo
 
     }
 
+
     void testFormWithDuplicatePages() {
         def parser = createParser(Fixtures.formWithDupePages)
 
-        try {
+        shouldFail(DuplicateElementException){
             parser.study()
             fail("Expecting duplicate page exception")
-        } catch (ValidationException ex) {
-            assertTrue ex.message.contains("Duplicate pages")
         }
     }
 
@@ -327,7 +326,7 @@ jeelopo
         try {
             parser.study()
             fail("Expecting duplicate question exception")
-        } catch (DuplicateQuestionException ex) {
+        } catch (DuplicateElementException ex) {
             //this is ok
         }
     }
@@ -379,7 +378,7 @@ jeelopo
         try {
             def study = parser.study()
             fail('Expecting duplicate question Exception')
-        } catch (DuplicateQuestionException e) {
+        } catch (DuplicateElementException e) {
             assertEquals e.question1.binding, e.question2.binding
         }
     }

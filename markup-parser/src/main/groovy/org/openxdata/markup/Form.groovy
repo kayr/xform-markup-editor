@@ -1,6 +1,6 @@
 package org.openxdata.markup
 
-import org.openxdata.markup.exception.DuplicateQuestionException
+import org.openxdata.markup.exception.DuplicateElementException
 import org.openxdata.markup.exception.ValidationException
 
 /**
@@ -34,27 +34,11 @@ class Form implements HasQuestions {
         this.name = name
     }
 
-
-    void addPage(Page page) {
-        page.parent = this
-        pages << page
-    }
-
-
     List<Page> getPages() {
-        return elements.findAll { it instanceof Page }
+        return elements.findAll { it instanceof Page } as List<Page>
     }
-
-//    List<IQuestion> getAllQuestions() {
-//        def allQuestions = questionMap.values() as List
-//        return allQuestions
-//    }
 
     Page getFirstPage() {
-        if (pages.isEmpty()) {
-            def page = new Page("Page1")
-            addPage(page)
-        }
         return pages[0]
     }
 
@@ -72,23 +56,16 @@ class Form implements HasQuestions {
             validateNotDuplicate(it)
 
         }
-        validatePages()
     }
 
     void validateNotDuplicate(IFormElement qn) {
         if (!qn.binding) return
         def otherQns = getElements(qn.binding)
         if (otherQns.size() > 1)
-            throw new DuplicateQuestionException(question1: qn, question2: otherQns[0])
+            throw new DuplicateElementException(question1: qn, question2: otherQns[0])
     }
 
-    void validatePages() {
 
-        def pageNames = pages*.name
-        def duplicatePages = pageNames.findAll { pageNames.count(it) > 1 }.unique()
-        if (duplicatePages)
-            throw new ValidationException("Duplicate pages($duplicatePages) in Form[$name]")
-    }
 
     public static String getAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {
         return _absoluteBindingXP(xpath, question, config + [indexed: false])
@@ -168,19 +145,6 @@ class Form implements HasQuestions {
     }
 
 
-    List<IQuestion> getElements(String binding) {
-        List<IQuestion> questions = []
-        pages.each { Page p ->
-            def pageQuestions = p.getElements(binding)
-            if (pageQuestions) {
-                questions.addAll(pageQuestions)
-            }
-        }
-
-        return questions
-
-    }
-
     public String getBinding() {
         if (id == null)
             id = Util.getBindName("${study.name}_${name}_v1")
@@ -203,10 +167,6 @@ class Form implements HasQuestions {
     }
 
 
-
-
-
-
     void buildIndex() {
         buildIndex(null, this, 0)
     }
@@ -224,7 +184,7 @@ class Form implements HasQuestions {
 
             if (e instanceof HasQuestions) {
                 if (e.id) {
-                     buildIndex(newId, e, 0)
+                    buildIndex(newId, e, 0)
                 } else {
                     idx = buildIndex(parent, e, idx)
                 }

@@ -111,7 +111,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
     @Override
     void valueChanged(TreeSelectionEvent e) {
         DefaultMutableTreeNode component = tree.lastSelectedPathComponent
-        if (component?.userObject instanceof IQuestion)
+        if (component?.userObject instanceof IFormElement)
             listener.call(component.userObject)
 
     }

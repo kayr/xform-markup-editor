@@ -483,7 +483,7 @@ class MainPresenter implements DocumentListener {
     }
 
     def updateTree(Study study) {
-        form.studyTreeBuilder.updateTree(study) { IQuestion qn -> selectLine(qn.line) }
+        form.studyTreeBuilder.updateTree(study) { IFormElement qn -> selectLine(qn.line) }
         invokeLater { form.studyTreeBuilder.expand(3) }
     }
 

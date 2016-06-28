@@ -362,9 +362,11 @@ Kenya,Kampala,Bugiroad
 
     static def formWithDupePages = '''###Study
 ##Form
+@id p1
 #>Bioform
   Name
   Sex
+@id p1
 #>Bioform
     Country
 '''

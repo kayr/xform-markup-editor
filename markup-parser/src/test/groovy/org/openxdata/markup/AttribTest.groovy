@@ -126,7 +126,6 @@ class AttribTest extends GroovyTestCase {
         }
 
 
-
     }
 
     void testSetAttribOnForm() {
@@ -159,6 +158,8 @@ class AttribTest extends GroovyTestCase {
 
         def questions = form.allQuestions
 
+        assert form.firstPage.line == 3
+        assert form.line == 3
         assert questions.find { it.binding == 'patient_id' }.line == 6
         assert questions.find { it.binding == 'title' }.line == 8
         assert questions.find { it.binding == 'first_name' }.line == 13

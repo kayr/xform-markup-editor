@@ -17,13 +17,14 @@ class Page implements HasQuestions {
 
 
     String toString() {
-        name ?: 'Group'
+        def newText = name ?: 'Group'
+        if (id) return "${questionIdx}. $newText"
+        return newText
     }
 
     String getAbsoluteBinding() {
         return "$parent.absoluteBinding"
     }
-
 
     //pages should not trying to generate ids
     String getBinding() {
