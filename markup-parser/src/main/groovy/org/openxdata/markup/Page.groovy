@@ -17,7 +17,7 @@ class Page implements HasQuestions {
 
 
     String toString() {
-        name
+        name ?: 'Group'
     }
 
     String getAbsoluteBinding() {

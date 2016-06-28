@@ -87,6 +87,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@required"|
   "@invisible"|
   "repeat{"|
+  "group{"|
   "@barcode"|
   "@gps"|
   "@readonly"|
