@@ -9,7 +9,7 @@ package org.openxdata.markup.serializer
 class MarkupAligner {
 
 
-    public static final String INDENT = '        '
+    public static final String INDENT = '    '
     String markUpTxt
 
     static String align(String form) {
@@ -114,7 +114,7 @@ class MarkupAligner {
             printer.println currentLine
 
 
-            if (currentLine.matches(/repeat\s*\{.*/)) {
+            if (currentLine.matches(/((repeat)|(group))\s*\{.*/)) {
                 printer.incrementIndent()
                 printer.println()
             } else if (currentLine.matches(/dynamic\s*\{/) || currentLine.matches(/dynamic_instance\s*\{/)) {
@@ -139,7 +139,7 @@ class MarkupAligner {
         return s.startsWith('@') ||
                 s.startsWith('#') ||
                 s.startsWith('//') ||
-                s.matches(/repeat\s*\{.*/) ||
+                s.matches(/((repeat)|(group))\s*\{.*/) ||
                 s.matches(/dynamic_instance\s*\{/) ||
                 s.matches(/dynamic\s*\{/)
 

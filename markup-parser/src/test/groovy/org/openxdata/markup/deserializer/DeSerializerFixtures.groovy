@@ -96,7 +96,7 @@ Has angina
 @id armpain
 Has armpain
 ''',
-            xform: '''<xforms>
+            xform : '''<xforms>
   <model>
     <instance id="study_form_v1">
       <study_form_v1 id="0" name="Form" formKey="study_form_v1">
@@ -204,7 +204,8 @@ Has armpain
 '''
     ]
 
-    static def gpsForm = [markUp: ''' ### F
+    static def gpsForm = [
+            markUp: ''' ### F
 
 ## f
 
@@ -220,7 +221,8 @@ repeat {    ffd
 
 }
 ''']
-    static def dynFormWithQuotes = [markUp: ''' ### F
+    static def dynFormWithQuotes = [
+            markUp: ''' ### F
 
 ## f
 
@@ -238,6 +240,228 @@ kenya,"nairobi ""M"""
 uganda,entebbe
 }
 ''']
+
+    static def nestedGroups = [
+            markUp     : '''### s
+
+## f
+@id oldpageid
+#> old page
+q1.1
+
+@id group_page_1
+@layout:jdsj jsjd
+@bind:someBindAttr bind_attr
+group{ p1.2
+    q1.1.1
+    group{
+        q1.1.2
+        @id group_page_2
+        group{ g.1.1.3
+            q1.1.3.1
+        }
+    }
+}
+group{
+   q1.3
+}
+q1.4
+#> otherpage
+q4
+''',
+            xml        : '''<xforms>
+  <model>
+    <instance id="s_f_v1">
+      <s_f_v1 id="0" name="f" formKey="s_f_v1">
+        <oldpageid>
+          <q1_dot_1 />
+          <group_page_1>
+            <q1_dot_1_dot_1 />
+            <q1_dot_1_dot_2 />
+            <group_page_2>
+              <q1_dot_1_dot_3_dot_1 />
+            </group_page_2>
+          </group_page_1>
+          <q1_dot_3 />
+          <q1_dot_4 />
+        </oldpageid>
+        <q4 />
+      </s_f_v1>
+    </instance>
+    <bind id="oldpageid" nodeset="/s_f_v1" />
+    <bind id="q1_dot_1" nodeset="/s_f_v1/q1_dot_1" type="xsd:string" />
+    <bind id="group_page_1" nodeset="/s_f_v1" someBindAttr="bind_attr" />
+    <bind id="q1_dot_1_dot_1" nodeset="/s_f_v1/q1_dot_1_dot_1" type="xsd:string" />
+    <bind id="q1_dot_1_dot_2" nodeset="/s_f_v1/q1_dot_1_dot_2" type="xsd:string" />
+    <bind id="group_page_2" nodeset="/s_f_v1" />
+    <bind id="q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/q1_dot_1_dot_3_dot_1" type="xsd:string" />
+    <bind id="q1_dot_3" nodeset="/s_f_v1/q1_dot_3" type="xsd:string" />
+    <bind id="q1_dot_4" nodeset="/s_f_v1/q1_dot_4" type="xsd:string" />
+    <bind id="q4" nodeset="/s_f_v1/q4" type="xsd:string" />
+  </model>
+  <group id="oldpageid" binding="oldpageid">
+    <label>old page</label>
+    <input bind="q1_dot_1">
+      <label>q1.1</label>
+    </input>
+    <group id="group_page_1" jdsj="jsjd" binding="group_page_1">
+      <label>p1.2</label>
+      <input bind="q1_dot_1_dot_1">
+        <label>q1.1.1</label>
+      </input>
+      <group id="0">
+        <label></label>
+        <input bind="q1_dot_1_dot_2">
+          <label>q1.1.2</label>
+        </input>
+        <group id="group_page_2" binding="group_page_2">
+          <label>g.1.1.3</label>
+          <input bind="q1_dot_1_dot_3_dot_1">
+            <label>q1.1.3.1</label>
+          </input>
+        </group>
+      </group>
+    </group>
+    <group id="0">
+      <label></label>
+      <input bind="q1_dot_3">
+        <label>q1.3</label>
+      </input>
+    </group>
+    <input bind="q1_dot_4">
+      <label>q1.4</label>
+    </input>
+  </group>
+  <group id="2">
+    <label>otherpage</label>
+    <input bind="q4">
+      <label>q4</label>
+    </input>
+  </group>
+</xforms>''',
+            xmlNumbered: '''<xforms>
+  <model>
+    <instance id="s_f_v1">
+      <s_f_v1 id="0" name="f" formKey="s_f_v1">
+        <_1oldpageid>
+          <_1_1q1_dot_1 />
+          <_1_2group_page_1>
+            <_1_2_1q1_dot_1_dot_1 />
+            <_1_2_2q1_dot_1_dot_2 />
+            <_1_2_3group_page_2>
+              <_1_2_3_1q1_dot_1_dot_3_dot_1 />
+            </_1_2_3group_page_2>
+          </_1_2group_page_1>
+          <_1_3q1_dot_3 />
+          <_1_4q1_dot_4 />
+        </_1oldpageid>
+        <_2q4 />
+      </s_f_v1>
+    </instance>
+    <bind id="_1oldpageid" nodeset="/s_f_v1/_1oldpageid" />
+    <bind id="_1_1q1_dot_1" nodeset="/s_f_v1/_1_1q1_dot_1" type="xsd:string" />
+    <bind id="_1_2group_page_1" nodeset="/s_f_v1/_1_2group_page_1" someBindAttr="bind_attr" />
+    <bind id="_1_2_1q1_dot_1_dot_1" nodeset="/s_f_v1/_1_2_1q1_dot_1_dot_1" type="xsd:string" />
+    <bind id="_1_2_2q1_dot_1_dot_2" nodeset="/s_f_v1/_1_2_2q1_dot_1_dot_2" type="xsd:string" />
+    <bind id="_1_2_3group_page_2" nodeset="/s_f_v1/_1_2_3group_page_2" />
+    <bind id="_1_2_3_1q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/_1_2_3_1q1_dot_1_dot_3_dot_1" type="xsd:string" />
+    <bind id="_1_3q1_dot_3" nodeset="/s_f_v1/_1_3q1_dot_3" type="xsd:string" />
+    <bind id="_1_4q1_dot_4" nodeset="/s_f_v1/_1_4q1_dot_4" type="xsd:string" />
+    <bind id="_2q4" nodeset="/s_f_v1/_2q4" type="xsd:string" />
+  </model>
+  <group id="oldpageid" binding="oldpageid">
+    <label>1. old page</label>
+    <input bind="_1_1q1_dot_1">
+      <label>1.1. q1.1</label>
+    </input>
+    <group id="group_page_1" jdsj="jsjd" binding="group_page_1">
+      <label>1.2. p1.2</label>
+      <input bind="_1_2_1q1_dot_1_dot_1">
+        <label>1.2.1. q1.1.1</label>
+      </input>
+      <group id="0">
+        <label></label>
+        <input bind="_1_2_2q1_dot_1_dot_2">
+          <label>1.2.2. q1.1.2</label>
+        </input>
+        <group id="group_page_2" binding="group_page_2">
+          <label>1.2.3. g.1.1.3</label>
+          <input bind="_1_2_3_1q1_dot_1_dot_3_dot_1">
+            <label>1.2.3.1. q1.1.3.1</label>
+          </input>
+        </group>
+      </group>
+    </group>
+    <group id="0">
+      <label></label>
+      <input bind="_1_3q1_dot_3">
+        <label>1.3. q1.3</label>
+      </input>
+    </group>
+    <input bind="_1_4q1_dot_4">
+      <label>1.4. q1.4</label>
+    </input>
+  </group>
+  <group id="2">
+    <label>otherpage</label>
+    <input bind="_2q4">
+      <label>2. q4</label>
+    </input>
+  </group>
+</xforms>''',
+            formatted :'''
+
+### s
+
+
+## f
+
+
+@id oldpageid
+#> old page
+
+
+q1.1
+
+
+@id group_page_1
+@layout:jdsj jsjd
+@bind:someBindAttr bind_attr
+group{ p1.2
+
+    q1.1.1
+
+
+    group{
+
+        q1.1.2
+
+
+        @id group_page_2
+        group{ g.1.1.3
+
+            q1.1.3.1
+        }
+    }
+}
+
+
+group{
+
+    q1.3
+}
+
+
+q1.4
+
+
+#> otherpage
+
+
+q4
+'''
+
+    ]
 
 
 }

@@ -8,7 +8,7 @@ import groovy.transform.stc.FirstParam
 trait HasQuestions implements IFormElement {
 
     //Map to speed up question look up
-    private Map<String, Object> questionMap = [:]
+    private Map<String, Object> elementMap = [:]
     private List<IFormElement> elements = []
     private List<HasQuestions> hasQuestions = []
 
@@ -18,7 +18,7 @@ trait HasQuestions implements IFormElement {
     }
 
     List<IFormElement> getElementsWithIds() {
-        elements.findAll { IFormElement it -> it.id != null && !it.id.isEmpty()} as List<IFormElement>
+        elements.findAll { IFormElement it -> it.id != null && !it.id.isEmpty() } as List<IFormElement>
     }
 
     /**
@@ -47,16 +47,16 @@ trait HasQuestions implements IFormElement {
 
         if (!qnBinding) return
 
-        def existingEntity = questionMap[qnBinding]
+        def existingEntity = elementMap[qnBinding]
 
         if (existingEntity) {
             if (existingEntity instanceof List) {
                 (existingEntity as List) << question
             } else {
-                questionMap[qnBinding] = [existingEntity] << question
+                elementMap[qnBinding] = [existingEntity] << question
             }
         } else {
-            questionMap[qnBinding] = question
+            elementMap[qnBinding] = question
         }
 
         parentForm.elementCache[qnBinding] = question
@@ -76,7 +76,7 @@ trait HasQuestions implements IFormElement {
     }
 
     List<IFormElement> getAllElementsWithIds() {
-        getAllElements{IFormElement e -> e.id != null && !e.id.isEmpty()}
+        getAllElements { IFormElement e -> e.id != null && !e.id.isEmpty() }
     }
 
     List<IQuestion> getAllElements(@ClosureParams(FirstParam.FirstGenericType) Closure filter) {
@@ -94,14 +94,14 @@ trait HasQuestions implements IFormElement {
 
 
     IFormElement getElement(String binding) {
-        def question = questionMap[binding]
+        def element = elementMap[binding]
 
-        if (question instanceof List) {
-            return (question as List)[0] as IQuestion
+        if (element instanceof List) {
+            return (element as List)[0] as IFormElement
         }
 
-        if (question) {
-            return question as IQuestion
+        if (element) {
+            return element as IFormElement
         }
 
         for (hq in hasQuestions) {
@@ -112,9 +112,13 @@ trait HasQuestions implements IFormElement {
         return null
     }
 
+    IFormElement getAt(String binding) {
+        getElement(binding)
+    }
+
     List<IFormElement> getElements(String binding) {
         List<IFormElement> rt = []
-        def question = questionMap[binding]
+        def question = elementMap[binding]
 
         if (question instanceof List<IFormElement>) {
             rt.addAll(question as List<IQuestion>)

@@ -53,6 +53,7 @@ class Form implements HasQuestions {
             if (it instanceof DynamicQuestion)
                 it.validate()
 
+            it.validateIdExistsIfNecessary()
             validateNotDuplicate(it)
 
         }

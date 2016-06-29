@@ -18,15 +18,6 @@ class Fixtures {
         return resourceFolder
     }
 
-
-    static def formWIthValue = '''### s
-
-## f
-
-@default Me
-Some question
-'''
-
     static def formWithDollarInString = '''### s
 
 ## s
@@ -1652,7 +1643,7 @@ repeat{ *Required repeat
   </group>
 </xforms>'''
 
-    def static formWithLayoutAndBindAttributes= '''
+    def static formWithLayoutAndBindAttributes = '''
 ### Sample Markup Study
 
 
@@ -1750,7 +1741,7 @@ dynamic{
         Washington, Kings
 }
 '''
-  def static formWithLayoutAndBindAttributesXML = '''<xforms>
+    def static formWithLayoutAndBindAttributesXML = '''<xforms>
   <model>
     <instance id="sample_markup_study_simple_form_v1">
       <sample_markup_study_simple_form_v1 id="0" name="Simple Form" formKey="sample_markup_study_simple_form_v1">
@@ -1876,7 +1867,7 @@ dynamic{
     </select1>
   </group>
 </xforms>'''
-  def static formWithLayoutAndBindAttributesToCommentsXML = '''<xforms>
+    def static formWithLayoutAndBindAttributesToCommentsXML = '''<xforms>
   <model>
     <instance id="sample_markup_study_simple_form_v1">
       <sample_markup_study_simple_form_v1 id="0" name="Simple Form" formKey="sample_markup_study_simple_form_v1">

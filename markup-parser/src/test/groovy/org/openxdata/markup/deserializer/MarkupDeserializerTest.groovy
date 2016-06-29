@@ -1,7 +1,10 @@
 package org.openxdata.markup.deserializer
 
 import org.openxdata.markup.ParserUtils
+import org.openxdata.markup.exception.ValidationException
+import org.openxdata.markup.serializer.XFormSerializer
 
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
 import static org.openxdata.markup.deserializer.MarkupDeserializer.createAST
 
 /**
@@ -29,28 +32,38 @@ sdsdsd''"""
 
     }
 
-    void testPrint(){
-        def p = '''
-### djsjdj
+    void testSerializingNestedGroupsNumbered() {
+        def f = new MarkupDeserializer(nestedGroups.markUp).study().forms.first()
+        def xform = new XFormSerializer(numberBindings: true, numberQuestions: true).toXForm(f)
+        assert f['oldpageid'].line == 5
+        assert f['group_page_1'].line == 11
+        assert f['group_page_2'].line == 16
+        assertEquals nestedGroups.xmlNumbered, xform
 
-## jdjsjd
+    }
 
-@id oldpageid
-#> old page
+    void testSerializingNestedGroups() {
+        def f = new MarkupDeserializer(nestedGroups.markUp).study().forms.first()
+        def xform = new XFormSerializer(numberBindings: false, numberQuestions: false).toXForm(f)
+        assertEquals nestedGroups.xml, xform
 
-q1
+    }
 
-@id groupid
-group{ new page
-    q2
-}
+    void testGroupsWithNoIdsButHaveBindAttrs() {
+        def form = '''### s
+                     |## f
+                     |@invisible
+                     |#> sjdjsd
+                     |sdsd
+                     |@layout:appearance jjs
+                     |#> sdsd
+                     |sddsd'''.stripMargin()
 
-
-ksd kskd
-'''
-
-
-
-        ParserUtils.printTree(createAST(p))
+        try {
+            new MarkupDeserializer(form).study()
+            fail("Expecting validation exception")
+        } catch (ValidationException x) {
+            assert x.message.contains('Has No Id')
+        }
     }
 }

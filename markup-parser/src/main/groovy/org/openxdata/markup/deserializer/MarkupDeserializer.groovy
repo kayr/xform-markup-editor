@@ -149,6 +149,7 @@ class MarkupDeserializer {
                 case XformParser.PAGE:
                     def page = parent as Page
                     page.setName(child.text)
+                    page.line = child.line == 0 ? parent.parentForm.line : child.line
                     break
 
                 case XformParser.T_PAGE:
@@ -175,6 +176,7 @@ class MarkupDeserializer {
 
                 case XformParser.GROUP_MARKER:
                     p.name = child.text
+                    p.line = child.line
                     break
 
             }
@@ -277,6 +279,5 @@ class MarkupDeserializer {
         XformParser parser = new XformParser(tokens);
         return parser;
     }
-
 
 }

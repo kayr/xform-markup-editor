@@ -1,4 +1,9 @@
 package org.openxdata.markup.serializer
+
+import org.openxdata.markup.deserializer.DeSerializerFixtures
+
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
+
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -93,17 +98,17 @@ Score math
 @validif . = 3
 repeat{ Child details
 
-        Child Name
+    Child Name
 
 
-        Child Sex
-          >male
-        //e434
-          >female
+    Child Sex
+      >male
+    //e434
+      >female
 
 
-        @number
-        Child Age
+    @number
+    Child Age
 }
 
 
@@ -112,15 +117,14 @@ $>dynamic option
 
 
 dynamic{
-        Region,Sub-Region,City
-        Washington,King,Seattle
+    Region,Sub-Region,City
+    Washington,King,Seattle
 }
 
 
-//comment
-'''
+//comment'''
 
-    def markUp2 = [raw: '''
+    def markUp2 = [raw      : '''
 
 ### Simple Form
 
@@ -249,7 +253,7 @@ dynamic_instance{
         netherlands, Another Netherlands
 }
 ''',
-            formatted: '''
+                   formatted: '''
 
 ### Simple Form
 
@@ -304,16 +308,16 @@ Number of children
 
 repeat{ Child details
 
-        Child Name
+    Child Name
 
 
-        Child Sex
-          >male
-          >female
+    Child Sex
+      >male
+      >female
 
 
-        @number
-        Child Age
+    @number
+    Child Age
 }
 
 
@@ -335,41 +339,41 @@ $> city
 
 
 dynamic_instance{
-        root,sub_hyphen_region
-        washington, King
-        washington, Pierce
-        texas, King-Texas
-        texas, Cameron
-        africa, Uganda
-        africa, Kenya
-        europe, Netherlands
+    root,sub_hyphen_region
+    washington, King
+    washington, Pierce
+    texas, King-Texas
+    texas, Cameron
+    africa, Uganda
+    africa, Kenya
+    europe, Netherlands
 }
 
 
 dynamic_instance{
-        root,city
-        king, Seattle
-        king, Redmond
-        pierce, Tacoma
-        pierce, Puyallup
-        king_hyphen_texas, Dumont
-        king_hyphen_texas, Finney
-        cameron, brownsville
-        cameron, harlingen
-        uganda, Kampala
-        uganda, Masaka
-        uganda, Mbale
-        uganda, Mbarara
-        kenya, Nairobi
-        kenya, Kisumu
-        kenya, Eldoret
-        netherlands, Netherlandis
-        netherlands, Another Netherlands
+    root,city
+    king, Seattle
+    king, Redmond
+    pierce, Tacoma
+    pierce, Puyallup
+    king_hyphen_texas, Dumont
+    king_hyphen_texas, Finney
+    cameron, brownsville
+    cameron, harlingen
+    uganda, Kampala
+    uganda, Masaka
+    uganda, Mbale
+    uganda, Mbarara
+    kenya, Nairobi
+    kenya, Kisumu
+    kenya, Eldoret
+    netherlands, Netherlandis
+    netherlands, Another Netherlands
 }
 ''']
 
     def mulitineMarkup2 = [
-            raw: """
+            raw      : """
 
 ### Simple Form
 
@@ -589,23 +593,23 @@ Number of children
 
 repeat{ Child details
 
-        Child Name
+    Child Name
 
 
-        '''
+    '''
         Child Sex
         Child Sex
         Child Sex
-        '''
-          >'''
+    '''
+      >'''
           male
           male
-        male'''
-          >female
+    male'''
+      >female
 
 
-        @number
-        Child Age
+    @number
+    Child Age
 }
 
 
@@ -627,36 +631,36 @@ City
 
 
 dynamic_instance{
-        root,sub_hyphen_region
-        washington, King
-        washington, Pierce
-        texas, King-Texas
-        texas, Cameron
-        africa, Uganda
-        africa, Kenya
-        europe, Netherlands
+    root,sub_hyphen_region
+    washington, King
+    washington, Pierce
+    texas, King-Texas
+    texas, Cameron
+    africa, Uganda
+    africa, Kenya
+    europe, Netherlands
 }
 
 
 dynamic_instance{
-        root,city
-        king, Seattle
-        king, Redmond
-        pierce, Tacoma
-        pierce, Puyallup
-        king_hyphen_texas, Dumont
-        king_hyphen_texas, Finney
-        cameron, brownsville
-        cameron, harlingen
-        uganda, Kampala
-        uganda, Masaka
-        uganda, Mbale
-        uganda, Mbarara
-        kenya, Nairobi
-        kenya, Kisumu
-        kenya, Eldoret
-        netherlands, Netherlandis
-        netherlands, Another Netherlands
+    root,city
+    king, Seattle
+    king, Redmond
+    pierce, Tacoma
+    pierce, Puyallup
+    king_hyphen_texas, Dumont
+    king_hyphen_texas, Finney
+    cameron, brownsville
+    cameron, harlingen
+    uganda, Kampala
+    uganda, Masaka
+    uganda, Mbale
+    uganda, Mbarara
+    kenya, Nairobi
+    kenya, Kisumu
+    kenya, Eldoret
+    netherlands, Netherlandis
+    netherlands, Another Netherlands
 }
 """
     ]
@@ -664,8 +668,6 @@ dynamic_instance{
     void testAlign() {
 
         MarkupAligner formatter = new MarkupAligner(inpurt)
-
-//        println formatter.align()
         assertEquals expected.trim(), formatter.align().trim()
 
     }
@@ -675,7 +677,10 @@ dynamic_instance{
     }
 
     void testMultiline() {
-        println(MarkupAligner.align(mulitineMarkup2.raw))
         assertEquals mulitineMarkup2.formatted, MarkupAligner.align(mulitineMarkup2.raw)
+    }
+
+    void testFormattingGroups() {
+        assertEquals nestedGroups.formatted, MarkupAligner.align(nestedGroups.markUp)
     }
 }

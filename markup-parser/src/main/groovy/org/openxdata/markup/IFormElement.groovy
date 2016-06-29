@@ -1,6 +1,7 @@
 package org.openxdata.markup
 
 import groovy.transform.CompileStatic
+import org.openxdata.markup.exception.ValidationException
 
 
 @CompileStatic
@@ -146,6 +147,15 @@ trait IFormElement {
         if (number)
             return getNumberedText()
         return text
+
+    }
+
+
+    void validateIdExistsIfNecessary() {
+        def DEFAULT_BIND_ATTRS = [visible: true]
+        def shouldHaveId = binding == null && (_bindAttr != DEFAULT_BIND_ATTRS || bindAttributes.size() > 0)
+        if (shouldHaveId)
+            throw new ValidationException("Element[$this] Has No Id But Has Logic Attributes", line)
 
     }
 

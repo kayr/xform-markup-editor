@@ -56,6 +56,7 @@ class Attrib {
 
             question.type = lowCaseAttrib
         } else if (allowedAttributes.contains(lowCaseAttrib)) {
+            setElementAttribute(question, lowCaseAttrib, param, line)
             setQuestionAttribute(question, lowCaseAttrib, param, line)
         } else {
             throw new InvalidAttributeException("""Attibute [@$attribute] has no meaning.\n""" +
@@ -104,15 +105,7 @@ class Attrib {
             return
         }
 
-        switch (attrib) {
-            case 'id':
-                Util.validateId(param, line)
-                page.id = param
-                page.line = line
-                break
-            default:
-                throw new InvalidAttributeException("Attribute $attrib on form $page.name in not supported", line)
-        }
+        setElementAttribute(page, attrib, param, line, true)
     }
 
     static Map extractAttribAndParam(String attribute) {
@@ -168,20 +161,12 @@ class Attrib {
 
     }
 
-    static void setQuestionAttribute(IQuestion question, String attribute, String param, int line) {
+
+    static void setElementAttribute(IFormElement question, String attribute, String param, int line, boolean throwException = false) {
+
         switch (attribute) {
-            case 'readonly':
-                question.readOnly = true
-                break
-            case 'required':
-                question.required = true
-                break
             case 'invisible':
                 question.visible = false
-                break
-            case 'comment':
-            case 'hint':
-                question.comment = param
                 break
             case 'id':
                 Util.validateId(param, line)
@@ -211,18 +196,46 @@ class Attrib {
             case 'message':
                 question.message = param
                 break
+            case 'parent':
+                Util.validateId(param, line)
+                (question as DynamicQuestion).parentQuestionId = param
+                break
+            default:
+                if (throwException)
+                    throw new InvalidAttributeException("Attribute $attribute on Element $question.name in not supported", line)
 
+        }
+    }
+
+
+    static void setQuestionAttribute(IQuestion question, String attribute, String param, int line, boolean throwException = false) {
+        switch (attribute) {
+            case 'readonly':
+                (question as IQuestion).readOnly = true
+                break
+            case 'required':
+                (question as IQuestion).required = true
+                break
+            case 'comment':
+            case 'hint':
+                (question as IQuestion).comment = param
+                break
             case 'calculate':
-                question.calculation = param
+                (question as IQuestion).calculation = param
                 break
             case 'parent':
                 Util.validateId(param, line)
                 (question as DynamicQuestion).parentQuestionId = param
                 break
             case 'default':
-                question.value = param
+                (question as IQuestion).value = param
                 break
+            default:
+                if (throwException)
+                    throw new InvalidAttributeException("Attribute $attribute on Question $question.name in not supported", line)
+
         }
     }
+
 
 }
