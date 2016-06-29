@@ -33,6 +33,8 @@ class MainUI {
 
     }
 
+    MainPresenter mainPresenter
+
     def initUi() {
         s = new SwingBuilder()
 
@@ -106,7 +108,8 @@ class MainUI {
                 btnGenerateXML = button(text: "Export OXD Study")
                 btnShowXml = button(text: "Show XML OXD")
                 btnShowOdkXml = button(text: "Show XML ODK")
-                btnPreviewXml = button(text: "Preview First Form")
+                lstFormOptions = comboBox()
+                btnPreviewXml = button(text: "Preview Selected Form")
                 chkNumberLabels = checkBox(text: 'Number Labels')
 
             }
@@ -219,6 +222,8 @@ class MainUI {
     JButton btnShowOdkXml
     JButton btnRefreshTree
     JButton btnPreviewXml
+
+    JComboBox lstFormOptions
 
     JCheckBoxMenuItem chkGenerateLayout
     JCheckBoxMenuItem chkNumberBindings
