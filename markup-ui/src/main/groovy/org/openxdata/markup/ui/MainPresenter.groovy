@@ -176,15 +176,25 @@ class MainPresenter implements DocumentListener {
 
 
     void previewOdkXML() {
+        def selectedForm = form.lstFormOptions.getSelectedItem()
         def study = getParsedStudy()
         def ser = getODKSerializer()
         ser.toStudyXml(study)
-        def params = [comment:  ser.xforms.values().first()]
+        def formXml = [:]
+        if (selectedForm != 'Select Form') {
+            ser.xforms.each { frmName, xml ->
+                formXml << [(frmName.toString()): xml]
+            }
+        }else {
+            throw new RuntimeException("Select a form to preview")
+        }
+
+        def params = [comment: formXml[selectedForm]]
         def uploadUrl = "http://forms.omnitech.co.ug/clipboard/add_text.php"
 
         String xmlUrl = ''
         try {
-            Util.time("====== Uploading XML to server"){
+            Util.time("====== Uploading XML to server") {
                 xmlUrl = httpPost(uploadUrl, params)
             }
 
@@ -210,7 +220,7 @@ class MainPresenter implements DocumentListener {
     }
 
     private void copyUrlToClipBoard(String url) {
-        setClipboardContents( url)
+        setClipboardContents(url)
         def msg = "The url has been copied to your clipboard, please paste it to your preferred browser"
         invokeLater {
             JOptionPane.showMessageDialog(form.frame, msg)
@@ -219,7 +229,7 @@ class MainPresenter implements DocumentListener {
 
     static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 
-    static void setClipboardContents(final String contents){
+    static void setClipboardContents(final String contents) {
         clipboard.setContents(new StringSelection(contents), null)
     }
 
@@ -441,6 +451,14 @@ class MainPresenter implements DocumentListener {
                 Study.validateWithXML.set(null)
             }
 
+        }
+
+        def ser = getODKSerializer()
+        form.lstFormOptions.removeAllItems()
+        form.lstFormOptions.addItem('Select Form')
+        ser.toStudyXml(result.value)
+        ser.xforms.each { frmName, xml ->
+            form.lstFormOptions.addItem(frmName.toString())
         }
         updateTree(result.value)
         return result.value
