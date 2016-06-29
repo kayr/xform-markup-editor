@@ -70,6 +70,17 @@ class Attrib {
 
         String attrib = params['attrib']
         String param = params['param']
+        boolean isBind = params['isBind']
+        boolean isLayout = params['isLayout']
+
+        if (isBind) {
+            setBindAttribute(form, attrib, param, line)
+            return
+        }
+
+        if (isLayout) {
+            setLayoutAttribute(form, attrib, param, line)
+        }
 
 
         switch (attrib) {
@@ -81,6 +92,9 @@ class Attrib {
             case 'dbid':
                 form.dbId = param
                 form.dbIdLine = line
+                break
+            case 'style':
+                form.layoutAttributes['style'] = param
                 break
             default:
                 throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)

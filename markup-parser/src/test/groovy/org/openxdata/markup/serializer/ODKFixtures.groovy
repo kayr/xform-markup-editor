@@ -1293,7 +1293,7 @@ No. Kids
       <bind id="subregion" nodeset="/sample_markup_study_simple_form_v1/subregion" name="13" type="string" />
     </model>
   </h:head>
-  <h:body>
+  <h:body class="pages">
     <group>
       <label>Page1</label>
       <input ref="/sample_markup_study_simple_form_v1/name" name="lo 1">

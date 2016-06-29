@@ -1,6 +1,7 @@
 package org.openxdata.markup.deserializer
 
 import groovy.json.JsonSlurper
+import groovy.util.slurpersupport.NamespaceAwareHashMap
 import org.openxdata.markup.*
 
 /**
@@ -12,8 +13,10 @@ class XFormDeserializer {
     private def xForm
     private Form form
     private def model
-    private final static
+    private final
+    static
     def COMMON_BIND_ATTRIBUTES = ['locked', 'message', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
+    static def LAYOUT_NS = '{https://github.com/kayr/xform-markup-editor#layout}'
 
 
     XFormDeserializer() {
@@ -26,7 +29,7 @@ class XFormDeserializer {
     Form parse() {
         if (form)
             return form
-        xForm = new XmlSlurper().parseText(xml)
+        xForm = new XmlSlurper(false, true).parseText(xml)
         toForm()
     }
 
@@ -34,16 +37,32 @@ class XFormDeserializer {
         def instance = xForm.model.instance[0]
         model = instance.'*'[0]
 
+
+
         form = new Form()
         form.id = instance.@id
         form.name = model.@name
         form.dbId = model.@id
+
+        addLayoutAttributes()
         addDynamicInstances()
         addPages()
-        form.allQuestions.each {
+        form.allElementsWithIds.each {
             addBehaviourInfo(it)
         }
         return form
+    }
+
+    private void addLayoutAttributes() {
+        def layoutAttributes = (xForm.attributes() as NamespaceAwareHashMap).findResults { k, v ->
+            if (k.startsWith(LAYOUT_NS)) {
+                return new MapEntry(k.replace(LAYOUT_NS, ''), v)
+            }
+            return null
+        }
+
+        if (layoutAttributes)
+            form.layoutAttributes.putAll(layoutAttributes)
     }
 
     private def addDynamicInstances() {
@@ -71,7 +90,7 @@ class XFormDeserializer {
     private def addPages() {
         def groups = xForm.group
         groups.each {
-            processPage(it)
+            processPage(form, it)
         }
     }
 
@@ -79,9 +98,9 @@ class XFormDeserializer {
         return elem.dynamiclist.size() > 0
     }
 
-    private Page processPage(def group) {
+    private Page processPage(HasQuestions parent, def group) {
         def page = new Page(name: group.label.text())
-        form.addElement(page)
+        addIdMetaInfo(page, parent, group)
         addQuestions(page, group)
         return page
     }
@@ -94,7 +113,7 @@ class XFormDeserializer {
         page.allQuestions
     }
 
-    private IQuestion processQnElem(HasQuestions page, def qnElem) {
+    private IFormElement processQnElem(HasQuestions page, def qnElem) {
         def tagName = qnElem.name()
         def method = "process_$tagName"
 
@@ -131,12 +150,22 @@ class XFormDeserializer {
         return qn
     }
 
-    private IQuestion process_group(HasQuestions page, def elem) {
-        def qn = new RepeatQuestion(parent: page)
-        //add questions after u have set the parent form
-        addQuestions(qn, elem.repeat)
-        addIdMetaInfo(qn, page, elem)
-        return qn
+    private IFormElement process_group(HasQuestions page, def elem) {
+
+        if (isRepeatGroup(elem)) {
+            def qn = new RepeatQuestion(parent: page)
+            //add questions after u have set the parent form
+            addQuestions(qn, elem.repeat)
+            addIdMetaInfo(qn, page, elem)
+            return qn
+        } else {
+            processPage(page, elem)
+        }
+
+    }
+
+    private static boolean isRepeatGroup(def elem) {
+        return elem.'*'.find { it.name() == 'repeat' }
     }
 
     private IQuestion process_Dynamic(HasQuestions page, def elem) {
@@ -152,19 +181,21 @@ class XFormDeserializer {
         return elem.itemset.size() > 0
     }
 
-    private IQuestion addIdMetaInfo(IQuestion qn, HasQuestions parent, def elem) {
+    private IFormElement addIdMetaInfo(IFormElement qn, HasQuestions parent, def elem) {
         //repeats do not have a bind attribute
-        if (elem.name() == 'group')
+        if (isRepeatGroup(elem))
             qn.binding = elem.@id
         else
             qn.binding = elem.@bind
 
-        def value = model."$qn.binding".text()
-        if (value)
-            qn.value = value
-        qn.text = elem.label.text()
-        qn.comment = elem.hint.text()
-        mayBeParseCommentAttribute(qn)
+        if (qn instanceof IQuestion) {
+            def value = model."$qn.binding".text()
+            if (value)
+                qn.value = value
+            qn.text = elem.label.text()
+            qn.comment = elem.hint.text()
+            mayBeParseCommentAttribute(qn)
+        }
 
 
         parent.addElement(qn)
@@ -172,7 +203,7 @@ class XFormDeserializer {
         return qn
     }
 
-    private static mayBeAddLayoutAttributes(IQuestion qn, def elem) {
+    private static mayBeAddLayoutAttributes(IFormElement qn, def elem) {
         Map layoutAttributes = elem.attributes()
         if (qn instanceof RepeatQuestion) {
             layoutAttributes = elem.repeat[0].attributes()
@@ -225,17 +256,19 @@ class XFormDeserializer {
      * @param elem the bind element
      * @return the passed question
      */
-    private IQuestion addBehaviourInfo(IQuestion qn) {
+    private IFormElement addBehaviourInfo(IFormElement qn) {
         def bindNode = getBindNode(qn.binding)
         /*todo implement the notion of readonly and not enabled. Readonly question can be populated with data as opposed to disabled*/
-        mayBeMakeLocked(bindNode, qn)
-        mayBeMakeReadOnly(bindNode, qn)
+        if (qn instanceof IQuestion) {
+            mayBeMakeLocked(bindNode, qn)
+            mayBeMakeReadOnly(bindNode, qn)
+            mayBeAddCalculation(bindNode, qn)
+        }
         mayBeMakeInvisible(bindNode, qn)
         mayBeMakeRequired(bindNode, qn)
 
         mayBeAddSkipLogic(bindNode, qn)
         mayBeAddValidationLogic(bindNode, qn)
-        mayBeAddCalculation(bindNode, qn)
 
         Map bindAttributes = bindNode.attributes()
 
@@ -255,7 +288,7 @@ class XFormDeserializer {
         }
     }
 
-    private void mayBeAddValidationLogic(bindNode, IQuestion qn) {
+    private void mayBeAddValidationLogic(bindNode, IFormElement qn) {
         String validationLogic = bindNode.@constraint.text()
         if (validationLogic) {
             qn.validationLogic = getXPathFormula(validationLogic)
@@ -263,7 +296,7 @@ class XFormDeserializer {
         }
     }
 
-    private void mayBeAddSkipLogic(bindNode, IQuestion qn) {
+    private void mayBeAddSkipLogic(bindNode, IFormElement qn) {
         String skipLogic = bindNode.@relevant.text()
         if (skipLogic) {
             qn.skipLogic = getXPathFormula(skipLogic)
@@ -271,14 +304,14 @@ class XFormDeserializer {
         }
     }
 
-    private static void mayBeMakeRequired(bindNode, IQuestion qn) {
+    private static void mayBeMakeRequired(bindNode, IFormElement qn) {
         String required = bindNode.@required.text()
         if (required && required.contains('true')) {
             qn.required = true
         }
     }
 
-    private static void mayBeMakeInvisible(bindNode, IQuestion qn) {
+    private static void mayBeMakeInvisible(bindNode, IFormElement qn) {
         String visible = bindNode.@visible.text()
         if (visible && visible.contains('false')) {
             qn.visible = false

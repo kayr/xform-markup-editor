@@ -95,7 +95,13 @@ class ODKSerializer {
             }
 
             // CONTROLS AND WIDGETS
-            x.'h:body' {
+            def formAttrs = [:]
+            if (form.layoutAttributes) {
+                formAttrs += form.layoutAttributes
+                if (formAttrs['style'])
+                    formAttrs['class'] = formAttrs.remove('style')
+            }
+            x.'h:body'(formAttrs) {
                 form.elements.each {
                     mayBeBuildLayout(x, it)
                 }

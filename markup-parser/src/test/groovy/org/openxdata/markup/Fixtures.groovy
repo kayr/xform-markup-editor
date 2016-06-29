@@ -1647,6 +1647,7 @@ repeat{ *Required repeat
 ### Sample Markup Study
 
 
+@style pages
 ## Simple Form
 
 
@@ -1741,7 +1742,7 @@ dynamic{
         Washington, Kings
 }
 '''
-    def static formWithLayoutAndBindAttributesXML = '''<xforms>
+    def static formWithLayoutAndBindAttributesXML = '''<xforms layout:style="pages" xmlns:layout="https://github.com/kayr/xform-markup-editor#layout">
   <model>
     <instance id="sample_markup_study_simple_form_v1">
       <sample_markup_study_simple_form_v1 id="0" name="Simple Form" formKey="sample_markup_study_simple_form_v1">
@@ -1867,7 +1868,7 @@ dynamic{
     </select1>
   </group>
 </xforms>'''
-    def static formWithLayoutAndBindAttributesToCommentsXML = '''<xforms>
+    def static formWithLayoutAndBindAttributesToCommentsXML = '''<xforms layout:style="pages" xmlns:layout="https://github.com/kayr/xform-markup-editor#layout">
   <model>
     <instance id="sample_markup_study_simple_form_v1">
       <sample_markup_study_simple_form_v1 id="0" name="Simple Form" formKey="sample_markup_study_simple_form_v1">

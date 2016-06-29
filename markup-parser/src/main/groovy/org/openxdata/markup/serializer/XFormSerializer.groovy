@@ -78,7 +78,13 @@ class XFormSerializer {
         def xml = new MarkupBuilder(printWriter)
         xml.doubleQuotes = true
         checkBindLength(form.binding)
-        xml.xforms {
+        def attrs = [:]
+        if (form.layoutAttributes) {
+            attrs += form.layoutAttributes.collectEntries { ["layout:$it.key", it.value] }
+            attrs["xmlns:layout"] = 'https://github.com/kayr/xform-markup-editor#layout'
+        }
+
+        xml.xforms(attrs) {
             xml.model {
                 xml.instance(id: form.binding) {
                     xml."$form.binding"(id: form.dbId ?: 0, name: form.name, formKey: form.binding) {
@@ -323,7 +329,7 @@ class XFormSerializer {
         def map = [id: pageId] + page.layoutAttributes
 
         if (page.id) {
-            map['binding'] = pageId
+            map['bind'] = pageId
         }
 
         xml.group(map) {

@@ -228,4 +228,9 @@ class XFormDeserializerTest extends GroovyTestCase {
         assertEquals formWithLayoutAndBindAttributesXML, new XFormSerializer().toXForm(form)
     }
 
+    void testNestedGroups() {
+       testRoundTrip(nestedGroups.markUp)
+       testRoundTrip(formWithLayoutAndBindAttributes)
+    }
+
 }

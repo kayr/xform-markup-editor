@@ -299,12 +299,12 @@ q4
     <bind id="q1_dot_4" nodeset="/s_f_v1/q1_dot_4" type="xsd:string" />
     <bind id="q4" nodeset="/s_f_v1/q4" type="xsd:string" />
   </model>
-  <group id="oldpageid" binding="oldpageid">
+  <group id="oldpageid" bind="oldpageid">
     <label>old page</label>
     <input bind="q1_dot_1">
       <label>q1.1</label>
     </input>
-    <group id="group_page_1" jdsj="jsjd" binding="group_page_1">
+    <group id="group_page_1" jdsj="jsjd" bind="group_page_1">
       <label>p1.2</label>
       <input bind="q1_dot_1_dot_1">
         <label>q1.1.1</label>
@@ -314,7 +314,7 @@ q4
         <input bind="q1_dot_1_dot_2">
           <label>q1.1.2</label>
         </input>
-        <group id="group_page_2" binding="group_page_2">
+        <group id="group_page_2" bind="group_page_2">
           <label>g.1.1.3</label>
           <input bind="q1_dot_1_dot_3_dot_1">
             <label>q1.1.3.1</label>
@@ -369,12 +369,12 @@ q4
     <bind id="_1_4q1_dot_4" nodeset="/s_f_v1/_1_4q1_dot_4" type="xsd:string" />
     <bind id="_2q4" nodeset="/s_f_v1/_2q4" type="xsd:string" />
   </model>
-  <group id="oldpageid" binding="oldpageid">
+  <group id="oldpageid" bind="oldpageid">
     <label>1. old page</label>
     <input bind="_1_1q1_dot_1">
       <label>1.1. q1.1</label>
     </input>
-    <group id="group_page_1" jdsj="jsjd" binding="group_page_1">
+    <group id="group_page_1" jdsj="jsjd" bind="group_page_1">
       <label>1.2. p1.2</label>
       <input bind="_1_2_1q1_dot_1_dot_1">
         <label>1.2.1. q1.1.1</label>
@@ -384,7 +384,7 @@ q4
         <input bind="_1_2_2q1_dot_1_dot_2">
           <label>1.2.2. q1.1.2</label>
         </input>
-        <group id="group_page_2" binding="group_page_2">
+        <group id="group_page_2" bind="group_page_2">
           <label>1.2.3. g.1.1.3</label>
           <input bind="_1_2_3_1q1_dot_1_dot_3_dot_1">
             <label>1.2.3.1. q1.1.3.1</label>
