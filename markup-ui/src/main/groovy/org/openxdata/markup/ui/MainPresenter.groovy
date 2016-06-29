@@ -35,6 +35,8 @@ import static javax.swing.SwingUtilities.invokeLater
  */
 class MainPresenter implements DocumentListener {
 
+    public static final String ENKETO_URL = "http://forms.omnitech.co.ug:7005"
+    public static final String CLIPBOARD_URL = "http://clip.omnitech.co.ug/clip"
     XFormImporterPresenter xFormImporter
     MainUI form
     File currentFile
@@ -180,7 +182,7 @@ class MainPresenter implements DocumentListener {
         def ser = getODKSerializer()
         ser.toStudyXml(study)
         def params = [comment: ser.xforms.values().first()]
-        def uploadUrl = "http://clip.omnitech.co.ug/clip/add_text.php"
+        def uploadUrl = CLIPBOARD_URL + "/add_text.php"
 
         String xmlUrl = ''
         try {
@@ -195,7 +197,7 @@ class MainPresenter implements DocumentListener {
         if (!(xmlUrl ==~ 'http(s)?:.*'))
             throw new RuntimeException("Server could not process request: reason[${xmlUrl}]")
 
-        def enketoUrl = "http://forms.omnitech.co.ug:7005/preview?form=$xmlUrl"
+        def enketoUrl = ENKETO_URL + "/preview?form=$xmlUrl"
 
         if (Desktop.isDesktopSupported()) {
             try {
