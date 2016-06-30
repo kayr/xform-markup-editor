@@ -84,7 +84,7 @@ class ODKSerializer {
                     buildDynamicModel(x, form)
 
                     //BINDINGS
-                    form.allQuestions.each {
+                    form.allElementsWithIds.each {
                         addBindNode(x, it)
                     }
 
@@ -144,13 +144,13 @@ class ODKSerializer {
 
     }
 
-    private String getAbsoluteBindingXPath(String xPath, IQuestion question) {
+    private String getAbsoluteBindingXPath(String xPath, IFormElement question) {
         if (numberBindings)
             return makeXPathCompatible(Form.getIndexedAbsoluteBindingXPath(xPath, question, [allowRelativePath: false]), question)
         return makeXPathCompatible(Form.getAbsoluteBindingXPath(xPath, question, [allowRelativePath: false]), question)
     }
 
-    def makeXPathCompatible(String xPath, IQuestion question) {
+    def makeXPathCompatible(String xPath, IFormElement question) {
         try {
             if (oxdConversion)
                 return ODKXpathUtil.makeODKCompatibleXPath(question.parentForm, xPath, numberBindings)
@@ -180,16 +180,19 @@ class ODKSerializer {
         return bind
     }
 
-    private void addBindNode(MarkupBuilder xml, IQuestion question) {
-
-        def type = getQuestionType(question)
+    private void addBindNode(MarkupBuilder xml, IFormElement question) {
 
         def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
 
-        if (type.type) map.type = type.type
+        if (question instanceof IQuestion) {
+            def type = getQuestionType(question)
 
-        if (question.isRequired()) map.required = "true()"
-        if (question.isReadOnly()) map.readonly = "true()"
+
+            if (type.type) map.type = type.type
+
+            if (question.isRequired()) map.required = "true()"
+            if (question.isReadOnly()) map.readonly = "true()"
+        }
         //implement visibility in the layout body
         //if (!question.isVisible() ) map.readonly = "true()"
 
@@ -214,14 +217,18 @@ class ODKSerializer {
             map.'jr:constraintMsg' = question.message
         }
 
-        if (question.calculation) {
-            def xpath = getAbsoluteBindingXPath(question.calculation, question)
-            map.calculate = xpath
+        if (question instanceof IQuestion) {
+            if (question.calculation) {
+                def xpath = getAbsoluteBindingXPath(question.calculation, question)
+                map.calculate = xpath
+            }
+
+            if (oxdConversion) {
+                doPostProcessingForOxd(question, map)
+            }
         }
 
-        if (oxdConversion) {
-            doPostProcessingForOxd(question, map)
-        }
+
 
         xml.bind(map)
     }
@@ -366,7 +373,7 @@ class ODKSerializer {
         String removedJR = groupLayoutAttributes.remove('jrcount')
 
         if (removedJR) {
-            attr['jr:count'] = getAbsoluteBindingXPath(removedJR,question)
+            attr['jr:count'] = getAbsoluteBindingXPath(removedJR, question)
         }
 
         xml.group(groupLayoutAttributes) {

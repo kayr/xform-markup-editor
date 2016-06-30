@@ -288,15 +288,15 @@ q4
         <q4 />
       </s_f_v1>
     </instance>
-    <bind id="oldpageid" nodeset="/s_f_v1" />
-    <bind id="q1_dot_1" nodeset="/s_f_v1/q1_dot_1" type="xsd:string" />
-    <bind id="group_page_1" nodeset="/s_f_v1" someBindAttr="bind_attr" />
-    <bind id="q1_dot_1_dot_1" nodeset="/s_f_v1/q1_dot_1_dot_1" type="xsd:string" />
-    <bind id="q1_dot_1_dot_2" nodeset="/s_f_v1/q1_dot_1_dot_2" type="xsd:string" />
-    <bind id="group_page_2" nodeset="/s_f_v1" />
-    <bind id="q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/q1_dot_1_dot_3_dot_1" type="xsd:string" />
-    <bind id="q1_dot_3" nodeset="/s_f_v1/q1_dot_3" type="xsd:string" />
-    <bind id="q1_dot_4" nodeset="/s_f_v1/q1_dot_4" type="xsd:string" />
+    <bind id="oldpageid" nodeset="/s_f_v1/oldpageid" />
+    <bind id="q1_dot_1" nodeset="/s_f_v1/oldpageid/q1_dot_1" type="xsd:string" />
+    <bind id="group_page_1" nodeset="/s_f_v1/oldpageid/group_page_1" someBindAttr="bind_attr" />
+    <bind id="q1_dot_1_dot_1" nodeset="/s_f_v1/oldpageid/group_page_1/q1_dot_1_dot_1" type="xsd:string" />
+    <bind id="q1_dot_1_dot_2" nodeset="/s_f_v1/oldpageid/group_page_1/q1_dot_1_dot_2" type="xsd:string" />
+    <bind id="group_page_2" nodeset="/s_f_v1/oldpageid/group_page_1/group_page_2" />
+    <bind id="q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/oldpageid/group_page_1/group_page_2/q1_dot_1_dot_3_dot_1" type="xsd:string" />
+    <bind id="q1_dot_3" nodeset="/s_f_v1/oldpageid/q1_dot_3" type="xsd:string" />
+    <bind id="q1_dot_4" nodeset="/s_f_v1/oldpageid/q1_dot_4" type="xsd:string" />
     <bind id="q4" nodeset="/s_f_v1/q4" type="xsd:string" />
   </model>
   <group id="oldpageid" bind="oldpageid">
@@ -359,14 +359,14 @@ q4
       </s_f_v1>
     </instance>
     <bind id="_1oldpageid" nodeset="/s_f_v1/_1oldpageid" />
-    <bind id="_1_1q1_dot_1" nodeset="/s_f_v1/_1_1q1_dot_1" type="xsd:string" />
-    <bind id="_1_2group_page_1" nodeset="/s_f_v1/_1_2group_page_1" someBindAttr="bind_attr" />
-    <bind id="_1_2_1q1_dot_1_dot_1" nodeset="/s_f_v1/_1_2_1q1_dot_1_dot_1" type="xsd:string" />
-    <bind id="_1_2_2q1_dot_1_dot_2" nodeset="/s_f_v1/_1_2_2q1_dot_1_dot_2" type="xsd:string" />
-    <bind id="_1_2_3group_page_2" nodeset="/s_f_v1/_1_2_3group_page_2" />
-    <bind id="_1_2_3_1q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/_1_2_3_1q1_dot_1_dot_3_dot_1" type="xsd:string" />
-    <bind id="_1_3q1_dot_3" nodeset="/s_f_v1/_1_3q1_dot_3" type="xsd:string" />
-    <bind id="_1_4q1_dot_4" nodeset="/s_f_v1/_1_4q1_dot_4" type="xsd:string" />
+    <bind id="_1_1q1_dot_1" nodeset="/s_f_v1/_1oldpageid/_1_1q1_dot_1" type="xsd:string" />
+    <bind id="_1_2group_page_1" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1" someBindAttr="bind_attr" />
+    <bind id="_1_2_1q1_dot_1_dot_1" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_1q1_dot_1_dot_1" type="xsd:string" />
+    <bind id="_1_2_2q1_dot_1_dot_2" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_2q1_dot_1_dot_2" type="xsd:string" />
+    <bind id="_1_2_3group_page_2" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_3group_page_2" />
+    <bind id="_1_2_3_1q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_3group_page_2/_1_2_3_1q1_dot_1_dot_3_dot_1" type="xsd:string" />
+    <bind id="_1_3q1_dot_3" nodeset="/s_f_v1/_1oldpageid/_1_3q1_dot_3" type="xsd:string" />
+    <bind id="_1_4q1_dot_4" nodeset="/s_f_v1/_1oldpageid/_1_4q1_dot_4" type="xsd:string" />
     <bind id="_2q4" nodeset="/s_f_v1/_2q4" type="xsd:string" />
   </model>
   <group id="oldpageid" bind="oldpageid">
@@ -459,7 +459,165 @@ q1.4
 
 
 q4
-'''
+''',
+            oxd2OdkXml : '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>f</h:title>
+    <model>
+      <instance>
+        <s_f_v1 id="0" name="f">
+          <oldpageid>
+            <q1_dot_1 />
+            <group_page_1>
+              <q1_dot_1_dot_1 />
+              <q1_dot_1_dot_2 />
+              <group_page_2>
+                <q1_dot_1_dot_3_dot_1 />
+              </group_page_2>
+            </group_page_1>
+            <q1_dot_3 />
+            <q1_dot_4 />
+          </oldpageid>
+          <q4 />
+          <meta>
+            <instanceID />
+          </meta>
+        </s_f_v1>
+      </instance>
+      <bind id="oldpageid" nodeset="/s_f_v1/oldpageid" />
+      <bind id="q1_dot_1" nodeset="/s_f_v1/oldpageid/q1_dot_1" type="string" />
+      <bind id="group_page_1" nodeset="/s_f_v1/oldpageid/group_page_1" someBindAttr="bind_attr" />
+      <bind id="q1_dot_1_dot_1" nodeset="/s_f_v1/oldpageid/group_page_1/q1_dot_1_dot_1" type="string" />
+      <bind id="q1_dot_1_dot_2" nodeset="/s_f_v1/oldpageid/group_page_1/q1_dot_1_dot_2" type="string" />
+      <bind id="group_page_2" nodeset="/s_f_v1/oldpageid/group_page_1/group_page_2" />
+      <bind id="q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/oldpageid/group_page_1/group_page_2/q1_dot_1_dot_3_dot_1" type="string" />
+      <bind id="q1_dot_3" nodeset="/s_f_v1/oldpageid/q1_dot_3" type="string" />
+      <bind id="q1_dot_4" nodeset="/s_f_v1/oldpageid/q1_dot_4" type="string" />
+      <bind id="q4" nodeset="/s_f_v1/q4" type="string" />
+      <bind calculate="concat('uuid:', uuid())" nodeset="/s_f_v1/meta/instanceID" readonly="true()" type="string" />
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/s_f_v1/oldpageid">
+      <label>old page</label>
+      <input ref="/s_f_v1/oldpageid/q1_dot_1">
+        <label>q1.1</label>
+      </input>
+      <group ref="/s_f_v1/oldpageid/group_page_1" jdsj="jsjd">
+        <label>p1.2</label>
+        <input ref="/s_f_v1/oldpageid/group_page_1/q1_dot_1_dot_1">
+          <label>q1.1.1</label>
+        </input>
+        <group>
+          <label></label>
+          <input ref="/s_f_v1/oldpageid/group_page_1/q1_dot_1_dot_2">
+            <label>q1.1.2</label>
+          </input>
+          <group ref="/s_f_v1/oldpageid/group_page_1/group_page_2">
+            <label>g.1.1.3</label>
+            <input ref="/s_f_v1/oldpageid/group_page_1/group_page_2/q1_dot_1_dot_3_dot_1">
+              <label>q1.1.3.1</label>
+            </input>
+          </group>
+        </group>
+      </group>
+      <group>
+        <label></label>
+        <input ref="/s_f_v1/oldpageid/q1_dot_3">
+          <label>q1.3</label>
+        </input>
+      </group>
+      <input ref="/s_f_v1/oldpageid/q1_dot_4">
+        <label>q1.4</label>
+      </input>
+    </group>
+    <group>
+      <label>otherpage</label>
+      <input ref="/s_f_v1/q4">
+        <label>q4</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>''',
+            odkNumberd : '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>f</h:title>
+    <model>
+      <instance>
+        <s_f_v1 id="0" name="f">
+          <_1oldpageid>
+            <_1_1q1_dot_1 />
+            <_1_2group_page_1>
+              <_1_2_1q1_dot_1_dot_1 />
+              <_1_2_2q1_dot_1_dot_2 />
+              <_1_2_3group_page_2>
+                <_1_2_3_1q1_dot_1_dot_3_dot_1 />
+              </_1_2_3group_page_2>
+            </_1_2group_page_1>
+            <_1_3q1_dot_3 />
+            <_1_4q1_dot_4 />
+          </_1oldpageid>
+          <_2q4 />
+          <meta>
+            <instanceID />
+          </meta>
+        </s_f_v1>
+      </instance>
+      <bind id="_1oldpageid" nodeset="/s_f_v1/_1oldpageid" />
+      <bind id="_1_1q1_dot_1" nodeset="/s_f_v1/_1oldpageid/_1_1q1_dot_1" type="string" />
+      <bind id="_1_2group_page_1" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1" someBindAttr="bind_attr" />
+      <bind id="_1_2_1q1_dot_1_dot_1" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_1q1_dot_1_dot_1" type="string" />
+      <bind id="_1_2_2q1_dot_1_dot_2" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_2q1_dot_1_dot_2" type="string" />
+      <bind id="_1_2_3group_page_2" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_3group_page_2" />
+      <bind id="_1_2_3_1q1_dot_1_dot_3_dot_1" nodeset="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_3group_page_2/_1_2_3_1q1_dot_1_dot_3_dot_1" type="string" />
+      <bind id="_1_3q1_dot_3" nodeset="/s_f_v1/_1oldpageid/_1_3q1_dot_3" type="string" />
+      <bind id="_1_4q1_dot_4" nodeset="/s_f_v1/_1oldpageid/_1_4q1_dot_4" type="string" />
+      <bind id="_2q4" nodeset="/s_f_v1/_2q4" type="string" />
+      <bind calculate="concat('uuid:', uuid())" nodeset="/s_f_v1/meta/instanceID" readonly="true()" type="string" />
+    </model>
+  </h:head>
+  <h:body>
+    <group ref="/s_f_v1/_1oldpageid">
+      <label>1. old page</label>
+      <input ref="/s_f_v1/_1oldpageid/_1_1q1_dot_1">
+        <label>1.1. q1.1</label>
+      </input>
+      <group ref="/s_f_v1/_1oldpageid/_1_2group_page_1" jdsj="jsjd">
+        <label>1.2. p1.2</label>
+        <input ref="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_1q1_dot_1_dot_1">
+          <label>1.2.1. q1.1.1</label>
+        </input>
+        <group>
+          <label></label>
+          <input ref="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_2q1_dot_1_dot_2">
+            <label>1.2.2. q1.1.2</label>
+          </input>
+          <group ref="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_3group_page_2">
+            <label>1.2.3. g.1.1.3</label>
+            <input ref="/s_f_v1/_1oldpageid/_1_2group_page_1/_1_2_3group_page_2/_1_2_3_1q1_dot_1_dot_3_dot_1">
+              <label>1.2.3.1. q1.1.3.1</label>
+            </input>
+          </group>
+        </group>
+      </group>
+      <group>
+        <label></label>
+        <input ref="/s_f_v1/_1oldpageid/_1_3q1_dot_3">
+          <label>1.3. q1.3</label>
+        </input>
+      </group>
+      <input ref="/s_f_v1/_1oldpageid/_1_4q1_dot_4">
+        <label>1.4. q1.4</label>
+      </input>
+    </group>
+    <group>
+      <label>otherpage</label>
+      <input ref="/s_f_v1/_2q4">
+        <label>2. q4</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>'''
 
     ]
 

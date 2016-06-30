@@ -6,8 +6,13 @@ import org.openxdata.markup.TestUtils
 import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.InvalidAttributeException
 
+import static org.openxdata.markup.TestUtils.oxd2Odk
 import static org.openxdata.markup.TestUtils.toForm
 import static org.openxdata.markup.TestUtils.toODK
+import static org.openxdata.markup.TestUtils.toOXD
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.getNestedGroups
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.getNestedGroups
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
 import static org.openxdata.markup.serializer.ODKFixtures.*
 
 /**
@@ -117,6 +122,16 @@ class ODKSerializerTest extends GroovyTestCase {
 
     void testAddingMetaInstanceId() {
         assertEquals oxdSampleForm.xmlWithMeta, toODK(oxdSampleForm.form, false, true, true)
+    }
+
+    void testNestedGroup() {
+        def oxd = ODKSerializer.oxd2Odk(nestedGroups.xml, true)
+        assertEquals nestedGroups.oxd2OdkXml, oxd
+    }
+
+    void testNestedGroupNumber() {
+        def oxd = toODK(toForm(nestedGroups.markUp),true)
+        assertEquals nestedGroups.odkNumberd, oxd
     }
 
 }

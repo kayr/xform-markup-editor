@@ -209,6 +209,9 @@ class XFormDeserializer {
             layoutAttributes = elem.repeat[0].attributes()
         }
 
+        if (qn instanceof Page) {
+            layoutAttributes.remove('id')
+        }
         layoutAttributes.remove('bind')
         qn.layoutAttributes.putAll(layoutAttributes)
     }

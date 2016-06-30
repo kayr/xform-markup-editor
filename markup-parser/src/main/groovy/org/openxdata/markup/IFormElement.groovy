@@ -80,7 +80,7 @@ trait IFormElement {
         if (!parent)
             return "/$binding"
 
-        return "$parent.absoluteBinding/$binding"
+        return "$firstInstanceParent.absoluteBinding/$binding"
     }
 
     Form getParentForm() {
@@ -91,15 +91,23 @@ trait IFormElement {
         return parent as Form
     }
 
+    HasQuestions getFirstInstanceParent() {
+        def parent = this.parent
+        while (parent && !parent.binding) {
+            parent = parent.parent
+        }
+        return parent
+    }
+
     def getContextIdx() {
         return "${parent.questions.indexOf(this) + 1}"
     }
 
 
     String getIndexedAbsoluteBinding() {
-        if (parent instanceof IQuestion)
-            return "$parent.indexedAbsoluteBinding/$indexedBinding"
-        return "$parent.absoluteBinding/$indexedBinding"
+        if (!parent)
+            return "/$binding"
+        return "$firstInstanceParent.indexedAbsoluteBinding/$indexedBinding"
     }
 
     String getIndexedBinding() {

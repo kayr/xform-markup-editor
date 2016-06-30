@@ -22,10 +22,6 @@ class Page implements HasQuestions {
         return newText
     }
 
-    String getAbsoluteBinding() {
-        return "$parent.absoluteBinding"
-    }
-
     //pages should not trying to generate ids
     String getBinding() {
         return this.id

@@ -34,10 +34,12 @@ sdsdsd''"""
 
     void testSerializingNestedGroupsNumbered() {
         def f = new MarkupDeserializer(nestedGroups.markUp).study().forms.first()
-        def xform = new XFormSerializer(numberBindings: true, numberQuestions: true).toXForm(f)
         assert f['oldpageid'].line == 5
         assert f['group_page_1'].line == 11
         assert f['group_page_2'].line == 16
+        assert f['oldpageid'].absoluteBinding == '/s_f_v1/oldpageid'
+        assert f['group_page_2'].absoluteBinding == '/s_f_v1/oldpageid/group_page_1/group_page_2'
+        def xform = new XFormSerializer(numberBindings: true, numberQuestions: true).toXForm(f)
         assertEquals nestedGroups.xmlNumbered, xform
 
     }
@@ -48,6 +50,8 @@ sdsdsd''"""
         assertEquals nestedGroups.xml, xform
 
     }
+
+
 
     void testGroupsWithNoIdsButHaveBindAttrs() {
         def form = '''### s
