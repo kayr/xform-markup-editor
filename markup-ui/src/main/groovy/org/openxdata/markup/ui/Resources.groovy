@@ -169,7 +169,7 @@ Total score
 $uniqueIdQuestion
 """
 
-    static def advanceSkip = """//This form was used to demostrate the new Evaluator developed by Brent
+    static def advanceSkip = '''//This form was used to demostrate the new Evaluator developed by Brent
 //NOTE: THIS FORM CAN CURRENTLY RUN ON THE MFORMS CLIENTS 2.0 UPWARDS
 ### Advanced Skiplogic Study
 
@@ -177,8 +177,8 @@ $uniqueIdQuestion
 
 @required
 Gender
->\$male Male
->\$female Female
+>$male Male
+>$female Female
 
 
 @required
@@ -208,7 +208,7 @@ Height
 
 @required
 @readonly
-@calculate \$weight div ((\$heightcm div 100.0)*(\$heightcm div 100.0))
+@calculate $weight div (($heightcm div 100.0)*($heightcm div 100.0))
 @id bmi
 Bio Mass Index
 
@@ -239,7 +239,7 @@ Heart health History
 
 @boolean
 @required
-@enableif \$gender = 'male'
+@enableif $gender = 'male'
 @id hypertension
 Has Suspension
 
@@ -259,7 +259,7 @@ Has angina
 
 
 
-@validif . = false() or \$chestpain = true()
+@validif . = false() or $chestpain = true()
 @message You can't have angina without chestpain!
 @boolean
 @id armpain
@@ -269,11 +269,11 @@ Has armpain
 
 @required
 @boolean
-@enableif \$bmi > 30.0 or ( \$chestpain = 'male' and \$hypertension = true() ) or (\$systolic > 180 or \$diastolic > 110) or (today() - \$birthdate > 365 * 35 and \$hearthistory = true() ) or (\$chestpain = true() and \$angina != true() ) or  \$armpain = true()
+@enableif $bmi > 30.0 or ( $gender = 'male' and $hypertension = true() ) or ($systolic > 180 or $diastolic > 110) or (today() - $birthdate > 365 * 35 and $hearthistory = true() ) or ($chestpain = true() and $angina != true() ) or  $armpain = true()
 Seen Cardioligist
 
-$uniqueIdQuestion
-"""
+''' + uniqueIdQuestion + '''
+'''
 
     static def oxdSampleForm = """### Example study2
 

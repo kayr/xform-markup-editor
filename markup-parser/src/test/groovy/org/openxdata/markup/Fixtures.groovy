@@ -1709,12 +1709,15 @@ Total score
 
 @number
 @bind:name 10
+@appearance w1
 @layout:name lo 10
+@id children
 Number of children
 
 
 @bind:name 11
 @layout:name lo 11
+@jrcount $children
 repeat{ Child details
 
         @bind:name 11.1
@@ -1755,7 +1758,7 @@ dynamic{
         <score_computer_science />
         <score_history />
         <total_score />
-        <number_of_children />
+        <children />
         <child_details>
           <child_name />
         </child_details>
@@ -1784,7 +1787,7 @@ dynamic{
     <bind id="score_computer_science" nodeset="/sample_markup_study_simple_form_v1/score_computer_science" name="7" type="xsd:int" />
     <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="xsd:int" />
     <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="xsd:string" />
-    <bind id="number_of_children" nodeset="/sample_markup_study_simple_form_v1/number_of_children" name="10" type="xsd:int" />
+    <bind id="children" nodeset="/sample_markup_study_simple_form_v1/children" name="10" type="xsd:int" />
     <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
     <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="xsd:string" />
     <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
@@ -1840,12 +1843,12 @@ dynamic{
     <input bind="total_score" name="lo 9">
       <label>Total score</label>
     </input>
-    <input bind="number_of_children" name="lo 10">
+    <input bind="children" appearance="w1" name="lo 10">
       <label>Number of children</label>
     </input>
     <group id="child_details">
       <label>Child details</label>
-      <repeat bind="child_details" name="lo 11">
+      <repeat bind="child_details" name="lo 11" jrcount="$children">
         <input bind="child_name" name="lo 11.1">
           <label>Child Name</label>
         </input>
@@ -1881,7 +1884,7 @@ dynamic{
         <score_computer_science />
         <score_history />
         <total_score />
-        <number_of_children />
+        <children />
         <child_details>
           <child_name />
         </child_details>
@@ -1910,7 +1913,7 @@ dynamic{
     <bind id="score_computer_science" nodeset="/sample_markup_study_simple_form_v1/score_computer_science" name="7" type="xsd:int" />
     <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="xsd:int" />
     <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="xsd:string" />
-    <bind id="number_of_children" nodeset="/sample_markup_study_simple_form_v1/number_of_children" name="10" type="xsd:int" />
+    <bind id="children" nodeset="/sample_markup_study_simple_form_v1/children" name="10" type="xsd:int" />
     <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
     <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="xsd:string" />
     <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
@@ -1974,14 +1977,14 @@ dynamic{
       <label>Total score</label>
       <hint>json:{"bind":{"name":"9"},"layout":{"name":"lo 9"}}</hint>
     </input>
-    <input bind="number_of_children" name="lo 10">
+    <input bind="children" appearance="w1" name="lo 10">
       <label>Number of children</label>
-      <hint>json:{"bind":{"name":"10"},"layout":{"name":"lo 10"}}</hint>
+      <hint>json:{"bind":{"name":"10"},"layout":{"appearance":"w1","name":"lo 10"}}</hint>
     </input>
     <group id="child_details">
       <label>Child details</label>
-      <hint>json:{"bind":{"name":"11"},"layout":{"name":"lo 11"}}</hint>
-      <repeat bind="child_details" name="lo 11">
+      <hint>json:{"bind":{"name":"11"},"layout":{"name":"lo 11","jrcount":"$children"}}</hint>
+      <repeat bind="child_details" name="lo 11" jrcount="$children">
         <input bind="child_name" name="lo 11.1">
           <label>Child Name</label>
           <hint>json:{"bind":{"name":"11.1"},"layout":{"name":"lo 11.1"}}</hint>

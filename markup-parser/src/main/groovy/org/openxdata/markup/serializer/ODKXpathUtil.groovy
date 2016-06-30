@@ -8,6 +8,7 @@ import org.openxdata.markup.XPathUtil
 
 import static org.openxdata.markup.XPathParser.*
 import static org.openxdata.markup.XPathUtil.extractExpr
+import static org.openxdata.markup.XPathUtil.isPath
 
 /**
  * This class is mainly used to transform OXD XPATH Expressions to something ODK Understands
@@ -56,7 +57,7 @@ public class ODKXpathUtil {
      * Filters out all the tree tokens
      */
     private def clsFilter(CommonTree tree) {
-        if (!tree.isPath()) return false
+        if (!isPath(tree)) return false
         def qn = findQuestion(tree, form, numberedBindings)
         return (qn instanceof MultiSelectQuestion || qn?.type?.equalsIgnoreCase('boolean'))
     }
@@ -82,7 +83,7 @@ public class ODKXpathUtil {
         def parent = qnTree.getParent() as CommonTree
 
         //we only convert != and =
-        if (parent.token.type != EQ && parent.token.type != NEQ) return null
+        if (!parent || (parent.token.type != EQ && parent.token.type != NEQ)) return null
 
         IQuestion qn = findQuestion(qnTree, form, numberedBindings)
         def isMultiSelect = qn instanceof MultiSelectQuestion

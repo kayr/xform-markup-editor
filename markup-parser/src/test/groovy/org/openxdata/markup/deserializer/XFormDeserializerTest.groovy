@@ -1,5 +1,7 @@
 package org.openxdata.markup.deserializer
 
+import junit.framework.ComparisonFailure
+import org.custommonkey.xmlunit.XMLTestCase
 import org.openxdata.markup.*
 import org.openxdata.markup.serializer.XFormSerializer
 
@@ -11,7 +13,7 @@ import static org.openxdata.markup.serializer.ODKFixtures.formWithIncompatibleOX
 /**
  * Created by kay on 6/7/14.
  */
-class XFormDeserializerTest extends GroovyTestCase {
+class XFormDeserializerTest extends XMLTestCase {
 
     def serializer = new XFormSerializer()
 
@@ -213,13 +215,19 @@ class XFormDeserializerTest extends GroovyTestCase {
         serializer.numberBindings = false
         def otherXform = serializer.toXForm(parsedMarkupFormModel)
 
-        assertEquals originalXform, otherXform
+        try {
+            assertEquals originalXform, otherXform
+
+        }catch (ComparisonFailure f){
+            System.err.println("Some form failed to pass round trip $mkpForm.name")
+            assertXMLEqual originalXform,otherXform
+        }
     }
 
     void testDeSerializingWithLayoutAttributesInComment() {
         def form = new XFormDeserializer(formWithLayoutAndBindAttributesToCommentsXML).parse()
 
-        assertEquals formWithLayoutAndBindAttributesXML, new XFormSerializer().toXForm(form)
+        assertXMLEqual formWithLayoutAndBindAttributesXML, new XFormSerializer().toXForm(form)
     }
 
     void testDeSerializingWithLayoutAttributes() {

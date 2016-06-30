@@ -25,7 +25,6 @@ class XPathUtil {
     private XPathUtil parse() {
         def parser = createXpathParser(xpath)
         tree = parser.eval().tree as CommonTree
-        XPathParser.NEQ
         return this
     }
 
@@ -76,7 +75,7 @@ class XPathUtil {
 
             if (visited.contains(tree)) return
 
-            def children = tree.findAllDeep { true } as List
+            def children = findAllDeep(tree) { true } as List
             visited.addAll([tree] + children)
 
             def markUpPath = emitTailString(tree)
@@ -176,8 +175,14 @@ class XPathUtil {
         findResultsImpl(tree, filter, false, false)
     }
 
-    static List<CommonTree> findResultsImpl(Tree tree, Closure filter, boolean transform, boolean deep) {
+    static List<CommonTree> findResultsImpl(Tree tree, Closure filter, boolean transform, boolean deep,boolean includeParent = true) {
         List<CommonTree> trees = []
+
+        if (includeParent && filter(tree)) { //first check this item on the tree
+            trees << tree
+            if (!deep) return trees
+        }
+
         int count = tree.getChildCount()
         for (int i = 0; i < count; i++) {
             Tree child = tree.getChild(i)
@@ -188,7 +193,7 @@ class XPathUtil {
 
             if (result && !deep) continue
 
-            trees.addAll(findResultsImpl(child, filter, transform, deep))
+            trees.addAll(findResultsImpl(child, filter, transform, deep,false))
         }
         return trees
     }
@@ -270,7 +275,7 @@ class XPathUtil {
         }
 
         CommonTree.metaClass.isPath {
-          XPathUtil.isPath(delegate)
+            XPathUtil.isPath(delegate)
         }
     }
 }

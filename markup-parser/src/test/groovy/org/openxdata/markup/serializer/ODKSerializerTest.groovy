@@ -2,8 +2,12 @@ package org.openxdata.markup.serializer
 
 import org.openxdata.markup.Fixtures
 import org.openxdata.markup.Form
+import org.openxdata.markup.TestUtils
 import org.openxdata.markup.deserializer.MarkupDeserializer
+import org.openxdata.markup.exception.InvalidAttributeException
 
+import static org.openxdata.markup.TestUtils.toForm
+import static org.openxdata.markup.TestUtils.toODK
 import static org.openxdata.markup.serializer.ODKFixtures.*
 
 /**
@@ -21,7 +25,7 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testStartTimeAnd() {
-        assertEquals toODK(timeStamp.form, true), timeStamp.xml
+        assertEquals toODK(timeStamp.form, false, true), timeStamp.xml
     }
 
     void testFormWithRelativeValidation() {
@@ -29,15 +33,15 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testOxdSampleForm() {
-        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, true)
+        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, false, true)
     }
 
     void testMultiSelectConversion() {
-        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, true)
+        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, false, true)
     }
 
     void testOxdExternalApp() {
-        assertEquals formWithAppearanceComment.xml, toODK(formWithAppearanceComment.form, true)
+        assertEquals formWithAppearanceComment.xml, toODK(formWithAppearanceComment.form, false, true)
     }
 
     void testSkipActionsAndLogic() {
@@ -92,40 +96,27 @@ class ODKSerializerTest extends GroovyTestCase {
                         "selected(/f/s, f1(/f/c = string(f1(selected(/f/s, f1(/f/c = 'true'))))))",
                 '''$s = concat-1($c = true)'''                                                                                   :
                         "selected(/f/s, concat-1(/f/c = 'true'))",
+                '''$s'''                                                                                                         :
+                        "/f/s"
         ].each {
 
 
             def path = Form.getAbsoluteBindingXPath(it.key, form.getElement('ps'))
             def compatibleXPath = ODKXpathUtil.makeODKCompatibleXPath(form, path, false)
-//            println "$path \ncompatibleXPath\n\n"
             assertEquals it.value, compatibleXPath
         }
     }
 
     void testBooleanConversion() {
-        assertEquals booleanConversion.xml, toODK(booleanConversion.form, true)
+        assertEquals booleanConversion.xml, toODK(booleanConversion.form, false, true)
     }
 
     void testAppearanceAndLayoutAttributes() {
-        assertEquals formWithLayoutAttributes.xml, toODK(Fixtures.formWithLayoutAndBindAttributes)
+        assertEquals formWithLayoutAttributes.xml, toODK(Fixtures.formWithLayoutAndBindAttributes,)
     }
 
     void testAddingMetaInstanceId() {
-        assertEquals oxdSampleForm.xmlWithMeta, toODK(oxdSampleForm.form, true, true)
+        assertEquals oxdSampleForm.xmlWithMeta, toODK(oxdSampleForm.form, false, true, true)
     }
 
-
-    String toODK(String markup, boolean oxd = false, boolean addMetaInstance = false) {
-        toODK(toForm(markup), oxd, addMetaInstance)
-    }
-
-    static Form toForm(String markup) {
-        new MarkupDeserializer(markup).study().forms[0]
-    }
-
-    String toODK(Form form, boolean oxd = false,boolean addMetaInstance) {
-        serializer.oxdConversion = oxd
-        serializer.addMetaInstanceId = addMetaInstance
-        serializer.toXForm(form)
-    }
 }

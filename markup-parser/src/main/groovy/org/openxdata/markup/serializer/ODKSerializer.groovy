@@ -348,7 +348,7 @@ class ODKSerializer {
 
         if (!question.isVisible()) return
 
-        def attr = [nodeset: absoluteBinding(question)] + question.layoutAttributes
+        def attr = [nodeset: absoluteBinding(question)]
         if (oxdConversion) {
             //oxd uses validation to control size of repeat while odk uses jr:count
             def logic = question.getValidationLogic()
@@ -360,7 +360,16 @@ class ODKSerializer {
 
         }
 
-        xml.group {
+        //serialize layout attributes to the group
+        def groupLayoutAttributes = ([:] + question.layoutAttributes)
+        groupLayoutAttributes.remove('jr:count')
+        String removedJR = groupLayoutAttributes.remove('jrcount')
+
+        if (removedJR) {
+            attr['jr:count'] = getAbsoluteBindingXPath(removedJR,question)
+        }
+
+        xml.group(groupLayoutAttributes) {
             buildQuestionLabelAndHint(xml, question)
             xml.repeat(attr) {
                 question.elements.each { child ->

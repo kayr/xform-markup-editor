@@ -409,7 +409,7 @@ q4
     </input>
   </group>
 </xforms>''',
-            formatted :'''
+            formatted  : '''
 
 ### s
 

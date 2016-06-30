@@ -1257,7 +1257,7 @@ No. Kids
           <score_computer_science />
           <score_history />
           <total_score />
-          <number_of_children />
+          <children />
           <child_details>
             <child_name />
           </child_details>
@@ -1286,7 +1286,7 @@ No. Kids
       <bind id="score_computer_science" nodeset="/sample_markup_study_simple_form_v1/score_computer_science" name="7" type="int" />
       <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="int" />
       <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="string" />
-      <bind id="number_of_children" nodeset="/sample_markup_study_simple_form_v1/number_of_children" name="10" type="int" />
+      <bind id="children" nodeset="/sample_markup_study_simple_form_v1/children" name="10" type="int" />
       <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
       <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="string" />
       <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="string" />
@@ -1352,12 +1352,12 @@ No. Kids
       <input ref="/sample_markup_study_simple_form_v1/total_score" name="lo 9">
         <label>Total score</label>
       </input>
-      <input ref="/sample_markup_study_simple_form_v1/number_of_children" name="lo 10">
+      <input ref="/sample_markup_study_simple_form_v1/children" appearance="w1" name="lo 10">
         <label>Number of children</label>
       </input>
-      <group>
+      <group name="lo 11">
         <label>Child details</label>
-        <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" name="lo 11">
+        <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" jr:count="/sample_markup_study_simple_form_v1/children">
           <input ref="/sample_markup_study_simple_form_v1/child_details/child_name" name="lo 11.1">
             <label>Child Name</label>
           </input>

@@ -53,6 +53,12 @@ class Form implements HasQuestions {
             if (it instanceof DynamicQuestion)
                 it.validate()
 
+            if (it instanceof RepeatQuestion) {
+                def jrCount = it.layoutAttributes['jrcount']
+                if (jrCount)
+                    validateXpath(jrCount, it, "jr:count")
+            }
+
             it.validateIdExistsIfNecessary()
             validateNotDuplicate(it)
 
@@ -65,7 +71,6 @@ class Form implements HasQuestions {
         if (otherQns.size() > 1)
             throw new DuplicateElementException(question1: qn, question2: otherQns[0])
     }
-
 
 
     public static String getAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {

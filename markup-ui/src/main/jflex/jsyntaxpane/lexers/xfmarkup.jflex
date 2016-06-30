@@ -99,6 +99,9 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@message" |
   "@dbid" |
   "@parent" |
+  "@style" |
+  "@jrcount" |
+  "@appearance" |
   "@default" |
   {LayoutId} |
   {BindId} |

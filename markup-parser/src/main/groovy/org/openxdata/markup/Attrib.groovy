@@ -18,8 +18,8 @@ class Attrib {
                          'picture', 'gps', 'barcode', 'longtext']
 
     static
-    List allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
-                              'hideif', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
+    List allowedAttributes = ['readonly', 'required','jrcount', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
+                              'hideif', 'appearance', 'style (on forms)', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
 
 
     static void addAttribute(IQuestion question, String attribute, int line) {
@@ -214,6 +214,9 @@ class Attrib {
                 Util.validateId(param, line)
                 (question as DynamicQuestion).parentQuestionId = param
                 break
+            case 'appearance':
+                question.layoutAttributes['appearance'] = param
+                break
             default:
                 if (throwException)
                     throw new InvalidAttributeException("Attribute $attribute on Element $question.name in not supported", line)
@@ -244,6 +247,12 @@ class Attrib {
             case 'default':
                 (question as IQuestion).value = param
                 break
+            case 'jrcount':
+                if (question instanceof RepeatQuestion)
+                    question.layoutAttributes['jrcount'] = param
+                else
+                    throw new InvalidAttributeException('Arribute jrcount can only be set on Repeat Question', line)
+
             default:
                 if (throwException)
                     throw new InvalidAttributeException("Attribute $attribute on Question $question.name in not supported", line)
