@@ -15,6 +15,7 @@ A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit
 ### Features:
  - Simple XPath Variable references e.g instead of `/instance/path_id` you use `$path_id`
  - On the fly simple validation of xpath
+ - Direct preview in enketo
  - Autocompletion of words using Ctrl-K
  - Easy creation of cascading selects by referencing a CSV. The CSV will data will be baked into the generated XFORM.
  - Auto-numbering of labels and IDS
@@ -22,6 +23,8 @@ A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit
  - If you are designing forms for OpenXData you can select the *Emulate OXD to ODK* preference to convert OXD Xpath to ODK.
    e.g `$multiselect_qn = 'option'` is converted to `selected($multiselect_qn,'option')`
  - Multiline Questions which make it easier to write markdown spanning multiple lines
+ - Support for appearance
+ - Support for form styles
 
 ### Instructions
 
@@ -61,8 +64,8 @@ multiple lines '''
 
 The above will generate a study named **Sample Study** containing one Form(Sample Form). All questions will be of type Text
 
-#### Adding pages
-To add a page use the **#> <Page.Name>** marker. The example below generates two pages ***Bio Info Page*** and ***Health Status Page***
+#### Adding pages(High Level Groups)
+To add a page use the **#> <Page.Name>** marker. The example below generates two pages ***Bio Info Page*** and ***Health Status Page***. Pages normally translate to groups. That is high level groups.
 
 ```
 ### Sample Study
@@ -87,7 +90,44 @@ Drugs taken
 
 ```
 
+You can assign appearance,skiplogic and ids to these pages
+E.g:
+```
+@appearance field-list
+@id bio_info_page
+#> Bio Info Page
+```
 
+#### Adding Groups(Inner groups with in pages)
+
+To wrap questions in a group you can wrap the them in a group tag. Only groups that have ids will be labeled with numbers in case you select the ***"number labels"*** option or ***"number ids"*** .
+E.g :
+```
+### study
+
+## form
+
+#> page one(outer group)
+
+Question one
+
+@appearance field-list
+group{ This is a group label but its optional
+   Question two
+   Question three
+}
+```
+
+You can assign appearance,skiplogic and ids to these groups too
+E.g:
+```
+@appearance field-list
+@id nested_group
+group{ This is a group label but its optional
+   Question two
+   Question three
+}
+```
 
 #### Single Select and Multiple Select
 To add options to questions you simply use `>` or `>>` for single select and multiple select respectively
@@ -227,13 +267,34 @@ E.g
 @hint This is help text for first name question
 First name
 ```
+#### Adding styles to forms
+You can add styles to forms.
+E.g Adding the theme-grid style to a form
+```
+### study
 
+@style theme-grid
+## form name
+
+#> page one
+```
 
 #### Adding Bind Attributes and Layout Attributes(e.g appearance)
 You can add layout attributes(like appearance,jr:count etc) to you questions. See below:
 
 E.g
 To make a select-one question with search
+```
+@appearance search
+Select one option
+ >option one
+ >option two
+ >option three
+ >option four
+```
+
+If you wish to add any other custom layout attribute you can use ***"@layout:..."*** syntax
+E.g The same example below is the same as the one before
 ```
 @layout:appearance search
 Select one option
@@ -257,7 +318,7 @@ OpenXdata Form Designer does not support layout and bind attributes and therefor
 
 #### Multiline Questions/Options
 
-To write questions that span multiple lines simply wrap the question text in triple quotes
+To write questions that span multiple lines simply wrap the question text in triple quotes. This makes it easy to write Markdown
 
 E.g
 ```
@@ -280,7 +341,9 @@ that spans multiple lines'''
 
 #### Numbering The Questions Automatically
 
-To number the questions automatically check the ***Number Labels checkbox*** on the toolbar. If you want the numbers to be propagated to the binding then you can also check the ***Number IDs checkbox***.
+To number the questions automatically check the ***Number Labels checkbox*** on the toolbar. If you want the numbers to be propagated to the binding then you can also check the ***Preferences -> Number IDs checkbox***.
+
+**N.B** Selecting the ***number ids option*** has one downside in that when a question is added to a form.. all following questions after that question will get a new bindings and hence might make it difficult to analyze data between two form versions.
 
 # For Power Users
 Before the markup editor was for basically generating form content(questions) but it was extended to also support adding of skip/validation/calculation logic. This comes in a little handy if you have to write complex formulas only handled by mforms that the visual form designer cannot handle. You get a little benefit of basic validation of your formulas and variables. All the formulas are based on plain XPATH syntax. But with simpler question referencing as compared to the raw XML way.
@@ -385,5 +448,35 @@ An example that calculates that total drugs taken i.e [Pain killers taken] + [An
 Total drugs taken
 ```
 
+#### Adding Appearance
+You can add appearance to any element(groups,pages and questions) using the ***"@appearance"*** attribute
+
+e.g
+````
+
+@appearance w1
+Question one
+
+@appearance field-list
+group{ This is a group header
+	Question two
+	Question three
+}
+````
+#### Explaining preferences
+  - **Number Labels:** This auto numbers all the question labels and groups(excludes groups without ids)
+  - **Number Id:** The propagates the label numbers down to the question bindings
+  - **Allow Invalid OXD ids:** The informs the edit to allow all valid XML ids. Without this option selected only lower case ids or bindings are allowed
+  - **Ensure unique Identifier Question:** This checks the a form has a unique identifier exists in a form. This question will generate a unique id that will be explicitly unique to any form instance or data. Uncheck this option to turn off the feature
+##### ODK Specific
+  - **Emulate ODK to OXD:** This makes the behave as if its converting oxd forms to ODK. It makes extra effort to ensure that oxd xpath retains the semantics when converted to ODK. especially expressions that contain multi select and single select references
+  - **Automatically add meta InstanceID:** This auto add the meta/instanceID element to the form as required by some javarosa clients and servers
+
+##### Openxdata specific
+  - **Generate Layout:** Generates layout xml when you export  form
+  - **Store extra attributes in comments:** OpenXdata Form Designer does not support layout and bind attributes and therefore these attributes will disappear once you load the form into the openxdata form designer. To work around this, in the editor select the ***Store extra attributes in Comment***  preference then these attributes will be embedded into the hint section of a question.
+
 [main_window]: https://github.com/kayr/xform-markup-editor/blob/master/images/main_window.PNG?raw=true
 [show_xml]: https://github.com/kayr/xform-markup-editor/blob/master/images/show_xml.PNG?raw=true
+
+
