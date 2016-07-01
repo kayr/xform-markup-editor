@@ -106,7 +106,7 @@ class MainUI {
                 btnGenerateXML = button(text: "Export OXD Study")
                 btnShowXml = button(text: "Show XML OXD")
                 btnShowOdkXml = button(text: "Show XML ODK")
-                btnPreviewXml = button(text: "Preview First Form")
+                btnPreviewXml = button(text: "Preview in Enketo")
                 chkNumberLabels = checkBox(text: 'Number Labels')
 
             }
