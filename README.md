@@ -468,6 +468,7 @@ group{ This is a group header
   - **Number Id:** The propagates the label numbers down to the question bindings
   - **Allow Invalid OXD ids:** The informs the edit to allow all valid XML ids. Without this option selected only lower case ids or bindings are allowed
   - **Ensure unique Identifier Question:** This checks the a form has a unique identifier exists in a form. This question will generate a unique id that will be explicitly unique to any form instance or data. Uncheck this option to turn off the feature
+
 ##### ODK Specific
   - **Emulate ODK to OXD:** This makes the behave as if its converting oxd forms to ODK. It makes extra effort to ensure that oxd xpath retains the semantics when converted to ODK. especially expressions that contain multi select and single select references
   - **Automatically add meta InstanceID:** This auto add the meta/instanceID element to the form as required by some javarosa clients and servers
