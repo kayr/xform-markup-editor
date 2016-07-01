@@ -201,7 +201,7 @@ class ODKSerializer {
 
             //odk does not support actions so...
             //if we have action = enable and question is disabled remove the readonly Attr
-            if (question.isReadOnly() && (question.skipAction == 'enable'))
+            if (question instanceof IQuestion && question.isReadOnly() && (question.skipAction == 'enable'))
                 map.remove('readonly')
 
             //odk does not have actions so hideif or disableif should be negated

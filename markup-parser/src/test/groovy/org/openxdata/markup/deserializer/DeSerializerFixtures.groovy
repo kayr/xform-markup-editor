@@ -621,5 +621,103 @@ q4
 
     ]
 
+    static def groupWithSkipLogic = [
+            markUp: '''###s
+                      ## f
+                      dd
+                      @showif $dd = 'yes\'
+                      @id g1
+                      group{
+                            ddsd
+                      }
+                      @validif $dd = 'no\'
+                      @message Hello
+                      @id g2
+                      group{
+                            group 2
+                      }''',
+            odkXml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>f</h:title>
+    <model>
+      <instance>
+        <s_f_v1 id="0" name="f">
+          <dd />
+          <g1>
+            <ddsd />
+          </g1>
+          <g2>
+            <group_2 />
+          </g2>
+        </s_f_v1>
+      </instance>
+      <bind id="dd" nodeset="/s_f_v1/dd" type="string" />
+      <bind id="g1" nodeset="/s_f_v1/g1" relevant="/s_f_v1/dd = 'yes'" />
+      <bind id="ddsd" nodeset="/s_f_v1/g1/ddsd" type="string" />
+      <bind id="g2" nodeset="/s_f_v1/g2" constraint="/s_f_v1/dd = 'no'" jr:constraintMsg="Hello" />
+      <bind id="group_2" nodeset="/s_f_v1/g2/group_2" type="string" />
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label>Page1</label>
+      <input ref="/s_f_v1/dd">
+        <label>dd</label>
+      </input>
+      <group ref="/s_f_v1/g1">
+        <label></label>
+        <input ref="/s_f_v1/g1/ddsd">
+          <label>ddsd</label>
+        </input>
+      </group>
+      <group ref="/s_f_v1/g2">
+        <label></label>
+        <input ref="/s_f_v1/g2/group_2">
+          <label>group 2</label>
+        </input>
+      </group>
+    </group>
+  </h:body>
+</h:html>''',
+            oxdXml: '''<xforms>
+  <model>
+    <instance id="s_f_v1">
+      <s_f_v1 id="0" name="f" formKey="s_f_v1">
+        <dd />
+        <g1>
+          <ddsd />
+        </g1>
+        <g2>
+          <group_2 />
+        </g2>
+      </s_f_v1>
+    </instance>
+    <bind id="dd" nodeset="/s_f_v1/dd" type="xsd:string" />
+    <bind id="g1" nodeset="/s_f_v1/g1" relevant="/s_f_v1/dd = 'yes'" action="show" />
+    <bind id="ddsd" nodeset="/s_f_v1/g1/ddsd" type="xsd:string" />
+    <bind id="g2" nodeset="/s_f_v1/g2" constraint="/s_f_v1/dd = 'no'" message="Hello" />
+    <bind id="group_2" nodeset="/s_f_v1/g2/group_2" type="xsd:string" />
+  </model>
+  <group id="1">
+    <label>Page1</label>
+    <input bind="dd">
+      <label>dd</label>
+    </input>
+    <group id="g1" bind="g1">
+      <label></label>
+      <input bind="ddsd">
+        <label>ddsd</label>
+      </input>
+    </group>
+    <group id="g2" bind="g2">
+      <label></label>
+      <input bind="group_2">
+        <label>group 2</label>
+      </input>
+    </group>
+  </group>
+</xforms>'''
+    ]
+
 
 }

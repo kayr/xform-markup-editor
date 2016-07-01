@@ -12,6 +12,7 @@ import static org.openxdata.markup.TestUtils.toODK
 import static org.openxdata.markup.TestUtils.toOXD
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.getNestedGroups
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.getNestedGroups
+import static org.openxdata.markup.deserializer.DeSerializerFixtures.groupWithSkipLogic
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
 import static org.openxdata.markup.serializer.ODKFixtures.*
 
@@ -130,8 +131,31 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testNestedGroupNumber() {
-        def oxd = toODK(toForm(nestedGroups.markUp),true)
+        def oxd = toODK(toForm(nestedGroups.markUp), true)
         assertEquals nestedGroups.odkNumberd, oxd
+    }
+
+    void testGroupWithValidaionAndSkipLogic() {
+
+        def form = '''###s
+                      ## f
+                      dd
+                      @showif $dd = 'yes'
+                      @id g1
+                      group{
+                            ddsd
+                      }
+                      @validif $dd = 'no'
+                      @message Hello
+                      @id g2
+                      group{
+                            group 2
+                      }'''
+        def odk = toODK(form)
+        def oxd = toOXD(form)
+
+        assertEquals groupWithSkipLogic.odkXml, odk
+        assertEquals groupWithSkipLogic.oxdXml, oxd
     }
 
 }
