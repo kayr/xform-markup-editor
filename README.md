@@ -100,7 +100,7 @@ E.g:
 
 #### Adding Groups(Inner groups with in pages)
 
-To wrap questions in a group you can wrap the them in a group tag. Only groups that have ids will be labeled with numbers in case you select the ***"number labels"*** option or ***"number ids"*** .
+You can wrap questions in a group using the ***group{}*** tag. Only groups that have ids will be labeled with numbers in case you select the ***"number labels"*** or ***"number ids"*** option.
 E.g :
 ```
 ### study
@@ -246,7 +246,7 @@ E.g
 ```
 
 #### Assigning ids or binds to questions
-Sometimes questions have very long bindings or ids and need to be shortened(in order to exported).Or sometimes you need to assign a question an id if you plan to use it as a reference in skip or validation logic.
+Sometimes questions have very long bindings or ids and need to be shortened(in order to be exported).Or sometimes you need to assign a question an id if you plan to use it as a reference in skip or validation logic.
 
 To assign an id to a question use the ***@id*** attribute
 
@@ -280,7 +280,7 @@ E.g Adding the theme-grid style to a form
 ```
 
 #### Adding Bind Attributes and Layout Attributes(e.g appearance)
-You can add layout attributes(like appearance,jr:count etc) to you questions. See below:
+You can add layout attributes(like appearance,jr:count etc) to questions. See below:
 
 E.g
 To make a select-one question with search
@@ -293,8 +293,8 @@ Select one option
  >option four
 ```
 
-If you wish to add any other custom layout attribute you can use ***"@layout:..."*** syntax
-E.g The same example below is the same as the one before
+If you wish to add any other custom layout attribute you can use the ***"@layout:..."*** syntax
+E.g The same example below is the same as the one above
 ```
 @layout:appearance search
 Select one option
@@ -312,13 +312,13 @@ To preload the username configured in ODK Collect settings page do the following
 User name
 ```
 
-##### A compatibility not about OpenXdata generated XForm and Layout and Bind Attributes (OpenXdata Users Only)
+##### A compatibility note about OpenXdata generated XForm and Layout/Bind Attributes (OpenXdata Users Only)
 OpenXdata Form Designer does not support layout and bind attributes and therefore these attributes will disappear once you load the form into the openxdata form designer. To work around this, in the editor select the ***Store extra attributes in Comment***  preference then these attributes will be embedded into the hint section of a question. This is important when you are using this editor's library as a bridge between OpenXdata and OpenDataKit. When converting an openXdata xform to OpenDataKit XForm these attributes will be picked up and reinserted into the form.
 
 
 #### Multiline Questions/Options
 
-To write questions that span multiple lines simply wrap the question text in triple quotes. This makes it easy to write Markdown
+To write questions that span multiple lines, simply wrap the question text in triple quotes. This makes it easy to write Markdown
 
 E.g
 ```
@@ -470,7 +470,7 @@ group{ This is a group header
   - **Ensure unique Identifier Question:** This checks the a form has a unique identifier exists in a form. This question will generate a unique id that will be explicitly unique to any form instance or data. Uncheck this option to turn off the feature
 
 ##### ODK Specific
-  - **Emulate ODK to OXD:** This makes the behave as if its converting oxd forms to ODK. It makes extra effort to ensure that oxd xpath retains the semantics when converted to ODK. especially expressions that contain multi select and single select references
+  - **Emulate ODK to OXD:** This makes the editor behave as if its converting oxd forms to ODK. It makes extra effort to ensure that oxd xpath retains the semantics when converted to ODK. especially expressions that contain multi select and single select references
   - **Automatically add meta InstanceID:** This auto add the meta/instanceID element to the form as required by some javarosa clients and servers
 
 ##### Openxdata specific
