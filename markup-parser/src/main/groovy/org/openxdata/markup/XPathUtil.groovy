@@ -2,11 +2,14 @@ package org.openxdata.markup
 
 import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CharStream
+import org.antlr.runtime.CommonToken
 import org.antlr.runtime.CommonTokenStream
 import org.antlr.runtime.tree.CommonTree
 import org.antlr.runtime.tree.Tree
 import org.codehaus.groovy.runtime.StackTraceUtils
 import org.openxdata.markup.exception.ValidationException
+
+import static org.openxdata.markup.ParserUtils.find
 
 /**
  * Created by kay on 6/16/14.
@@ -23,8 +26,7 @@ class XPathUtil {
     }
 
     private XPathUtil parse() {
-        def parser = createXpathParser(xpath)
-        tree = parser.eval().tree as CommonTree
+        tree = createAST(xpath)
         return this
     }
 
@@ -34,6 +36,11 @@ class XPathUtil {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         XPathParser parser = new XPathParser(tokens);
         return parser;
+    }
+
+    public static CommonTree createAST(String string) throws IOException {
+        def parser = createXpathParser(string)
+        return parser.eval().tree as CommonTree
     }
 
 
@@ -63,7 +70,7 @@ class XPathUtil {
     String removeMarkupSyntax(IFormElement question, Map config = [:]) {
         def logicType = config.logicType ?: 'XPATH'
 
-        boolean allAllowRelativePath = config.allowRelativePath == null ? true : config.allowRelativePath
+        boolean allowOxdLikeRelativePaths = config.allowRelativePath == null ? true : config.allowRelativePath
 
         boolean indexed = config.indexed ?: false
 
@@ -73,27 +80,32 @@ class XPathUtil {
 
         def transFormer = { StringBuilder finalXPath, CommonTree tree, int offset ->
 
-            if (visited.contains(tree)) return
+//            if (visited.contains(tree)) return
 
-            def children = findAllDeep(tree) { true } as List
-            visited.addAll([tree] + children)
+//            def children = findAllDeep(tree) { true } as List
+//            visited.addAll([tree] + children)
 
-            def markUpPath = emitTailString(tree)
+//            def markUpPath = emitTailString(tree).replaceFirst(/\$:?/, '')
 
-            def isCurrentPathShortCut = markUpPath == '$.'
 
-            def finalVar = isCurrentPathShortCut ? markUpPath : markUpPath.replaceFirst(/\$:?/, '')
+            def qNameTree = find(tree) { CommonTree c -> c.type == XPathParser.QNAME || c.type == XPathParser.DOT }
+            def actualNameTree = qNameTree.type == XPathParser.DOT ? qNameTree : qNameTree.getChild(0) as CommonTree
+            def markUpPath = actualNameTree.text
+
+            def isCurrentPathShortCut = markUpPath == '.'
+
+            def finalVar = markUpPath
 
             def qn = isCurrentPathShortCut ? question : question.parentForm.getElement(finalVar)
 
             if (!qn) throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$finalVar]", question.line)
 
-            boolean isRelative = markUpPath.startsWith('$:') && allAllowRelativePath
+            boolean isRelative = tree.type == XPathParser.SHORT_OXD_ABSPATH && allowOxdLikeRelativePaths
 
             def convertedPath = createFinalBinding(qn, finalVar, indexed, isRelative, config)
 
             def start = tree.charPositionInLine + offset
-            def end = getLastIndex(tree) + offset + 1
+            def end = (actualNameTree.token as CommonToken).stopIndex + offset + 1
 
             finalXPath.replace(start, end, convertedPath)
 
@@ -117,7 +129,7 @@ class XPathUtil {
 
     static
     private String createFinalBinding(IFormElement qn, String variable, boolean indexed, boolean relative, Map config) {
-        if (variable == '$.') return qn.getAbsoluteBinding(indexed, relative)
+        if (variable == '.') return qn.getAbsoluteBinding(indexed, relative)
         def variableQn = qn.parentForm.getElement(variable)
         return variableQn.getAbsoluteBinding(indexed, relative)
     }
@@ -125,7 +137,7 @@ class XPathUtil {
 
     static int getLastIndex(Tree tree) {
         if (tree.childCount == 0)
-            tree = tree.token.stop
+            return (tree.token as CommonToken).stopIndex
 
         List trees = tree.findAll { Tree t ->
             t.childCount == 0
@@ -164,7 +176,7 @@ class XPathUtil {
     }
 
     List<CommonTree> findAll(Closure filter) {
-        tree.findAll(filter)
+        findAll tree, filter
     }
 
     static List<CommonTree> findResultsImpl(Tree tree, Closure filter) {
@@ -175,7 +187,7 @@ class XPathUtil {
         findResultsImpl(tree, filter, false, false)
     }
 
-    static List<CommonTree> findResultsImpl(Tree tree, Closure filter, boolean transform, boolean deep,boolean includeParent = true) {
+    static List<CommonTree> findResultsImpl(Tree tree, Closure filter, boolean transform, boolean deep, boolean includeParent = true) {
         List<CommonTree> trees = []
 
         if (includeParent && filter(tree)) { //first check this item on the tree
@@ -193,7 +205,7 @@ class XPathUtil {
 
             if (result && !deep) continue
 
-            trees.addAll(findResultsImpl(child, filter, transform, deep,false))
+            trees.addAll(findResultsImpl(child, filter, transform, deep, false))
         }
         return trees
     }
@@ -217,7 +229,7 @@ class XPathUtil {
 
         try {
             def builder = new StringBuilder(xpath)
-            def trees = this.findAll(filter)
+            def trees = findAllDeep(tree, filter)
 
             //todo do some caching to improve performance
             trees.inject(0) { Integer offset, def tree ->
@@ -237,7 +249,7 @@ class XPathUtil {
     }
 
     static isMarkUpPath(CommonTree tree) {
-        tree.token.type == XPathParser.SHORT_ABSPATH || tree.token.type == XPathParser.SHORT_OXD_ABSPATH
+        tree.token?.type == XPathParser.SHORT_ABSPATH || tree.token?.type == XPathParser.SHORT_OXD_ABSPATH
     }
 
     static findAllDeep(CommonTree tree, Closure filter) {
@@ -249,7 +261,7 @@ class XPathUtil {
     }
 
     static isPath(CommonTree tree) {
-        tree.token.type == XPathParser.ABSPATH || tree.token.type == XPathParser.RELPATH
+        tree.token?.type == XPathParser.ABSPATH || tree.token?.type == XPathParser.RELPATH
     }
 
 

@@ -2,16 +2,14 @@ package org.openxdata.markup.serializer
 
 import org.openxdata.markup.Fixtures
 import org.openxdata.markup.Form
-import org.openxdata.markup.TestUtils
-import org.openxdata.markup.deserializer.MarkupDeserializer
-import org.openxdata.markup.exception.InvalidAttributeException
+import org.openxdata.markup.ParserUtils
+import org.openxdata.markup.XPathUtil
 
-import static org.openxdata.markup.TestUtils.oxd2Odk
+import static org.openxdata.markup.ParserUtils.printTree
 import static org.openxdata.markup.TestUtils.toForm
 import static org.openxdata.markup.TestUtils.toODK
 import static org.openxdata.markup.TestUtils.toOXD
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.getNestedGroups
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.getNestedGroups
+import static org.openxdata.markup.XPathUtil.createAST
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.groupWithSkipLogic
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
 import static org.openxdata.markup.serializer.ODKFixtures.*
@@ -103,10 +101,13 @@ class ODKSerializerTest extends GroovyTestCase {
                 '''$s = concat-1($c = true)'''                                                                                   :
                         "selected(/f/s, concat-1(/f/c = 'true'))",
                 '''$s'''                                                                                                         :
-                        "/f/s"
+                        "/f/s",
+                '''$s[$c = true][@attr2 = $s]''':'''/f/s[/f/c = 'true'][selected(/f/s, @attr2)]''',//hope this is valid
+                '''$s[$c= true] = true''':'''/f/s[/f/c = 'true'] = true''',
+                '''$s[$c = -2] = true''':'''/f/s[/f/c = string(-2)] = true''',
+                '''$s[$c = $s[$c = ($s = 'calculus')]] = true''':'''/f/s[/f/c = /f/s[/f/c = string((selected(/f/s, 'calculus')))]] = true''',
+                '''$s = ('calculus')''':'''selected(/f/s, ('calculus'))''',//this was throwing a null pointer
         ].each {
-
-
             def path = Form.getAbsoluteBindingXPath(it.key, form.getElement('ps'))
             def compatibleXPath = ODKXpathUtil.makeODKCompatibleXPath(form, path, false)
             assertEquals it.value, compatibleXPath

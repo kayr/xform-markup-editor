@@ -4,6 +4,9 @@ import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.ValidationException
 
+import static org.openxdata.markup.ParserUtils.printTree
+import static org.openxdata.markup.XPathUtil.createAST
+
 /**
  * Created by kay on 6/18/14.
  */
@@ -65,7 +68,7 @@ class XPathUtilTest extends GroovyTestCase {
         String xpath = "/study_form_v1/weight div ((/study_form_v1/heightcm div 100.0)*(/study_form_v1/heightcm div 100.0))"
         def xpathUtil = new XPathUtil(xpath)
 
-        assert xpathUtil.tree.findAllDeep { true }.size() == 35
+        assert xpathUtil.tree.findAllDeep { true }.size() == 38
 
     }
 
@@ -96,5 +99,9 @@ repeat{ repeat
         Study study = new MarkupDeserializer(simpleForm, false).study()
         assert study.forms.size() > 0
 
+    }
+
+    void testManyTest() {
+        printTree(createAST('''/abs/olute/path[$etc = -2]/sdsd'''))
     }
 }

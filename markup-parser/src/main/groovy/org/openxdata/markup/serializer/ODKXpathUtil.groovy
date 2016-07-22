@@ -7,6 +7,7 @@ import org.openxdata.markup.MultiSelectQuestion
 import org.openxdata.markup.XPathUtil
 
 import static org.openxdata.markup.XPathParser.*
+import static org.openxdata.markup.XPathUtil.emitTailString
 import static org.openxdata.markup.XPathUtil.extractExpr
 import static org.openxdata.markup.XPathUtil.isPath
 
@@ -110,7 +111,7 @@ public class ODKXpathUtil {
         CommonTree rightTree = children.find { it != qnTree }
 
         def leftString = leftTree.emitTailString()
-        def rightString = rightTree.emitTailString().replaceFirst(/\(\)/, '')
+        def rightString = emitTailString(rightTree).replaceFirst(/\(\)/, '')
         def eq = eqTree.type == EQ ? '=' : '!='
 
         if (rightString == 'true' || rightString == 'false')

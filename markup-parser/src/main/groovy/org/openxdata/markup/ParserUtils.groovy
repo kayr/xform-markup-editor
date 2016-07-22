@@ -29,6 +29,10 @@ class ParserUtils {
         findResultsImpl(tree, filter, false, true)?.get(0) as T
     }
 
+    static def <T extends Tree> T findDeep(T tree, @CP(FirstGenericType) Closure filter) {
+        findResultsImpl(tree, filter, true, true)?.get(0) as T
+    }
+
     static def <T extends Tree> void each(T tree, @CP(FirstGenericType) Closure filter) {
         eachImpl(tree, filter, false)
     }
@@ -84,7 +88,7 @@ class ParserUtils {
         for (int i = 0; i < level; i++) print("--")
 
         //print node description: type code followed by token text
-        w.println(" " + tree.getType() + " " + tree.getText())
+        w.println("| " + tree.getType() + " " + tree.getText())
 
         //print all children
         if (tree.getChildren() != null)

@@ -13,6 +13,7 @@ options {
 
 tokens {
   PATHSEP  =  '/';
+  DBLPATHSEP = '//';
   DOLLAR  =  '$'; //added to support $ simply for the sake o
   LPAR  =  '(';
   RPAR  =  ')';
@@ -21,6 +22,7 @@ tokens {
   MINUS  =  '-';
   PLUS  =  '+';
   DOT  =  '.';
+  DOT2  =  '..';
   MUL  =  '*';
   COMMA  =  ',';
   EQ = '=';
@@ -44,7 +46,9 @@ tokens {
   NUMBER;
   FUNCTION;
   QNAME;
-  UMINUS;
+  NEGATIVE;
+  GROUPEXPR;
+  PREDICATE;
 }
 
 @header {
@@ -83,44 +87,57 @@ eval  :  expr EOF -> expr
 locationPath
   :  relativeLocationPath -> ^(RELPATH relativeLocationPath)
   |  absoluteLocationPathNoroot -> ^(ABSPATH absoluteLocationPathNoroot)
-  | shortenedAbsolutePath -> ^(SHORT_ABSPATH shortenedAbsolutePath)
-  | shortenedOxdAbsolutePath -> ^(SHORT_OXD_ABSPATH shortenedOxdAbsolutePath)
+  |  editorAbsolutePath
   ;
 
 absoluteLocationPathNoroot
   :  PATHSEP relativeLocationPath
+  |  DBLPATHSEP relativeLocationPath
   ;
+
+//custom
+editorAbsolutePath
+ : DOLLAR DOT predicate* -> ^(SHORT_ABSPATH DOLLAR DOT predicate*)
+ | DOLLAR qName predicate*-> ^(SHORT_ABSPATH DOLLAR qName predicate*)
+ | DOLLAR COLON qName predicate* -> ^(SHORT_OXD_ABSPATH DOLLAR qName predicate*)
+ ;
+
   
-  //custom
-shortenedAbsolutePath
-  	: DOLLAR nodeTest
-  	| DOLLAR abbreviatedStep
-  	;
-  //custom
-shortenedOxdAbsolutePath
-  	: DOLLAR COLON nodeTest 
-  	;
 
 relativeLocationPath
-  :  step (PATHSEP step)*
+  :  step ((PATHSEP|DBLPATHSEP) step)*
   ;
 
-step  :  nodeTest
+step :  axisSpecifier nodeTest predicate*
   |  abbreviatedStep
   ;
-
-nodeTest:  nameTest
+  
+axisSpecifier
+  :  AxisName '::'
+  |  '@'?
   ;
+  
+nodeTest:  nameTest
+  |  NodeType '(' ')'
+  |  'processing-instruction' '(' Literal ')'
+  ;
+  
+predicate
+  :  LBRAC expr RBRAC -> ^(PREDICATE LBRAC expr RBRAC)
+  ;
+
 
 abbreviatedStep
   :  DOT
+  |  DOT2
   ;
 
 expr  :  orExpr  ;
 
 primaryExpr
 //include brackets we need them
-  :  LPAR expr RPAR
+//  :variableReference  
+  :  LPAR expr RPAR -> ^(GROUPEXPR LPAR expr RPAR)
   |  Literal -> ^(LITERAL Literal)
   |  Number  -> ^(NUMBER Number)
   |  functionCall
@@ -133,6 +150,8 @@ functionCall
   |  booleanCompat LPAR RPAR -> ^(FUNCTION booleanCompat LPAR RPAR)
   |  booleanCompat -> ^(FUNCTION booleanCompat)
   ;
+  
+
 
 functionArgs
   :  expr ( COMMA! expr )*
@@ -140,9 +159,25 @@ functionArgs
 
 booleanCompat : TRUE | FALSE;
 
+unaryExprNoRoot
+  :  MINUS+ unionExprNoRoot -> ^(NEGATIVE MINUS+ unionExprNoRoot)
+  |  unionExprNoRoot 
+  //custom-pathExprNoRoot //should probably not be here
+  ;
+
+unionExprNoRoot
+  :  pathExprNoRoot ('|' unionExprNoRoot)?
+  |  '/' '|' unionExprNoRoot
+  ;
+
 pathExprNoRoot
   :  locationPath
-  |  primaryExpr (PATHSEP relativeLocationPath)?
+//  |  primary//Expr (PATHSEP relativeLocationPath)?
+  |  filterExpr (('/'|'//') relativeLocationPath)?
+  ;
+  
+filterExpr
+  :  primaryExpr predicate*
   ;
 
 orExpr  :  andExpr (OR^ andExpr)*
@@ -168,10 +203,7 @@ multiplicativeExpr
   |  PATHSEP ((DIV|MOD)^ multiplicativeExpr)?
   ;
 
-unaryExprNoRoot
-  :  MINUS unaryExprNoRoot -> ^(UMINUS unaryExprNoRoot)
-  | pathExprNoRoot
-  ;
+
 
 qName  :  pre=nCName -> ^(QNAME $pre)
   |       pre=nCName COLON lcl=nCName -> ^(QNAME $pre $lcl)
@@ -180,11 +212,24 @@ qName  :  pre=nCName -> ^(QNAME $pre)
 functionName
   :  qName  // Does not match nodeType, as per spec.
   ;
+  
+//variableReference
+//  :  DOLLAR qName
+//  ;
 
-nameTest: qName
+nameTest:  '*'
+  |  nCName ':' '*'
+  |  qName
   ;
 
-nCName:  NCName
+nCName  :  NCName
+  |  AxisName
+  ;
+
+NodeType:  'comment'
+  |  'text'
+  |  'processing-instruction'
+  |  'node'
   ;
 
 Number  :  Digits (DOT Digits?)?
@@ -194,6 +239,23 @@ Number  :  Digits (DOT Digits?)?
 fragment
 Digits  :  ('0'..'9')+
   ;
+  
+  
+AxisName:  'ancestor'
+  |  'ancestor-or-self'
+  |  'attribute'
+  |  'child'
+  |  'descendant'
+  |  'descendant-or-self'
+  |  'following'
+  |  'following-sibling'
+  |  'namespace'
+  |  'parent'
+  |  'preceding'
+  |  'preceding-sibling'
+  |  'self'
+  ;
+
 
 Literal  :  '"' ~'"'* '"'
   |  '\'' ~'\''* '\''
