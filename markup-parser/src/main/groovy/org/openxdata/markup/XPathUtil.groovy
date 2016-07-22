@@ -9,7 +9,7 @@ import org.antlr.runtime.tree.Tree
 import org.codehaus.groovy.runtime.StackTraceUtils
 import org.openxdata.markup.exception.ValidationException
 
-import static org.openxdata.markup.ParserUtils.find
+import static org.openxdata.markup.ParserUtils.*
 
 /**
  * Created by kay on 6/16/14.
@@ -45,15 +45,15 @@ class XPathUtil {
 
 
     List<Map> getXPathPathVariables() {
-        List<CommonTree> paths = tree.findAll { CommonTree tree ->
-            tree.isPath()
+        List<CommonTree> paths = findAllDeepSelf(tree) { CommonTree tree ->
+            isPath(tree)
         }
         convertToSimpleListOfPathMap(paths)
     }
 
     List<Map> getAllPathVariables() {
-        List<CommonTree> paths = tree.findAll { CommonTree tree ->
-            tree.isPath() || isMarkUpPath(tree)
+        List<CommonTree> paths = findAllDeepSelf(tree) { CommonTree tree ->
+            isPath(tree) || isMarkUpPath(tree)
         }
         convertToSimpleListOfPathMap(paths)
     }
@@ -74,35 +74,27 @@ class XPathUtil {
 
         boolean indexed = config.indexed ?: false
 
-        def visited = []
-
         def filter = { CommonTree tree -> isMarkUpPath(tree) }
 
         def transFormer = { StringBuilder finalXPath, CommonTree tree, int offset ->
 
-//            if (visited.contains(tree)) return
+            def qNameTree = find(tree) { CommonTree c ->
+                c.type == XPathParser.QNAME || c.type == XPathParser.DOT
+            }
 
-//            def children = findAllDeep(tree) { true } as List
-//            visited.addAll([tree] + children)
-
-//            def markUpPath = emitTailString(tree).replaceFirst(/\$:?/, '')
-
-
-            def qNameTree = find(tree) { CommonTree c -> c.type == XPathParser.QNAME || c.type == XPathParser.DOT }
             def actualNameTree = qNameTree.type == XPathParser.DOT ? qNameTree : qNameTree.getChild(0) as CommonTree
-            def markUpPath = actualNameTree.text
 
-            def isCurrentPathShortCut = markUpPath == '.'
+            def variableReference = actualNameTree.text
 
-            def finalVar = markUpPath
+            def isCurrentPathShortCut = variableReference == '.'
 
-            def qn = isCurrentPathShortCut ? question : question.parentForm.getElement(finalVar)
+            def qn = isCurrentPathShortCut ? question : question.parentForm.getElement(variableReference)
 
-            if (!qn) throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$finalVar]", question.line)
+            if (!qn) throw new ValidationException("$logicType Logic for [$question.text] has an unknown variable [$variableReference]", question.line)
 
             boolean isRelative = tree.type == XPathParser.SHORT_OXD_ABSPATH && allowOxdLikeRelativePaths
 
-            def convertedPath = createFinalBinding(qn, finalVar, indexed, isRelative, config)
+            def convertedPath = createFinalBinding(qn, variableReference, indexed, isRelative, config)
 
             def start = tree.charPositionInLine + offset
             def end = (actualNameTree.token as CommonToken).stopIndex + offset + 1
@@ -139,7 +131,7 @@ class XPathUtil {
         if (tree.childCount == 0)
             return (tree.token as CommonToken).stopIndex
 
-        List trees = tree.findAll { Tree t ->
+        List trees = ParserUtils.findAll(tree) { Tree t ->
             t.childCount == 0
         }
         return trees.get(trees.size() - 1).token.stop
@@ -156,12 +148,8 @@ class XPathUtil {
         return xpath.substring(start, end + 1)
     }
 
-    String extractExpr(CommonTree _tree) {
-        return extractExpr(_tree, xpath)
-    }
-
     static Tree getLastChild(Tree tree) {
-        List trees = tree.findAll { Tree t ->
+        List trees = findAllDeep(tree) { Tree t ->
             t.childCount == 0
         }
         return trees.get(trees.size() - 1)
@@ -169,45 +157,6 @@ class XPathUtil {
 
     static String getNodeName(String path) {
         new File(path).name
-    }
-
-    List<Tree> findResults(Closure filter) {
-        findResultsImpl(tree, filter)
-    }
-
-    List<CommonTree> findAll(Closure filter) {
-        findAll tree, filter
-    }
-
-    static List<CommonTree> findResultsImpl(Tree tree, Closure filter) {
-        findResultsImpl(tree, filter, true, false)
-    }
-
-    static List<CommonTree> findAllImpl(Tree tree, Closure filter) {
-        findResultsImpl(tree, filter, false, false)
-    }
-
-    static List<CommonTree> findResultsImpl(Tree tree, Closure filter, boolean transform, boolean deep, boolean includeParent = true) {
-        List<CommonTree> trees = []
-
-        if (includeParent && filter(tree)) { //first check this item on the tree
-            trees << tree
-            if (!deep) return trees
-        }
-
-        int count = tree.getChildCount()
-        for (int i = 0; i < count; i++) {
-            Tree child = tree.getChild(i)
-            def result = filter(child)
-            if (result) {
-                trees << (transform ? result : child)
-            }
-
-            if (result && !deep) continue
-
-            trees.addAll(findResultsImpl(child, filter, transform, deep, false))
-        }
-        return trees
     }
 
     /** Print out only the tails */
@@ -229,7 +178,7 @@ class XPathUtil {
 
         try {
             def builder = new StringBuilder(xpath)
-            def trees = findAllDeep(tree, filter)
+            def trees = findAllDeepSelf(tree, filter)
 
             //todo do some caching to improve performance
             trees.inject(0) { Integer offset, def tree ->
@@ -252,42 +201,17 @@ class XPathUtil {
         tree.token?.type == XPathParser.SHORT_ABSPATH || tree.token?.type == XPathParser.SHORT_OXD_ABSPATH
     }
 
-    static findAllDeep(CommonTree tree, Closure filter) {
-        findResultsImpl(tree, filter, false, true)
-    }
-
-    static findAll(CommonTree tree, Closure filter) {
-        findAllImpl(tree, filter)
-    }
-
     static isPath(CommonTree tree) {
         tree.token?.type == XPathParser.ABSPATH || tree.token?.type == XPathParser.RELPATH
     }
 
-
-    static {
-        CommonTree.metaClass.findResults = { Closure clos ->
-            XPathUtil.findResultsImpl(delegate, clos)
-        }
-
-        CommonTree.metaClass.findAll = { Closure clos ->
-            XPathUtil.findAll(delegate, clos)
-        }
-
-        CommonTree.metaClass.findAllDeep = { Closure clos ->
-            XPathUtil.findAllDeep(delegate, clos)
-        }
-
-        Tree.metaClass.emitTailString {
-            XPathUtil.emitTailString(delegate)
-        }
-
-        Tree.metaClass.isCommonTree {
-            delegate instanceof CommonTree
-        }
-
-        CommonTree.metaClass.isPath {
-            XPathUtil.isPath(delegate)
-        }
+    List<Tree> findResults(Closure filter) {
+        findResults(tree, filter)
     }
+
+    List<CommonTree> findAllDeepSelf(Closure filter) {
+        findAllDeepSelf tree, filter
+    }
+
+
 }

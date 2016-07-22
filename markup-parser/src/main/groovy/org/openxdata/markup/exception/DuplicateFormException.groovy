@@ -1,7 +1,7 @@
 package org.openxdata.markup.exception
 
-import groovy.transform.CompileStatic;
-import org.openxdata.markup.Form;
+import groovy.transform.CompileStatic
+import org.openxdata.markup.Form
 
 /**
  * Created with IntelliJ IDEA.

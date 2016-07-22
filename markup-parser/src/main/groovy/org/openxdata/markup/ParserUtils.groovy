@@ -21,16 +21,28 @@ class ParserUtils {
         findResultsImpl(tree, filter, false, true)
     }
 
+    static def <T extends Tree> List<T> findAllDeepSelf(T tree, @CP(FirstGenericType) Closure filter) {
+        findResultsImpl(tree, filter, false, true, false, true)
+    }
+
     static def <T extends Tree> List<T> findAll(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImpl(tree, filter, false, false)
     }
 
     static def <T extends Tree> T find(T tree, @CP(FirstGenericType) Closure filter) {
-        findResultsImpl(tree, filter, false, true)?.get(0) as T
+        findResultsImpl(tree, filter, false, false, true)?.get(0) as T
+    }
+
+    static def <T extends Tree> T findSelf(T tree, @CP(FirstGenericType) Closure filter) {
+        findResultsImpl(tree, filter, false, false, true, true)?.get(0) as T
     }
 
     static def <T extends Tree> T findDeep(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImpl(tree, filter, true, true)?.get(0) as T
+    }
+
+    static def <T extends Tree> T findDeepSelf(T tree, @CP(FirstGenericType) Closure filter) {
+        findResultsImpl(tree, filter, false, true, true, true)?.get(0) as T
     }
 
     static def <T extends Tree> void each(T tree, @CP(FirstGenericType) Closure filter) {
@@ -45,8 +57,17 @@ class ParserUtils {
                                                      @CP(FirstGenericType) Closure filter,
                                                      boolean transform,
                                                      boolean deep,
-                                                     boolean breakOnFirst = false) {
+                                                     boolean breakOnFirst = false,
+                                                     boolean includeParent = false) {
+
+
         List trees = []
+
+        if (includeParent && filter(tree)) { //first check this item on the tree
+            trees << tree
+            if (!deep || breakOnFirst) return trees
+        }
+
         int count = tree.getChildCount()
         for (int i = 0; i < count; i++) {
             Tree child = tree.getChild(i)
@@ -97,3 +118,5 @@ class ParserUtils {
             }
     }
 }
+
+

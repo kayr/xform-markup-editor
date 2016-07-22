@@ -2,7 +2,6 @@ package org.openxdata.markup.exception
 
 import groovy.transform.CompileStatic
 import org.openxdata.markup.IFormElement
-import org.openxdata.markup.IQuestion
 
 /**
  * Created with IntelliJ IDEA.

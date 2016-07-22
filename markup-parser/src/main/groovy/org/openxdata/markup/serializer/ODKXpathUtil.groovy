@@ -1,15 +1,10 @@
 package org.openxdata.markup.serializer
 
 import org.antlr.runtime.tree.CommonTree
-import org.openxdata.markup.Form
-import org.openxdata.markup.IQuestion
-import org.openxdata.markup.MultiSelectQuestion
-import org.openxdata.markup.XPathUtil
+import org.openxdata.markup.*
 
 import static org.openxdata.markup.XPathParser.*
-import static org.openxdata.markup.XPathUtil.emitTailString
-import static org.openxdata.markup.XPathUtil.extractExpr
-import static org.openxdata.markup.XPathUtil.isPath
+import static org.openxdata.markup.XPathUtil.*
 
 /**
  * This class is mainly used to transform OXD XPATH Expressions to something ODK Understands
@@ -71,7 +66,7 @@ public class ODKXpathUtil {
 
 
     private static IQuestion findQuestion(CommonTree tree, Form form, boolean numberedBindings) {
-        def qnBinding = XPathUtil.getNodeName(tree.emitTailString())
+        def qnBinding = XPathUtil.getNodeName(emitTailString(tree))
         if (numberedBindings) qnBinding = removeIndex(qnBinding)
         return form.getElement(qnBinding)
     }
@@ -105,12 +100,12 @@ public class ODKXpathUtil {
         def eqTree = qnTree.parent
         List<CommonTree> children = eqTree.children
 
-        if (children[1].isPath() && children[0].isPath()) return null
+        if (isPath(children[1]) && isPath(children[0])) return null
 
         CommonTree leftTree = qnTree
         CommonTree rightTree = children.find { it != qnTree }
 
-        def leftString = leftTree.emitTailString()
+        def leftString = emitTailString(leftTree)
         def rightString = emitTailString(rightTree).replaceFirst(/\(\)/, '')
         def eq = eqTree.type == EQ ? '=' : '!='
 
@@ -133,12 +128,12 @@ public class ODKXpathUtil {
         CommonTree leftTree = qnTree
         CommonTree rightTree = children.find { it != qnTree }
 
-        if (children[1] == qnTree && children[0].isPath()) {
+        if (children[1] == qnTree && isPath(children[0])) {
             def rQn = findQuestion(children[0], qn.parentForm, numberedBindings)
             if (rQn instanceof MultiSelectQuestion) return null
         }
 
-        def leftString = leftTree.emitTailString()
+        def leftString = emitTailString(leftTree)
         def rightString = extractExpr(rightTree, _xpath)
 
         def finalExpr
@@ -160,7 +155,7 @@ public class ODKXpathUtil {
 
     private String makeCompatibleSubXpath(CommonTree rightTree) {
         def rightString = extractExpr(rightTree, _xpath)
-        List<CommonTree> trees = rightTree.findAllDeep { true }
+        List<CommonTree> trees = ParserUtils.findAllDeepSelf(rightTree) { true }
         visitedTrees.addAll(trees)
         rightString = makeODKCompatibleXPath(form, rightString, numberedBindings)
         return rightString
@@ -182,10 +177,10 @@ public class ODKXpathUtil {
             CommonTree left = children[0] as CommonTree
             CommonTree right = children[1] as CommonTree
 
-            def leftSide = left.emitTailString()
+            def leftSide = emitTailString(left)
             if (leftSide != 'length(.)') return null
 
-            def tail = right.emitTailString()
+            def tail = emitTailString(right)
 
             if (right.type == ABSPATH) return tail
 
