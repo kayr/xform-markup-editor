@@ -96,11 +96,16 @@ class ODKSerializerTest extends GroovyTestCase {
                         "selected(/f/s, concat-1(/f/c = 'true'))",
                 '''$s'''                                                                                                         :
                         "/f/s",
-                '''$s[$c = true][@attr2 = $s]'''                                                                                 : '''/f/s[/f/c = 'true'][selected(/f/s, @attr2)]''',//hope this is valid
-                '''$s[$c= true] = true'''                                                                                        : '''/f/s[/f/c = 'true'] = true''',
-                '''$s[$c = -2] = true'''                                                                                         : '''/f/s[/f/c = string(-2)] = true''',
-                '''$s[$c = $s[$c = ($s = 'calculus')]] = true'''                                                                 : '''/f/s[/f/c = /f/s[/f/c = string((selected(/f/s, 'calculus')))]] = true''',
-                '''$s = ('calculus')'''                                                                                          : '''selected(/f/s, ('calculus'))''',//this was throwing a null pointer
+                '''$s[$c = true][@attr2 = $s]'''                                                                                 :
+                        '''/f/s[/f/c = 'true'][selected(/f/s, @attr2)]''',
+                '''$s[$c= true] = true'''                                                                                        :
+                        '''/f/s[/f/c = 'true'] = true''',
+                '''$s[$c = -2] = true'''                                                                                         :
+                        '''/f/s[/f/c = string(-2)] = true''',
+                '''$s[$c = $s[$c = ($s = 'calculus')]] = true'''                                                                 :
+                        '''/f/s[/f/c = /f/s[/f/c = string((selected(/f/s, 'calculus')))]] = true''',
+                '''$s = ('calculus')'''                                                                                          :
+                        '''selected(/f/s, ('calculus'))''',//this was throwing a null pointer
         ].each {
             def path = Form.getAbsoluteBindingXPath(it.key, form.getElement('ps'))
             def compatibleXPath = ODKXpathUtil.makeODKCompatibleXPath(form, path, false)

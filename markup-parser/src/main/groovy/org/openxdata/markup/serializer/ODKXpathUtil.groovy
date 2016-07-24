@@ -1,5 +1,6 @@
 package org.openxdata.markup.serializer
 
+import groovy.transform.CompileStatic
 import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.*
 
@@ -36,7 +37,7 @@ public class ODKXpathUtil {
      * @param offset length by how much the expression has changed
      * @return
      */
-    private def clsTransformer(StringBuilder finalXPath, CommonTree tree, int offset) {
+    private def clsTransformer = { StringBuilder finalXPath, CommonTree tree, int offset ->
         if (visitedTrees.contains(tree)) return
         visitedTrees.add(tree)
 
@@ -44,29 +45,28 @@ public class ODKXpathUtil {
         if (!compatibleExpr) return
 
         //make sure u get the position of the first token in the expression
-        def start = tree.parent.children[0].charPositionInLine + offset
-        def end = XPathUtil.getLastIndex(tree.parent) + offset + 1
+        def start = (tree.parent as CommonTree).children[0].charPositionInLine + offset
+        def end = getLastIndex(tree.parent) + offset + 1
         finalXPath.replace(start, end, compatibleExpr)
     }
 
     /**
      * Filters out all the tree tokens
      */
-    private def clsFilter(CommonTree tree) {
+    private def clsFilter = { CommonTree tree ->
         if (!isPath(tree)) return false
         def qn = findQuestion(tree, form, numberedBindings)
         return (qn instanceof MultiSelectQuestion || qn?.type?.equalsIgnoreCase('boolean'))
     }
 
-
     private String _makeODKCompatibleXPath(String xpath) {
         XPathUtil xp = new XPathUtil(xpath)
-        return xp.transformXPath(this.&clsFilter, this.&clsTransformer)
+        return xp.transformXPath(this.clsFilter, this.clsTransformer)
     }
 
 
     private static IQuestion findQuestion(CommonTree tree, Form form, boolean numberedBindings) {
-        def qnBinding = XPathUtil.getNodeName(emitTailString(tree))
+        def qnBinding = XPathUtil.getNodeName(ParserUtils.emitTailString(tree))
         if (numberedBindings) qnBinding = removeIndex(qnBinding)
         return form.getElement(qnBinding)
     }
@@ -75,6 +75,7 @@ public class ODKXpathUtil {
         return binding.replaceFirst(/(^_[0-9]+)/, '')
     }
 
+    @CompileStatic
     private String makeCompatibleExpression(CommonTree qnTree) {
         def parent = qnTree.getParent() as CommonTree
 
@@ -95,9 +96,10 @@ public class ODKXpathUtil {
     }
 
 
+    @CompileStatic
     private String transformToBooleanExpr(CommonTree qnTree, IQuestion qn) {
 
-        def eqTree = qnTree.parent
+        def eqTree = qnTree.parent as CommonTree
         List<CommonTree> children = eqTree.children
 
         if (isPath(children[1]) && isPath(children[0])) return null
@@ -105,8 +107,8 @@ public class ODKXpathUtil {
         CommonTree leftTree = qnTree
         CommonTree rightTree = children.find { it != qnTree }
 
-        def leftString = emitTailString(leftTree)
-        def rightString = emitTailString(rightTree).replaceFirst(/\(\)/, '')
+        def leftString = ParserUtils.emitTailString(leftTree)
+        def rightString = ParserUtils.emitTailString(rightTree).replaceFirst(/\(\)/, '')
         def eq = eqTree.type == EQ ? '=' : '!='
 
         if (rightString == 'true' || rightString == 'false')
@@ -120,6 +122,7 @@ public class ODKXpathUtil {
 
     }
 
+    @CompileStatic
     private String transformToMultiSelectExpr(CommonTree qnTree, IQuestion qn) {
 
         CommonTree parent = qnTree.parent as CommonTree
@@ -133,7 +136,7 @@ public class ODKXpathUtil {
             if (rQn instanceof MultiSelectQuestion) return null
         }
 
-        def leftString = emitTailString(leftTree)
+        def leftString = ParserUtils.emitTailString(leftTree)
         def rightString = extractExpr(rightTree, _xpath)
 
         def finalExpr
@@ -177,10 +180,10 @@ public class ODKXpathUtil {
             CommonTree left = children[0] as CommonTree
             CommonTree right = children[1] as CommonTree
 
-            def leftSide = emitTailString(left)
+            def leftSide = ParserUtils.emitTailString(left)
             if (leftSide != 'length(.)') return null
 
-            def tail = emitTailString(right)
+            def tail = ParserUtils.emitTailString(right)
 
             if (right.type == ABSPATH) return tail
 

@@ -1,5 +1,6 @@
 package org.openxdata.markup
 
+import groovy.transform.CompileStatic
 import org.antlr.runtime.ANTLRStringStream
 import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonToken
@@ -14,7 +15,7 @@ import static org.openxdata.markup.ParserUtils.*
 /**
  * Created by kay on 6/16/14.
  */
-
+@CompileStatic
 class XPathUtil {
 
     String xpath
@@ -61,7 +62,7 @@ class XPathUtil {
     private static List<LinkedHashMap<String, Object>> convertToSimpleListOfPathMap(List<CommonTree> paths) {
         return paths.collect {
             String path = emitTailString(it)
-            String lastChild = getLastChild(it)?.toString()
+            String lastChild = getLastNameOnTree(it)?.toString()
             return [path: path, name: getNodeName(path), start: it.charPositionInLine, end: getLastIndex(it) + 1, varName: lastChild]
         }
     }
@@ -112,8 +113,12 @@ class XPathUtil {
         def xp = new XPathUtil(xpath)
         def variables = xp.getAllPathVariables()
         for (v in variables) {
-            def name = v.varName
-            if (name == '.' || v.path == 'null') continue
+            def name = v.varName as String
+            def path = v.path as String
+
+            //attributes also come as part of variables and paths so exclude them among the things to be validated
+            if (path == '.' || path == '$.' || path == '..' || path == 'null' || path?.startsWith('@')) continue
+
             def qn = question.parentForm.getElement(name)
             if (!qn) throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for has an unknown variable [$v]", question.line)
         }
@@ -126,15 +131,14 @@ class XPathUtil {
         return variableQn.getAbsoluteBinding(indexed, relative)
     }
 
-
-    static int getLastIndex(Tree tree) {
+    static int getLastIndex(CommonTree tree) {
         if (tree.childCount == 0)
             return (tree.token as CommonToken).stopIndex
 
-        List trees = ParserUtils.findAll(tree) { Tree t ->
+        List trees = findAllDeep(tree) { Tree t ->
             t.childCount == 0
         }
-        return trees.get(trees.size() - 1).token.stop
+        return trees.last().token.asType(CommonToken).stopIndex
     }
 
     static String extractExpr(CommonTree _tree, String xpath) {
@@ -148,30 +152,20 @@ class XPathUtil {
         return xpath.substring(start, end + 1)
     }
 
-    static Tree getLastChild(Tree tree) {
-        List trees = findAllDeep(tree) { Tree t ->
-            t.childCount == 0
+    private static CommonTree getLastNameOnTree(CommonTree tree) {
+        List<CommonTree> trees = findAllBreadth1st(tree) { CommonTree t ->
+            t.type == XPathParser.QNAME
         }
-        return trees.get(trees.size() - 1)
+
+        if (trees)
+            return trees.last().children.first() as CommonTree
+        return null
     }
 
     static String getNodeName(String path) {
         new File(path).name
     }
 
-    /** Print out only the tails */
-    public static String emitTailString(Tree tree) {
-        if (tree.getChildCount() == 0) {
-            return tree.toString()
-        }
-        StringBuffer buf = new StringBuffer()
-
-        for (int i = 0; i < tree.getChildCount(); i++) {
-            Tree t = (Tree) tree.getChild(i)
-            buf.append(emitTailString(t))
-        }
-        return buf.toString()
-    }
 
     String transformXPath(Closure filter, Closure transformer, boolean swallowException = false) {
         if (!xpath) return null
@@ -203,14 +197,6 @@ class XPathUtil {
 
     static isPath(CommonTree tree) {
         tree.token?.type == XPathParser.ABSPATH || tree.token?.type == XPathParser.RELPATH
-    }
-
-    List<Tree> findResults(Closure filter) {
-        findResults(tree, filter)
-    }
-
-    List<CommonTree> findAllDeepSelf(Closure filter) {
-        findAllDeepSelf tree, filter
     }
 
 
