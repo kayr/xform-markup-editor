@@ -1,3 +1,47 @@
+
+# Xform Markup Editor For Javarosa and OpenXData XForms
+
+**Table of Contents**
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Designing Xforms in simple plain text](#designing-xforms-in-simple-plain-text)
+  - [Screenshots](#screenshots)
+    - [Main window](#main-window)
+    - [XML Preview](#xml-preview)
+  - [Features:](#features)
+  - [Instructions](#instructions)
+    - [Adding Appearance To Questions](#adding-appearance-to-questions)
+    - [Adding pages(High Level Groups)](#adding-pageshigh-level-groups)
+    - [Adding Groups(Inner groups with in pages)](#adding-groupsinner-groups-with-in-pages)
+    - [Adding Appearance To Pages/Groups](#adding-appearance-to-pagesgroups)
+    - [Single Select and Multiple Select](#single-select-and-multiple-select)
+    - [Repeat Questions](#repeat-questions)
+    - [Dynamic Single Select or Cascading Select Questions](#dynamic-single-select-or-cascading-select-questions)
+      - [Option 1](#option-1)
+      - [Option 2](#option-2)
+    - [Setting Datatype](#setting-datatype)
+    - [Setting Other question attributes(Required/Hidden/Locked)](#setting-other-question-attributesrequiredhiddenlocked)
+    - [Assigning an Id to a form](#assigning-an-id-to-a-form)
+    - [Assigning ids or binds to questions](#assigning-ids-or-binds-to-questions)
+    - [Adding hints/help text to questions](#adding-hintshelp-text-to-questions)
+    - [Adding styles to forms](#adding-styles-to-forms)
+    - [Adding Arbitrary Bind Attributes and Layout Attributes(e.g appearance)](#adding-arbitrary-bind-attributes-and-layout-attributeseg-appearance)
+      - [A compatibility note about OpenXdata generated XForm and Layout/Bind Attributes (OpenXdata Users Only)](#a-compatibility-note-about-openxdata-generated-xform-and-layoutbind-attributes-openxdata-users-only)
+    - [Multiline Questions/Options](#multiline-questionsoptions)
+    - [Numbering The Questions Automatically](#numbering-the-questions-automatically)
+- [Adding Skip/Validation/Calculation Logic](#adding-skipvalidationcalculation-logic)
+    - [Adding Skip Logic](#adding-skip-logic)
+    - [Adding Validation Logic](#adding-validation-logic)
+    - [Adding Calculation Logic](#adding-calculation-logic)
+  - [Explaining preferences](#explaining-preferences)
+    - [ODK Specific](#odk-specific)
+    - [Openxdata specific](#openxdata-specific)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Designing Xforms in simple plain text 
 You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK)](https://opendatakit.org/) forms using this editor fast and easy.
 
@@ -62,6 +106,23 @@ multiple lines '''
 ```
 
 
+#### Adding Appearance To Questions
+You can add appearance to any element(groups,pages and questions) using the ***"@appearance"*** attribute
+
+e.g
+````
+
+@appearance w1
+Question one
+
+@appearance field-list
+group{ This is a group header
+	Question two
+	Question three
+}
+````
+
+
 The above will generate a study named **Sample Study** containing one Form(Sample Form). All questions will be of type Text
 
 #### Adding pages(High Level Groups)
@@ -90,13 +151,8 @@ Drugs taken
 
 ```
 
-You can assign appearance,skiplogic and ids to these pages
-E.g:
-```
-@appearance field-list
-@id bio_info_page
-#> Bio Info Page
-```
+
+
 
 #### Adding Groups(Inner groups with in pages)
 
@@ -121,6 +177,23 @@ group{ This is a group label but its optional
 You can assign appearance,skiplogic and ids to these groups too
 E.g:
 ```
+@appearance field-list
+@id nested_group
+group{ This is a group label but its optional
+   Question two
+   Question three
+}
+```
+
+#### Adding Appearance To Pages/Groups
+
+You can assign appearance,skiplogic and ids to these pages
+E.g:
+```
+@appearance field-list
+@id bio_info_page
+#> Bio Info Page
+
 @appearance field-list
 @id nested_group
 group{ This is a group label but its optional
@@ -279,7 +352,7 @@ E.g Adding the theme-grid style to a form
 #> page one
 ```
 
-#### Adding Bind Attributes and Layout Attributes(e.g appearance)
+#### Adding Arbitrary Bind Attributes and Layout Attributes(e.g appearance)
 You can add layout attributes(like appearance,jr:count etc) to questions. See below:
 
 E.g
@@ -345,7 +418,7 @@ To number the questions automatically check the ***Number Labels checkbox*** on 
 
 **N.B** Selecting the ***number ids option*** has one downside in that when a question is added to a form.. all following questions after that question will get a new bindings and hence might make it difficult to analyze data between two form versions.
 
-# For Power Users
+## Adding Skip/Validation/Calculation Logic
 Before the markup editor was for basically generating form content(questions) but it was extended to also support adding of skip/validation/calculation logic. This comes in a little handy if you have to write complex formulas only handled by mforms that the visual form designer cannot handle. You get a little benefit of basic validation of your formulas and variables. All the formulas are based on plain XPATH syntax. But with simpler question referencing as compared to the raw XML way.
 
 ***Referencing question IDs:*** You reference a question in a formula like this ***$\<question-id\>***. To reference the current question variable use the ***"."***
@@ -448,32 +521,18 @@ An example that calculates that total drugs taken i.e [Pain killers taken] + [An
 Total drugs taken
 ```
 
-#### Adding Appearance
-You can add appearance to any element(groups,pages and questions) using the ***"@appearance"*** attribute
 
-e.g
-````
-
-@appearance w1
-Question one
-
-@appearance field-list
-group{ This is a group header
-	Question two
-	Question three
-}
-````
-#### Explaining preferences
+### Explaining preferences
   - **Number Labels:** This auto numbers all the question labels and groups(excludes groups without ids)
   - **Number Id:** The propagates the label numbers down to the question bindings
   - **Allow Invalid OXD ids:** The informs the edit to allow all valid XML ids. Without this option selected only lower case ids or bindings are allowed
   - **Ensure unique Identifier Question:** This checks the a form has a unique identifier exists in a form. This question will generate a unique id that will be explicitly unique to any form instance or data. Uncheck this option to turn off the feature
 
-##### ODK Specific
+#### ODK Specific
   - **Emulate ODK to OXD:** This makes the editor behave as if its converting oxd forms to ODK. It makes extra effort to ensure that oxd xpath retains the semantics when converted to ODK. especially expressions that contain multi select and single select references
   - **Automatically add meta InstanceID:** This auto add the meta/instanceID element to the form as required by some javarosa clients and servers
 
-##### Openxdata specific
+#### Openxdata specific
   - **Generate Layout:** Generates layout xml when you export  form
   - **Store extra attributes in comments:** OpenXdata Form Designer does not support layout and bind attributes and therefore these attributes will disappear once you load the form into the openxdata form designer. To work around this, in the editor select the ***Store extra attributes in Comment***  preference then these attributes will be embedded into the hint section of a question.
 
