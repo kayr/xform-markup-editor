@@ -69,6 +69,7 @@ A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit
  - Multiline Questions which make it easier to write markdown spanning multiple lines
  - Support for appearance
  - Support for form styles
+ - Some simple constructs while writing skip logic (see [Adding Skip Logic](#adding-skip-logic))
 
 ### Instructions
 
@@ -109,18 +110,22 @@ multiple lines '''
 #### Adding Appearance To Questions
 You can add appearance to any element(groups,pages and questions) using the ***"@appearance"*** attribute
 
-e.g
-````
+Look at [this](http://xlsform.org/ref-table/) page for most supported appearances for both enketo and odk
 
+e.g
+```
 @appearance w1
 Question one
 
-@appearance field-list
-group{ This is a group header
-	Question two
-	Question three
-}
-````
+@appearance search
+Select preferences
+ > Option 1
+ > Option 2
+ > Option 3
+ > Option 4
+ > Option 5
+ > Option 6
+```
 
 
 The above will generate a study named **Sample Study** containing one Form(Sample Form). All questions will be of type Text
@@ -419,7 +424,7 @@ To number the questions automatically check the ***Number Labels checkbox*** on 
 **N.B** Selecting the ***number ids option*** has one downside in that when a question is added to a form.. all following questions after that question will get a new bindings and hence might make it difficult to analyze data between two form versions.
 
 ## Adding Skip/Validation/Calculation Logic
-Before the markup editor was for basically generating form content(questions) but it was extended to also support adding of skip/validation/calculation logic. This comes in a little handy if you have to write complex formulas only handled by mforms that the visual form designer cannot handle. You get a little benefit of basic validation of your formulas and variables. All the formulas are based on plain XPATH syntax. But with simpler question referencing as compared to the raw XML way.
+Before the markup editor was for basically generating form content(questions) and groups but it was extended to also support adding of skip/validation/calculation logic. This comes in a little handy if you have to write complex formulas only handled by xforms clients that visual form designers cannot handle. You get a little benefit of basic validation of your formulas and variables. All the formulas are based on plain XPATH syntax. But with simpler question referencing as compared to the raw XML way.
 
 ***Referencing question IDs:*** You reference a question in a formula like this ***$\<question-id\>***. To reference the current question variable use the ***"."***
 
@@ -445,7 +450,7 @@ Second name
 @id sex
 Sex
 >Male
->$female_opt Female
+>$female Female
 
 @number
 Age
@@ -480,15 +485,23 @@ repeat{ Child details
   An example that ***shows*** the [Is pregnant] question when selected sex is female
 
 ```
-@showif $sex = 'female_opt'
+@showif $sex = 'female'
 Is pregnant
 ```
-An example that ***enables*** the [Is pregnant] question when selected sex is female
+An example that ***enables*** the [Is pregnant] question when selected sex is female. In Javarosa clients this behaves the same as @showif
 
 ```
-@enableif $sex = 'female_opt'
+@enableif $sex = 'female'
 Is pregnant
 ```
+You can even even ***hide***  the question if the person is male.
+e.g
+```
+@hideif $sex = 'male'
+Is pregnant
+```
+For Javarosa clients the above example will be converted to ```relevant=not($sex = 'male')``` after the xform is compiled
+
 Other supported skip logic actions include  ***@hideif, @enableif, @disableif, @showif***
 
 #### Adding Validation Logic
@@ -513,6 +526,17 @@ repeat{ Child details
   Child Sex
 }
 ```
+
+For Javarosa Client You use jr:count,however the above can be converted to the javarosa(see [Explaining preferences Emulate ODK to OXD ](#explaining-preferences) )
+```
+@jrcount $children
+repeat{ Child details
+
+  Child Name
+
+  Child Sex
+}
+```
 #### Adding Calculation Logic
 An example that calculates that total drugs taken i.e [Pain killers taken] + [Antibiotics taken]
 
@@ -529,7 +553,9 @@ Total drugs taken
   - **Ensure unique Identifier Question:** This checks the a form has a unique identifier exists in a form. This question will generate a unique id that will be explicitly unique to any form instance or data. Uncheck this option to turn off the feature
 
 #### ODK Specific
-  - **Emulate ODK to OXD:** This makes the editor behave as if its converting oxd forms to ODK. It makes extra effort to ensure that oxd xpath retains the semantics when converted to ODK. especially expressions that contain multi select and single select references
+  - **Emulate ODK to OXD:** This makes the editor behave as if its converting oxd forms to ODK. It makes extra effort to ensure that oxd xpath retains the semantics when converted to ODK. especially expressions that contain multi select and single select references.
+	  - This mode also makes any date related question with id of `endtime` to become an automatic time stamp i.e it adds the required jr:preload attributes
+	  - This add `jr:count` to all repeat questions that have a validation like `length(.) = <value>`
   - **Automatically add meta InstanceID:** This auto add the meta/instanceID element to the form as required by some javarosa clients and servers
 
 #### Openxdata specific
@@ -538,5 +564,6 @@ Total drugs taken
 
 [main_window]: https://github.com/kayr/xform-markup-editor/blob/master/images/main_window.PNG?raw=true
 [show_xml]: https://github.com/kayr/xform-markup-editor/blob/master/images/show_xml.PNG?raw=true
+
 
 
