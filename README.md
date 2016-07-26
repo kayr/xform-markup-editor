@@ -46,6 +46,7 @@
 You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK)](https://opendatakit.org/) forms using this editor fast and easy.
 
 A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit.ly/1OvDOoO).
+To run this app open the command line and execute `java -jar <file-name>`
 
 ### Screenshots
 
