@@ -45,7 +45,7 @@
 ## Designing Xforms in simple plain text 
 You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK)](https://opendatakit.org/) forms using this editor fast and easy.
 
-A [download](http://bit.ly/1OvDOoO) of the editor is available [here](http://bit.ly/1OvDOoO).
+A [download](https://github.com/kayr/xform-markup-editor/releases) of the editor is available [here](https://github.com/kayr/xform-markup-editor/releases).
 To run this app open the command line and execute `java -jar <file-name>`
 
 ### Screenshots
