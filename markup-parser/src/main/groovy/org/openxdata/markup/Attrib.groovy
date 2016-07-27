@@ -93,6 +93,9 @@ class Attrib {
                 form.dbId = param
                 form.dbIdLine = line
                 break
+            case 'version'://todo write test
+                form.version = param
+                break
             case 'style':
                 form.layoutAttributes['style'] = param
                 break

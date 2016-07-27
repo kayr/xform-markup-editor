@@ -103,6 +103,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@jrcount" |
   "@appearance" |
   "@default" |
+  "@version" |
   {LayoutId} |
   {BindId} |
   "dynamic_instance{" |

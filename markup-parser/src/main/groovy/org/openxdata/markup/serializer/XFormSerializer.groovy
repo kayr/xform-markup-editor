@@ -35,7 +35,7 @@ class XFormSerializer {
 
             study.forms.each { form ->
                 xml.form(name: form.name) {
-                    xml.version(name: 'v1') {
+                    xml.version(name: form.version) {//todo test
                         xml.xform(toXForm(form))
                         if (generateView)
                             xml.layout(toLayout(form))

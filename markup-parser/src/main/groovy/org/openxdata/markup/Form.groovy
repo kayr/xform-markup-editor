@@ -19,6 +19,7 @@ class Form implements HasQuestions {
 
     String dbId
     Study study
+    String version = 'v1'
     int line
     int dbIdLine
     int idLine
@@ -153,7 +154,7 @@ class Form implements HasQuestions {
 
     public String getBinding() {
         if (id == null)
-            id = Util.getBindName("${study.name}_${name}_v1")
+            id = Util.getBindName("${study.name}_${name}_${version}")
         return id
     }
 
