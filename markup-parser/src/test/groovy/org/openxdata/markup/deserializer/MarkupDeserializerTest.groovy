@@ -1,5 +1,6 @@
 package org.openxdata.markup.deserializer
 
+import org.openxdata.markup.HasQuestions
 import org.openxdata.markup.ParserUtils
 import org.openxdata.markup.exception.ValidationException
 import org.openxdata.markup.serializer.XFormSerializer
@@ -39,6 +40,12 @@ sdsdsd''"""
         assert f['group_page_2'].line == 16
         assert f['oldpageid'].absoluteBinding == '/s_f_v1/oldpageid'
         assert f['group_page_2'].absoluteBinding == '/s_f_v1/oldpageid/group_page_1/group_page_2'
+
+        assert f.allFirstLevelQuestions.size() == 1
+        assert (f['group_page_1'] as HasQuestions).allFirstLevelQuestions.size() == 2
+        assert (f['oldpageid'] as HasQuestions).allFirstLevelQuestions.size() == 3
+
+
         def xform = new XFormSerializer(numberBindings: true, numberQuestions: true).toXForm(f)
         assertEquals nestedGroups.xmlNumbered, xform
 

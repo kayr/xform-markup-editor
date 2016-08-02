@@ -35,6 +35,13 @@ trait HasQuestions implements IFormElement {
         elements << question
     }
 
+    List<IQuestion> getAllFirstLevelQuestions() {
+        def thisObject = this
+        return getAllElements { IFormElement q -> q.firstInstanceParent == thisObject }
+                .findAll { it instanceof IQuestion } as List
+
+    }
+
     private void cacheQuestion(IFormElement question) {
 
         //first store the Container
