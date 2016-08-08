@@ -153,8 +153,13 @@ class Form implements HasQuestions {
 
 
     public String getBinding() {
-        if (id == null)
-            id = Util.getBindName("${study.name}_${name}_${version}")
+
+        if (id == null) {
+            if (study.name)
+                id = Util.getBindName("${study.name}_${name}_${version}")
+            else
+                id = Util.getBindName("${name}_${version}")
+        }
         return id
     }
 

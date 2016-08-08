@@ -72,7 +72,12 @@ study 	: 	NEWLINE*
 	 	form+
 	 	SPACE*
 	 	-> ^(STUDYNAME form+)
-	;
+	 	|
+	 	NEWLINE*
+	 	form+
+	 	SPACE* 
+	 	-> ^(STUDYNAME[""] form+)
+	 ;
 
 form 	: 	ATTRIBUTE*
 	   	FORMNAME

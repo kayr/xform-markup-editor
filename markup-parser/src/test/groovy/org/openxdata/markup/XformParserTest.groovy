@@ -470,6 +470,17 @@ jeelopo
         assertEquals form.allQuestions.size(), 7
     }
 
+    void testNoStudyInMarkup() {
+        def markup = '''## form
+Q1
+'''
+
+        def form = TestUtils.toForm(markup)
+
+        assert form.binding == 'form_v1'
+        assert form.allQuestions.size() == 1
+    }
+
 
     private MarkupDeserializer createParser(String testString) throws IOException {
         return new MarkupDeserializer(testString)
