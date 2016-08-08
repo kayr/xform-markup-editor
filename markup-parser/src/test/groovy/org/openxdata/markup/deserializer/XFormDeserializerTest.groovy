@@ -233,7 +233,7 @@ class XFormDeserializerTest extends XMLTestCase {
     void testDeSerializingWithLayoutAttributes() {
         def form = new XFormDeserializer(formWithLayoutAndBindAttributesXML).parse()
 
-        assertEquals formWithLayoutAndBindAttributesXML, new XFormSerializer().toXForm(form)
+        assertXMLEqual formWithLayoutAndBindAttributesXML, new XFormSerializer().toXForm(form)
     }
 
     void testNestedGroups() {
