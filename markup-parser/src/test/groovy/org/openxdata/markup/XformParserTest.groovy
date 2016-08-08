@@ -130,11 +130,11 @@ jeelopo
 
         assertEquals 3, qn.questions.size()
 
-        assertNotNull study.forms[0].allElements.find  { it instanceof SingleSelectQuestion }
+        assertNotNull study.forms[0].allElements.find { it instanceof SingleSelectQuestion }
 
-        assertNotNull study.forms[0].allElements.find  { it instanceof MultiSelectQuestion }
+        assertNotNull study.forms[0].allElements.find { it instanceof MultiSelectQuestion }
 
-        assertNotNull study.forms[0].allElements.find  { it instanceof RepeatQuestion }
+        assertNotNull study.forms[0].allElements.find { it instanceof RepeatQuestion }
 
         def allQuestions = study.forms[0].allQuestions
         assertEquals 12, allQuestions.size()
@@ -314,7 +314,7 @@ jeelopo
     void testFormWithDuplicatePages() {
         def parser = createParser(Fixtures.formWithDupePages)
 
-        shouldFail(DuplicateElementException){
+        shouldFail(DuplicateElementException) {
             parser.study()
             fail("Expecting duplicate page exception")
         }
