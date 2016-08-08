@@ -36,9 +36,13 @@ trait HasQuestions implements IFormElement {
     }
 
     List<IQuestion> getAllFirstLevelQuestions() {
+        return allFirstLevelElements.findAll { it instanceof IQuestion } as List
+
+    }
+
+    List<IQuestion> getAllFirstLevelElements() {
         def thisObject = this
         return getAllElements { IFormElement q -> q.firstInstanceParent == thisObject }
-                .findAll { it instanceof IQuestion } as List
 
     }
 
