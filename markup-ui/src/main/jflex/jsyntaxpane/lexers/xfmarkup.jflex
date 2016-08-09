@@ -73,6 +73,11 @@ VariableReference = "$" {Identifier}
 
 Comment = {StartComment} {InputCharacter}* {LineTerminator}?
 
+Repeat = "repeat"[ \t]*"{"
+Dyn = "dynamic"[ \t]*"{"
+DynInstance = "dynamic_instance"[ \t]*"{"
+Group = "group"[ \t]*"{"
+
 %%
 
 <YYINITIAL> {
@@ -86,8 +91,10 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@decimal"|
   "@required"|
   "@invisible"|
-  "repeat{"|
-  "group{"|
+  {Repeat}|
+  {Group}|
+  {Dyn} |
+  {DynInstance}|
   "@barcode"|
   "@gps"|
   "@readonly"|
@@ -105,9 +112,7 @@ Comment = {StartComment} {InputCharacter}* {LineTerminator}?
   "@default" |
   "@version" |
   {LayoutId} |
-  {BindId} |
-  "dynamic_instance{" |
-  "dynamic{"
+  {BindId}
                                 {
                                 yypushState(ATTRIB_TEXT);
                                 return token(TokenType.KEYWORD);
