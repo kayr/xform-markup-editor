@@ -565,7 +565,7 @@ Total drugs taken
   - **Generate Layout:** Generates layout xml when you export  form
   - **Store extra attributes in comments:** OpenXdata Form Designer does not support layout and bind attributes and therefore these attributes will disappear once you load the form into the openxdata form designer. To work around this, in the editor select the ***Store extra attributes in Comment***  preference then these attributes will be embedded into the hint section of a question.
 
-[main_window]: https://github.com/kayr/xform-markup-editor/blob/master/images/main_window.PNG?raw=true
+[main_window]: https://github.com/kayr/xform-markup-editor/blob/master/images/main_window.gif?raw=true
 [show_xml]: https://github.com/kayr/xform-markup-editor/blob/master/images/show_xml.PNG?raw=true
 
 
