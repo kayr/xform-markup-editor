@@ -13,8 +13,7 @@ import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.filechooser.FileFilter
-import java.awt.Desktop
-import java.awt.Toolkit
+import java.awt.*
 import java.awt.datatransfer.Clipboard
 import java.awt.datatransfer.StringSelection
 import java.awt.event.WindowAdapter
@@ -40,7 +39,7 @@ class MainPresenter implements DocumentListener {
     XFormImporterPresenter xFormImporter
     MainUI form
     File currentFile
-    def xfmFilter
+    FileFilter xfmFilter
     def allowedAttribs
     def allowedTypes
     Executor e = Executors.newSingleThreadExecutor()
@@ -242,10 +241,8 @@ class MainPresenter implements DocumentListener {
 
 
     private void renderXMLPreview(Map<Form, String> xforms) {
-        def previewFrame = new XFormsUI(form.frame)
-        xforms.each { frmName, xml ->
-            previewFrame.addTab("Form:$frmName.name", xml)
-        }
+        def previewFrame = new XFormsPresenter(form.frame)
+        previewFrame.renderXMLPreview(xforms)
     }
 
     private XFormSerializer getOxdSerializer() {
@@ -300,9 +297,7 @@ class MainPresenter implements DocumentListener {
         if (currentFile == null) {
 
 
-            File file = chooseFile(HistoryKeeper.lastAccessedFile?.parentFile) { JFileChooser jc ->
-                jc.showSaveDialog(form.frame)
-            }
+            File file = chooseFile(HistoryKeeper.lastAccessedDirectory) { JFileChooser jc -> jc.showSaveDialog(form.frame) }
 
             if (!file) return
 
@@ -322,24 +317,8 @@ class MainPresenter implements DocumentListener {
     }
 
     private File chooseFile(File lastAccessedFile, Closure<Integer> dialogChooser) {
-        JFileChooser jc = new JFileChooser()
-
-        jc.fileFilter = xfmFilter
-
-        def selectedFile = currentFile ?: lastAccessedFile
-        if (selectedFile) {
-            if (selectedFile.isDirectory())
-                jc.currentDirectory = selectedFile
-            else
-                jc.selectedFile = selectedFile
-        }
-
-
-        def option = dialogChooser(jc)
-
-        if (option != JFileChooser.APPROVE_OPTION) return null
-
-        return jc.selectedFile
+        def lastFiler = currentFile ?: lastAccessedFile
+        return IOHelper.chooseFile(lastFiler, xfmFilter, dialogChooser)
     }
 
     void openFile() {
@@ -361,9 +340,9 @@ class MainPresenter implements DocumentListener {
         XFormSerializer ser = getOxdSerializer()
         def studyXML = ser.toStudyXml(study)
 
-        def file = chooseFile(null) { JFileChooser jc ->
-            jc.fileFilter = [accept        : { File f -> return f.name.endsWith('.xml') || f.isDirectory() },
-                             getDescription: { return 'XML File' }] as FileFilter
+        def file = IOHelper.chooseFile(
+                HistoryKeeper.lastAccessedDirectory,
+                IOHelper.filter('XML File', 'xml')) { JFileChooser jc ->
             jc.showSaveDialog(form.frame)
         }
 

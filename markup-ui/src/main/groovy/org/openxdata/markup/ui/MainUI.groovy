@@ -18,11 +18,14 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
  */
 class MainUI {
 
+    //UIManager.getDefaults().findAll{it.key.toString().toLowerCase().contains('icon')}
     static def ICON_OPEN = getIcon('Tree.openIcon')
     static def ICON_SAVE = getIcon('FileView.floppyDriveIcon')
     static def ICON_NEW = getIcon('FileView.fileIcon')
     static def ICON_IMPORT = getIcon('FileChooser.upFolderIcon')
     static def ICON_FORM = getIcon('FileChooser.detailsViewIcon')
+    static def ICON_HDD = getIcon('FileView.hardDriveIcon')
+    static def ICON_FILE = getIcon('FileView.fileIcon')
 
     Closure formLoader
     SwingBuilder s

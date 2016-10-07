@@ -63,4 +63,8 @@ class HistoryKeeper {
             return history.head()?.asType(File)
     }
 
+    static File getLastAccessedDirectory() {
+        return lastAccessedFile?.parentFile
+    }
+
 }

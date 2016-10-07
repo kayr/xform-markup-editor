@@ -3,8 +3,10 @@ package org.openxdata.markup.ui
 import groovy.swing.SwingBuilder
 
 import javax.swing.*
+import java.awt.*
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import java.util.List
 
 /**
  * Created by kay on 7/11/14.
@@ -12,9 +14,12 @@ import java.awt.event.WindowEvent
 class XFormsUI {
 
     def s = new SwingBuilder()
-    JFrame parent
+    JFrame parent, frame
+
     JTabbedPane tabs
     List<JEditorPane> editors = []
+    JButton btnSave
+
 
     XFormsUI(JFrame parent) {
         this.parent = parent
@@ -22,11 +27,16 @@ class XFormsUI {
     }
 
     private def init() {
-       def frame = s.frame(size: [525, 352], visible: true, title: 'XForm XML',
+        frame = s.frame(size: [525, 352], visible: true, title: 'XForm XML',
                 defaultCloseOperation: WindowConstants.DISPOSE_ON_CLOSE,
                 alwaysOnTop: false, locationRelativeTo: parent) {
 
-            tabs = tabbedPane()
+            panel(constraints: BorderLayout.NORTH) {
+                btnSave = button(text: 'Save To File',icon: MainUI.ICON_SAVE)
+            }
+
+            tabs = tabbedPane(constraints: BorderLayout.CENTER)
+
         }
 
         frame.addWindowListener(new WindowAdapter() {
@@ -36,6 +46,13 @@ class XFormsUI {
             }
         })
 
+    }
+
+
+    JEditorPane getSelectedView() {
+        def cmp = tabs.getComponentAt(tabs.getSelectedIndex()) as JScrollPane
+        def component = cmp.getViewport().getComponent(0) as JEditorPane
+        return component
     }
 
     def addTab(String name, String xml) {
@@ -58,7 +75,9 @@ class XFormsUI {
     }
 
     static main(args) {
-        new XFormsUI(new JFrame())
+
+        def i = new XFormsUI(new JFrame())
+        i.addTab('dsd', '<a/>')
     }
 
 }
