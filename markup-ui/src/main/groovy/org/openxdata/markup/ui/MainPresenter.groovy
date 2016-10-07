@@ -307,13 +307,17 @@ class MainPresenter implements DocumentListener {
 
             file.setText(form.txtMarkUp.text, 'UTF-8')
 
-            form.title = "OXD-Markup: " + file.absolutePath
+            setWindowTitle(file)
             currentFile = file
             HistoryKeeper.registerHistory(file.absolutePath)
             renderHistory()
         } else {
             currentFile.setText(form.txtMarkUp.text, 'UTF-8')
         }
+    }
+
+    private void setWindowTitle(File file) {
+        form.title = "[$file.name] - OXD-Markup: [$file.absolutePath]"
     }
 
     private File chooseFile(File lastAccessedFile, Closure<Integer> dialogChooser) {
@@ -386,7 +390,7 @@ class MainPresenter implements DocumentListener {
         loadForm(text)
 
         currentFile = f
-        form.title = "OXD-Markup: " + currentFile.absolutePath
+        setWindowTitle(f)
 
         HistoryKeeper.registerHistory(f.absolutePath)
         renderHistory()
