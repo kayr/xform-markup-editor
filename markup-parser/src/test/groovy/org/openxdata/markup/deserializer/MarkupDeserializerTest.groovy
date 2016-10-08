@@ -100,7 +100,7 @@ sdsdsd''"""
 
         assert 'sjdjsd' == study.getElementClosestToLine(3).name
         assert 'sjdjsd' == study.getElementClosestToLine(4).name
-        assert 'sdsd' == study.getElementClosestToLine(5).name
+        assert 'kskas' == study.getElementClosestToLine(5).name
         assert 'ddff' == study.getElementClosestToLine(100).name
         assert 'f' == study.getElementClosestToLine(-1).name
         assert 'sdj' == study.getElementClosestToLine(14).name
