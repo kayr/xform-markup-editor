@@ -5,7 +5,7 @@
         <artifactId>oxdmarkup</artifactId>
         <version>0.5-SNAPSHOT</version>
     </parent>
-    <groupId>org.openxdata</groupId>
+
     <artifactId>oxdmarkup-ui</artifactId>
     <version>0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
