@@ -1,6 +1,9 @@
 package org.openxdata.markup.ui
 
-import org.openxdata.markup.*
+import org.openxdata.markup.Form
+import org.openxdata.markup.HasQuestions
+import org.openxdata.markup.IFormElement
+import org.openxdata.markup.Study
 import org.openxdata.markup.deserializer.MarkupDeserializer
 
 import javax.swing.*
@@ -58,7 +61,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         this.listener = listener
         clear()
 
-        rootNode.setUserObject(study.name)
+        rootNode.setUserObject(study)
         renderForms(study.forms)
 
         treeModel.reload()
@@ -78,7 +81,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         }
     }
 
-    def renderQuestions(DefaultMutableTreeNode rootNode2, HasQuestions hasQuestions) {
+    private def renderQuestions(DefaultMutableTreeNode rootNode2, HasQuestions hasQuestions) {
         for (qn in hasQuestions.elements) {
             DefaultMutableTreeNode childNode = addObject(rootNode2, qn)
             if (qn instanceof HasQuestions)
@@ -93,7 +96,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
     }
 
 
-    public DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent, Object child) {
+    private DefaultMutableTreeNode addObject(DefaultMutableTreeNode parent, Object child) {
         DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
         if (parent == null) {
             parent = rootNode;
@@ -106,15 +109,36 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         for (int i = 0; i < level && i < tree.getRowCount(); i++) {
             tree.expandRow(i);
         }
+        tree.scrollRowToVisible(level)
     }
+
+    public void expandTo(IFormElement level) {
+        Enumeration e = rootNode.preorderEnumeration()
+        def row = e.findIndexOf { DefaultMutableTreeNode n -> n.getUserObject().is(level) }
+        expand(row)
+        tree.setSelectionRow(row)
+    }
+
+    boolean isUserSelection = true
 
     @Override
     void valueChanged(TreeSelectionEvent e) {
-        DefaultMutableTreeNode component = tree.lastSelectedPathComponent
-        if (component?.userObject instanceof IFormElement)
+        DefaultMutableTreeNode component = (DefaultMutableTreeNode) tree.lastSelectedPathComponent
+        if (isUserSelection && component?.userObject instanceof IFormElement)
             listener.call(component.userObject)
 
     }
+
+    void selectNodeForLine(int caretLine) {
+        def object = rootNode.getUserObject()
+        if (!(object instanceof Study)) return
+        def study = object as Study
+        def element = study.getElementClosestToLine(caretLine)
+        isUserSelection = false
+        expandTo(element)
+        isUserSelection = true
+    }
+
 
     static main(args) {
         StudyTreeBuilder b = new StudyTreeBuilder()
@@ -126,6 +150,13 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         f.setVisible(true)
 
         def parser = new MarkupDeserializer(Resources.oxdSampleForm)
-        SwingUtilities.invokeLater { b.updateTree(parser.study()) { println it } }
+        def study = parser.study()
+
+        SwingUtilities.invokeLater {
+            b.updateTree(study) { println it }
+        }
+        SwingUtilities.invokeLater {
+            b.expandTo(study.forms.first()['height'])
+        }
     }
 }

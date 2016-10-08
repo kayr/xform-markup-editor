@@ -1,5 +1,6 @@
 package org.openxdata.markup.ui
 
+import groovy.transform.CompileStatic
 import jsyntaxpane.actions.ActionUtils
 import org.codehaus.groovy.runtime.StackTraceUtils
 import org.openxdata.markup.*
@@ -82,13 +83,17 @@ class MainPresenter implements DocumentListener {
 
         form.btnPreviewXml.addActionListener { Thread.start { executeSafely { previewOdkXML() } } }
 
+        form.txtMarkUp.addCaretListener { selectLineOnTree(it.dot) }
 
-        form.frame.addWindowListener(new WindowAdapter() {
+
+
+        def windowCloseHandler = new WindowAdapter() {
             @Override
             void windowClosing(WindowEvent e) {
                 handleWindowCloseOperation()
             }
-        })
+        }
+        form.frame.addWindowListener(windowCloseHandler)
 
         allowedAttribs = Attrib.allowedAttributes.collect { '@' + it }
         allowedTypes = Attrib.types.collect { '@' + it }
@@ -183,20 +188,20 @@ class MainPresenter implements DocumentListener {
         def params = [comment: ser.xforms.values().first()]
         def uploadUrl = CLIPBOARD_URL + "/add_text.php"
 
-        String xmlUrl = ''
+        String response = ''
         try {
             Util.time("====== Uploading XML to server") {
-                xmlUrl = httpPost(uploadUrl, params)
+                response = IOHelper.httpPost(uploadUrl, params)
             }
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to connect to server: [${e.message}]", e)
         }
 
-        if (!(xmlUrl ==~ 'http(s)?:.*'))
-            throw new RuntimeException("Server could not process request: reason[${xmlUrl}]")
+        if (!(response ==~ 'http(s)?:.*'))
+            throw new RuntimeException("Server could not process request: reason[${response}]")
 
-        def enketoUrl = ENKETO_URL + "/preview?form=$xmlUrl"
+        def enketoUrl = ENKETO_URL + "/preview?form=$response"
 
         if (Desktop.isDesktopSupported()) {
             try {
@@ -222,21 +227,6 @@ class MainPresenter implements DocumentListener {
 
     static void setClipboardContents(final String contents) {
         clipboard.setContents(new StringSelection(contents), null)
-    }
-
-    static httpPost(String url, Map<String, Object> params) {
-        def url1 = new URL(url)
-        def connection = url1.openConnection()
-        connection.requestMethod = "POST"
-        def urlParameters = params.collect { k, v ->
-            URLEncoder.encode(k, 'UTF-8') + '=' + URLEncoder.encode(v.toString(), "UTF-8")
-        }.join('&')
-        //send post request
-        connection.doOutput = true
-        connection.outputStream << urlParameters
-        //get http response
-        String response = connection.inputStream.text
-        return response
     }
 
 
@@ -453,15 +443,20 @@ class MainPresenter implements DocumentListener {
         return new MarkupDeserializer(newMarkup).study()
     }
 
+    private Study currentStudy
+    private int previousCaretLine
+
     void quickParseStudy() {
         invokeLater {//start this thread when u r sure all UI events are done
             e.execute {
                 Study.quickParse.set(true)
                 try {
-                    getParsedStudy()
+                    currentStudy = null
+                    currentStudy = getParsedStudy()
                 } catch (Exception x) {
                     println('error parsing study')
                     invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
+
                 }
             }
         }
@@ -469,7 +464,13 @@ class MainPresenter implements DocumentListener {
 
     def updateTree(Study study) {
         form.studyTreeBuilder.updateTree(study) { IFormElement qn -> selectLine(qn.line) }
-        invokeLater { form.studyTreeBuilder.expand(3) }
+        invokeLater {
+            if (!previousCaretLine)
+                form.studyTreeBuilder.expand(3)
+            else
+                form.studyTreeBuilder.selectNodeForLine(previousCaretLine + 1)
+        }
+
     }
 
     private selectLine(int line) {
@@ -484,17 +485,24 @@ class MainPresenter implements DocumentListener {
         }
     }
 
-    public void insertUpdate(final DocumentEvent e) {
-        refreshTreeLater()
+    @CompileStatic
+    private selectLineOnTree(int pos) {
+        if (!currentStudy || isUpdating()) return
+
+        def caretLine = ActionUtils.getLineNumber(form.txtMarkUp, pos)
+
+        if (previousCaretLine == caretLine) return
+
+        previousCaretLine = caretLine
+        //AntLr lines start from 1 but JText start from 0
+        form.studyTreeBuilder.selectNodeForLine(caretLine + 1)
     }
 
-    public void removeUpdate(DocumentEvent e) {
-        refreshTreeLater()
-    }
+    public void insertUpdate(final DocumentEvent e) { refreshTreeLater() }
 
-    public void changedUpdate(DocumentEvent e) {
-        refreshTreeLater()
-    }
+    public void removeUpdate(DocumentEvent e) { refreshTreeLater() }
+
+    public void changedUpdate(DocumentEvent e) { refreshTreeLater() }
 
     private updating = false
     private long updateTime = System.currentTimeMillis()

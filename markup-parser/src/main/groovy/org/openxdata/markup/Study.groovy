@@ -42,4 +42,19 @@ class Study {
     String toString() {
         name
     }
+
+    IFormElement getElementClosestToLine(int lineOfInterest) {
+        def firstForm = forms.first()
+        if (lineOfInterest < firstForm.line) {
+            return forms.first()
+        }
+        if (forms.size() == 1) {
+            return firstForm.getElementClosestToLine(lineOfInterest)
+        }
+        //find form where line lies
+        def candidateForm = forms.inject { Form curr, Form next ->
+            if (lineOfInterest >= curr.line && lineOfInterest < next.line) curr else next
+        }
+        return candidateForm.getElementClosestToLine(lineOfInterest)
+    }
 }

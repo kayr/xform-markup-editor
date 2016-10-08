@@ -1,12 +1,10 @@
 package org.openxdata.markup.deserializer
 
 import org.openxdata.markup.HasQuestions
-import org.openxdata.markup.ParserUtils
 import org.openxdata.markup.exception.ValidationException
 import org.openxdata.markup.serializer.XFormSerializer
 
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
-import static org.openxdata.markup.deserializer.MarkupDeserializer.createAST
 
 /**
  * Created by kay on 5/26/2016.
@@ -59,7 +57,6 @@ sdsdsd''"""
     }
 
 
-
     void testGroupsWithNoIdsButHaveBindAttrs() {
         def form = '''### s
                      |## f
@@ -76,5 +73,38 @@ sdsdsd''"""
         } catch (ValidationException x) {
             assert x.message.contains('Has No Id')
         }
+    }
+
+    void testThatClosestElementIsFetched() {
+        def form = '''### s
+                     |## f
+                     |
+                     |#> sjdjsd
+                     |kskas
+                     |sdsd
+                     |@layout:appearance jjs
+                     |
+                     |#> sdsd
+                     |sddsd
+                     |
+                     |## f2
+                     |
+                     |sdj
+                     |
+                     |ddff
+                     |>dsd
+                     |
+                     '''.stripMargin()
+
+        def study = new MarkupDeserializer(form).parse()
+
+        assert 'sjdjsd' == study.getElementClosestToLine(3).name
+        assert 'sjdjsd' == study.getElementClosestToLine(4).name
+        assert 'sdsd' == study.getElementClosestToLine(5).name
+        assert 'ddff' == study.getElementClosestToLine(100).name
+        assert 'f' == study.getElementClosestToLine(-1).name
+        assert 'sdj' == study.getElementClosestToLine(14).name
+
+
     }
 }

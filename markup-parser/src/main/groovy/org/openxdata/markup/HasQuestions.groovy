@@ -147,4 +147,19 @@ trait HasQuestions implements IFormElement {
         return rt.unique() as List<IQuestion>
     }
 
+    IFormElement getElementClosestToLine(int lineOfInterest) {
+        def elements = getAllElements()
+
+        if (lineOfInterest <= this.line) return this
+
+
+        def lastElement = elements.last()
+
+        if (lineOfInterest >= lastElement.line) return lastElement
+
+        def elem = elements.find { IFormElement it -> lineOfInterest <= it.line/* > lineOfInterest */}
+
+        return elem
+    }
+
 }

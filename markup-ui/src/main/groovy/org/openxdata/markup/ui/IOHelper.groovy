@@ -38,4 +38,19 @@ class IOHelper {
     static FileNameExtensionFilter filter(String desc, String... extensions) {
         return new FileNameExtensionFilter(desc, extensions)
     }
+
+    static httpPost(String url, Map<String, Object> params) {
+        def url1 = new URL(url)
+        def connection = url1.openConnection()
+        connection.requestMethod = "POST"
+        def urlParameters = params.collect { k, v ->
+            URLEncoder.encode(k, 'UTF-8') + '=' + URLEncoder.encode(v.toString(), "UTF-8")
+        }.join('&')
+        //send post request
+        connection.doOutput = true
+        connection.outputStream << urlParameters
+        //get http response
+        String response = connection.inputStream.text
+        return response
+    }
 }
