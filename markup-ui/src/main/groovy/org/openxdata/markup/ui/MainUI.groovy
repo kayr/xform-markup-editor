@@ -18,14 +18,13 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
  */
 class MainUI {
 
-    //UIManager.getDefaults().findAll{it.key.toString().toLowerCase().contains('icon')}
+    //UIManager.getDefaults().findAll{it.key.toString().toLowerCase().endsWith('icon')}
     static def ICON_OPEN = getIcon('Tree.openIcon')
     static def ICON_SAVE = getIcon('FileView.floppyDriveIcon')
     static def ICON_NEW = getIcon('FileView.fileIcon')
     static def ICON_IMPORT = getIcon('FileChooser.upFolderIcon')
     static def ICON_FORM = getIcon('FileChooser.detailsViewIcon')
-    static def ICON_HDD = getIcon('FileView.hardDriveIcon')
-    static def ICON_FILE = getIcon('FileView.fileIcon')
+    static def ICON_REFRESH = createImageIcon('/refresh.png', 'Refresh')
 
     Closure formLoader
     SwingBuilder s
@@ -122,7 +121,7 @@ class MainUI {
 
                 panel(constraints: BorderLayout.NORTH) {
                     flowLayout(alignment: FlowLayout.LEFT)
-                    btnRefreshTree = button(text: 'Refresh')
+                    btnRefreshTree = button(icon: ICON_REFRESH)
                     chkAutoUpdateTree = checkBox(text: 'Auto Refresh', selected: true)
                 }
 
@@ -216,6 +215,16 @@ class MainUI {
         frame.title = s
     }
 
+    static protected ImageIcon createImageIcon(String path,
+                                               String description) {
+        java.net.URL imgURL = getClass().getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL, description);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
 
     JButton btnGenerateXML
     JButton btnShowXml
