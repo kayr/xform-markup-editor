@@ -115,7 +115,7 @@ class MainUI {
         }
 
         def _tree = {
-            s.panel(preferredSize: [160, -1]) {
+            s.panel(preferredSize: [250, -1]) {
 
                 borderLayout()
 

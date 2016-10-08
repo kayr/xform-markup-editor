@@ -119,24 +119,31 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         tree.setSelectionRow(row)
     }
 
-    boolean isUserSelection = true
+    private boolean keyboardUpdateTriggered = false, mouseUpdateTriggered = false
+
 
     @Override
     void valueChanged(TreeSelectionEvent e) {
         DefaultMutableTreeNode component = (DefaultMutableTreeNode) tree.lastSelectedPathComponent
-        if (isUserSelection && component?.userObject instanceof IFormElement)
+        if (!keyboardUpdateTriggered && component?.userObject instanceof IFormElement) {
+            mouseUpdateTriggered = true
             listener.call(component.userObject)
-
+        }
     }
 
     void selectNodeForLine(int caretLine) {
+        if (mouseUpdateTriggered) {
+            mouseUpdateTriggered = false
+            return
+        }
+
         def object = rootNode.getUserObject()
         if (!(object instanceof Study)) return
         def study = object as Study
         def element = study.getElementClosestToLine(caretLine)
-        isUserSelection = false
+        keyboardUpdateTriggered = true
         expandTo(element)
-        isUserSelection = true
+        keyboardUpdateTriggered = false
     }
 
 
