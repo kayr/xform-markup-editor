@@ -466,7 +466,7 @@ class MainPresenter implements DocumentListener {
         form.studyTreeBuilder.updateTree(study) { IFormElement qn -> selectLine(qn.line) }
         invokeLater {
             if (!previousCaretLine)
-                form.studyTreeBuilder.expand(3)
+                form.studyTreeBuilder.expand(2)
             else
                 form.studyTreeBuilder.selectNodeForLine(previousCaretLine + 1)
         }

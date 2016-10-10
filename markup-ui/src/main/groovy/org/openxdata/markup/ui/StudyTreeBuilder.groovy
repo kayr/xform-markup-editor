@@ -113,10 +113,30 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
     }
 
     public void expandTo(IFormElement level) {
-        Enumeration e = rootNode.preorderEnumeration()
-        def row = e.findIndexOf { DefaultMutableTreeNode n -> n.getUserObject().is(level) }
-        expand(row)
-        tree.setSelectionRow(row)
+
+        def parent = level
+        def hierarchy = []
+        while (parent) {
+            hierarchy << parent
+            parent = parent.parent
+        }
+        hierarchy << rootNode.userObject
+
+        int currentRow = 0
+        for (formElem in hierarchy.reverse()) {
+
+            for (currentRow = 0; currentRow < tree.getRowCount(); currentRow++) {
+                def node = tree.getPathForRow(currentRow).lastPathComponent.asType(DefaultMutableTreeNode);
+                if (node.getUserObject().is(formElem)) {
+                    tree.expandRow(currentRow)
+                    break
+                }
+            }
+
+        }
+
+        tree.setSelectionRow(currentRow)
+        tree.scrollRowToVisible(currentRow)
     }
 
     private boolean keyboardUpdateTriggered = false, mouseUpdateTriggered = false
