@@ -334,9 +334,11 @@ class MainPresenter implements DocumentListener {
         XFormSerializer ser = getOxdSerializer()
         def studyXML = ser.toStudyXml(study)
 
+        def lastAccessedDirectory = HistoryKeeper.lastAccessedDirectory
         def file = IOHelper.chooseFile(
-                HistoryKeeper.lastAccessedDirectory,
+                lastAccessedDirectory,
                 IOHelper.filter('XML File', 'xml')) { JFileChooser jc ->
+            jc.selectedFile = new File(lastAccessedDirectory, "${study.name ?: study.forms.first().name}.study.xml")
             jc.showSaveDialog(form.frame)
         }
 
