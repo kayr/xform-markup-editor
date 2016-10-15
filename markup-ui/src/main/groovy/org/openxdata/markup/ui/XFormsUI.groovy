@@ -32,7 +32,7 @@ class XFormsUI {
                 alwaysOnTop: false, locationRelativeTo: parent) {
 
             panel(constraints: BorderLayout.NORTH) {
-                btnSave = button(text: 'Save To File',icon: MainUI.ICON_SAVE)
+                btnSave = button(text: 'Save To File', icon: MainUI.ICON_SAVE)
             }
 
             tabs = tabbedPane(constraints: BorderLayout.CENTER)

@@ -1,8 +1,9 @@
 package org.openxdata.markup.ui
 
+import java.awt.*
+import java.awt.datatransfer.Clipboard
+import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
-import java.awt.Toolkit
-import java.awt.datatransfer.*
 
 /**
  * Created by Martin on 23/06/2016.
@@ -10,11 +11,11 @@ import java.awt.datatransfer.*
 class ClipboardUtils {
     static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
 
-    static void setClipboardContents(final String contents){
+    static void setClipboardContents(final String contents) {
         clipboard.setContents(new StringSelection(contents), null)
     }
 
-    static String getClipboardContents(){
+    static String getClipboardContents() {
         return clipboard.getContents(null).getTransferData(DataFlavor.stringFlavor)
     }
 }

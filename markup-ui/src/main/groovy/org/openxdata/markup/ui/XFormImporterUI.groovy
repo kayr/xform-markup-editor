@@ -25,7 +25,7 @@ class XFormImporterUI {
         init()
 
         filter = [
-                accept: { File file -> file.name.endsWith('.xml') || file.isDirectory() },
+                accept        : { File file -> file.name.endsWith('.xml') || file.isDirectory() },
                 getDescription: { "XML Files" }
         ] as SFilter
 

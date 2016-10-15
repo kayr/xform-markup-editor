@@ -387,11 +387,10 @@ $uniqueIdQuestion
 """
 
 
-
     static EXAMPLES = [
-            'Simple Form': sampleStudy,
+            'Simple Form'                 : sampleStudy,
             'Simple Skip Validation Logic': simpleSkip,
-            'Advanced Skip Logic': advanceSkip,
-            'Oxd Sample Form': oxdSampleForm
+            'Advanced Skip Logic'         : advanceSkip,
+            'Oxd Sample Form'             : oxdSampleForm
     ]
 }
