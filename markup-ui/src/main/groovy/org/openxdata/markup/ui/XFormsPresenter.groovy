@@ -45,7 +45,7 @@ class XFormsPresenter {
         def file = chooseFile(lastAccessedDirectory,
                 filter('XML Files', 'xml')) { JFileChooser jc ->
             jc.setSelectedFile(suggestedFile)
-            jc.showSaveDialog(previewFrame.parent)
+            jc.showSaveDialog(previewFrame.frame)
         }
 
         if (!file) return
