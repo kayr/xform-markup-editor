@@ -52,7 +52,7 @@ class ConversionHelper {
 
     private static def cache = new ConcurrentHashMap<String, Form>()
 
-    static Form oxd2FormWithCache(String xform, boolean pClearCache = true) {
+    static Form oxd2FormWithCache(String xform, boolean pClearCache = false) {
 
         if (pClearCache) {
             clearCache()
