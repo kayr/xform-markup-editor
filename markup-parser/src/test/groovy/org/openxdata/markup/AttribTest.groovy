@@ -3,9 +3,7 @@ package org.openxdata.markup
 import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.InvalidAttributeException
 
-import static org.openxdata.markup.TestUtils.toForm
-import static org.openxdata.markup.TestUtils.toODK
-import static org.openxdata.markup.TestUtils.toOXD
+import static ConversionHelper.markup2Form
 
 /**
  * Created with IntelliJ IDEA.
@@ -196,7 +194,7 @@ class AttribTest extends GroovyTestCase {
     void testJRCountCannotBeSetOnOtherQuestion() {
         def f = '''### s\n## f\n @jrcount\nq1'''
         try {
-            toForm(f)
+            markup2Form(f)
             fail('Expecting validation exception')
         } catch (InvalidAttributeException e) {
             assert e.message.contains('be set on Repeat Question')

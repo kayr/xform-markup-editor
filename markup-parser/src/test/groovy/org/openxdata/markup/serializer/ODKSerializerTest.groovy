@@ -3,7 +3,7 @@ package org.openxdata.markup.serializer
 import org.openxdata.markup.Fixtures
 import org.openxdata.markup.Form
 
-import static org.openxdata.markup.TestUtils.*
+import static org.openxdata.markup.ConversionHelper.*
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.groupWithSkipLogic
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
 import static org.openxdata.markup.serializer.ODKFixtures.*
@@ -15,37 +15,37 @@ class ODKSerializerTest extends GroovyTestCase {
     def serializer = new ODKSerializer();
 
     void testReadonlyAndInvisibleIsConvertedToReadonly() {
-        assertEquals formWithInvisible.xml, toODK(formWithInvisible.form)
+        assertEquals formWithInvisible.xml, markup2Odk(formWithInvisible.form)
     }
 
     void testReadonlyAndSkipLogicAreProcessedOk() {
-        assertEquals formWithSkipLogicAndReadOnly.xml, toODK(formWithSkipLogicAndReadOnly.form)
+        assertEquals formWithSkipLogicAndReadOnly.xml, markup2Odk(formWithSkipLogicAndReadOnly.form)
     }
 
     void testStartTimeAnd() {
-        assertEquals toODK(timeStamp.form, false, true), timeStamp.xml
+        assertEquals markup2Odk(timeStamp.form, false, true), timeStamp.xml
     }
 
     void testFormWithRelativeValidation() {
-        assertEquals formRelativeValidation.xml, toODK(formRelativeValidation.form)
+        assertEquals formRelativeValidation.xml, markup2Odk(formRelativeValidation.form)
     }
 
     void testOxdSampleForm() {
-        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, false, true)
+        assertEquals oxdSampleForm.xml, markup2Odk(oxdSampleForm.form, false, true)
     }
 
     void testMultiSelectConversion() {
-        assertEquals oxdSampleForm.xml, toODK(oxdSampleForm.form, false, true)
+        assertEquals oxdSampleForm.xml, markup2Odk(oxdSampleForm.form, false, true)
     }
 
     void testOxdExternalApp() {
-        assertEquals formWithAppearanceComment.xml, toODK(formWithAppearanceComment.form, false, true)
+        assertEquals formWithAppearanceComment.xml, markup2Odk(formWithAppearanceComment.form, false, true)
     }
 
     void testSkipActionsAndLogic() {
         serializer.numberBindings = true
         serializer.numberQuestions = true
-        assertEquals formSkipLogicAndActions.xml, toODK(formSkipLogicAndActions.form, true)
+        assertEquals formSkipLogicAndActions.xml, markup2Odk(formSkipLogicAndActions.form, true)
     }
 
     void testRegex() {
@@ -65,7 +65,7 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testToODKMultiSelect() {
-        Form form = toForm(multiSelectConversion.form)
+        Form form = markup2Form(multiSelectConversion.form)
 
         [
                 '$s = \'calculus\' and ($ps != null or (3-4) = 9 or $s = \'grades\') and $s = \'biology\''                       :
@@ -114,15 +114,15 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testBooleanConversion() {
-        assertEquals booleanConversion.xml, toODK(booleanConversion.form, false, true)
+        assertEquals booleanConversion.xml, markup2Odk(booleanConversion.form, false, true)
     }
 
     void testAppearanceAndLayoutAttributes() {
-        assertEquals formWithLayoutAttributes.xml, toODK(Fixtures.formWithLayoutAndBindAttributes,)
+        assertEquals formWithLayoutAttributes.xml, markup2Odk(Fixtures.formWithLayoutAndBindAttributes,)
     }
 
     void testAddingMetaInstanceId() {
-        assertEquals oxdSampleForm.xmlWithMeta, toODK(oxdSampleForm.form, false, true, true)
+        assertEquals oxdSampleForm.xmlWithMeta, markup2Odk(oxdSampleForm.form, false, true, true)
     }
 
     void testNestedGroup() {
@@ -131,7 +131,7 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testNestedGroupNumber() {
-        def oxd = toODK(toForm(nestedGroups.markUp), true)
+        def oxd = form2Odk(markup2Form(nestedGroups.markUp), true)
         assertEquals nestedGroups.odkNumberd, oxd
     }
 
@@ -151,8 +151,8 @@ class ODKSerializerTest extends GroovyTestCase {
                       group{
                             group 2
                       }'''
-        def odk = toODK(form)
-        def oxd = toOXD(form)
+        def odk = markup2Odk(form)
+        def oxd = markup2Oxd(form)
 
         assertEquals groupWithSkipLogic.odkXml, odk
         assertEquals groupWithSkipLogic.oxdXml, oxd

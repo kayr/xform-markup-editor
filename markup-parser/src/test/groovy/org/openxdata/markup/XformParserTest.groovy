@@ -475,7 +475,7 @@ jeelopo
 Q1
 '''
 
-        def form = TestUtils.toForm(markup)
+        def form = ConversionHelper.markup2Form(markup)
 
         assert form.binding == 'form_v1'
         assert form.allQuestions.size() == 1

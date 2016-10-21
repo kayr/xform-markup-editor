@@ -116,7 +116,7 @@ repeat{ repeat
             '''
 
         try {
-            TestUtils.toForm(markup)
+            ConversionHelper.markup2Form(markup)
         } catch (Exception x) {
             x.printStackTrace()
             fail("Double dot should not throw exception")
@@ -139,7 +139,7 @@ repeat{ repeat
             '''
 
         try {
-            TestUtils.toForm(markup)
+            ConversionHelper.markup2Form(markup)
         } catch (Exception x) {
             x.printStackTrace()
             fail("Double dot should not throw exception")
