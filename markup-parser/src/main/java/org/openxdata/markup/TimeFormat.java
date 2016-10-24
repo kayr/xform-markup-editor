@@ -36,7 +36,6 @@ package org.openxdata.markup;
  * FIXME: expanded features need documentation. JGH
  * 
  * @author <a href="mailto:jhaynie@vocalocity.net">Jeff Haynie</a>
- * @date $Date: 2008-11-14 07:45:28 -0500 (Fri, 14 Nov 2008) $
  * @version $Revision: 81022 $
  */
 public final class TimeFormat  {
