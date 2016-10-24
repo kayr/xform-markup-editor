@@ -50,18 +50,18 @@ class ConversionHelper {
         serializer.toXForm(form)
     }
 
-    private static def cache = new ConcurrentHashMap<String, Form>()
+    private static def cache = new ConcurrentHashMap<Object, Form>()
 
-    static Form oxd2FormWithCache(String xform, boolean pClearCache = false) {
+    static Form oxd2FormWithCache(String xform, def cacheID = xform, boolean pClearCache = false) {
 
         if (pClearCache) {
             clearCache()
         }
 
-        def cachedForm = cache[xform]
+        def cachedForm = cache[cacheID]
         if (!cachedForm) {
             cachedForm = new XFormDeserializer(xform).parse()
-            cache[xform] = cachedForm
+            cache[cacheID] = cachedForm
         }
 
         return cachedForm
