@@ -3,6 +3,14 @@
 
 You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK)](https://opendatakit.org/) forms using this editor fast and easy.
 
+### Screenshots
+
+#### Main window
+![Editor][main_window]
+
+#### XML Preview
+![Editor][show_xml]
+
 
 **Table of Contents**
 
@@ -50,19 +58,14 @@ You can generate an [openXdata](http://www.openxdata.org/) or [Open Data Kit(ODK
 A [download](https://github.com/kayr/xform-markup-editor/releases) of the editor is available [here](https://github.com/kayr/xform-markup-editor/releases).
 To run this app open the command line and execute `java -jar <file-name>`
 
-### Screenshots
 
-#### Main window
-![Editor][main_window]
-
-#### XML Preview
-![Editor][show_xml]
 
 
 ### Features:
  - Simple XPath Variable references e.g instead of `/instance/path_id` you use `$path_id`
  - On the fly simple validation of xpath
  - Direct preview in enketo
+ - Integrated ODK Validate
  - Autocompletion of words using Ctrl-K
  - Easy creation of cascading selects by referencing a CSV. The CSV will data will be baked into the generated XFORM.
  - Auto-numbering of labels and IDS
