@@ -138,6 +138,7 @@ class MainPresenter implements DocumentListener {
 
     private void loadForm(String markupTxt, boolean reloadTree = true) {
         //first remove the listener before you load the form this is to avoid double parsing of the study
+        form.chkEnsureUniqueIdentifier.selected = true
         form.txtMarkUp.document.removeDocumentListener(this)
 
         form.txtMarkUp.read(new StringReader(markupTxt), 'text/xform')
@@ -440,6 +441,8 @@ class MainPresenter implements DocumentListener {
         return result.value
     }
 
+    def uniqueIdWarnings = 0
+
     private Study mayBeAddUniqueId(Study study) {
         if (!form.chkEnsureUniqueIdentifier.isSelected()) return study
 
@@ -455,7 +458,12 @@ class MainPresenter implements DocumentListener {
 
         def answer = JOptionPane.showConfirmDialog(form.frame, message, "WARNING!!", YES_NO_OPTION, WARNING_MESSAGE)
 
-        if (answer != JOptionPane.OK_OPTION) return study
+        uniqueIdWarnings++
+        if (answer != JOptionPane.OK_OPTION) {
+            if (uniqueIdWarnings >= 3)
+                form.chkEnsureUniqueIdentifier.selected = false
+            return study
+        }
 
         def newMarkup = uId.addUniqueIdentifier()
         invokeLater { loadForm(newMarkup, false) }
