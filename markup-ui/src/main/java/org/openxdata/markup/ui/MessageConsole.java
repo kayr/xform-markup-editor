@@ -19,12 +19,12 @@ import java.io.PrintStream;
  *  You can limit the number of lines to hold in the Document.
  */
 public class MessageConsole {
-    private JTextComponent textComponent;
+    private JTextPane  textComponent;
     private Document document;
     private boolean isAppend;
     private DocumentListener limitLinesListener;
 
-    public MessageConsole(JTextComponent textComponent) {
+    public MessageConsole(JTextPane  textComponent) {
         this(textComponent, true);
     }
 
@@ -35,7 +35,7 @@ public class MessageConsole {
       *  The messages can either be appended to the end of the console or
       *  inserted as the first line of the console.
       */
-    public MessageConsole(JTextComponent textComponent, boolean isAppend) {
+    public MessageConsole(JTextPane  textComponent, boolean isAppend) {
         this.textComponent = textComponent;
         this.document = textComponent.getDocument();
         this.isAppend = isAppend;
@@ -218,7 +218,7 @@ public class MessageConsole {
     }
 
     public static void init(Component parentComponent) {
-        JTextArea textArea = new JTextArea();
+        JTextPane  textArea = new JTextPane ();
         JScrollPane scrollPane = new JScrollPane(textArea);
 
         JFrame frame = new JFrame("Output");
@@ -228,8 +228,8 @@ public class MessageConsole {
 
         MessageConsole con = new MessageConsole(textArea);
         con.setMessageLines(300);
-        con.redirectOut(Color.black, System.out);
-        con.redirectErr(Color.black, System.err);
+        con.redirectOut(Color.blue, System.out);
+        con.redirectErr(Color.red, System.err);
 
     }
 }

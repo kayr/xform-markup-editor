@@ -1,8 +1,11 @@
 package org.openxdata.markup.ui
 
 import groovy.transform.CompileStatic
+import groovy.transform.WithWriteLock
 import jsyntaxpane.actions.ActionUtils
 import org.codehaus.groovy.runtime.StackTraceUtils
+import org.odk.validate.ErrorListener
+import org.odk.validate.FormValidator
 import org.openxdata.markup.*
 import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.ValidationException
@@ -177,6 +180,13 @@ class MainPresenter implements DocumentListener {
         def study = getParsedStudy()
         def ser = getODKSerializer()
         ser.toStudyXml(study)
+
+        if (form.chkODKValidate.isSelected()) {
+            ser.xforms.each {
+                validateWithODK(it.key, it.value)
+            }
+        }
+
         renderXMLPreview(ser.xforms)
     }
 
@@ -185,8 +195,15 @@ class MainPresenter implements DocumentListener {
         def study = getParsedStudy()
         def ser = getODKSerializer()
         ser.toStudyXml(study)
-        def params = [comment: ser.xforms.values().first()]
+        def firstXform = ser.xforms.values().first()
+        def params = [comment: firstXform]
         def uploadUrl = CLIPBOARD_URL + "/add_text.php"
+
+        if (form.chkODKValidate.isSelected()) {
+            validateWithODK(study.forms.first(), firstXform)
+        }
+
+
 
         String response = ''
         try {
@@ -456,13 +473,47 @@ class MainPresenter implements DocumentListener {
                     currentStudy = null
                     currentStudy = getParsedStudy()
                 } catch (Exception x) {
-                    println('error parsing study')
+                    System.err.println('error parsing study')
                     invokeLater { form.studyTreeBuilder.showError("Error!! [$x.message]") }
 
                 }
             }
         }
     }
+
+
+    def validateWithODK(Form form1, String xform) {
+
+        System.out.println("========== VALIDATING($form1.name) WITH ODK VALIDATE =============")
+
+        def gotError = false
+        def odkErrorListener = new ErrorListener() {
+            @Override
+            @WithWriteLock
+            void error(Object o) {
+                System.err.println(o)
+                gotError = true
+            }
+
+            @Override
+            @WithWriteLock
+            void info(Object o) { System.out.println(o) }
+        }
+
+        def validator = new FormValidator(odkErrorListener)
+        validator.validateText(xform)
+        if (gotError) {
+            System.err.println("****************************************************************************************")
+            System.err.println("****************************************************************************************")
+            System.err.println("ODK VALIDATION ERROR ->FORM($form1.name)*************".padRight(88, '*'))
+            System.err.println("****************************************************************************************")
+        } else {
+            System.out.println("========== COMPLETED:($form1.name) =========")
+
+        }
+
+    }
+
 
     def updateTree(Study study) {
         form.studyTreeBuilder.updateTree(study) { IFormElement qn -> selectLine(qn.line) }

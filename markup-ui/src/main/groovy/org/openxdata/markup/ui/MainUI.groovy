@@ -5,6 +5,7 @@ import jsyntaxpane.DefaultSyntaxKit
 import jsyntaxpane.actions.CaretMonitor
 
 import javax.swing.*
+import javax.swing.text.DefaultStyledDocument
 import java.awt.*
 import java.awt.event.ActionEvent
 
@@ -109,7 +110,8 @@ class MainUI {
                 btnShowXml = button(text: "Show XML OXD")
                 btnShowOdkXml = button(text: "Show XML ODK")
                 btnPreviewXml = button(text: "Preview in Enketo")
-                chkNumberLabels = checkBox(text: 'Number Labels')
+                chkNumberLabels = checkBox(text: 'Number Labels',selected: true)
+                chkODKValidate= checkBox(text: 'ODK Validate',selected: true)
 
             }
         }
@@ -142,7 +144,7 @@ class MainUI {
         }
 
         def _textArea = {
-            s.splitPane(orientation: JSplitPane.VERTICAL_SPLIT, resizeWeight: 0.85) {
+            s.splitPane(orientation: JSplitPane.VERTICAL_SPLIT, resizeWeight: 0.70) {
 
                 scrollPane(constraints: 'top') {
                     txtMarkUp = editorPane()
@@ -150,7 +152,7 @@ class MainUI {
                 }
 
                 scrollPane(constraints: 'bottom') {
-                    txtConsole = textArea()
+                    txtConsole = textPane(styledDocument : new DefaultStyledDocument(),font: new Font(Font.MONOSPACED,Font.PLAIN,12))
                 }
             }
         }
@@ -174,9 +176,9 @@ class MainUI {
 
         MessageConsole con = new MessageConsole(txtConsole);
         con.with {
-            setMessageLines(300)
+            setMessageLines(2000)
             redirectOut Color.black, System.out
-            redirectErr Color.black, System.err
+            redirectErr Color.red, System.err
         }
         new CaretMonitor(txtMarkUp, lblCaret)
     }
@@ -235,6 +237,7 @@ class MainUI {
     JCheckBoxMenuItem chkGenerateLayout
     JCheckBoxMenuItem chkNumberBindings
     JCheckBox chkNumberLabels
+    JCheckBox chkODKValidate
     JCheckBoxMenuItem chkEmulateOXDConversion
     JCheckBoxMenuItem chkAutoAddInstanceId
     JCheckBox chkAutoUpdateTree
@@ -254,7 +257,7 @@ class MainUI {
 
     //Text
     JEditorPane txtMarkUp
-    JTextArea txtConsole
+    JTextPane txtConsole
 
     StudyTreeBuilder studyTreeBuilder
 
