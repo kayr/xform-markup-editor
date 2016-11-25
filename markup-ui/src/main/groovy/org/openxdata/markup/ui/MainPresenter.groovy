@@ -28,6 +28,7 @@ import java.util.concurrent.Executors
 import static javax.swing.JOptionPane.WARNING_MESSAGE
 import static javax.swing.JOptionPane.YES_NO_OPTION
 import static javax.swing.SwingUtilities.invokeLater
+import static org.openxdata.markup.ui.IOHelper.save
 
 /**
  * Created with IntelliJ IDEA.
@@ -116,9 +117,10 @@ class MainPresenter implements DocumentListener {
     void handleWindowCloseOperation() {
 
         def text = form.txtMarkUp.text
-        if (text == null || text.isEmpty()) {
+        if (!doesFileNeedSaving()) {
             doExit()
         }
+
 
         def option = JOptionPane.showConfirmDialog(form.frame, "Save File?")
 
@@ -283,16 +285,20 @@ class MainPresenter implements DocumentListener {
     }
 
     private boolean mayBeSaveFile() {
-        if (!doesFileNeedSaving() && JOptionPane.showConfirmDialog(form.frame, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-            currentFile.setText(form.txtMarkUp.text, 'UTF-8')
+        if (doesFileNeedSaving() &&
+                form.txtMarkUp.text != addHeader(Resources.sampleStudy) &&
+                JOptionPane.showConfirmDialog(form.frame, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION
+        ) {
+            saveFile()
             return true
         }
         return false
     }
 
     boolean doesFileNeedSaving() {
-        return currentFile == null || currentFile.text == form.txtMarkUp.text
+        return IOHelper.needsSaving(currentFile, form.txtMarkUp.text)
     }
+
 
     private void reset() {
         currentFile = null
@@ -313,14 +319,14 @@ class MainPresenter implements DocumentListener {
                 file = new File(file.absolutePath + '.xfm')
             }
 
-            file.setText(form.txtMarkUp.text, 'UTF-8')
+            save file, form.txtMarkUp.text
 
             setWindowTitle(file)
             currentFile = file
             HistoryKeeper.registerHistory(file.absolutePath)
             renderHistory()
         } else {
-            currentFile.setText(form.txtMarkUp.text, 'UTF-8')
+            save currentFile, form.txtMarkUp.text
         }
     }
 
@@ -366,17 +372,17 @@ class MainPresenter implements DocumentListener {
             file = new File(file.absolutePath + '.xml')
         }
 
-        file.setText(studyXML, 'UTF-8')
+        save(file, studyXML)
 
         def formFolder = createDirectory(file.parentFile.absolutePath + "/xforms")
         ser.xforms.each { key, value ->
-            new File(formFolder, key.name + '.xml').setText(value, 'UTF-8')
+            save new File(formFolder, key.name + '.xml'), value
         }
 
         def importsFolder = createDirectory(file.parentFile.absolutePath + "/xform-imports")
         def imports = ser.formImports
         imports.each { key, value ->
-            new File(importsFolder, key + '.xml').setText(value, 'UTF-8')
+            save new File(importsFolder, key + '.xml'), value
         }
 
         def msg = "Created study file $file.absolutePath\n" +
@@ -384,6 +390,7 @@ class MainPresenter implements DocumentListener {
                 "Created ${imports.size()} import file(s) in folder $importsFolder.absolutePath"
         JOptionPane.showMessageDialog(form.frame, msg)
     }
+
 
     static File createDirectory(String path) {
         def directory = new File(path)
@@ -394,7 +401,7 @@ class MainPresenter implements DocumentListener {
 
     void openFile(File f) {
 
-        def text = f.text
+        def text = IOHelper.loadText(f)
         System.setProperty('form.dir', f.parent)
 
         loadForm(text)
@@ -425,6 +432,7 @@ class MainPresenter implements DocumentListener {
             try {
                 Study.validateWithXML.set(form.chkUseXMLValidation.isSelected())
                 def text = form.txtMarkUp.text
+                if (!text) { return null }
                 def parser = new MarkupDeserializer(text)
                 def study = parser.study()
                 if (validateUniqueId) study = mayBeAddUniqueId(study)
@@ -515,6 +523,8 @@ class MainPresenter implements DocumentListener {
             System.err.println("****************************************************************************************")
             System.err.println("ODK VALIDATION ERROR ->FORM($form1.name)*************".padRight(88, '*'))
             System.err.println("****************************************************************************************")
+            JOptionPane.showMessageDialog(form.frame, "ODK Validate Found Errors In The Form. " +
+                    "See Logs In Lower Output Window For Details", "ODK VALIDATE WARNING:", JOptionPane.ERROR_MESSAGE)
         } else {
             System.out.println("========== COMPLETED:($form1.name) =========")
 

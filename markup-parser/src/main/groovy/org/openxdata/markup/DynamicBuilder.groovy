@@ -260,7 +260,7 @@ class DynamicBuilder {
         if (Study.quickParse.get()) {
             readMaxLines(file)
         } else {
-            csvSrc = new StringBuilder(file.text)
+            csvSrc = new StringBuilder(file.getText('UTF-8'))
         }
     }
 

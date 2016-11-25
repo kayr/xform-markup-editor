@@ -60,7 +60,7 @@ class XFormsPresenter {
 
         }
 
-        file.setText(currentXML, 'UTF-8')
+        IOHelper.save file, currentXML
     }
 
 }

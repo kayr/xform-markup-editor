@@ -23,7 +23,7 @@ class XFormImporterPresenter {
     }
 
     def load(File file) {
-        ui.setXML(file.text)
+        ui.setXML(IOHelper.loadText(file))
     }
 
     def processXml() {

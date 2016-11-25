@@ -110,8 +110,8 @@ class MainUI {
                 btnShowXml = button(text: "Show XML OXD")
                 btnShowOdkXml = button(text: "Show XML ODK")
                 btnPreviewXml = button(text: "Preview in Enketo")
-                chkNumberLabels = checkBox(text: 'Number Labels',selected: true)
-                chkODKValidate= checkBox(text: 'ODK Validate',selected: true)
+                chkNumberLabels = checkBox(text: 'Number Labels', selected: true)
+                chkODKValidate = checkBox(text: 'ODK Validate', selected: true)
 
             }
         }
@@ -152,7 +152,9 @@ class MainUI {
                 }
 
                 scrollPane(constraints: 'bottom') {
-                    txtConsole = textPane(styledDocument : new DefaultStyledDocument(),font: new Font(Font.MONOSPACED,Font.PLAIN,12))
+                    txtConsole = textPane(styledDocument: new DefaultStyledDocument(),
+                            font: new Font(Font.MONOSPACED, Font.PLAIN, 12),
+                            background: new Color(255, 255, 218))
                 }
             }
         }

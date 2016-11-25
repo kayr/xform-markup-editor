@@ -53,4 +53,33 @@ class IOHelper {
         String response = connection.inputStream.text
         return response
     }
+
+    static save(File file, String text) {
+        println("Saving file: ${file.absolutePath}")
+        file.setText(text, 'UTF-8')
+    }
+
+    static String loadText(File file) {
+        println("Reading file: ${file.absolutePath}")
+        file.getText('UTF-8')
+    }
+
+    static boolean needsSaving(File file, String textContent) {
+
+        def textNullOrEmpty = textContent == null || textContent.isEmpty()
+        def fileNull = file == null || !file.exists()
+
+        if (fileNull && textNullOrEmpty) { return false }
+
+        if (fileNull && !textNullOrEmpty) { return true }
+
+        if (!fileNull && textNullOrEmpty) { return true }
+
+        def fileText = loadText(file)
+
+        if (fileText != textContent) { return true }
+
+        return false
+    }
+
 }
