@@ -50,6 +50,7 @@ class MainPresenter implements DocumentListener {
     Executor e = Executors.newSingleThreadExecutor()
 
 
+
     MainPresenter() {
         form = new MainUI()
 
@@ -116,7 +117,6 @@ class MainPresenter implements DocumentListener {
 
     void handleWindowCloseOperation() {
 
-        def text = form.txtMarkUp.text
         if (!doesFileNeedSaving()) {
             doExit()
         }
@@ -500,14 +500,23 @@ class MainPresenter implements DocumentListener {
 
     def validateWithODK(Form form1, String xform) {
 
-        System.out.println("========== VALIDATING($form1.name) WITH ODK VALIDATE =============")
+        info("========== VALIDATING($form1.name) WITH ODK VALIDATE =============")
 
         def gotError = false
         def odkErrorListener = new ErrorListener() {
             @Override
             @WithWriteLock
             void error(Object o) {
+                def e = o instanceof Throwable ? StackTraceUtils.deepSanitize(o) : o
+                System.err.println(e)
+                gotError = true
+            }
+
+            @Override
+            void error(Object o, Throwable throwable) {
                 System.err.println(o)
+                def finalException = StackTraceUtils.deepSanitize(getRootCause(throwable))
+                clipStackTrace(finalException, 10).printStackTrace()
                 gotError = true
             }
 
@@ -520,15 +529,37 @@ class MainPresenter implements DocumentListener {
         validator.validateText(xform)
         if (gotError) {
             System.err.println("****************************************************************************************")
-            System.err.println("****************************************************************************************")
-            System.err.println("ODK VALIDATION ERROR ->FORM($form1.name)*************".padRight(88, '*'))
+            System.err.println("ODK VALIDATION ERROR ->FORM($form1.name)")
             System.err.println("****************************************************************************************")
             JOptionPane.showMessageDialog(form.frame, "ODK Validate Found Errors In The Form. " +
                     "See Logs In Lower Output Window For Details", "ODK VALIDATE WARNING:", JOptionPane.ERROR_MESSAGE)
         } else {
-            System.out.println("========== COMPLETED:($form1.name) =========")
+            info("========== COMPLETED ODK VALIDATION:($form1.name) Successfully=========")
 
         }
+
+    }
+
+    private info(Object o){
+        form.info.println(o)
+    }
+
+    private Throwable clipStackTrace(Throwable throwable, int num) {
+        def trace1 = throwable.getStackTrace()
+        java.util.List<StackTraceElement> newTrace = []
+        for (it in (0..num)) {
+            if (it < trace1.size()) {
+                newTrace << trace1[it]
+            }
+        }
+        throwable.setStackTrace(newTrace as StackTraceElement[])
+        return throwable
+    }
+
+    Throwable getRootCause(Throwable t) {
+        def rt = t
+        while (rt.getCause()) { rt = rt.getCause() }
+        return rt
 
     }
 
@@ -614,6 +645,7 @@ class MainPresenter implements DocumentListener {
                 "//Allowed Types: $allowedTypes\n" +
                 "//Use Ctrl + K for auto-completion\n$markupTxt"
     }
+
 
     static main(args) {
         new MainPresenter()

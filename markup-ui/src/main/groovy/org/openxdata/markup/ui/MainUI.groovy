@@ -29,6 +29,7 @@ class MainUI {
 
     Closure formLoader
     SwingBuilder s
+    PrintStream info
 
     MainUI() {
         DefaultSyntaxKit.registerContentType("text/xform", "org.openxdata.markup.ui.XFormMarkupSyntaxKit");
@@ -181,6 +182,7 @@ class MainUI {
             setMessageLines(2000)
             redirectOut Color.black, System.out
             redirectErr Color.red, System.err
+            info = createStream(Color.blue)
         }
         new CaretMonitor(txtMarkUp, lblCaret)
     }

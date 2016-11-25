@@ -60,6 +60,8 @@ public class MessageConsole {
         System.setOut(new PrintStream(cos, true));
     }
 
+
+
     /*
       *  Redirect the output from the standard error to the console
       *  using the default text color and null PrintStream
@@ -77,6 +79,11 @@ public class MessageConsole {
     public void redirectErr(Color textColor, PrintStream printStream) {
         ConsoleOutputStream cos = new ConsoleOutputStream(textColor, printStream);
         System.setErr(new PrintStream(cos, true));
+    }
+
+    public PrintStream createStream(Color color){
+        PrintStream printStream = new PrintStream(new ConsoleOutputStream(color,null),true);
+        return printStream;
     }
 
     /*
