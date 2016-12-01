@@ -9,12 +9,16 @@ package org.openxdata.markup
 class Page implements HasQuestions {
 
 
-    Page() {}
+    Page() { init() }
 
     Page(String name) {
+        init()
         this.name = name
     }
 
+    private def init() {
+        this.xformType = XformType.GROUP
+    }
 
     String toString() {
         def newText = name ?: 'Group'

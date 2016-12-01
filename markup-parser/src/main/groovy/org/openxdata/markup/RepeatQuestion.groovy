@@ -11,12 +11,14 @@ package org.openxdata.markup
 class RepeatQuestion implements HasQuestions,IQuestion{
 
 
-    RepeatQuestion() {}
+    RepeatQuestion() {init()}
 
     RepeatQuestion(String question) {
         setText(question)
+        init()
     }
 
+    private def init(){ this.xformType = XformType.REPEAT }
 
     @Override
     String getType() {

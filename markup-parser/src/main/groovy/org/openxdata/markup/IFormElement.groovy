@@ -40,6 +40,10 @@ trait IFormElement {
         _bindAttr.message = string
     }
 
+    abstract void setXformType(XformType type)
+
+    abstract XformType getXformType()
+
     String getMessage() {
         return _bindAttr.message
     }

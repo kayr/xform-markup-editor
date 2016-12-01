@@ -10,16 +10,19 @@ import org.openxdata.markup.exception.ValidationException
  * Time: 11:09 AM
  * To change this template use File | Settings | File Templates.
  */
-class DynamicQuestion  implements ISelectionQuestion {
+class DynamicQuestion implements ISelectionQuestion {
 
     String dynamicInstanceId
     String parentQuestionId
 
-    DynamicQuestion() {}
+    DynamicQuestion() { init() }
 
     DynamicQuestion(String question) {
         setText(question)
+        init()
     }
+
+    private def init() { this.xformType = XformType.SELECT1_DYNAMIC }
 
     @Override
     String getType() {

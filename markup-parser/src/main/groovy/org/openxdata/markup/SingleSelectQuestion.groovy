@@ -9,11 +9,14 @@ package org.openxdata.markup
  */
 class SingleSelectQuestion implements ISelectionQuestion {
 
-    SingleSelectQuestion() {}
+    SingleSelectQuestion() {init()}
 
     SingleSelectQuestion(String question) {
         setText(question)
+        init()
     }
+
+    private def init(){ this.xformType = XformType.SELECT1 }
 
 
     @Override

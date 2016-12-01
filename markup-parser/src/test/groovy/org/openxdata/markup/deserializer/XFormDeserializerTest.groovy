@@ -122,37 +122,80 @@ class XFormDeserializerTest extends XMLTestCase {
         def mkpForm = new MarkupDeserializer(oxdSampleForm).study().forms[0]
 
         def xForm = serializer.toXForm(mkpForm)
-        def form = new XFormDeserializer(xml: xForm).parse()
+        def formFromXml = new XFormDeserializer(xml: xForm).parse()
 
-        def questions = form.allQuestions
-        assert questions.find { it.binding == 'patient_id' }.type == 'string'
-        assert questions.find { it.binding == 'title' }.type == 'string'
-        assert questions.find { it.binding == 'sex' }.type == 'string'
-        assert questions.find { it.binding == 'birthdate' }.type == 'date'
-        assert questions.find { it.binding == 'weightkg' }.type == 'decimal'
-        assert questions.find { it.binding == 'is_patient_pregnant' }.type == 'boolean'
-        assert questions.find { it.binding == 'arvs' }.type == 'string'
-        assert questions.find {
-            it.binding == 'arvs'
-        }.comment == 'Please select all anti-retrovirals that the patient is taking'
-        assert questions.find { it.binding == 'picture' }.type == 'picture'
-        assert questions.find { it.binding == 'sound' }.type == 'audio'
-        assert questions.find { it.binding == 'record_video' }.type == 'video'
-        assert questions.find { it.binding == 'region' }.type == 'string'
-        assert questions.find { it.binding == 'sub_hyphen_region' }.type == 'string'
-        assert questions.find { it.binding == 'city' }.type == 'string'
-        assert questions.find { it.binding == 'age' }.type == 'number'
-        assert questions.find { it.binding == 'child_sex' }.type == 'string'
-        assert questions.find { it.binding == 'start_time' }.type == 'time'
-        assert questions.find { it.binding == 'endtime' }.type == 'time'
 
-        //options
-        assert questions.find { it.binding == 'sex' }.options.size() == 2
-        assert questions.find { it.binding == 'arvs' }.options.size() == 5
+        def validateType = { Form form ->
+            def questions = form.allQuestions
+            assert questions.find { it.binding == 'patient_id' }.type in ['string','longtext']
+            assert questions.find { it.binding == 'patient_id' }.xformType == XformType.TEXT
 
-        ['azt', 'abicvar', 'efivarence', 'triomune', 'truvada'].each { binding ->
-            assert questions.find { it.binding == 'arvs' }.options.any { option -> binding == option.bind }
+            assert questions.find { it.binding == 'title' }.type == 'string'
+            assert questions.find { it.binding == 'title' }.xformType == XformType.SELECT1
+
+            assert questions.find { it.binding == 'sex' }.type == 'string'
+
+            assert questions.find { it.binding == 'birthdate' }.type == 'date'
+            assert questions.find { it.binding == 'birthdate' }.xformType == XformType.DATE
+
+            assert questions.find { it.binding == 'weightkg' }.type == 'decimal'
+            assert questions.find { it.binding == 'weightkg' }.xformType == XformType.DECIMAL
+
+
+            assert questions.find { it.binding == 'is_patient_pregnant' }.type == 'boolean'
+            assert questions.find { it.binding == 'is_patient_pregnant' }.xformType == XformType.BOOLEAN
+
+            assert questions.find { it.binding == 'arvs' }.type == 'string'
+            assert questions.find { it.binding == 'arvs' }.xformType == XformType.SELECT
+            assert questions.find {
+                it.binding == 'arvs'
+            }.comment == 'Please select all anti-retrovirals that the patient is taking'
+
+            assert questions.find { it.binding == 'picture' }.type == 'picture'
+            assert questions.find { it.binding == 'picture' }.xformType == XformType.PICTURE
+
+            assert questions.find { it.binding == 'sound' }.type == 'audio'
+            assert questions.find { it.binding == 'sound' }.xformType == XformType.AUDIO
+
+            assert questions.find { it.binding == 'record_video' }.type == 'video'
+            assert questions.find { it.binding == 'record_video' }.xformType == XformType.VIDEO
+
+            assert questions.find { it.binding == 'region' }.type == 'string'
+            assert questions.find { it.binding == 'region' }.xformType == XformType.SELECT1
+
+            assert questions.find { it.binding == 'sub_hyphen_region' }.type == 'string'
+            assert questions.find { it.binding == 'sub_hyphen_region' }.xformType == XformType.SELECT1_DYNAMIC
+
+            assert questions.find { it.binding == 'city' }.type == 'string'
+
+            assert questions.find { it.binding == 'age' }.type == 'number'
+            assert questions.find { it.binding == 'age' }.xformType == XformType.NUMBER
+
+            assert questions.find { it.binding == 'child_sex' }.type == 'string'
+            assert questions.find { it.binding == 'child_sex' }.xformType == XformType.SELECT1
+
+            assert questions.find { it.binding == 'start_time' }.type == 'time'
+            assert questions.find { it.binding == 'start_time' }.xformType == XformType.TIME
+
+            assert questions.find { it.binding == 'endtime' }.type == 'time'
+
+            assert questions.find { it.binding == 'details_of_children' }.xformType == XformType.REPEAT
+            assert form.firstPage.xformType == XformType.GROUP
+
+            //options
+            assert questions.find { it.binding == 'sex' }.options.size() == 2
+            assert questions.find { it.binding == 'arvs' }.options.size() == 5
+
+
+
+            ['azt', 'abicvar', 'efivarence', 'triomune', 'truvada'].each { binding ->
+                assert questions.find { it.binding == 'arvs' }.options.any { option -> binding == option.bind }
+            }
         }
+
+ validateType(mkpForm)
+        validateType(formFromXml)
+
     }
 
     void testSkipLogic() {
@@ -218,9 +261,9 @@ class XFormDeserializerTest extends XMLTestCase {
         try {
             assertEquals originalXform, otherXform
 
-        }catch (ComparisonFailure f){
+        } catch (ComparisonFailure f) {
             System.err.println("Some form failed to pass round trip $mkpForm.name")
-            assertXMLEqual originalXform,otherXform
+            assertXMLEqual originalXform, otherXform
         }
     }
 
@@ -237,8 +280,8 @@ class XFormDeserializerTest extends XMLTestCase {
     }
 
     void testNestedGroups() {
-       testRoundTrip(nestedGroups.markUp)
-       testRoundTrip(formWithLayoutAndBindAttributes)
+        testRoundTrip(nestedGroups.markUp)
+        testRoundTrip(formWithLayoutAndBindAttributes)
     }
 
 }

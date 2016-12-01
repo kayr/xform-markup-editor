@@ -15,6 +15,7 @@ trait IQuestion implements IFormElement {
     boolean readOnly
     String calculation
     def value
+    XformType xformType
 
 
     void setText(String text) {
@@ -26,11 +27,16 @@ trait IQuestion implements IFormElement {
         def tempBind = Util.getBindName(text)
         if (!binding)
             binding = tempBind
-        if (!type)
-            type = Util.getType(tempBind)
+        if (!this.@type)
+            setType(Util.getType(tempBind))
     }
 
 
+    void setType(String pType) {
+        this.@type = pType
+        if (this instanceof TextQuestion)
+            xformType = XformType.resolve(pType)
+    }
 
 
     String getComment() {
@@ -39,7 +45,7 @@ trait IQuestion implements IFormElement {
 
 
     String toString() {
-        return "$questionIdx. $text"
+        return "$xformType->$questionIdx. $text"
     }
 
 }

@@ -11,6 +11,9 @@ trait HasQuestions implements IFormElement {
     private Map<String, Object> elementMap = [:]
     private List<IFormElement> elements = []
     private List<HasQuestions> hasQuestions = []
+    XformType xformType
+
+
 
 
     List<IFormElement> getElements() {

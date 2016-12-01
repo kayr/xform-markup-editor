@@ -9,11 +9,15 @@ package org.openxdata.markup
  */
 class MultiSelectQuestion  implements ISelectionQuestion {
 
-    MultiSelectQuestion() {}
+    MultiSelectQuestion() {init()}
 
     MultiSelectQuestion(String question) {
         setText(question)
+        init()
     }
+
+    private def init(){ this.xformType = XformType.SELECT }
+
 
     @Override
     String getType() {

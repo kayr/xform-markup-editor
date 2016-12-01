@@ -29,11 +29,14 @@ class Form implements HasQuestions {
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
 
-    Form() {}
+
+    Form() { init() }
 
     Form(String name) {
         this.name = name
+        init()
     }
+
 
     List<Page> getPages() {
         return elements.findAll { it instanceof Page } as List<Page>
@@ -41,6 +44,10 @@ class Form implements HasQuestions {
 
     Page getFirstPage() {
         return pages[0]
+    }
+
+    private def init() {
+        this.xformType = XformType.FORM
     }
 
     void validate() {
