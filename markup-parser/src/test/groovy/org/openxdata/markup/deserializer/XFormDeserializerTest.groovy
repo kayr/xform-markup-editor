@@ -250,20 +250,19 @@ class XFormDeserializerTest extends XMLTestCase {
         testRoundTrip(formWithIncompatibleOXDId.form)
     }
 
-    void testRoundTrip(String form) {
-        def mkpForm = new MarkupDeserializer(form).study().forms[0]
-        def originalXform = serializer.toXForm(mkpForm)
+    void testRoundTrip(String markup) {
+        def form1 = new MarkupDeserializer(markup).study().forms[0]
+        def oxd1 = ConversionHelper.markup2Oxd(markup)
 
-        def parsedMarkupFormModel = new XFormDeserializer(originalXform).parse()
-        serializer.numberBindings = false
-        def otherXform = serializer.toXForm(parsedMarkupFormModel)
+        def form2 = ConversionHelper.oxd2Form(oxd1)
+        def oxd2 = ConversionHelper.form2Oxd(form2)
 
         try {
-            assertEquals originalXform, otherXform
+            assertEquals oxd1, oxd2
 
         } catch (ComparisonFailure f) {
-            System.err.println("Some form failed to pass round trip $mkpForm.name")
-            assertXMLEqual originalXform, otherXform
+            System.err.println("Some form failed to pass round trip $form1.name")
+            assertXMLEqual oxd1, oxd2
         }
     }
 
