@@ -118,7 +118,7 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testAppearanceAndLayoutAttributes() {
-        assertEquals formWithLayoutAttributes.xml, markup2Odk(Fixtures.formWithLayoutAndBindAttributes,)
+        assertEquals formWithLayoutAttributes.xml, markup2Odk(Fixtures.formWithLayoutAndBindAttributes)
     }
 
     void testAddingMetaInstanceId() {

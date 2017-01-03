@@ -27,8 +27,11 @@ enum XformType {
     DATE_TIME('datetime'),
     DATE('date'),
     TIME('time'),
-    FORM('form')
-
+    FORM('form'),
+    /**
+     * Generica data type for binary data
+     */
+    BINARY('binary')
 
     String value
 

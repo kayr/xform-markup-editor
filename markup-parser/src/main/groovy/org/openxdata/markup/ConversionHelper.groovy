@@ -1,6 +1,7 @@
 package org.openxdata.markup
 
 import org.openxdata.markup.deserializer.MarkupDeserializer
+import org.openxdata.markup.deserializer.ODKDeSerializer
 import org.openxdata.markup.deserializer.XFormDeserializer
 import org.openxdata.markup.serializer.ODKSerializer
 import org.openxdata.markup.serializer.XFormSerializer
@@ -26,6 +27,10 @@ class ConversionHelper {
         serializer.numberQuestions = number
         serializer.numberBindings = number
         serializer.toXForm(form)
+    }
+
+    static Form odk2Form(String xml) {
+        return new ODKDeSerializer(xml).parse()
     }
 
     static Form oxd2Form(String xml) {

@@ -355,31 +355,37 @@ class ODKSerializer {
 
         if (!question.isVisible()) return
 
-        def attr = [nodeset: absoluteBinding(question)]
+        def repeatAttributes = [nodeset: absoluteBinding(question)]
         if (oxdConversion) {
             //oxd uses validation to control size of repeat while odk uses jr:count
             def logic = question.getValidationLogic()
             if (logic) {
                 logic = getAbsoluteBindingXPath(logic, question)
                 def jrCount = ODKXpathUtil.getOXDJRCountOnRepeatValidation(logic)
-                if (jrCount) attr['jr:count'] = jrCount
+                if (jrCount) repeatAttributes['jr:count'] = jrCount
             }
 
         }
 
         //serialize layout attributes to the group
-        def groupLayoutAttributes = ([:] + question.layoutAttributes)
-        groupLayoutAttributes.remove('jr:count')
-        String removedJR = groupLayoutAttributes.remove('jrcount')
+        def layoutAttributes = ([:] + question.layoutAttributes)
+        def manualJRCount = layoutAttributes.remove('jr:count')
+        if(manualJRCount){
+            err.println("A manual jr:count($manualJRCount) was found on [$question.absoluteBinding] and therefore ignored")
+        }
+        layoutAttributes.remove('nodeset')
+        String removedJR = layoutAttributes.remove('jrcount')
 
         if (removedJR) {
-            attr['jr:count'] = getAbsoluteBindingXPath(removedJR, question)
+            repeatAttributes['jr:count'] = getAbsoluteBindingXPath(removedJR, question)
         }
 
-        xml.group(groupLayoutAttributes) {
+        repeatAttributes.putAll(layoutAttributes)
+
+        xml.group/*(groupLayoutAttributes)*/ { //do not add any layout attributes to the group we do not need them
             buildQuestionLabelAndHint(xml, question)
-            xml.repeat(attr) {
-                question.elements.each { child ->
+            xml.repeat(repeatAttributes) {
+                for (child in question.elements) {
                     mayBeBuildLayout(xml, child)
                 }
             }

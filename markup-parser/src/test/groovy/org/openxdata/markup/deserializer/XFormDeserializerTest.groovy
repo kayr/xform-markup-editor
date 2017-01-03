@@ -127,7 +127,7 @@ class XFormDeserializerTest extends XMLTestCase {
 
         def validateType = { Form form ->
             def questions = form.allQuestions
-            assert questions.find { it.binding == 'patient_id' }.type in ['string','longtext']
+            assert questions.find { it.binding == 'patient_id' }.type in ['string', 'longtext']
             assert questions.find { it.binding == 'patient_id' }.xformType == XformType.TEXT
 
             assert questions.find { it.binding == 'title' }.type == 'string'
@@ -193,7 +193,7 @@ class XFormDeserializerTest extends XMLTestCase {
             }
         }
 
- validateType(mkpForm)
+        validateType(mkpForm)
         validateType(formFromXml)
 
     }
@@ -259,11 +259,24 @@ class XFormDeserializerTest extends XMLTestCase {
 
         try {
             assertEquals oxd1, oxd2
-
         } catch (ComparisonFailure f) {
             System.err.println("Some form failed to pass round trip $form1.name")
             assertXMLEqual oxd1, oxd2
         }
+
+        def odk1 = ConversionHelper.markup2Odk(markup,false,false,false)
+
+        form2 = ConversionHelper.odk2Form(odk1)
+        form2.validate()
+        def odk2 = ConversionHelper.form2Odk(form2,false,false,false)
+
+//        try {
+            assertEquals odk1, odk2
+//        } catch (ComparisonFailure f) {
+//            System.err.println("Some form failed to pass round trip $form1.name")
+//            assertXMLEqual odk1, odk2
+//        }
+
     }
 
     void testDeSerializingWithLayoutAttributesInComment() {

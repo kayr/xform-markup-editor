@@ -145,4 +145,12 @@ repeat{ repeat
             fail("Double dot should not throw exception")
         }
     }
+
+    void testRandomTest(){
+        def xpath = "instance('sub_hyphen_region')/dynamiclist/item[@parent=/example_study2_example_form2_v1/_14region]"
+
+        def ast = XPathUtil.createAST(xpath)
+
+        printTree(ast)
+    }
 }

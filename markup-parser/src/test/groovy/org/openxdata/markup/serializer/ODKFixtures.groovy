@@ -1355,9 +1355,9 @@ No. Kids
       <input ref="/sample_markup_study_simple_form_v1/children" appearance="w1" name="lo 10">
         <label>Number of children</label>
       </input>
-      <group name="lo 11">
+      <group>
         <label>Child details</label>
-        <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" jr:count="/sample_markup_study_simple_form_v1/children">
+        <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" jr:count="/sample_markup_study_simple_form_v1/children" name="lo 11">
           <input ref="/sample_markup_study_simple_form_v1/child_details/child_name" name="lo 11.1">
             <label>Child Name</label>
           </input>
@@ -1382,5 +1382,7 @@ No. Kids
   </h:body>
 </h:html>'''
     ]
+
+
 
 }

@@ -14,8 +14,6 @@ trait HasQuestions implements IFormElement {
     XformType xformType
 
 
-
-
     List<IFormElement> getElements() {
         elements
     }
@@ -36,6 +34,26 @@ trait HasQuestions implements IFormElement {
         question.setParent(this)
         cacheQuestion(question)
         elements << question
+    }
+
+    void addAfterElement(IFormElement after, IFormElement toAdd) {
+        addAfterElement(after.binding, toAdd)
+    }
+
+    void addAfterElement(String after, IFormElement toAdd) {
+        def idx = elements.findIndexOf { IFormElement e -> e.binding == after }
+        if (idx == -1) {
+            addElement(toAdd)
+        } else {
+            addElementAt(idx + 1, toAdd)
+        }
+    }
+
+
+    void addElementAt(int idx, IFormElement question) {
+        question.setParent(this)
+        cacheQuestion(question)
+        elements.add(idx, question)
     }
 
     List<IQuestion> getAllFirstLevelQuestions() {
@@ -160,7 +178,7 @@ trait HasQuestions implements IFormElement {
 
         if (lineOfInterest >= lastElement.line) return lastElement
 
-        def elem = elements.find { IFormElement it -> lineOfInterest <= it.line/* > lineOfInterest */}
+        def elem = elements.find { IFormElement it -> lineOfInterest <= it.line/* > lineOfInterest */ }
 
         return elem
     }

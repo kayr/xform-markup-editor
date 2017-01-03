@@ -163,6 +163,7 @@ class XPathUtil {
     }
 
     static String getNodeName(String path) {
+        if (path == null) return null
         new File(path).name
     }
 

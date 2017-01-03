@@ -3,6 +3,7 @@ package org.openxdata.markup.ui
 import org.openxdata.markup.Form
 import org.openxdata.markup.HasQuestions
 import org.openxdata.markup.IFormElement
+import org.openxdata.markup.RepeatQuestion
 import org.openxdata.markup.Study
 import org.openxdata.markup.deserializer.MarkupDeserializer
 

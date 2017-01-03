@@ -1,72 +1,75 @@
 package org.openxdata.markup.deserializer
 
-import groovy.json.JsonSlurper
-import groovy.util.slurpersupport.NamespaceAwareHashMap
+import groovy.xml.Namespace
+import groovy.xml.QName
+import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.*
 
 /**
- * Created by kay on 6/7/14.
+ * Created by kay on 1/1/2017.
  */
-class XFormDeserializer {
+class ODKDeSerializer {
+
 
     private String xml
-    private def xForm
+    private Node xForm
     private Form form
-    private def model
+    private def dataNode, model
     private final
     static
-    def COMMON_BIND_ATTRIBUTES = ['locked', 'message', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
-    static def LAYOUT_NS = '{https://github.com/kayr/xform-markup-editor#layout}'
+    def COMMON_BIND_ATTRIBUTES = ['jr:constraintMsg', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
+    static def XFORM_NS = new Namespace("http://www.w3.org/2002/xforms"),
+               XHTML_NS = new Namespace("http://www.w3.org/1999/xhtml", 'h'),
+               JR_NS = new Namespace("http://openrosa.org/javarosa", "jr")
 
 
-    XFormDeserializer() {
-    }
-
-    XFormDeserializer(String xml) {
+    ODKDeSerializer(String xml) {
         this.xml = xml
     }
+
 
     Form parse() {
         if (form)
             return form
-        xForm = new XmlSlurper(false, true).parseText(xml)
+        xForm = new XmlParser(false, true).parseText(xml)
         toForm()
     }
 
     private Form toForm() {
-        def instance = xForm.model.instance[0]
-        model = instance.'*'[0]
+
+        //xForm.head.model.instance[0].'*'[0]
+        model = xForm[XHTML_NS.head].model
+        def instance = model.instance[0]
+        dataNode = instance.'*'[0]
 
 
 
         form = new Form()
-        form.id = instance.@id
-        form.name = model.@name
-        form.dbId = model.@id
+        form.id = dataNode.name().localPart
+        form.name = xForm[XHTML_NS.head][XHTML_NS.title].text()
+        form.dbId = dataNode.@id
 
         addLayoutAttributes()
         addDynamicInstances()
-        addPages()
+        addElements()
         form.allElementsWithIds.each {
             addBehaviourInfo(it)
         }
+
+
+        addHiddenQuestions()
+
         return form
     }
 
     private void addLayoutAttributes() {
-        def layoutAttributes = (xForm.attributes() as NamespaceAwareHashMap).findResults { k, v ->
-            if (k.startsWith(LAYOUT_NS)) {
-                return new MapEntry(k.replace(LAYOUT_NS, ''), v)
-            }
-            return null
-        }
-
-        if (layoutAttributes)
-            form.layoutAttributes.putAll(layoutAttributes)
+        def attrs = xForm[XHTML_NS.body][0].attributes()
+        if (attrs)
+            form.layoutAttributes.putAll(attrs)
     }
 
     private def addDynamicInstances() {
-        def instances = xForm.model.instance
+        def instances = model.instance
         instances.each {
             if (isDynamicInstanceNode(it)) {
                 String instanceId = it.@id
@@ -79,19 +82,72 @@ class XFormDeserializer {
     private def buildDynamicList(String instanceId, def dynamicElem) {
         def options = dynamicElem.'*'.collect {
             def dynamicOption = new DynamicOption()
-            dynamicOption.bind = it.@id.text()
-            dynamicOption.parentBinding = it.@parent.text()
+            dynamicOption.bind = it.@id
+            dynamicOption.parentBinding = it.@parent
             dynamicOption.option = it.label.text()
             return dynamicOption
         }
         form.addDynamicOptions(instanceId, options)
     }
 
-    private def addPages() {
-        def groups = xForm.group
-        groups.each {
-            processPage(form, it)
+    def addHiddenQuestions() {
+        def previous = null
+        for (bind in model.bind) {
+            mayBeAddNode(previous, bind)
         }
+
+    }
+
+    def mayBeAddNode(def previousBind, def bind) {
+        String nodeset = bind.@nodeset
+
+        String bindName = XPathUtil.getNodeName(nodeset)
+
+        def element = form.getElement(bindName)
+
+        if (element) return
+
+        def steps = nodeset.split('/')
+
+        def pathSteps = steps[0..-2]
+
+        def finalParent = pathSteps.inject(form) { HasQuestions acc, String val ->
+            def group = acc.getElement(val)
+            if (!group) {
+                group = new Page(id: val)
+                acc.addElement(group)
+            }
+            return group
+        }
+
+        if (finalParent instanceof HasQuestions) {
+
+            def prevQnBindName = XPathUtil.getNodeName(previousBind?.@nodeset)
+            def previousBindElement = finalParent.getElement(prevQnBindName)
+            def question = createQuestionFromBind(bind)
+            if (previousBindElement) {
+                finalParent.addAfterElement(previousBindElement, question)
+            } else {
+                finalParent.addElement(question)
+            }
+        } else {
+            System.err.println("Could not add [$nodeset] invalid ")
+        }
+    }
+
+    private TextQuestion createQuestionFromBind(def bind) {
+        def t = new TextQuestion('-')
+        t.binding = XPathUtil.getNodeName(bind.@nodeset)
+        t.setType(resolveType(t, null))
+        addBehaviourInfo(t)
+
+        return t
+
+    }
+
+    private def addElements() {
+        def body = xForm[XHTML_NS.body][0]
+        addQuestions(form, body)
     }
 
     private static boolean isDynamicInstanceNode(def elem) {
@@ -114,11 +170,14 @@ class XFormDeserializer {
     }
 
     private IFormElement processQnElem(HasQuestions page, def qnElem) {
-        def tagName = qnElem.name()
+
+        def tagName = qnElem.name().localPart
         def method = "process_$tagName"
 
         if (this.respondsTo(method)) {
             this."$method"(page, qnElem)
+        } else {
+            System.err.println("Cannot find tag handler for  [$tagName]")
         }
     }
 
@@ -140,13 +199,13 @@ class XFormDeserializer {
 
     private IQuestion process_input(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new TextQuestion(), page, elem
-        qn.setType(resolveType(qn))
+        qn.setType(resolveType(qn, elem))
         return qn
     }
 
     private IQuestion process_upload(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new TextQuestion(), page, elem
-        qn.setType(resolveType(qn))
+        qn.setType(resolveType(qn, elem))
         return qn
     }
 
@@ -165,14 +224,15 @@ class XFormDeserializer {
     }
 
     private static boolean isRepeatGroup(def elem) {
-        return elem.'*'.find { it.name() == 'repeat' }
+        return elem.repeat as boolean
     }
 
     private IQuestion process_Dynamic(HasQuestions page, def elem) {
         def qn = addIdMetaInfo(new DynamicQuestion(), page, elem) as DynamicQuestion
-        String nodeSet = elem.itemset.@nodeset.text()
-        qn.parentQuestionId = getDynamicParentInstanceId(nodeSet)
-        qn.dynamicInstanceId = getDynamicChildInstanceId(nodeSet)
+        String nodeSet = elem.itemset[0].@nodeset
+        def (dynamicInstanceId, parentQuestionId) = getInstanceAndParentId(nodeSet)
+        qn.dynamicInstanceId = dynamicInstanceId
+        qn.parentQuestionId = parentQuestionId
         return qn
 
     }
@@ -182,19 +242,19 @@ class XFormDeserializer {
     }
 
     private IFormElement addIdMetaInfo(IFormElement qn, HasQuestions parent, def elem) {
+
         //repeats do not have a bind attribute
         if (isRepeatGroup(elem))
-            qn.binding = elem.@id
+            qn.binding = XPathUtil.getNodeName(elem.repeat[0].@nodeset)
         else
-            qn.binding = elem.@bind
+            qn.binding = XPathUtil.getNodeName(elem.@ref)
 
         if (qn instanceof IQuestion) {
-            def value = model."$qn.binding".text()
+            def value = dataNode."$qn.binding".text()
             if (value)
                 qn.value = value
             qn.text = elem.label.text()
             qn.comment = elem.hint.text()
-            mayBeParseCommentAttribute(qn)
         }
 
 
@@ -208,49 +268,7 @@ class XFormDeserializer {
         if (qn instanceof RepeatQuestion) {
             layoutAttributes = elem.repeat[0].attributes()
         }
-
-        if (qn instanceof Page) {
-            layoutAttributes.remove('id')
-        }
-        layoutAttributes.remove('bind')
-        qn.layoutAttributes.putAll(layoutAttributes)
-    }
-
-    private static mayBeParseCommentAttribute(IQuestion qn) {
-
-        def jsonComment = qn.comment?.trim()
-
-        if (!(jsonComment?.startsWith('json:'))) {
-            return
-        }
-
-        jsonComment = Util.replaceFirst(jsonComment, 'json:', '')
-
-        def json = new JsonSlurper().parseText(jsonComment)
-
-
-        def comment = json.comment
-        if (comment) {
-            qn.comment = comment
-        } else {
-            qn.comment = null
-        }
-
-        def bindAttributes = json.bind
-        if (bindAttributes instanceof Map) {
-            for (e in bindAttributes) {
-                if (qn.bindAttributes.containsKey(e.key)) continue
-                qn.bindAttributes.put(e.key, e.value)
-            }
-        }
-
-        def layoutAttributes = json.layout
-        if (layoutAttributes instanceof Map) {
-            for (e in layoutAttributes) {
-                if (qn.layoutAttributes.containsKey(e.key)) continue
-                qn.layoutAttributes.put(e.key, e.value)
-            }
-        }
+        nameSpaceAwareCopyInto(qn.layoutAttributes, layoutAttributes, ['nodeset', 'ref'], ['jr:count': 'jrcount'])
     }
 
     /**
@@ -274,62 +292,85 @@ class XFormDeserializer {
         mayBeAddValidationLogic(bindNode, qn)
 
         Map bindAttributes = bindNode.attributes()
+        def questionAttributes = qn.bindAttributes
 
-        for (kv in bindAttributes) {
-            if (!COMMON_BIND_ATTRIBUTES.contains(kv.key)) {
-                qn.bindAttributes[kv.key] = kv.value
-            }
-        }
+        nameSpaceAwareCopyInto(questionAttributes, bindAttributes, COMMON_BIND_ATTRIBUTES, ['jr:count': 'jrcount'])
 
         return qn
     }
 
+    static private void nameSpaceAwareCopyInto(Map questionAttributes, Map bindAttributes,
+                                               Collection<String> exclude, Map convertMap = [:]) {
+        for (kv in bindAttributes) {
+            if (kv.key instanceof QName) {
+                def qName = mayBeResolveDefaultQName(kv.key)
+                kv = new MapEntry(qName.qualifiedName, kv.value)
+            }
+            if (!exclude.contains(kv.key)) {
+                questionAttributes[convertMap[kv.key] ?: kv.key] = kv.value
+            }
+        }
+    }
+
+    /**
+     * This method should help you get the QName with default prefix we use in the whole library.
+     * May be in future we can look into changing the prefix at the parser level
+     */
+    static QName mayBeResolveDefaultQName(QName name) {
+        def defaultNS = [XFORM_NS, JR_NS, XHTML_NS].find { it.uri == name.namespaceURI }
+        if (defaultNS) {
+            return defaultNS.get(name.localPart)
+        }
+        return name
+    }
+
     private void mayBeAddCalculation(bindNode, IQuestion qn) {
-        String calculate = bindNode.@calculate.text()
+        String calculate = bindNode.@calculate
         if (calculate) {
             qn.calculation = getXPathFormula(calculate)
         }
     }
 
     private void mayBeAddValidationLogic(bindNode, IFormElement qn) {
-        String validationLogic = bindNode.@constraint.text()
+        String validationLogic = bindNode.@constraint
         if (validationLogic) {
             qn.validationLogic = getXPathFormula(validationLogic)
-            qn.message = bindNode.@message.text()
+            qn.message = bindNode.attributes()[JR_NS.constraintMsg]
         }
     }
 
     private void mayBeAddSkipLogic(bindNode, IFormElement qn) {
-        String skipLogic = bindNode.@relevant.text()
+        String skipLogic = bindNode.@relevant
         if (skipLogic) {
             qn.skipLogic = getXPathFormula(skipLogic)
-            qn.skipAction = bindNode.@action.text()
+            qn.skipAction = 'show'
         }
     }
 
     private static void mayBeMakeRequired(bindNode, IFormElement qn) {
-        String required = bindNode.@required.text()
+        String required = bindNode.@required
         if (required && required.contains('true')) {
             qn.required = true
         }
     }
 
+    //todo implement test for invisible
     private static void mayBeMakeInvisible(bindNode, IFormElement qn) {
-        String visible = bindNode.@visible.text()
+        String visible = bindNode.@visible
         if (visible && visible.contains('false')) {
             qn.visible = false
         }
     }
 
     private static void mayBeMakeReadOnly(bindNode, IQuestion qn) {
-        String enabled = bindNode.@readonly.text()
+        String enabled = bindNode.@readonly
         if (enabled && enabled.contains('true')) {
             qn.readOnly = true;
         }
     }
 
     private static String mayBeMakeLocked(bindNode, IQuestion qn) {
-        String readonly = bindNode.@locked.text()
+        String readonly = bindNode.@locked
         if (readonly && readonly.contains('true')) {
             qn.readOnly = true
         }
@@ -339,7 +380,6 @@ class XFormDeserializer {
     private String getXPathFormula(String xpath) {
         if (!xpath) return null
 
-//        xpath = xpath.replace('$', '\\$')
         try {
             def builder = new StringBuilder(xpath)
             def paths = new XPathUtil(xpath).getXPathPathVariables()
@@ -367,9 +407,11 @@ class XFormDeserializer {
     }
 
     private String getReference(String reference) {
+
+        if (!reference) return reference
+
         int idx = reference.lastIndexOf('/')
         if (idx < 0) return reference
-        //todo do not resolve binding that have conflicts
         def id = XPathUtil.getNodeName(reference)
         if (form.getElement(id))
             return reference.startsWith('/') ? '$' + id : '$:' + id
@@ -377,35 +419,40 @@ class XFormDeserializer {
 
     }
 
-    private String resolveType(IQuestion qn) {
+    private String resolveType(IFormElement qn, def layoutElem) {
         def binding = getBindNode(qn.binding)
 
         if (!binding) return 'string'
 
-        String type = binding.@type.text()?.replaceFirst('xsd:', '')
-        def format = binding.@format
-
-        if (Attrib.types.contains(type) || type?.equalsIgnoreCase('string')) {
-            return format?.isEmpty() ? type : format;
-        }
+        String type = binding.@type?.replaceFirst('xsd:', '')
 
         switch (type) {
-            case 'base64Binary':
-                return resolveMediaType(format)
+            case 'binary':
+                def media = layoutElem.@mediatype
+                return resolveMediaType(media)
             case 'int':
-                return 'number'
+                return XformType.NUMBER.value
             default:
                 return type ?: 'string'
-
         }
     }
 
     private Object getBindNode(binding) {
-        return xForm.model.bind.find { it.@id == binding }
+        return model.bind.find { XPathUtil.getNodeName(it.@nodeset) == binding }
     }
 
-    static private String resolveMediaType(format) {
-        return format == 'image' ? 'picture' : format
+    static private String resolveMediaType(mediaType) {
+        switch (mediaType) {
+            case 'image/*':
+                return XformType.PICTURE.value
+            case 'audio/*':
+                return XformType.AUDIO.value
+            case 'video/*':
+                return XformType.VIDEO.value
+            default:
+                return XformType.BINARY.value
+
+        }
     }
 
     private static String getDynamicChildInstanceId(String nodeset) {
@@ -420,21 +467,29 @@ class XFormDeserializer {
         return nodeset.substring(pos1 + 1, pos2)
     }
 
-    private static String getDynamicParentInstanceId(String nodeset) {
+    private static List getInstanceAndParentId(String nodeset) {
         if (!nodeset) return null
 
-        int pos1 = nodeset.lastIndexOf('/')
-        if (pos1 < 0) return null
+        def ast = XPathUtil.createAST(nodeset)
 
-        int pos2 = nodeset.lastIndexOf(']')
-        if (pos2 < 0 || (pos1 == pos2)) return null
+        def tree = ParserUtils.find(ast) { CommonTree it -> it.type == XPathParser.LITERAL }
 
-        return nodeset.substring(pos1 + 1, pos2)
+        def literalTree = tree.getChild(0) as CommonTree
+        def instanceId = literalTree.text.replaceAll("'", '')
+
+
+        def childPath = ParserUtils.find(ast) { CommonTree it -> it.type == XPathParser.ABSPATH }
+
+        def parentId = XPathUtil.getNodeName(ParserUtils.emitTailString(childPath))
+
+        return [instanceId, parentId]
+
     }
 
 
     private static List<Option> getSelectOptions(def select) {
         def items = select.item
-        return items.collect { new Option(it.label.text(), it.@id.text()) }
+        return items.collect { new Option(it.label.text(), it.value.text()) }
     }
+
 }
