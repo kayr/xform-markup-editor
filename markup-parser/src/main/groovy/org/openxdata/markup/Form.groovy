@@ -217,6 +217,8 @@ class Form implements HasQuestions {
         allQuestions.each {
             out.println "___________________________"
             out.println "${it.xformType.value.padRight(15)}: ${it.getText(true)}"
+            if (it.id)
+                out.println "ID             : $it.id"
             if (it.required)
                 out.println "Required       : $it.required"
             if (it.readOnly)

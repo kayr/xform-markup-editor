@@ -14,13 +14,15 @@ class ODKDeSerializer {
     private String xml
     private Node xForm
     private Form form
-    private def dataNode, model
+    private def xDataNode, xModel
     private final
     static
     def COMMON_BIND_ATTRIBUTES = ['jr:constraintMsg', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
     static def XFORM_NS = new Namespace("http://www.w3.org/2002/xforms"),
                XHTML_NS = new Namespace("http://www.w3.org/1999/xhtml", 'h'),
                JR_NS = new Namespace("http://openrosa.org/javarosa", "jr")
+
+    private Map<String, Map<String, String>> TRANSLATIONS = [:]
 
 
     ODKDeSerializer(String xml) {
@@ -32,22 +34,63 @@ class ODKDeSerializer {
         if (form)
             return form
         xForm = new XmlParser(false, true).parseText(xml)
+        extractEssentNodes()
+        buildLanguageDictionary()
         toForm()
+    }
+
+    private def buildLanguageDictionary() {
+        def xITextList = xModel.itext
+        if (!xITextList) return
+        def xItext = xITextList[0]
+        def translations = xItext.translation
+
+        def xDefaultTranslation = translations.find { xItext.@lang?.toLowerCase() in ['english', 'en', 'eng'] }
+        if (!xDefaultTranslation) {
+            xDefaultTranslation = translations[0]
+        }
+
+        loadTranslations('_default', xDefaultTranslation)
+
+        for (xTranslation in translations) {
+            if (xTranslation.is(xDefaultTranslation)) continue
+            loadTranslations(xTranslation.@lang, xTranslation)
+        }
+    }
+
+    def loadTranslations(String name, def xTranslation) {
+        def translation = [:]
+        TRANSLATIONS[name] = translation
+        for (xText in xTranslation.text) {
+            translation[xText.@id] = xText.value.text()
+        }
+    }
+
+    def resolveDefaultText(String id) {
+        if (!id || !id?.trim()?.startsWith('jr:itext')) return id
+        def finalId = id.find(~/('|").*('|")/).replaceAll(/'|"/, '')
+        for (kv in TRANSLATIONS) {
+            def translation = kv.value[finalId]
+            if (translation) return translation
+        }
+        return id
+
+    }
+
+    private Object extractEssentNodes() {
+        //xForm.head.model.instance[0].'*'[0]
+        xModel = xForm[XHTML_NS.head].model
+        def instance = xModel.instance[0]
+        xDataNode = instance.'*'[0]
+        return xDataNode
     }
 
     private Form toForm() {
 
-        //xForm.head.model.instance[0].'*'[0]
-        model = xForm[XHTML_NS.head].model
-        def instance = model.instance[0]
-        dataNode = instance.'*'[0]
-
-
-
         form = new Form()
-        form.id = dataNode.name().localPart
+        form.id = xDataNode.name().localPart
         form.name = xForm[XHTML_NS.head][XHTML_NS.title].text()
-        form.dbId = dataNode.@id
+        form.dbId = xDataNode.@id
 
         addLayoutAttributes()
         addDynamicInstances()
@@ -62,6 +105,7 @@ class ODKDeSerializer {
         return form
     }
 
+
     private void addLayoutAttributes() {
         def attrs = xForm[XHTML_NS.body][0].attributes()
         if (attrs)
@@ -69,7 +113,7 @@ class ODKDeSerializer {
     }
 
     private def addDynamicInstances() {
-        def instances = model.instance
+        def instances = xModel.instance
         instances.each {
             if (isDynamicInstanceNode(it)) {
                 String instanceId = it.@id
@@ -92,7 +136,7 @@ class ODKDeSerializer {
 
     def addHiddenQuestions() {
         def previous = null
-        for (bind in model.bind) {
+        for (bind in xModel.bind) {
             mayBeAddNode(previous, bind)
         }
 
@@ -250,11 +294,11 @@ class ODKDeSerializer {
             qn.binding = XPathUtil.getNodeName(elem.@ref)
 
         if (qn instanceof IQuestion) {
-            def value = dataNode."$qn.binding".text()
+            def value = xDataNode."$qn.binding".text()
             if (value)
                 qn.value = value
-            qn.text = elem.label.text()
-            qn.comment = elem.hint.text()
+            qn.text = extractTranslation elem.label
+            qn.comment = extractTranslation elem.hint
         }
 
 
@@ -279,6 +323,7 @@ class ODKDeSerializer {
      */
     private IFormElement addBehaviourInfo(IFormElement qn) {
         def bindNode = getBindNode(qn.binding)
+        if (!bindNode) return
         /*todo implement the notion of readonly and not enabled. Readonly question can be populated with data as opposed to disabled*/
         if (qn instanceof IQuestion) {
             mayBeMakeLocked(bindNode, qn)
@@ -335,7 +380,7 @@ class ODKDeSerializer {
         String validationLogic = bindNode.@constraint
         if (validationLogic) {
             qn.validationLogic = getXPathFormula(validationLogic)
-            qn.message = bindNode.attributes()[JR_NS.constraintMsg]
+            qn.message = resolveDefaultText(bindNode.attributes()[JR_NS.constraintMsg])
         }
     }
 
@@ -438,7 +483,7 @@ class ODKDeSerializer {
     }
 
     private Object getBindNode(binding) {
-        return model.bind.find { XPathUtil.getNodeName(it.@nodeset) == binding }
+        return xModel.bind.find { XPathUtil.getNodeName(it.@nodeset) == binding }
     }
 
     static private String resolveMediaType(mediaType) {
@@ -487,9 +532,19 @@ class ODKDeSerializer {
     }
 
 
-    private static List<Option> getSelectOptions(def select) {
+    private List<Option> getSelectOptions(def select) {
         def items = select.item
-        return items.collect { new Option(it.label.text(), it.value.text()) }
+        return items.collect { new Option(extractTranslation(it.label), it.value.text()) }
+    }
+
+    private String extractTranslation(Object xLabel) {
+        def embeddedText = xLabel.text()
+        if (embeddedText) return embeddedText
+
+        def ref = xLabel.@ref
+        ref = xLabel instanceof List ? ref[0] : ref
+        return resolveDefaultText(ref)
+
     }
 
 }
