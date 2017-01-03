@@ -214,20 +214,20 @@ class Form implements HasQuestions {
 
     def printAll(PrintStream out) {
 
-        allQuestions.each {
+        allElements.each {
             out.println "___________________________"
             out.println "${it.xformType.value.padRight(15)}: ${it.getText(true)}"
             if (it.id)
                 out.println "ID             : $it.id"
-            if (it.required)
+            if (it instanceof IQuestion && it.required)
                 out.println "Required       : $it.required"
-            if (it.readOnly)
+            if (it instanceof IQuestion && it.readOnly)
                 out.println "Readonly       : $it.readOnly"
             if (!it.visible)
                 out.println "Visible        : $it.visible"
             if (it.skipLogic)
                 out.println "SkipLogic      : $it.skipAction if $it.skipLogic"
-            if (it.calculation)
+            if (it instanceof IQuestion && it.calculation)
                 out.println "Calcn          : $it.calculation"
             if (it.validationLogic)
                 out.println "Validation     : $it.validationLogic\n" +

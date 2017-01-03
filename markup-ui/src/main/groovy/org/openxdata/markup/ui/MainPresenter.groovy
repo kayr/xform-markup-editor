@@ -50,7 +50,6 @@ class MainPresenter implements DocumentListener {
     Executor e = Executors.newSingleThreadExecutor()
 
 
-
     MainPresenter() {
         form = new MainUI()
 
@@ -89,6 +88,8 @@ class MainPresenter implements DocumentListener {
         form.btnPreviewXml.addActionListener { Thread.start { executeSafely { previewOdkXML() } } }
 
         form.txtMarkUp.addCaretListener { selectLineOnTree(it.dot) }
+
+        form.menuEnableODKMode.addActionListener { enableODKMode() }
 
 
 
@@ -540,7 +541,7 @@ class MainPresenter implements DocumentListener {
 
     }
 
-    private info(Object o){
+    private info(Object o) {
         form.info.println(o)
     }
 
@@ -638,6 +639,19 @@ class MainPresenter implements DocumentListener {
             if (ex instanceof ValidationException) selectLine(ex.line)
         }
 
+    }
+
+
+    def enableODKMode() {
+        form.chkUseXMLValidation.setSelected(true)
+        form.chkEmulateOXDConversion.setSelected(true)
+        form.chkODKValidate.setSelected(true)
+        invokeLater {
+            form.chkUseXMLValidation.repaint()
+            form.chkEmulateOXDConversion.repaint()
+            form.chkODKValidate.repaint()
+            quickParseStudy()
+        }
     }
 
     String addHeader(String markupTxt) {

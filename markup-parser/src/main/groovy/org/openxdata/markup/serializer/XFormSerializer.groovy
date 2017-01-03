@@ -79,6 +79,11 @@ class XFormSerializer {
         xml.doubleQuotes = true
         checkBindLength(form.binding)
         def attrs = [:]
+        def hasJR = form.allElements.any { e -> [*:e.layoutAttributes,*:e.bindAttributes].any { kv -> kv.key.startsWith('jr:') } }
+        if (hasJR) {
+            attrs['xmlns:jr'] = 'http://openrosa.org/javarosa'
+        }
+
         if (form.layoutAttributes) {
             attrs += form.layoutAttributes.collectEntries { ["layout:$it.key", it.value] }
             attrs["xmlns:layout"] = 'https://github.com/kayr/xform-markup-editor#layout'

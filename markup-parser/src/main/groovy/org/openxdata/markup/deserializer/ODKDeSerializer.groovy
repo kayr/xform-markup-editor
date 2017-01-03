@@ -14,7 +14,7 @@ class ODKDeSerializer {
     private String xml
     private Node xForm
     private Form form
-    private def xDataNode, xModel
+    private def xDataNode, xModel, xBody
     private final
     static
     def COMMON_BIND_ATTRIBUTES = ['jr:constraintMsg', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
@@ -82,6 +82,7 @@ class ODKDeSerializer {
         xModel = xForm[XHTML_NS.head].model
         def instance = xModel.instance[0]
         xDataNode = instance.'*'[0]
+        xBody = xForm[XHTML_NS.body][0]
         return xDataNode
     }
 
@@ -107,7 +108,7 @@ class ODKDeSerializer {
 
 
     private void addLayoutAttributes() {
-        def attrs = xForm[XHTML_NS.body][0].attributes()
+        def attrs = xBody.attributes()
         if (attrs)
             form.layoutAttributes.putAll(attrs)
     }
@@ -138,6 +139,7 @@ class ODKDeSerializer {
         def previous = null
         for (bind in xModel.bind) {
             mayBeAddNode(previous, bind)
+            previous = bind
         }
 
     }
@@ -151,15 +153,21 @@ class ODKDeSerializer {
 
         if (element) return
 
+
+
         def steps = nodeset.split('/')
+        if (nodeset.startsWith('/')) steps = steps[1..-1]
 
         def pathSteps = steps[0..-2]
 
         def finalParent = pathSteps.inject(form) { HasQuestions acc, String val ->
-            def group = acc.getElement(val)
+            if (acc instanceof Form && val == form.id) return form
+            def accGroup = acc as HasQuestions
+            def group = accGroup.getElement(val)
             if (!group) {
-                group = new Page(id: val)
-                acc.addElement(group)
+                group = new Page(binding: val, visible: false,name: '')
+                accGroup.addElement(group)
+                println("### created new group:  [$group.absoluteBinding]")
             }
             return group
         }
@@ -172,7 +180,7 @@ class ODKDeSerializer {
             if (previousBindElement) {
                 finalParent.addAfterElement(previousBindElement, question)
             } else {
-                finalParent.addElement(question)
+                finalParent.addElementAt(0, question)
             }
         } else {
             System.err.println("Could not add [$nodeset] invalid ")
@@ -180,9 +188,10 @@ class ODKDeSerializer {
     }
 
     private TextQuestion createQuestionFromBind(def bind) {
-        def t = new TextQuestion('-')
+        def t = new TextQuestion('...')
         t.binding = XPathUtil.getNodeName(bind.@nodeset)
         t.setType(resolveType(t, null))
+        t.setVisible(false)
         addBehaviourInfo(t)
 
         return t
@@ -190,8 +199,7 @@ class ODKDeSerializer {
     }
 
     private def addElements() {
-        def body = xForm[XHTML_NS.body][0]
-        addQuestions(form, body)
+        addQuestions(form, xBody)
     }
 
     private static boolean isDynamicInstanceNode(def elem) {
@@ -285,7 +293,7 @@ class ODKDeSerializer {
         return elem.itemset.size() > 0
     }
 
-    private IFormElement addIdMetaInfo(IFormElement qn, HasQuestions parent, def elem) {
+    private def <T extends IFormElement> T addIdMetaInfo(T qn, HasQuestions parent, def elem) {
 
         //repeats do not have a bind attribute
         if (isRepeatGroup(elem))
@@ -312,7 +320,10 @@ class ODKDeSerializer {
         if (qn instanceof RepeatQuestion) {
             layoutAttributes = elem.repeat[0].attributes()
         }
-        nameSpaceAwareCopyInto(qn.layoutAttributes, layoutAttributes, ['nodeset', 'ref'], ['jr:count': 'jrcount'])
+        def ignoreAttribs = ['nodeset', 'ref']
+        if (elem.name().localPart == 'upload' && elem.@mediatype in ['image/*', 'video/*', 'audio/*'])//todo improve this and probably shift it to the actual question
+            ignoreAttribs.add('mediatype')
+        nameSpaceAwareCopyInto(qn.layoutAttributes, layoutAttributes, ignoreAttribs, ['jr:count': 'jrcount'])
     }
 
     /**
@@ -326,7 +337,6 @@ class ODKDeSerializer {
         if (!bindNode) return
         /*todo implement the notion of readonly and not enabled. Readonly question can be populated with data as opposed to disabled*/
         if (qn instanceof IQuestion) {
-            mayBeMakeLocked(bindNode, qn)
             mayBeMakeReadOnly(bindNode, qn)
             mayBeAddCalculation(bindNode, qn)
         }
@@ -402,6 +412,7 @@ class ODKDeSerializer {
     //todo implement test for invisible
     private static void mayBeMakeInvisible(bindNode, IFormElement qn) {
         String visible = bindNode.@visible
+
         if (visible && visible.contains('false')) {
             qn.visible = false
         }
@@ -414,13 +425,6 @@ class ODKDeSerializer {
         }
     }
 
-    private static String mayBeMakeLocked(bindNode, IQuestion qn) {
-        String readonly = bindNode.@locked
-        if (readonly && readonly.contains('true')) {
-            qn.readOnly = true
-        }
-        return readonly
-    }
 
     private String getXPathFormula(String xpath) {
         if (!xpath) return null
@@ -473,10 +477,12 @@ class ODKDeSerializer {
 
         switch (type) {
             case 'binary':
-                def media = layoutElem.@mediatype
+                def media = layoutElem?.@mediatype
                 return resolveMediaType(media)
             case 'int':
                 return XformType.NUMBER.value
+            case 'geopoint':
+                return XformType.GPS.value
             default:
                 return type ?: 'string'
         }

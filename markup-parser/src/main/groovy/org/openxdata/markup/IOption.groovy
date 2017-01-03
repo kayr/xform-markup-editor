@@ -20,4 +20,6 @@ interface IOption {
     int getLine()
 
     void setLine(int i)
+
+    String getMarkUpText()
 }

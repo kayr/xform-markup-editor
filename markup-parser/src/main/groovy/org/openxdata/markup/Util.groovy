@@ -213,7 +213,8 @@ class Util {
         } else if (option[0] == '$') {
             def tmpBind = option.find(/[$][^\s]*\s/)?.trim()
             //make sure bind is at the beginning
-            validateId(tmpBind?.replaceFirst(/\$/, ''), 0)
+            if (!Study.validateWithXML.get())
+                validateId(tmpBind?.replaceFirst(/\$/, ''), 0)
             if (tmpBind == null || option.indexOf(tmpBind) > 0)
                 throw new ValidationException("""Option [$option] has an invalid id.
                                                  |An Id should start with lower case characters follow by low case characters, numbers or underscores""".stripMargin().toString())

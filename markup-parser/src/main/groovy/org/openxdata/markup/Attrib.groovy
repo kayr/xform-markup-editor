@@ -18,7 +18,7 @@ class Attrib {
                          'picture', 'gps', 'barcode', 'longtext']
 
     static
-    List allowedAttributes = ['readonly', 'required','jrcount', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
+    List allowedAttributes = ['readonly', 'required', 'jrcount', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
                               'hideif', 'appearance', 'style (on forms)', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
 
 
@@ -80,6 +80,7 @@ class Attrib {
 
         if (isLayout) {
             setLayoutAttribute(form, attrib, param, line)
+            return
         }
 
 
@@ -262,6 +263,5 @@ class Attrib {
 
         }
     }
-
 
 }

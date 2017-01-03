@@ -63,6 +63,8 @@ class MainUI {
 
                 menu(text: 'Preferences') {
 
+                    menuEnableODKMode = menuItem(text: 'Enable ODK Mode')
+                    separator()
                     menuItem(text: '  General:', font: new Font(Font.SANS_SERIF, Font.BOLD, 12))
                     separator()
                     chkNumberBindings = checkBoxMenuItem(text: 'Number IDs')
@@ -257,6 +259,7 @@ class MainUI {
     JMenuItem menuRecent
     JMenuItem menuOpen
     JMenuItem menuSave
+    JMenuItem menuEnableODKMode
     JSplitPane spltMainPane
 
     //Text

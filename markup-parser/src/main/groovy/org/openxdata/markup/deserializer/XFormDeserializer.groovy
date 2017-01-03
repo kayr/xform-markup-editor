@@ -1,16 +1,16 @@
 package org.openxdata.markup.deserializer
 
 import groovy.json.JsonSlurper
+import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.NamespaceAwareHashMap
 import org.openxdata.markup.*
-
 /**
  * Created by kay on 6/7/14.
  */
 class XFormDeserializer {
 
     private String xml
-    private def xForm
+    private GPathResult xForm
     private Form form
     private def model
     private final
@@ -275,13 +275,36 @@ class XFormDeserializer {
 
         Map bindAttributes = bindNode.attributes()
 
-        for (kv in bindAttributes) {
-            if (!COMMON_BIND_ATTRIBUTES.contains(kv.key)) {
-                qn.bindAttributes[kv.key] = kv.value
-            }
-        }
+        nameSpaceAwareCopyInto(qn.bindAttributes,bindAttributes,COMMON_BIND_ATTRIBUTES)
+//        for (kv in bindAttributes) {
+//            if (!COMMON_BIND_ATTRIBUTES.contains(kv.key)) {
+//                qn.bindAttributes[kv.key] = kv.value
+//            }
+//        }
 
         return qn
+    }
+
+    def nameSpaceAwareCopyInto(Map target, Map<String,Object> source, Collection excludes, Map keyConversion = [:]) {
+//        def hints = xForm.@namespaceTagHints.collectEntries { [it.value, it.key] }
+
+        def hintsField = GPathResult.getDeclaredField('namespaceTagHints')
+        hintsField.setAccessible(true)
+        def hints =  hintsField.get(xForm) as Map<String,String>
+
+        for (kv in source) {
+            def finalKey = kv.key
+            if (kv.key.startsWith('{')) {
+                for (h in hints) {
+                    finalKey = finalKey.replace("{${hints[h.key]}}","$h.key:")
+                }
+            }
+
+            if (!excludes.contains(finalKey))
+                target[keyConversion[finalKey] ?: finalKey] = kv.value
+
+
+        }
     }
 
     private void mayBeAddCalculation(bindNode, IQuestion qn) {

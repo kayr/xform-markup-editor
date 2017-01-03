@@ -183,4 +183,6 @@ trait HasQuestions implements IFormElement {
         return elem
     }
 
+    boolean isHoldingContainersOnly() { elements.every { it instanceof HasQuestions } }
+
 }

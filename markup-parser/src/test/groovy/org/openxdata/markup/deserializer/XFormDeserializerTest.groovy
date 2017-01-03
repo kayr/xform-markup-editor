@@ -9,6 +9,7 @@ import static org.openxdata.markup.Fixtures.*
 import static org.openxdata.markup.Form.extractQuestions
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.*
 import static org.openxdata.markup.serializer.ODKFixtures.formWithIncompatibleOXDId
+import static org.openxdata.markup.serializer.ODKFixtures.formWithInvisible
 
 /**
  * Created by kay on 6/7/14.
@@ -245,6 +246,10 @@ class XFormDeserializerTest extends XMLTestCase {
         testRoundTrip(gpsForm.markUp)
         testRoundTrip(formWithDollarInString)
         testRoundTrip(dynFormWithQuotes.markUp)
+        testRoundTrip(formWithLayoutAndBindAttributes)
+        testRoundTrip(formWithInvisible.form)
+        testRoundTrip(formWithAttribs)
+
 
         Study.validateWithXML.set(true)
         testRoundTrip(formWithIncompatibleOXDId.form)
@@ -264,18 +269,17 @@ class XFormDeserializerTest extends XMLTestCase {
             assertXMLEqual oxd1, oxd2
         }
 
-        def odk1 = ConversionHelper.markup2Odk(markup,false,false,false)
+        def odk1 = ConversionHelper.markup2Odk(markup, false, false, false)
 
         form2 = ConversionHelper.odk2Form(odk1)
-        form2.validate()
-        def odk2 = ConversionHelper.form2Odk(form2,false,false,false)
+        def odk2 = ConversionHelper.form2Odk(form2, false, false, false)
 
-//        try {
+        try {
             assertEquals odk1, odk2
-//        } catch (ComparisonFailure f) {
-//            System.err.println("Some form failed to pass round trip $form1.name")
-//            assertXMLEqual odk1, odk2
-//        }
+        } catch (ComparisonFailure f) {
+            System.err.println("Some form failed to pass round trip $form1.name")
+            assertXMLEqual odk1, odk2
+        }
 
     }
 
@@ -294,6 +298,38 @@ class XFormDeserializerTest extends XMLTestCase {
     void testNestedGroups() {
         testRoundTrip(nestedGroups.markUp)
         testRoundTrip(formWithLayoutAndBindAttributes)
+    }
+
+    void testJRNameSpaceHandling(){
+        def markup = '''
+
+            ## f
+
+            @id start
+            @invisible
+            @bind:jr:preload timestamp
+            @bind:jr:preloadParams start
+            @dateTime
+            ...
+
+
+            @id end
+            @invisible
+            @bind:jr:preload timestamp
+            @bind:jr:preloadParams end
+            @dateTime
+            ...
+
+
+            @id today
+            @invisible
+            @bind:jr:preload date
+            @bind:jr:preloadParams today
+            @date
+            ...
+            '''
+
+        testRoundTrip(markup)
     }
 
 }

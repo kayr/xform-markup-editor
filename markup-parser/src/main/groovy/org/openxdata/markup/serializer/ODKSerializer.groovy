@@ -72,7 +72,7 @@ class ODKSerializer {
                     x.instance {
                         x."${vb form.binding}"(id: form.dbId ?: 0, name: form.name) {
                             buildInstance(x, form)
-                            if (addMetaInstanceId) {
+                            if (addMetaInstanceId && !form.getElement('instanceID')) {
                                 x.meta {
                                     x.instanceID()
                                 }
@@ -253,10 +253,18 @@ class ODKSerializer {
     private void mayBeBuildLayout(MarkupBuilder xml, IFormElement q) {
         // implement visibility here
         // if a question is invisible and has no skipLogic do not render its layout
-        if (!q.visible && !q.skipLogic)
-            return
+        if (shouldRenderLayout(q)) return
         buildLayout(xml, q)
     }
+
+    private boolean shouldRenderLayout(HasQuestions q) {
+        return q.allQuestions.any { shouldRenderLayout(it) }
+    }
+
+    private boolean shouldRenderLayout(IFormElement q) {
+        return !q.visible && !q.skipLogic
+    }
+
 
     private void buildDynamicModel(MarkupBuilder x, Form form) {
         def completeBinds = []
@@ -370,7 +378,7 @@ class ODKSerializer {
         //serialize layout attributes to the group
         def layoutAttributes = ([:] + question.layoutAttributes)
         def manualJRCount = layoutAttributes.remove('jr:count')
-        if(manualJRCount){
+        if (manualJRCount) {
             err.println("A manual jr:count($manualJRCount) was found on [$question.absoluteBinding] and therefore ignored")
         }
         layoutAttributes.remove('nodeset')
@@ -395,6 +403,8 @@ class ODKSerializer {
     private void buildLayout(MarkupBuilder xml, Page page) {
 
         if (!page.isVisible()) return
+
+
 
         def attr = page.id ? [ref: absoluteBinding(page)] : [:]
         attr = attr + page.layoutAttributes

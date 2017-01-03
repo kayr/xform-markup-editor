@@ -1,7 +1,6 @@
 package org.openxdata.markup.serializer
 
 import au.com.bytecode.opencsv.CSVWriter
-import org.codehaus.groovy.runtime.StringGroovyMethods
 import org.openxdata.markup.*
 
 /**
@@ -12,34 +11,54 @@ class MarkUpSerializer {
 
     static String toStudyMarkup(Study study) {
         use(StringBuildCategory) {
-            StringBuilder builder = new StringBuilder()
+            StringWriter w = new StringWriter()
+            def builder = new IndentPrinter(w, "  ", true, true)
             builder << "### $study.name"
             study.forms.each {
                 builder << toFormMarkUp(it)
             }
-            builder.toString()
+            w.toString()
         }
     }
 
     static String toFormMarkUp(Form form) {
         use(StringBuildCategory) {
-            StringBuilder builder = new StringBuilder()
+
+            StringWriter w = new StringWriter()
+            def builder = new IndentPrinter(w, "  ", true, true)
+            builder.toString()
+
 
             if (form.id)
                 builder << "@id $form.id"
             if (form.dbId && form.dbId != '0')
                 builder << "@dbid $form.dbId"
+            if (form.version)
+                builder << "@version $form.version"
+
+            for (la in form.layoutAttributes) {
+
+                if (la.key == 'style') {
+                    builder << "@style $la.value"
+                } else {
+                    builder << "@layout:$la.key $la.value"
+                }
+
+            }
+
             builder << "## $form.name"
 
-            form.pages.each {
-                renderPage(builder, it)
+            seprator(builder)
+
+            for (e in form.elements) {
+                serialize(builder, e)
             }
 
-            form.dynamicOptions.each {
-                renderDynamicOptions(builder, it.key, it.value)
+            for (Map.Entry<String, List<DynamicOption>> o in form.dynamicOptions) {
+                renderDynamicOptions(builder, o.key, o.value)
             }
 
-            return builder.toString()
+            return w.toString()
         }
     }
 
@@ -57,38 +76,149 @@ class MarkUpSerializer {
 
     }
 
-    static def renderPage(def builder, Page page) {
-        builder << "#> $page.name"
-        page.questions.each {
-            renderQuestion(builder, it)
+    static def renderPage(def builder, HasQuestions container) {
+        builder << "#> $container.name"
+        container.elements.each {
+            renderBehaviourInfo(builder, it)
         }
     }
 
-    def static renderQuestion(def builder, IQuestion qn) {
-        if (isAssignedId(qn))
-            builder << "@id $qn.binding"
-        if (qn.readOnly) builder << "@readonly"
-        if (!qn.visible) builder << "@invisible"
+    def static renderBehaviourInfo(def builder, IFormElement elem) {
+        if (elem.id && isAssignedId(elem))
+            builder << "@${elem.id == 'unique_id' ? 'absoluteid' : 'id'} $elem.binding"
 
-        mayBeAddSkipLogic(builder, qn)
-        mayBeAddValidationLogic(builder, qn)
+        if (elem instanceof IQuestion) {
+            if (elem.readOnly) builder << "@readonly"
+        }
 
-        if (qn.calculation) builder << "@calculate $qn.calculation"
+        if (!elem.visible) builder << "@invisible"
 
-        if (qn.comment) builder << "@comment $qn.comment"
+        mayBeAddSkipLogic(builder, elem)
+        mayBeAddValidationLogic(builder, elem)
 
-        if (qn.value) builder << "@default $qn.value"
+        if (elem instanceof IQuestion) {
+            if (elem.calculation) builder << "@calculate $elem.calculation"
 
-        if (qn instanceof TextQuestion) {
-            renderQuestionText builder, qn
+            if (elem.comment) builder << "@comment $elem.comment"
+
+            if (elem.value) builder << "@default $elem.value"
+        }
+
+        for (kv in elem.bindAttributes) {
+            if (Attrib.allowedAttributes.contains(kv.key)) {
+                builder << "@$kv.key $kv.value"
+            } else {
+                builder << "@bind:$kv.key $kv.value"
+            }
+        }
+
+        for (kv in elem.layoutAttributes) {
+            if (kv.key == 'appearance') {
+                builder << "@$kv.key $kv.value"
+            } else {
+                builder << "@layout:$kv.key $kv.value"
+            }
+        }
+
+    }
+
+
+    private static def isAssignedId(IFormElement qn) {
+        Util.getBindName(qn.text) != qn.binding
+    }
+
+
+    def static serialize(def builder, Page qn) {
+
+        renderBehaviourInfo(builder, qn)
+
+        def instanceParent = qn.firstInstanceParent
+        def isRootPage = instanceParent instanceof Form && instanceParent.isHoldingContainersOnly()
+        //todo test form that has mixed content
+        if (isRootPage) {
+            builder << "#> ${qn.text ?: "Page $qn.questionIdx"}"//todo test with with empty pages
         } else {
-            serialize(builder, qn)
+            builder << "group { ${qn.text ?: ''}"
         }
+
+        builder.println()
+
+        isRootPage ?: ++builder
+        for (e in qn.elements) {
+            serialize(builder, e)
+        }
+        isRootPage ?: --builder
+        if (!isRootPage) builder << '}'
+        seprator(builder)
+    }
+
+    def static serialize(def builder, MultiSelectQuestion qn) {
+        renderBehaviourInfo(builder, qn)
+        renderQuestionText(builder, qn)
+        ++builder
+        qn.options.each {
+            builder << ">>$it.markUpText"
+        }
+        --builder
+        seprator(builder)
+    }
+
+    def static serialize(def builder, SingleSelectQuestion qn) {
+        renderBehaviourInfo(builder, qn)
+        renderQuestionText(builder, qn)
+        ++builder
+        qn.options.each {
+            builder << ">$it.markUpText"
+        }
+        --builder
+        seprator(builder)
+
+    }
+
+    def static serialize(def builder, RepeatQuestion qn) {
+        renderBehaviourInfo(builder, qn)
+        builder << "repeat{ ${qn.required ? '*' : ''}$qn.text"
+
+        builder.println()
+
+        ++builder
+        qn.elements.each {
+            serialize(builder, it)
+        }
+        --builder
+        builder << "}"
+        seprator(builder)
 
     }
 
 
-    private static String mayBeAddSkipLogic(def builder, IQuestion qn) {
+    def static serialize(def builder, DynamicQuestion qn) {
+        renderBehaviourInfo(builder, qn)
+        builder << "@parent $qn.parentQuestionId"
+        renderQuestionText builder, qn
+        builder << "\$> $qn.dynamicInstanceId"
+        seprator(builder)
+
+    }
+
+    def static serialize(def builder, TextQuestion qn) {
+        renderBehaviourInfo(builder, qn)
+        renderQuestionText(builder, qn)
+        seprator(builder)
+
+    }
+
+    def static serialize(def builder, IQuestion qn) {
+        throw new UnsupportedOperationException("Cannot Render [${qn}] Markup")
+    }
+
+    static seprator(def builder) {
+        builder.println()
+        builder.println()
+
+    }
+
+    private static def mayBeAddSkipLogic(def builder, IFormElement qn) {
         if (!qn.skipLogic) return;
         def action = qn.skipAction?.trim() ?: 'enable'
         if (['enable', 'hide', 'show', 'disable'].contains(action)) {
@@ -99,61 +229,35 @@ class MarkUpSerializer {
         }
     }
 
-    private static def isAssignedId(IQuestion qn) {
-        Util.getBindName(qn.text) != qn.binding
-    }
-
-    private static String mayBeAddValidationLogic(def builder, IQuestion qn) {
+    private static def mayBeAddValidationLogic(def builder, IFormElement qn) {
         if (!qn.validationLogic) return;
         def logic = qn.validationLogic?.trim() ?: 'enable'
         builder << "@validif $logic"
         builder << "@message $qn.message"
     }
 
-
     private static void renderQuestionText(builder, IQuestion qn) {
-
         if (qn.type && qn.type != 'string') {
             builder << "@$qn.type"
         }
-
         builder << "${qn.required ? '*' : ''}$qn.text"
-    }
-
-    def static serialize(def builder, MultiSelectQuestion qn) {
-        renderQuestionText(builder, qn)
-        qn.options.each {
-            builder << ">>$it.markUpText"
-        }
-    }
-
-    def static serialize(def builder, SingleSelectQuestion qn) {
-        renderQuestionText builder, qn
-        qn.options.each {
-            builder << ">$it.markUpText"
-        }
-    }
-
-    def static serialize(def builder, RepeatQuestion qn) {
-        builder << "repeat{ ${qn.required ? '*' : ''}$qn.text"
-        qn.questions.each {
-            renderQuestion(builder, it)
-        }
-        builder << "}"
-
-    }
-
-    def static serialize(def builder, DynamicQuestion qn) {
-        builder << "@parent $qn.parentQuestionId"
-        renderQuestionText builder, qn
-        builder << "\$> $qn.dynamicInstanceId"
     }
 }
 
 
-@Category(StringBuilder)
+@Category(IndentPrinter)
 class StringBuildCategory {
     def leftShift(def value) {
-        StringGroovyMethods.leftShift(this, "\n$value")
+        this.println(value)
+    }
+
+    def next() {
+        this.incrementIndent()
+        return this
+    }
+
+    def previous() {
+        this.decrementIndent()
+        return this
     }
 }

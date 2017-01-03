@@ -7,7 +7,7 @@ import org.openxdata.markup.Fixtures
  */
 class ODKFixtures {
 
-    static def formWithInvisible = [
+    static def formWithInvisible = [ //tests that element with only invisible elements does not render body
             form: '''
 ### Std
 ## Frm
@@ -34,14 +34,7 @@ Disabled
       <bind id="disabled" nodeset="/std_frm_v1/disabled" type="string" readonly="true()" />
     </model>
   </h:head>
-  <h:body>
-    <group>
-      <label>Page1</label>
-      <input ref="/std_frm_v1/disabled">
-        <label>Disabled</label>
-      </input>
-    </group>
-  </h:body>
+  <h:body />
 </h:html>'''
     ]
     static def formWithSkipLogicAndReadOnly = [

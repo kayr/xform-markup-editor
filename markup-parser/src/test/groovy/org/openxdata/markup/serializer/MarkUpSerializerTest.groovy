@@ -1,11 +1,10 @@
 package org.openxdata.markup.serializer
 
-import org.openxdata.markup.Util
+import org.openxdata.markup.Fixtures
+import org.openxdata.markup.deserializer.DeSerializerFixtures
 import org.openxdata.markup.deserializer.MarkupDeserializer
 
 import static org.openxdata.markup.Fixtures.*
-import static org.openxdata.markup.deserializer.DeSerializerFixtures.getDynFormWithQuotes
-
 /**
  * Created by kay on 6/20/14.
  */
@@ -34,7 +33,9 @@ class MarkUpSerializerTest extends GroovyTestCase {
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
         testRoundTrip(formWithDollarInString)
-        testRoundTrip(dynFormWithQuotes.markUp)
+        testRoundTrip(DeSerializerFixtures.dynFormWithQuotes.markUp)
+        testRoundTrip(DeSerializerFixtures.nestedGroups.markUp)
+        testRoundTrip(Fixtures.formWithLayoutAndBindAttributes)
     }
 
     void testRoundTrip(String form) {
