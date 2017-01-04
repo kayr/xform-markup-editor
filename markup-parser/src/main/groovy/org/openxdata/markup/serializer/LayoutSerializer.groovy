@@ -40,8 +40,10 @@ class LayoutSerializer {
 
         List<PageLayout> pageLayouts = []
 
-        for (eachPage in form.pages) {
-            PageLayout pageLayOut = new PageLayout(page: eachPage)
+        def elementToIterate = form.isHoldingPagesOnly() ? form.pages : [form]
+
+        for (eachPage in elementToIterate) {
+            PageLayout pageLayOut = new PageLayout(page: (form.isHoldingPagesOnly() ? eachPage : new Page(name: 'Page1')))
 
             eachPage.questions.each { IQuestion qn ->
                 Layout layout = initQuestionLayout(qn)

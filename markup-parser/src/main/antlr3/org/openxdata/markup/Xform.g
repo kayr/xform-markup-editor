@@ -16,6 +16,7 @@ tokens {
   T_STUDY;
   T_FORM;
   T_PAGE;
+  T_START_FORM;
 }
 
 @header {
@@ -82,7 +83,7 @@ study 	: 	NEWLINE*
 form 	: 	ATTRIBUTE*
 	   	FORMNAME
 	   	formContent+
-	   	-> ^(T_FORM FORMNAME ATTRIBUTE* ^(T_PAGE PAGE["Page1"] formContent+))
+	   	-> ^(T_FORM FORMNAME ATTRIBUTE* ^(T_START_FORM formContent+))
 	   	|
 	   	ATTRIBUTE*
 	   	FORMNAME

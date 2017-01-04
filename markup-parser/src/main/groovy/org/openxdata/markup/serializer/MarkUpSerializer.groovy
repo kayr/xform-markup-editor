@@ -33,7 +33,7 @@ class MarkUpSerializer {
                 builder << "@id $form.id"
             if (form.dbId && form.dbId != '0')
                 builder << "@dbid $form.dbId"
-            if (form.version)
+            if (form.version && form.version != 'v1')
                 builder << "@version $form.version"
 
             for (la in form.layoutAttributes) {
@@ -133,22 +133,21 @@ class MarkUpSerializer {
         renderBehaviourInfo(builder, qn)
 
         def instanceParent = qn.firstInstanceParent
-        def isRootPage = instanceParent instanceof Form && instanceParent.isHoldingContainersOnly()
-        //todo test form that has mixed content
-        if (isRootPage) {
-            builder << "#> ${qn.text ?: "Page $qn.questionIdx"}"//todo test with with empty pages
+        def isFormWithPages = instanceParent instanceof Form && instanceParent.isHoldingPagesOnly()
+        if (isFormWithPages) {
+            builder << "#> ${qn.text ?: "Page $qn.questionIdx"}"
         } else {
             builder << "group { ${qn.text ?: ''}"
         }
 
         builder.println()
 
-        isRootPage ?: ++builder
+        isFormWithPages ?: ++builder
         for (e in qn.elements) {
             serialize(builder, e)
         }
-        isRootPage ?: --builder
-        if (!isRootPage) builder << '}'
+        isFormWithPages ?: --builder
+        if (!isFormWithPages) builder << '}'
         seprator(builder)
     }
 

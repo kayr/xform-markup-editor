@@ -262,7 +262,7 @@ class ODKSerializer {
     }
 
     private boolean shouldRenderLayout(IFormElement q) {
-        return !q.visible && !q.skipLogic
+        return !q.visible  && !q.skipLogic
     }
 
 

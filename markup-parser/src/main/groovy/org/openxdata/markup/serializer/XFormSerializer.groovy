@@ -35,7 +35,7 @@ class XFormSerializer {
 
             study.forms.each { form ->
                 xml.form(name: form.name) {
-                    xml.version(name: form.version) {//todo test
+                    xml.version(name: form.version) {
                         xml.xform(toXForm(form))
                         if (generateView)
                             xml.layout(toLayout(form))
@@ -79,7 +79,7 @@ class XFormSerializer {
         xml.doubleQuotes = true
         checkBindLength(form.binding)
         def attrs = [:]
-        def hasJR = form.allElements.any { e -> [*:e.layoutAttributes,*:e.bindAttributes].any { kv -> kv.key.startsWith('jr:') } }
+        def hasJR = form.allElements.any { e -> [*: e.layoutAttributes, *: e.bindAttributes].any { kv -> kv.key.startsWith('jr:') } }
         if (hasJR) {
             attrs['xmlns:jr'] = 'http://openrosa.org/javarosa'
         }
@@ -102,8 +102,16 @@ class XFormSerializer {
                 }
             }
 
-            form.elements.each { element ->
-                buildLayout(xml, element)
+
+            def wrapInPage = !form.isHoldingPagesOnly()
+            if (wrapInPage) {
+                xml.group(id: 1) {
+                    xml.label('Page1')
+
+                    form.elements.each { element -> buildLayout(xml, element) }
+                }
+            } else {
+                form.elements.each { element -> buildLayout(xml, element) }
             }
         }
 

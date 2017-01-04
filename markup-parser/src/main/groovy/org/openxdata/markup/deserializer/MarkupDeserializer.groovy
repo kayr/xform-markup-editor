@@ -85,6 +85,9 @@ class MarkupDeserializer {
                     form.addElement(page)
                     addQuestions(page, child)
                     break
+                case XformParser.T_START_FORM:
+                    addQuestions(form, child)
+                    break
             }
         }
 

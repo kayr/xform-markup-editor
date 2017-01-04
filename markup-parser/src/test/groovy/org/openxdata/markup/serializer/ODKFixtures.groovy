@@ -34,7 +34,11 @@ Disabled
       <bind id="disabled" nodeset="/std_frm_v1/disabled" type="string" readonly="true()" />
     </model>
   </h:head>
-  <h:body />
+  <h:body>
+    <input ref="/std_frm_v1/disabled">
+      <label>Disabled</label>
+    </input>
+  </h:body>
 </h:html>'''
     ]
     static def formWithSkipLogicAndReadOnly = [
@@ -77,53 +81,50 @@ Are you a father DisableIF
     </model>
   </h:head>
   <h:body>
-    <group>
-      <label>Page1</label>
-      <select1 ref="/std_frm_v1/sex">
-        <label>Sex</label>
-        <item>
-          <label>m</label>
-          <value>m</value>
-        </item>
-        <item>
-          <label>f</label>
-          <value>f</value>
-        </item>
-      </select1>
-      <select1 ref="/std_frm_v1/is_pregnant">
-        <label>Is pregnant</label>
-        <item>
-          <label>Yes</label>
-          <value>true</value>
-        </item>
-        <item>
-          <label>No</label>
-          <value>false</value>
-        </item>
-      </select1>
-      <select1 ref="/std_frm_v1/are_you_a_father_hideif">
-        <label>Are you a father HideIf</label>
-        <item>
-          <label>Yes</label>
-          <value>true</value>
-        </item>
-        <item>
-          <label>No</label>
-          <value>false</value>
-        </item>
-      </select1>
-      <select1 ref="/std_frm_v1/are_you_a_father_disableif">
-        <label>Are you a father DisableIF</label>
-        <item>
-          <label>Yes</label>
-          <value>true</value>
-        </item>
-        <item>
-          <label>No</label>
-          <value>false</value>
-        </item>
-      </select1>
-    </group>
+    <select1 ref="/std_frm_v1/sex">
+      <label>Sex</label>
+      <item>
+        <label>m</label>
+        <value>m</value>
+      </item>
+      <item>
+        <label>f</label>
+        <value>f</value>
+      </item>
+    </select1>
+    <select1 ref="/std_frm_v1/is_pregnant">
+      <label>Is pregnant</label>
+      <item>
+        <label>Yes</label>
+        <value>true</value>
+      </item>
+      <item>
+        <label>No</label>
+        <value>false</value>
+      </item>
+    </select1>
+    <select1 ref="/std_frm_v1/are_you_a_father_hideif">
+      <label>Are you a father HideIf</label>
+      <item>
+        <label>Yes</label>
+        <value>true</value>
+      </item>
+      <item>
+        <label>No</label>
+        <value>false</value>
+      </item>
+    </select1>
+    <select1 ref="/std_frm_v1/are_you_a_father_disableif">
+      <label>Are you a father DisableIF</label>
+      <item>
+        <label>Yes</label>
+        <value>true</value>
+      </item>
+      <item>
+        <label>No</label>
+        <value>false</value>
+      </item>
+    </select1>
   </h:body>
 </h:html>'''
     ]
@@ -149,12 +150,9 @@ Prefilled Date
     </model>
   </h:head>
   <h:body>
-    <group>
-      <label>Page1</label>
-      <input ref="/s_f_v1/endtime">
-        <label>Prefilled Date</label>
-      </input>
-    </group>
+    <input ref="/s_f_v1/endtime">
+      <label>Prefilled Date</label>
+    </input>
   </h:body>
 </h:html>'''
     ]
@@ -323,157 +321,154 @@ Prefilled Date
     </model>
   </h:head>
   <h:body>
+    <input ref="/example_study2_example_form2_v1/patient_id">
+      <label>Patient ID</label>
+    </input>
+    <select1 ref="/example_study2_example_form2_v1/title">
+      <label>Title</label>
+      <item>
+        <label>Mr</label>
+        <value>mr</value>
+      </item>
+      <item>
+        <label>Mrs</label>
+        <value>mrs</value>
+      </item>
+    </select1>
+    <input ref="/example_study2_example_form2_v1/first_name">
+      <label>First name</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/last_name">
+      <label>Last name</label>
+    </input>
+    <select1 ref="/example_study2_example_form2_v1/sex">
+      <label>Sex</label>
+      <item>
+        <label>Male</label>
+        <value>male</value>
+      </item>
+      <item>
+        <label>Female</label>
+        <value>female</value>
+      </item>
+    </select1>
+    <input ref="/example_study2_example_form2_v1/birthdate">
+      <label>Birthdate</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/weightkg">
+      <label>Weight(Kg)</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/height">
+      <label>Height</label>
+    </input>
+    <select1 ref="/example_study2_example_form2_v1/is_patient_pregnant">
+      <label>Is patient pregnant</label>
+      <item>
+        <label>Yes</label>
+        <value>true</value>
+      </item>
+      <item>
+        <label>No</label>
+        <value>false</value>
+      </item>
+    </select1>
+    <select ref="/example_study2_example_form2_v1/arvs">
+      <label>ARVS</label>
+      <hint>Please select all anti-retrovirals that the patient is taking</hint>
+      <item>
+        <label>AZT</label>
+        <value>azt</value>
+      </item>
+      <item>
+        <label>ABICVAR</label>
+        <value>abicvar</value>
+      </item>
+      <item>
+        <label>EFIVARENCE</label>
+        <value>efivarence</value>
+      </item>
+      <item>
+        <label>TRIOMUNE</label>
+        <value>triomune</value>
+      </item>
+      <item>
+        <label>TRUVADA</label>
+        <value>truvada</value>
+      </item>
+    </select>
+    <upload ref="/example_study2_example_form2_v1/picture" mediatype="image/*">
+      <label>Picture</label>
+    </upload>
+    <upload ref="/example_study2_example_form2_v1/sound" mediatype="audio/*">
+      <label>Sound</label>
+    </upload>
+    <upload ref="/example_study2_example_form2_v1/record_video" mediatype="video/*">
+      <label>Record video</label>
+    </upload>
+    <select1 ref="/example_study2_example_form2_v1/region">
+      <label>Region</label>
+      <item>
+        <label>Washington</label>
+        <value>washington</value>
+      </item>
+      <item>
+        <label>Texas</label>
+        <value>texas</value>
+      </item>
+      <item>
+        <label>Africa</label>
+        <value>africa</value>
+      </item>
+      <item>
+        <label>Europe</label>
+        <value>europe</value>
+      </item>
+    </select1>
+    <select1 ref="/example_study2_example_form2_v1/sub_hyphen_region">
+      <label>Sub-Region</label>
+      <itemset nodeset="instance('sub_hyphen_region')/dynamiclist/item[@parent=/example_study2_example_form2_v1/region]">
+        <value ref="value" />
+        <label ref="label" />
+      </itemset>
+    </select1>
+    <select1 ref="/example_study2_example_form2_v1/city">
+      <label>City</label>
+      <itemset nodeset="instance('city')/dynamiclist/item[@parent=/example_study2_example_form2_v1/sub_hyphen_region]">
+        <value ref="value" />
+        <label ref="label" />
+      </itemset>
+    </select1>
+    <input ref="/example_study2_example_form2_v1/children_number">
+      <label>Number of children</label>
+    </input>
     <group>
-      <label>Page1</label>
-      <input ref="/example_study2_example_form2_v1/patient_id">
-        <label>Patient ID</label>
-      </input>
-      <select1 ref="/example_study2_example_form2_v1/title">
-        <label>Title</label>
-        <item>
-          <label>Mr</label>
-          <value>mr</value>
-        </item>
-        <item>
-          <label>Mrs</label>
-          <value>mrs</value>
-        </item>
-      </select1>
-      <input ref="/example_study2_example_form2_v1/first_name">
-        <label>First name</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/last_name">
-        <label>Last name</label>
-      </input>
-      <select1 ref="/example_study2_example_form2_v1/sex">
-        <label>Sex</label>
-        <item>
-          <label>Male</label>
-          <value>male</value>
-        </item>
-        <item>
-          <label>Female</label>
-          <value>female</value>
-        </item>
-      </select1>
-      <input ref="/example_study2_example_form2_v1/birthdate">
-        <label>Birthdate</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/weightkg">
-        <label>Weight(Kg)</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/height">
-        <label>Height</label>
-      </input>
-      <select1 ref="/example_study2_example_form2_v1/is_patient_pregnant">
-        <label>Is patient pregnant</label>
-        <item>
-          <label>Yes</label>
-          <value>true</value>
-        </item>
-        <item>
-          <label>No</label>
-          <value>false</value>
-        </item>
-      </select1>
-      <select ref="/example_study2_example_form2_v1/arvs">
-        <label>ARVS</label>
-        <hint>Please select all anti-retrovirals that the patient is taking</hint>
-        <item>
-          <label>AZT</label>
-          <value>azt</value>
-        </item>
-        <item>
-          <label>ABICVAR</label>
-          <value>abicvar</value>
-        </item>
-        <item>
-          <label>EFIVARENCE</label>
-          <value>efivarence</value>
-        </item>
-        <item>
-          <label>TRIOMUNE</label>
-          <value>triomune</value>
-        </item>
-        <item>
-          <label>TRUVADA</label>
-          <value>truvada</value>
-        </item>
-      </select>
-      <upload ref="/example_study2_example_form2_v1/picture" mediatype="image/*">
-        <label>Picture</label>
-      </upload>
-      <upload ref="/example_study2_example_form2_v1/sound" mediatype="audio/*">
-        <label>Sound</label>
-      </upload>
-      <upload ref="/example_study2_example_form2_v1/record_video" mediatype="video/*">
-        <label>Record video</label>
-      </upload>
-      <select1 ref="/example_study2_example_form2_v1/region">
-        <label>Region</label>
-        <item>
-          <label>Washington</label>
-          <value>washington</value>
-        </item>
-        <item>
-          <label>Texas</label>
-          <value>texas</value>
-        </item>
-        <item>
-          <label>Africa</label>
-          <value>africa</value>
-        </item>
-        <item>
-          <label>Europe</label>
-          <value>europe</value>
-        </item>
-      </select1>
-      <select1 ref="/example_study2_example_form2_v1/sub_hyphen_region">
-        <label>Sub-Region</label>
-        <itemset nodeset="instance('sub_hyphen_region')/dynamiclist/item[@parent=/example_study2_example_form2_v1/region]">
-          <value ref="value" />
-          <label ref="label" />
-        </itemset>
-      </select1>
-      <select1 ref="/example_study2_example_form2_v1/city">
-        <label>City</label>
-        <itemset nodeset="instance('city')/dynamiclist/item[@parent=/example_study2_example_form2_v1/sub_hyphen_region]">
-          <value ref="value" />
-          <label ref="label" />
-        </itemset>
-      </select1>
-      <input ref="/example_study2_example_form2_v1/children_number">
-        <label>Number of children</label>
-      </input>
-      <group>
-        <label>Details of Children</label>
-        <repeat nodeset="/example_study2_example_form2_v1/details_of_children" jr:count="/example_study2_example_form2_v1/children_number">
-          <input ref="/example_study2_example_form2_v1/details_of_children/name">
-            <label>Name</label>
-          </input>
-          <input ref="/example_study2_example_form2_v1/details_of_children/age">
-            <label>Age</label>
-          </input>
-          <select1 ref="/example_study2_example_form2_v1/details_of_children/child_sex">
-            <label>Sex</label>
-            <item>
-              <label>Male</label>
-              <value>male</value>
-            </item>
-            <item>
-              <label>Female</label>
-              <value>female</value>
-            </item>
-          </select1>
-        </repeat>
-      </group>
-      <input ref="/example_study2_example_form2_v1/start_time">
-        <label>Start time</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/endtime">
-        <label>End time</label>
-      </input>
+      <label>Details of Children</label>
+      <repeat nodeset="/example_study2_example_form2_v1/details_of_children" jr:count="/example_study2_example_form2_v1/children_number">
+        <input ref="/example_study2_example_form2_v1/details_of_children/name">
+          <label>Name</label>
+        </input>
+        <input ref="/example_study2_example_form2_v1/details_of_children/age">
+          <label>Age</label>
+        </input>
+        <select1 ref="/example_study2_example_form2_v1/details_of_children/child_sex">
+          <label>Sex</label>
+          <item>
+            <label>Male</label>
+            <value>male</value>
+          </item>
+          <item>
+            <label>Female</label>
+            <value>female</value>
+          </item>
+        </select1>
+      </repeat>
     </group>
+    <input ref="/example_study2_example_form2_v1/start_time">
+      <label>Start time</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/endtime">
+      <label>End time</label>
+    </input>
   </h:body>
 </h:html>''',
             xmlWithMeta:'''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
@@ -642,157 +637,154 @@ Prefilled Date
     </model>
   </h:head>
   <h:body>
+    <input ref="/example_study2_example_form2_v1/patient_id">
+      <label>Patient ID</label>
+    </input>
+    <select1 ref="/example_study2_example_form2_v1/title">
+      <label>Title</label>
+      <item>
+        <label>Mr</label>
+        <value>mr</value>
+      </item>
+      <item>
+        <label>Mrs</label>
+        <value>mrs</value>
+      </item>
+    </select1>
+    <input ref="/example_study2_example_form2_v1/first_name">
+      <label>First name</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/last_name">
+      <label>Last name</label>
+    </input>
+    <select1 ref="/example_study2_example_form2_v1/sex">
+      <label>Sex</label>
+      <item>
+        <label>Male</label>
+        <value>male</value>
+      </item>
+      <item>
+        <label>Female</label>
+        <value>female</value>
+      </item>
+    </select1>
+    <input ref="/example_study2_example_form2_v1/birthdate">
+      <label>Birthdate</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/weightkg">
+      <label>Weight(Kg)</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/height">
+      <label>Height</label>
+    </input>
+    <select1 ref="/example_study2_example_form2_v1/is_patient_pregnant">
+      <label>Is patient pregnant</label>
+      <item>
+        <label>Yes</label>
+        <value>true</value>
+      </item>
+      <item>
+        <label>No</label>
+        <value>false</value>
+      </item>
+    </select1>
+    <select ref="/example_study2_example_form2_v1/arvs">
+      <label>ARVS</label>
+      <hint>Please select all anti-retrovirals that the patient is taking</hint>
+      <item>
+        <label>AZT</label>
+        <value>azt</value>
+      </item>
+      <item>
+        <label>ABICVAR</label>
+        <value>abicvar</value>
+      </item>
+      <item>
+        <label>EFIVARENCE</label>
+        <value>efivarence</value>
+      </item>
+      <item>
+        <label>TRIOMUNE</label>
+        <value>triomune</value>
+      </item>
+      <item>
+        <label>TRUVADA</label>
+        <value>truvada</value>
+      </item>
+    </select>
+    <upload ref="/example_study2_example_form2_v1/picture" mediatype="image/*">
+      <label>Picture</label>
+    </upload>
+    <upload ref="/example_study2_example_form2_v1/sound" mediatype="audio/*">
+      <label>Sound</label>
+    </upload>
+    <upload ref="/example_study2_example_form2_v1/record_video" mediatype="video/*">
+      <label>Record video</label>
+    </upload>
+    <select1 ref="/example_study2_example_form2_v1/region">
+      <label>Region</label>
+      <item>
+        <label>Washington</label>
+        <value>washington</value>
+      </item>
+      <item>
+        <label>Texas</label>
+        <value>texas</value>
+      </item>
+      <item>
+        <label>Africa</label>
+        <value>africa</value>
+      </item>
+      <item>
+        <label>Europe</label>
+        <value>europe</value>
+      </item>
+    </select1>
+    <select1 ref="/example_study2_example_form2_v1/sub_hyphen_region">
+      <label>Sub-Region</label>
+      <itemset nodeset="instance('sub_hyphen_region')/dynamiclist/item[@parent=/example_study2_example_form2_v1/region]">
+        <value ref="value" />
+        <label ref="label" />
+      </itemset>
+    </select1>
+    <select1 ref="/example_study2_example_form2_v1/city">
+      <label>City</label>
+      <itemset nodeset="instance('city')/dynamiclist/item[@parent=/example_study2_example_form2_v1/sub_hyphen_region]">
+        <value ref="value" />
+        <label ref="label" />
+      </itemset>
+    </select1>
+    <input ref="/example_study2_example_form2_v1/children_number">
+      <label>Number of children</label>
+    </input>
     <group>
-      <label>Page1</label>
-      <input ref="/example_study2_example_form2_v1/patient_id">
-        <label>Patient ID</label>
-      </input>
-      <select1 ref="/example_study2_example_form2_v1/title">
-        <label>Title</label>
-        <item>
-          <label>Mr</label>
-          <value>mr</value>
-        </item>
-        <item>
-          <label>Mrs</label>
-          <value>mrs</value>
-        </item>
-      </select1>
-      <input ref="/example_study2_example_form2_v1/first_name">
-        <label>First name</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/last_name">
-        <label>Last name</label>
-      </input>
-      <select1 ref="/example_study2_example_form2_v1/sex">
-        <label>Sex</label>
-        <item>
-          <label>Male</label>
-          <value>male</value>
-        </item>
-        <item>
-          <label>Female</label>
-          <value>female</value>
-        </item>
-      </select1>
-      <input ref="/example_study2_example_form2_v1/birthdate">
-        <label>Birthdate</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/weightkg">
-        <label>Weight(Kg)</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/height">
-        <label>Height</label>
-      </input>
-      <select1 ref="/example_study2_example_form2_v1/is_patient_pregnant">
-        <label>Is patient pregnant</label>
-        <item>
-          <label>Yes</label>
-          <value>true</value>
-        </item>
-        <item>
-          <label>No</label>
-          <value>false</value>
-        </item>
-      </select1>
-      <select ref="/example_study2_example_form2_v1/arvs">
-        <label>ARVS</label>
-        <hint>Please select all anti-retrovirals that the patient is taking</hint>
-        <item>
-          <label>AZT</label>
-          <value>azt</value>
-        </item>
-        <item>
-          <label>ABICVAR</label>
-          <value>abicvar</value>
-        </item>
-        <item>
-          <label>EFIVARENCE</label>
-          <value>efivarence</value>
-        </item>
-        <item>
-          <label>TRIOMUNE</label>
-          <value>triomune</value>
-        </item>
-        <item>
-          <label>TRUVADA</label>
-          <value>truvada</value>
-        </item>
-      </select>
-      <upload ref="/example_study2_example_form2_v1/picture" mediatype="image/*">
-        <label>Picture</label>
-      </upload>
-      <upload ref="/example_study2_example_form2_v1/sound" mediatype="audio/*">
-        <label>Sound</label>
-      </upload>
-      <upload ref="/example_study2_example_form2_v1/record_video" mediatype="video/*">
-        <label>Record video</label>
-      </upload>
-      <select1 ref="/example_study2_example_form2_v1/region">
-        <label>Region</label>
-        <item>
-          <label>Washington</label>
-          <value>washington</value>
-        </item>
-        <item>
-          <label>Texas</label>
-          <value>texas</value>
-        </item>
-        <item>
-          <label>Africa</label>
-          <value>africa</value>
-        </item>
-        <item>
-          <label>Europe</label>
-          <value>europe</value>
-        </item>
-      </select1>
-      <select1 ref="/example_study2_example_form2_v1/sub_hyphen_region">
-        <label>Sub-Region</label>
-        <itemset nodeset="instance('sub_hyphen_region')/dynamiclist/item[@parent=/example_study2_example_form2_v1/region]">
-          <value ref="value" />
-          <label ref="label" />
-        </itemset>
-      </select1>
-      <select1 ref="/example_study2_example_form2_v1/city">
-        <label>City</label>
-        <itemset nodeset="instance('city')/dynamiclist/item[@parent=/example_study2_example_form2_v1/sub_hyphen_region]">
-          <value ref="value" />
-          <label ref="label" />
-        </itemset>
-      </select1>
-      <input ref="/example_study2_example_form2_v1/children_number">
-        <label>Number of children</label>
-      </input>
-      <group>
-        <label>Details of Children</label>
-        <repeat nodeset="/example_study2_example_form2_v1/details_of_children" jr:count="/example_study2_example_form2_v1/children_number">
-          <input ref="/example_study2_example_form2_v1/details_of_children/name">
-            <label>Name</label>
-          </input>
-          <input ref="/example_study2_example_form2_v1/details_of_children/age">
-            <label>Age</label>
-          </input>
-          <select1 ref="/example_study2_example_form2_v1/details_of_children/child_sex">
-            <label>Sex</label>
-            <item>
-              <label>Male</label>
-              <value>male</value>
-            </item>
-            <item>
-              <label>Female</label>
-              <value>female</value>
-            </item>
-          </select1>
-        </repeat>
-      </group>
-      <input ref="/example_study2_example_form2_v1/start_time">
-        <label>Start time</label>
-      </input>
-      <input ref="/example_study2_example_form2_v1/endtime">
-        <label>End time</label>
-      </input>
+      <label>Details of Children</label>
+      <repeat nodeset="/example_study2_example_form2_v1/details_of_children" jr:count="/example_study2_example_form2_v1/children_number">
+        <input ref="/example_study2_example_form2_v1/details_of_children/name">
+          <label>Name</label>
+        </input>
+        <input ref="/example_study2_example_form2_v1/details_of_children/age">
+          <label>Age</label>
+        </input>
+        <select1 ref="/example_study2_example_form2_v1/details_of_children/child_sex">
+          <label>Sex</label>
+          <item>
+            <label>Male</label>
+            <value>male</value>
+          </item>
+          <item>
+            <label>Female</label>
+            <value>female</value>
+          </item>
+        </select1>
+      </repeat>
     </group>
+    <input ref="/example_study2_example_form2_v1/start_time">
+      <label>Start time</label>
+    </input>
+    <input ref="/example_study2_example_form2_v1/endtime">
+      <label>End time</label>
+    </input>
   </h:body>
 </h:html>'''
     ]
@@ -827,15 +819,12 @@ Some number
     </model>
   </h:head>
   <h:body>
-    <group>
-      <label>Page1</label>
-      <input ref="/dd_dsd_v1/n1">
-        <label>Num 1</label>
-      </input>
-      <input ref="/dd_dsd_v1/some_number">
-        <label>Some number</label>
-      </input>
-    </group>
+    <input ref="/dd_dsd_v1/n1">
+      <label>Num 1</label>
+    </input>
+    <input ref="/dd_dsd_v1/some_number">
+      <label>Some number</label>
+    </input>
   </h:body>
 </h:html>'''
     ]
@@ -950,68 +939,65 @@ Sex
     </model>
   </h:head>
   <h:body>
-    <group>
-      <label>Page1</label>
-      <select1 ref="/d_f_v1/_1sex">
-        <label>1. Sex</label>
-        <item>
-          <label>m</label>
-          <value>m</value>
-        </item>
-        <item>
-          <label>f</label>
-          <value>f</value>
-        </item>
-      </select1>
-      <input ref="/d_f_v1/_2was_visible_are_you_pregnamt_to_showif_sex_eq_f">
-        <label>2. [was visible] Are you pregnamt [to @showif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_3was_visible_are_you_pregnamt_to_hideif_sex_eq_m">
-        <label>3. [was visible] Are you pregnamt [to @hideif $sex = 'm']</label>
-      </input>
-      <input ref="/d_f_v1/_4was_visible_are_you_pregnamt_to_enableif_sex_eq_f">
-        <label>4. [was visible] Are you pregnamt [to @enableif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_5was_visible_are_you_pregnamt_to_disableif_sex_eq_m">
-        <label>5. [was visible] Are you pregnamt [to @disableif $sex = 'm']</label>
-      </input>
-      <input ref="/d_f_v1/_6was_invisible_are_you_pregnamt_to_showif_sex_eq_f">
-        <label>6. [was invisible] Are you pregnamt [to @showif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_7was_invisible_are_you_pregnamt_to_hideif_sex_eq_m">
-        <label>7. [was invisible] Are you pregnamt [to @hideif $sex = 'm']</label>
-      </input>
-      <input ref="/d_f_v1/_8was_invisible_are_you_pregnamt_to_enableif_sex_eq_f">
-        <label>8. [was invisible] Are you pregnamt [to @enableif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_9was_invisible_are_you_pregnamt_to_disableif_sex_eq_m">
-        <label>9. [was invisible] Are you pregnamt [to @disableif $sex = 'm']</label>
-      </input>
-      <input ref="/d_f_v1/_10was_enable_are_you_pregnamt_to_showif_sex_eq_f">
-        <label>10. [was enable] Are you pregnamt [to @showif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_11was_enable_are_you_pregnamt_to_hideif_sex_eq_m">
-        <label>11. [was enable] Are you pregnamt [to @hideif $sex = 'm']</label>
-      </input>
-      <input ref="/d_f_v1/_12was_enable_are_you_pregnamt_to_enableif_sex_eq_f">
-        <label>12. [was enable] Are you pregnamt [to @enableif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_13was_enable_are_you_pregnamt_to_disableif_sex_eq_m">
-        <label>13. [was enable] Are you pregnamt [to @disableif $sex = 'm']</label>
-      </input>
-      <input ref="/d_f_v1/_14was_readonly_are_you_pregnamt_to_showif_sex_eq_f">
-        <label>14. [was readonly] Are you pregnamt [to @showif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_15was_readonly_are_you_pregnamt_to_hideif_sex_eq_m">
-        <label>15. [was readonly] Are you pregnamt [to @hideif $sex = 'm']</label>
-      </input>
-      <input ref="/d_f_v1/_16was_readonly_are_you_pregnamt_to_enableif_sex_eq_f">
-        <label>16. [was readonly] Are you pregnamt [to @enableif $sex = 'f']</label>
-      </input>
-      <input ref="/d_f_v1/_17was_readonly_are_you_pregnamt_to_disableif_sex_eq_m">
-        <label>17. [was readonly] Are you pregnamt [to @disableif $sex = 'm']</label>
-      </input>
-    </group>
+    <select1 ref="/d_f_v1/_1sex">
+      <label>1. Sex</label>
+      <item>
+        <label>m</label>
+        <value>m</value>
+      </item>
+      <item>
+        <label>f</label>
+        <value>f</value>
+      </item>
+    </select1>
+    <input ref="/d_f_v1/_2was_visible_are_you_pregnamt_to_showif_sex_eq_f">
+      <label>2. [was visible] Are you pregnamt [to @showif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_3was_visible_are_you_pregnamt_to_hideif_sex_eq_m">
+      <label>3. [was visible] Are you pregnamt [to @hideif $sex = 'm']</label>
+    </input>
+    <input ref="/d_f_v1/_4was_visible_are_you_pregnamt_to_enableif_sex_eq_f">
+      <label>4. [was visible] Are you pregnamt [to @enableif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_5was_visible_are_you_pregnamt_to_disableif_sex_eq_m">
+      <label>5. [was visible] Are you pregnamt [to @disableif $sex = 'm']</label>
+    </input>
+    <input ref="/d_f_v1/_6was_invisible_are_you_pregnamt_to_showif_sex_eq_f">
+      <label>6. [was invisible] Are you pregnamt [to @showif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_7was_invisible_are_you_pregnamt_to_hideif_sex_eq_m">
+      <label>7. [was invisible] Are you pregnamt [to @hideif $sex = 'm']</label>
+    </input>
+    <input ref="/d_f_v1/_8was_invisible_are_you_pregnamt_to_enableif_sex_eq_f">
+      <label>8. [was invisible] Are you pregnamt [to @enableif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_9was_invisible_are_you_pregnamt_to_disableif_sex_eq_m">
+      <label>9. [was invisible] Are you pregnamt [to @disableif $sex = 'm']</label>
+    </input>
+    <input ref="/d_f_v1/_10was_enable_are_you_pregnamt_to_showif_sex_eq_f">
+      <label>10. [was enable] Are you pregnamt [to @showif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_11was_enable_are_you_pregnamt_to_hideif_sex_eq_m">
+      <label>11. [was enable] Are you pregnamt [to @hideif $sex = 'm']</label>
+    </input>
+    <input ref="/d_f_v1/_12was_enable_are_you_pregnamt_to_enableif_sex_eq_f">
+      <label>12. [was enable] Are you pregnamt [to @enableif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_13was_enable_are_you_pregnamt_to_disableif_sex_eq_m">
+      <label>13. [was enable] Are you pregnamt [to @disableif $sex = 'm']</label>
+    </input>
+    <input ref="/d_f_v1/_14was_readonly_are_you_pregnamt_to_showif_sex_eq_f">
+      <label>14. [was readonly] Are you pregnamt [to @showif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_15was_readonly_are_you_pregnamt_to_hideif_sex_eq_m">
+      <label>15. [was readonly] Are you pregnamt [to @hideif $sex = 'm']</label>
+    </input>
+    <input ref="/d_f_v1/_16was_readonly_are_you_pregnamt_to_enableif_sex_eq_f">
+      <label>16. [was readonly] Are you pregnamt [to @enableif $sex = 'f']</label>
+    </input>
+    <input ref="/d_f_v1/_17was_readonly_are_you_pregnamt_to_disableif_sex_eq_m">
+      <label>17. [was readonly] Are you pregnamt [to @disableif $sex = 'm']</label>
+    </input>
   </h:body>
 </h:html>'''
     ]
@@ -1110,53 +1096,50 @@ Some other quesion
     </model>
   </h:head>
   <h:body>
-    <group>
-      <label>Page1</label>
-      <select ref="/s_f_v1/subjects">
-        <label>Subjects</label>
-        <item>
-          <label>Physics</label>
-          <value>physics</value>
-        </item>
-        <item>
-          <label>Calculus</label>
-          <value>calculus</value>
-        </item>
-        <item>
-          <label>Biology</label>
-          <value>biology</value>
-        </item>
-      </select>
-      <select1 ref="/s_f_v1/c">
-        <label>Continue</label>
-        <item>
-          <label>Yes</label>
-          <value>true</value>
-        </item>
-        <item>
-          <label>No</label>
-          <value>false</value>
-        </item>
-      </select1>
-      <input ref="/s_f_v1/q1">
-        <label>Q1</label>
-      </input>
-      <input ref="/s_f_v1/q2">
-        <label>Q2</label>
-      </input>
-      <input ref="/s_f_v1/q3">
-        <label>Q3</label>
-      </input>
-      <input ref="/s_f_v1/g">
-        <label>Some other quesion</label>
-      </input>
-      <input ref="/s_f_v1/e">
-        <label>Some other quesion</label>
-      </input>
-      <input ref="/s_f_v1/ps">
-        <label>Some other quesion</label>
-      </input>
-    </group>
+    <select ref="/s_f_v1/subjects">
+      <label>Subjects</label>
+      <item>
+        <label>Physics</label>
+        <value>physics</value>
+      </item>
+      <item>
+        <label>Calculus</label>
+        <value>calculus</value>
+      </item>
+      <item>
+        <label>Biology</label>
+        <value>biology</value>
+      </item>
+    </select>
+    <select1 ref="/s_f_v1/c">
+      <label>Continue</label>
+      <item>
+        <label>Yes</label>
+        <value>true</value>
+      </item>
+      <item>
+        <label>No</label>
+        <value>false</value>
+      </item>
+    </select1>
+    <input ref="/s_f_v1/q1">
+      <label>Q1</label>
+    </input>
+    <input ref="/s_f_v1/q2">
+      <label>Q2</label>
+    </input>
+    <input ref="/s_f_v1/q3">
+      <label>Q3</label>
+    </input>
+    <input ref="/s_f_v1/g">
+      <label>Some other quesion</label>
+    </input>
+    <input ref="/s_f_v1/e">
+      <label>Some other quesion</label>
+    </input>
+    <input ref="/s_f_v1/ps">
+      <label>Some other quesion</label>
+    </input>
   </h:body>
 </h:html>'''
     ]
@@ -1222,12 +1205,9 @@ No. Kids
     </model>
   </h:head>
   <h:body>
-    <group>
-      <label>Page1</label>
-      <input ref="/study_form_v1/question_with_launch" appearance="ex:org.odx.activities.OdxPrefillActivity(table_name='household',key_field='id',display_field='household_head')">
-        <label>Question with launch</label>
-      </input>
-    </group>
+    <input ref="/study_form_v1/question_with_launch" appearance="ex:org.odx.activities.OdxPrefillActivity(table_name='household',key_field='id',display_field='household_head')">
+      <label>Question with launch</label>
+    </input>
   </h:body>
 </h:html>'''
   ]
@@ -1287,91 +1267,88 @@ No. Kids
     </model>
   </h:head>
   <h:body class="pages">
+    <input ref="/sample_markup_study_simple_form_v1/name" name="lo 1">
+      <label>Name</label>
+    </input>
+    <select1 ref="/sample_markup_study_simple_form_v1/sex" name="lo 2">
+      <label>Sex</label>
+      <item>
+        <label>male</label>
+        <value>male</value>
+      </item>
+      <item>
+        <label>female</label>
+        <value>female</value>
+      </item>
+    </select1>
+    <select1 ref="/sample_markup_study_simple_form_v1/is_pregnant" name="lo 3">
+      <label>Is pregnant</label>
+      <item>
+        <label>Yes</label>
+        <value>true</value>
+      </item>
+      <item>
+        <label>No</label>
+        <value>false</value>
+      </item>
+    </select1>
+    <input ref="/sample_markup_study_simple_form_v1/what_is_your_age" name="lo 4">
+      <label>What is your Age</label>
+    </input>
+    <select ref="/sample_markup_study_simple_form_v1/course_units" name="lo 5">
+      <label>Course units</label>
+      <hint>Course unit hint</hint>
+      <item>
+        <label>Computer Science</label>
+        <value>computer_science</value>
+      </item>
+      <item>
+        <label>Math</label>
+        <value>math</value>
+      </item>
+      <item>
+        <label>History</label>
+        <value>history</value>
+      </item>
+    </select>
+    <input ref="/sample_markup_study_simple_form_v1/score_math" name="lo 6">
+      <label>Score math</label>
+    </input>
+    <input ref="/sample_markup_study_simple_form_v1/score_computer_science" name="lo 7">
+      <label>Score Computer Science</label>
+    </input>
+    <input ref="/sample_markup_study_simple_form_v1/score_history" name="lo 8">
+      <label>Score History</label>
+    </input>
+    <input ref="/sample_markup_study_simple_form_v1/total_score" name="lo 9">
+      <label>Total score</label>
+    </input>
+    <input ref="/sample_markup_study_simple_form_v1/children" appearance="w1" name="lo 10">
+      <label>Number of children</label>
+    </input>
     <group>
-      <label>Page1</label>
-      <input ref="/sample_markup_study_simple_form_v1/name" name="lo 1">
-        <label>Name</label>
-      </input>
-      <select1 ref="/sample_markup_study_simple_form_v1/sex" name="lo 2">
-        <label>Sex</label>
-        <item>
-          <label>male</label>
-          <value>male</value>
-        </item>
-        <item>
-          <label>female</label>
-          <value>female</value>
-        </item>
-      </select1>
-      <select1 ref="/sample_markup_study_simple_form_v1/is_pregnant" name="lo 3">
-        <label>Is pregnant</label>
-        <item>
-          <label>Yes</label>
-          <value>true</value>
-        </item>
-        <item>
-          <label>No</label>
-          <value>false</value>
-        </item>
-      </select1>
-      <input ref="/sample_markup_study_simple_form_v1/what_is_your_age" name="lo 4">
-        <label>What is your Age</label>
-      </input>
-      <select ref="/sample_markup_study_simple_form_v1/course_units" name="lo 5">
-        <label>Course units</label>
-        <hint>Course unit hint</hint>
-        <item>
-          <label>Computer Science</label>
-          <value>computer_science</value>
-        </item>
-        <item>
-          <label>Math</label>
-          <value>math</value>
-        </item>
-        <item>
-          <label>History</label>
-          <value>history</value>
-        </item>
-      </select>
-      <input ref="/sample_markup_study_simple_form_v1/score_math" name="lo 6">
-        <label>Score math</label>
-      </input>
-      <input ref="/sample_markup_study_simple_form_v1/score_computer_science" name="lo 7">
-        <label>Score Computer Science</label>
-      </input>
-      <input ref="/sample_markup_study_simple_form_v1/score_history" name="lo 8">
-        <label>Score History</label>
-      </input>
-      <input ref="/sample_markup_study_simple_form_v1/total_score" name="lo 9">
-        <label>Total score</label>
-      </input>
-      <input ref="/sample_markup_study_simple_form_v1/children" appearance="w1" name="lo 10">
-        <label>Number of children</label>
-      </input>
-      <group>
-        <label>Child details</label>
-        <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" jr:count="/sample_markup_study_simple_form_v1/children" name="lo 11">
-          <input ref="/sample_markup_study_simple_form_v1/child_details/child_name" name="lo 11.1">
-            <label>Child Name</label>
-          </input>
-        </repeat>
-      </group>
-      <select1 ref="/sample_markup_study_simple_form_v1/district">
-        <label>District</label>
-        <hint>Please select you district</hint>
-        <item>
-          <label>Washington</label>
-          <value>washington</value>
-        </item>
-      </select1>
-      <select1 ref="/sample_markup_study_simple_form_v1/subregion" name="lo 13">
-        <label>Subregion</label>
-        <itemset nodeset="instance('subregion')/dynamiclist/item[@parent=/sample_markup_study_simple_form_v1/district]">
-          <value ref="value" />
-          <label ref="label" />
-        </itemset>
-      </select1>
+      <label>Child details</label>
+      <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" jr:count="/sample_markup_study_simple_form_v1/children" name="lo 11">
+        <input ref="/sample_markup_study_simple_form_v1/child_details/child_name" name="lo 11.1">
+          <label>Child Name</label>
+        </input>
+      </repeat>
     </group>
+    <select1 ref="/sample_markup_study_simple_form_v1/district">
+      <label>District</label>
+      <hint>Please select you district</hint>
+      <item>
+        <label>Washington</label>
+        <value>washington</value>
+      </item>
+    </select1>
+    <select1 ref="/sample_markup_study_simple_form_v1/subregion" name="lo 13">
+      <label>Subregion</label>
+      <itemset nodeset="instance('subregion')/dynamiclist/item[@parent=/sample_markup_study_simple_form_v1/district]">
+        <value ref="value" />
+        <label ref="label" />
+      </itemset>
+    </select1>
   </h:body>
 </h:html>'''
     ]

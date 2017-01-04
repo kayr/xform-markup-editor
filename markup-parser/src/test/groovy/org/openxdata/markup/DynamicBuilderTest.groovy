@@ -282,7 +282,7 @@ uganda,entebbe
 
         def form = new MarkupDeserializer(src).study().forms[0]
 
-        assert form.firstPage.questions.size() == 1
+        assert form.allQuestions.size() == 1
         assert form.dynamicOptions.size() == 1
         assert form.dynamicOptions.get('cities').size() == 3
     }

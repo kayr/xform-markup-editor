@@ -659,23 +659,20 @@ q4
     </model>
   </h:head>
   <h:body>
-    <group>
-      <label>Page1</label>
-      <input ref="/s_f_v1/dd">
-        <label>dd</label>
+    <input ref="/s_f_v1/dd">
+      <label>dd</label>
+    </input>
+    <group ref="/s_f_v1/g1">
+      <label></label>
+      <input ref="/s_f_v1/g1/ddsd">
+        <label>ddsd</label>
       </input>
-      <group ref="/s_f_v1/g1">
-        <label></label>
-        <input ref="/s_f_v1/g1/ddsd">
-          <label>ddsd</label>
-        </input>
-      </group>
-      <group ref="/s_f_v1/g2">
-        <label></label>
-        <input ref="/s_f_v1/g2/group_2">
-          <label>group 2</label>
-        </input>
-      </group>
+    </group>
+    <group ref="/s_f_v1/g2">
+      <label></label>
+      <input ref="/s_f_v1/g2/group_2">
+        <label>group 2</label>
+      </input>
     </group>
   </h:body>
 </h:html>''',

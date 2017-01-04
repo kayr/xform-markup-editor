@@ -1,8 +1,7 @@
 package org.openxdata.markup.serializer.layout
 
 import groovy.xml.MarkupBuilder
-import org.openxdata.markup.Page
-
+import org.openxdata.markup.HasQuestions
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -12,7 +11,7 @@ import org.openxdata.markup.Page
  */
 
 class PageLayout extends Layout {
-    Page page
+    HasQuestions page
     int top = 20
 
     private List<Layout> components = []

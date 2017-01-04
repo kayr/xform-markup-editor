@@ -94,7 +94,7 @@ class Attrib {
                 form.dbId = param
                 form.dbIdLine = line
                 break
-            case 'version'://todo write test
+            case 'version':
                 form.version = param
                 break
             case 'style':

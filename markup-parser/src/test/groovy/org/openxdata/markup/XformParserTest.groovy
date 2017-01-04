@@ -104,7 +104,7 @@ jeelopo
     public void testTwoTxtQuestionsExist() {
         def study = parser.study()
 
-        def txtQuestions = study.forms[0].firstPage.questions.findAll { it instanceof TextQuestion }
+        def txtQuestions = study.forms[0].questions.findAll { it instanceof TextQuestion }
 
         assertEquals 'Expecting 2 text questions', 2, txtQuestions.size()
     }

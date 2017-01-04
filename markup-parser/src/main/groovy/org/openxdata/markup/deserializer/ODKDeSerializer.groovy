@@ -340,7 +340,6 @@ class ODKDeSerializer {
             mayBeMakeReadOnly(bindNode, qn)
             mayBeAddCalculation(bindNode, qn)
         }
-        mayBeMakeInvisible(bindNode, qn)
         mayBeMakeRequired(bindNode, qn)
 
         mayBeAddSkipLogic(bindNode, qn)
@@ -406,15 +405,6 @@ class ODKDeSerializer {
         String required = bindNode.@required
         if (required && required.contains('true')) {
             qn.required = true
-        }
-    }
-
-    //todo implement test for invisible
-    private static void mayBeMakeInvisible(bindNode, IFormElement qn) {
-        String visible = bindNode.@visible
-
-        if (visible && visible.contains('false')) {
-            qn.visible = false
         }
     }
 

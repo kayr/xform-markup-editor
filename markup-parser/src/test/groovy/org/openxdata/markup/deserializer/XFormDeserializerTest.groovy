@@ -181,7 +181,6 @@ class XFormDeserializerTest extends XMLTestCase {
             assert questions.find { it.binding == 'endtime' }.type == 'time'
 
             assert questions.find { it.binding == 'details_of_children' }.xformType == XformType.REPEAT
-            assert form.firstPage.xformType == XformType.GROUP
 
             //options
             assert questions.find { it.binding == 'sex' }.options.size() == 2
@@ -197,6 +196,12 @@ class XFormDeserializerTest extends XMLTestCase {
         validateType(mkpForm)
         validateType(formFromXml)
 
+    }
+
+    void testGroupTypeIsDetected() {
+        def groupedForm = ConversionHelper.oxd2Form(nestedGroups.xml)
+        def grp = groupedForm['group_page_1']
+        assert grp.xformType == XformType.GROUP
     }
 
     void testSkipLogic() {
@@ -300,7 +305,7 @@ class XFormDeserializerTest extends XMLTestCase {
         testRoundTrip(formWithLayoutAndBindAttributes)
     }
 
-    void testJRNameSpaceHandling(){
+    void testJRNameSpaceHandling() {
         def markup = '''
 
             ## f

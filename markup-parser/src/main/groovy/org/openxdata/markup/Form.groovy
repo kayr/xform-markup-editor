@@ -43,7 +43,7 @@ class Form implements HasQuestions {
     }
 
     Page getFirstPage() {
-        return pages[0]
+        return pages ? pages.get(0) : null
     }
 
     private def init() {
@@ -236,7 +236,6 @@ class Form implements HasQuestions {
         out.println "___________________________"
     }
 
-    //todo test that these are set
     int getStartLine() {
         [dbIdLine, idLine, line].findAll().min()
     }

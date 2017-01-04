@@ -1,12 +1,8 @@
 package org.openxdata.markup.serializer
 
-import org.custommonkey.xmlunit.DetailedDiff
-import org.custommonkey.xmlunit.Diff
 import org.custommonkey.xmlunit.XMLTestCase
 import org.openxdata.markup.Fixtures
-import org.openxdata.markup.Util
 import org.openxdata.markup.deserializer.MarkupDeserializer
-
 /**
  * Created with IntelliJ IDEA.
  * User: kay
@@ -16,6 +12,7 @@ import org.openxdata.markup.deserializer.MarkupDeserializer
  */
 public class LayoutSerializerTest extends XMLTestCase {
 
+    //ignore
     public void testGenerateLayout() throws Exception {
 
         LayoutSerializer ser = new LayoutSerializer()
@@ -25,6 +22,7 @@ public class LayoutSerializerTest extends XMLTestCase {
 
         def xml = ser.generateLayout(form)
 
+        //ignore layout xml
         assertXMLEqual(Fixtures.xmlOxdSampleForm, xml)
     }
 }
