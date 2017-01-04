@@ -3,7 +3,6 @@ package org.openxdata.markup.ui
 import org.openxdata.markup.Form
 import org.openxdata.markup.HasQuestions
 import org.openxdata.markup.IFormElement
-import org.openxdata.markup.RepeatQuestion
 import org.openxdata.markup.Study
 import org.openxdata.markup.deserializer.MarkupDeserializer
 
@@ -74,11 +73,7 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
 
             def formNode = addObject(rootNode, form)
 
-            for (page in form.pages) {
-                def pageNode = addObject(formNode, page)
-                renderQuestions(pageNode, page)
-            }
-
+            renderQuestions(formNode, form)
         }
     }
 

@@ -643,13 +643,15 @@ class MainPresenter implements DocumentListener {
 
 
     def enableODKMode() {
-        form.chkUseXMLValidation.setSelected(true)
-        form.chkEmulateOXDConversion.setSelected(true)
-        form.chkODKValidate.setSelected(true)
+        def enables = [form.chkUseXMLValidation,
+                       form.chkEmulateOXDConversion,
+                       form.chkODKValidate,
+                       form.chkAutoAddInstanceId]
+
+        enables*.setSelected(true)
+
         invokeLater {
-            form.chkUseXMLValidation.repaint()
-            form.chkEmulateOXDConversion.repaint()
-            form.chkODKValidate.repaint()
+            enables*.repaint()
             quickParseStudy()
         }
     }
