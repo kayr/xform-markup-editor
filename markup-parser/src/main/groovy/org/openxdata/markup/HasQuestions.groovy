@@ -107,15 +107,33 @@ trait HasQuestions implements IFormElement {
         getAllElements(Closure.IDENTITY)
     }
 
+    IFormElement getFirstElementsWithId() {
+        def all = getAllElements(true) { IFormElement e -> e.id != null && !e.id.isEmpty() }
+        if (all) return all.first()
+        return null
+    }
+
+    IFormElement getFirstElementsText() {
+        def all = getAllElements(true) { IFormElement e -> e.text as boolean }
+        if (all) return all.first()
+        return null
+    }
+
     List<IFormElement> getAllElementsWithIds() {
         getAllElements { IFormElement e -> e.id != null && !e.id.isEmpty() }
     }
 
     List<IQuestion> getAllElements(@ClosureParams(FirstParam.FirstGenericType) Closure filter) {
+        getAllElements(false, filter)
+    }
+
+    List<IQuestion> getAllElements(boolean breakOnFirst, @ClosureParams(FirstParam.FirstGenericType) Closure filter) {
         def allQuestions = []
         for (IFormElement it in elements) {
-            if (filter(it))
+            if (filter(it)) {
                 allQuestions.add(it)
+                if (breakOnFirst) break
+            }
             if (it instanceof HasQuestions) {
                 def moreQuestions = (it as HasQuestions).getAllElements(filter)
                 allQuestions.addAll(moreQuestions)

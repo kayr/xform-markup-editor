@@ -20,6 +20,7 @@ import javax.swing.filechooser.FileFilter
 import java.awt.*
 import java.awt.datatransfer.Clipboard
 import java.awt.datatransfer.StringSelection
+import java.awt.event.ActionEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.util.concurrent.Executor
@@ -601,7 +602,22 @@ class MainPresenter implements DocumentListener {
         form.studyTreeBuilder.selectNodeForLine(caretLine + 1)
     }
 
-    public void insertUpdate(final DocumentEvent e) { refreshTreeLater() }
+    String previousInsertedChar
+
+    public void insertUpdate(final DocumentEvent e) {
+        def charInserted = e.document.getText(e.getOffset(), 1)
+        refreshTreeLater()
+        if (previousInsertedChar == '$') { mayBeShowAutoComplete() }
+        previousInsertedChar = charInserted
+    }
+
+    private mayBeShowAutoComplete() {
+        invokeLater {
+            def action = form.txtMarkUp.actionMap.get('complete-word')
+            action?.actionPerformed(new ActionEvent(form.txtMarkUp, 0, 'complete-word'))
+        }
+    }
+
 
     public void removeUpdate(DocumentEvent e) { refreshTreeLater() }
 
