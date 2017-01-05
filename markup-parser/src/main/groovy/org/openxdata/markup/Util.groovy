@@ -87,6 +87,8 @@ class Util {
         token = token.replaceAll("_+", "_");
         token = token.replaceAll(/_+$/, "");
 
+        if(token.isEmpty()) return '_empty'
+
         // make sure token starts with valid letter
         try {
             if (letters.indexOf((int) token.charAt(0)) == -1 || token.startsWith("xml"))

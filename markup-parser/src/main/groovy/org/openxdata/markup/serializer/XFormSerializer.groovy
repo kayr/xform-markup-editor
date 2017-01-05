@@ -105,7 +105,7 @@ class XFormSerializer {
 
             def wrapInPage = !form.isHoldingPagesOnly()
             if (wrapInPage) {
-                xml.group(id: 1) {
+                xml.group(id: 1, isSynthetic: true) {
                     xml.label('Page1')
 
                     form.elements.each { element -> buildLayout(xml, element) }

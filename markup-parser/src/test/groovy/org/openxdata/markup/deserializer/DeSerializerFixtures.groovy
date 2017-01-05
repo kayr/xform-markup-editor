@@ -695,7 +695,7 @@ q4
     <bind id="g2" nodeset="/s_f_v1/g2" constraint="/s_f_v1/dd = 'no'" message="Hello" />
     <bind id="group_2" nodeset="/s_f_v1/g2/group_2" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="dd">
       <label>dd</label>

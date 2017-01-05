@@ -165,7 +165,7 @@ class ODKDeSerializer {
             def accGroup = acc as HasQuestions
             def group = accGroup.getElement(val)
             if (!group) {
-                group = new Page(binding: val, visible: false,name: '')
+                group = new Page(binding: val, visible: false, name: '')
                 accGroup.addElement(group)
                 println("### created new group:  [$group.absoluteBinding]")
             }
@@ -305,8 +305,8 @@ class ODKDeSerializer {
             def value = xDataNode."$qn.binding".text()
             if (value)
                 qn.value = value
-            qn.text = extractTranslation elem.label
-            qn.comment = extractTranslation elem.hint
+            qn.text = extractTranslation(elem.label) ?: '...'
+            qn.comment = extractTranslation(elem.hint)
         }
 
 
@@ -530,7 +530,7 @@ class ODKDeSerializer {
 
     private List<Option> getSelectOptions(def select) {
         def items = select.item
-        return items.collect { new Option(extractTranslation(it.label), it.value.text()) }
+        return items.collect { new Option(extractTranslation(it.label)?: '...', it.value.text()) }
     }
 
     private String extractTranslation(Object xLabel) {

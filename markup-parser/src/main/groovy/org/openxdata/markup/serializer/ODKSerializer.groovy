@@ -58,6 +58,8 @@ class ODKSerializer {
         x.doubleQuotes = true
         vb(form.binding)
 
+        def doAddMetaInstanceId = addMetaInstanceId && !form.getElement('instanceID')
+
         x.'h:html'(xmlns: 'http://www.w3.org/2002/xforms',
                 'xmlns:h': 'http://www.w3.org/1999/xhtml',
                 'xmlns:ev': 'http://www.w3.org/2001/xml-events',
@@ -72,7 +74,7 @@ class ODKSerializer {
                     x.instance {
                         x."${vb form.binding}"(id: form.dbId ?: 0, name: form.name) {
                             buildInstance(x, form)
-                            if (addMetaInstanceId && !form.getElement('instanceID')) {
+                            if (doAddMetaInstanceId) {
                                 x.meta {
                                     x.instanceID()
                                 }
@@ -88,7 +90,7 @@ class ODKSerializer {
                         addBindNode(x, it)
                     }
 
-                    if (addMetaInstanceId) {
+                    if (doAddMetaInstanceId) {
                         x.bind(calculate: "concat('uuid:', uuid())", nodeset: "/$form.binding/meta/instanceID", readonly: "true()", type: "string")
                     }
                 }

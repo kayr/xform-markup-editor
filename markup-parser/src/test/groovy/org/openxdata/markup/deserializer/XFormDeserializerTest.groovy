@@ -26,8 +26,7 @@ class XFormDeserializerTest extends XMLTestCase {
 
     void testAddPages() {
         def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
-        assert form.pages.size() == 1
-        assert form.pages[0].name == 'Page1'
+        assert form.pages.size() == 0
     }
 
     void testNumberOfQuestions() {

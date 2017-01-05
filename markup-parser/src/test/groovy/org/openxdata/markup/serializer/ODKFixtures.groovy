@@ -1169,7 +1169,7 @@ No. Kids
     <bind id="pif-s." nodeset="/s_f_v1/pif-s." type="xsd:string" />
     <bind id="no_dot_kids" nodeset="/s_f_v1/no_dot_kids" type="xsd:string" relevant="/s_f_v1/pif-s. = 'male' and /s_f_v1/no_dot_kids = true" action="show" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="pif-s.">
       <label>Sex</label>

@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.NamespaceAwareHashMap
 import org.openxdata.markup.*
+
 /**
  * Created by kay on 6/7/14.
  */
@@ -89,8 +90,13 @@ class XFormDeserializer {
 
     private def addPages() {
         def groups = xForm.group
-        groups.each {
-            processPage(form, it)
+
+        if (groups.size() == 1 && groups.@isSynthetic.text()) {
+            addQuestions(form, groups[0])
+        } else {
+            groups.each {
+                processPage(form, it)
+            }
         }
     }
 
@@ -275,7 +281,7 @@ class XFormDeserializer {
 
         Map bindAttributes = bindNode.attributes()
 
-        nameSpaceAwareCopyInto(qn.bindAttributes,bindAttributes,COMMON_BIND_ATTRIBUTES)
+        nameSpaceAwareCopyInto(qn.bindAttributes, bindAttributes, COMMON_BIND_ATTRIBUTES)
 //        for (kv in bindAttributes) {
 //            if (!COMMON_BIND_ATTRIBUTES.contains(kv.key)) {
 //                qn.bindAttributes[kv.key] = kv.value
@@ -285,18 +291,18 @@ class XFormDeserializer {
         return qn
     }
 
-    def nameSpaceAwareCopyInto(Map target, Map<String,Object> source, Collection excludes, Map keyConversion = [:]) {
+    def nameSpaceAwareCopyInto(Map target, Map<String, Object> source, Collection excludes, Map keyConversion = [:]) {
 //        def hints = xForm.@namespaceTagHints.collectEntries { [it.value, it.key] }
 
         def hintsField = GPathResult.getDeclaredField('namespaceTagHints')
         hintsField.setAccessible(true)
-        def hints =  hintsField.get(xForm) as Map<String,String>
+        def hints = hintsField.get(xForm) as Map<String, String>
 
         for (kv in source) {
             def finalKey = kv.key
             if (kv.key.startsWith('{')) {
                 for (h in hints) {
-                    finalKey = finalKey.replace("{${hints[h.key]}}","$h.key:")
+                    finalKey = finalKey.replace("{${hints[h.key]}}", "$h.key:")
                 }
             }
 

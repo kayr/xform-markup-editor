@@ -644,7 +644,7 @@ jeelopo
     <bind id="rpt_question_2" nodeset="/snv_study_snv_form_v1/repeat_question_header/rpt_question_2" type="xsd:string" />
     <bind id="video" nodeset="/snv_study_snv_form_v1/video" type="xsd:base64Binary" format="video" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <select1 bind="country">
       <label>Country</label>
@@ -793,7 +793,7 @@ jeelopo
     <bind id="rpt_question_2" nodeset="/snv_study_snv_form_v1/repeat_question_header/rpt_question_2" type="xsd:string" />
     <bind id="video" nodeset="/snv_study_snv_form_v1/video" type="xsd:base64Binary" format="video" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <select1 bind="country">
       <label>1. Country</label>
@@ -1108,7 +1108,7 @@ jeelopo
     <bind id="hkdksdj" nodeset="/study_name_form_v1/hkdksdj" type="xsd:string" required="true()" />
     <bind id="testing_id" nodeset="/study_name_form_v1/testing_id" type="xsd:string" required="true()" visible="false()" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="age_of_boy">
       <label>Age</label>
@@ -1237,7 +1237,7 @@ repeat{ *Required repeat
     <bind id="pregnant" nodeset="/study_form_v1/pregnant" type="xsd:boolean" relevant="/study_form_v1/sex = 'female'" action="enable" />
     <bind id="male_question" nodeset="/study_form_v1/male_question" type="xsd:string" relevant="/study_form_v1/sex = 'male'" action="show" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <select1 bind="sex">
       <label>Sex</label>
@@ -1272,7 +1272,7 @@ repeat{ *Required repeat
     <bind id="age2" nodeset="/study_form_v1/age2" type="xsd:string" />
     <bind id="average" nodeset="/study_form_v1/average" type="xsd:string" calculate="(/study_form_v1/age + age2) div 2" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="age">
       <label>Age</label>
@@ -1300,7 +1300,7 @@ repeat{ *Required repeat
     <bind id="name" nodeset="/study_form_v1/child_repeat/name" type="xsd:string" />
     <bind id="sex" nodeset="/study_form_v1/child_repeat/sex" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <group id="child_repeat">
       <label>Children</label>
@@ -1450,7 +1450,7 @@ repeat{ *Required repeat
     </instance>
     <bind id="question" nodeset="/form_v5/question" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="question">
       <label>question</label>
@@ -1492,7 +1492,7 @@ repeat{ *Required repeat
     <bind id="subregion" nodeset="/study_form_v1/subregion" type="xsd:string" />
     <bind id="subregion_dupe" nodeset="/study_form_v1/subregion_dupe" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <select1 bind="region">
       <label>Select Region</label>
@@ -1533,7 +1533,7 @@ repeat{ *Required repeat
     <bind id="one" nodeset="/study_form_v1/one" type="xsd:string" />
     <bind id="two" nodeset="/study_form_v1/two" type="xsd:string" constraint=". = study_form_v1/one" message="blah" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="one">
       <label>One</label>
@@ -1629,7 +1629,7 @@ repeat{ *Required repeat
     <bind id="mn" nodeset="/study_form_v1/mn" type="xsd:string" />
     <bind id="_3question_3" nodeset="/study_form_v1/_3question_3" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="_1question_1">
       <label>1. question 1</label>
@@ -1793,7 +1793,7 @@ dynamic{
     <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
     <bind id="subregion" nodeset="/sample_markup_study_simple_form_v1/subregion" name="13" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="name" name="lo 1">
       <label>Name</label>
@@ -1919,7 +1919,7 @@ dynamic{
     <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
     <bind id="subregion" nodeset="/sample_markup_study_simple_form_v1/subregion" name="13" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="name" name="lo 1">
       <label>Name</label>
@@ -2086,7 +2086,7 @@ Option '''
     <bind id="text_two" nodeset="/study_name_form_v1/repeat/text_two" type="xsd:string" />
     <bind id="multi_three" nodeset="/study_name_form_v1/repeat/multi_three" type="xsd:string" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <select1 bind="single_select_question">
       <label>Single Select

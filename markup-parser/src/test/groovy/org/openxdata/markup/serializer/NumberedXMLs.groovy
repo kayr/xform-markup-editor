@@ -75,7 +75,7 @@ class NumberedXMLs {
     <bind id="_8_2rpt_question_2" nodeset="/snv_study_snv_form_v1/_8repeat_question_header/_8_2rpt_question_2" type="xsd:string" />
     <bind id="_9video" nodeset="/snv_study_snv_form_v1/_9video" type="xsd:base64Binary" format="video" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <select1 bind="_1country">
       <label>1. Country</label>
@@ -172,7 +172,7 @@ class NumberedXMLs {
     <bind id="_2pregnant" nodeset="/study_form_v1/_2pregnant" type="xsd:boolean" relevant="/study_form_v1/_1sex = 'female'" action="enable" />
     <bind id="_3male_question" nodeset="/study_form_v1/_3male_question" type="xsd:string" relevant="/study_form_v1/_1sex = 'male'" action="show" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <select1 bind="_1sex">
       <label>1. Sex</label>
@@ -207,7 +207,7 @@ class NumberedXMLs {
     <bind id="_2age2" nodeset="/study_form_v1/_2age2" type="xsd:string" />
     <bind id="_3average" nodeset="/study_form_v1/_3average" type="xsd:string" calculate="(/study_form_v1/_1age + age2) div 2" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="_1age">
       <label>1. Age</label>
@@ -234,7 +234,7 @@ class NumberedXMLs {
     <bind id="age2" nodeset="/study_form_v1/age2" type="xsd:string" />
     <bind id="average" nodeset="/study_form_v1/average" type="xsd:string" calculate="(/study_form_v1/age + age2) div 2" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="age">
       <label>1. Age</label>
@@ -259,7 +259,7 @@ class NumberedXMLs {
     <bind id="_1one" nodeset="/study_form_v1/_1one" type="xsd:string" />
     <bind id="_2two" nodeset="/study_form_v1/_2two" type="xsd:string" constraint=". = study_form_v1/_1one" message="blah" />
   </model>
-  <group id="1">
+  <group id="1" isSynthetic="true">
     <label>Page1</label>
     <input bind="_1one">
       <label>1. One</label>
