@@ -72,14 +72,9 @@ class XFormImporterUI {
 
     private loadFile() {
 
-        def fc = s.fileChooser(fileFilter: filter)
+        def file= IOHelper.chooseFile(HistoryKeeper.lastAccessedDirectory, IOHelper.filter('XML Files', 'xml')) { JFileChooser jc -> jc.showOpenDialog(frame) }
 
-        def option = fc.showOpenDialog(frame)
-
-        if (option == JFileChooser.APPROVE_OPTION) {
-            def file = fc.getSelectedFile()
-            presenter.load(file)
-        }
+        if(file) presenter.load(file)
     }
 
     def setXML(String xml) {

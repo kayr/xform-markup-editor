@@ -1,10 +1,9 @@
 package org.openxdata.markup.ui
 
+import org.openxdata.markup.ConversionHelper
 import org.openxdata.markup.deserializer.StudyDeSerializer
 import org.openxdata.markup.deserializer.XFormDeserializer
 import org.openxdata.markup.serializer.MarkUpSerializer
-import org.openxdata.markup.serializer.MarkupAligner
-
 /**
  * Created by kay on 7/11/14.
  */
@@ -28,7 +27,7 @@ class XFormImporterPresenter {
 
     def processXml() {
         def xml = ui.XML
-        def dom = new XmlSlurper(false, true).parseText(xml)
+        def dom = new XmlSlurper(false, false).parseText(xml)
 
         String markup
 
@@ -36,13 +35,16 @@ class XFormImporterPresenter {
             StudyDeSerializer sd = new StudyDeSerializer()
             def study = sd.toStudy(xml)
             markup = MarkUpSerializer.toStudyMarkup(study)
+        } else if (isForOdk(dom)) {
+            markup = MarkUpSerializer.toFormMarkUp(ConversionHelper.odk2Form(xml))
+            main?.enableODKMode()
         } else {
             XFormDeserializer ds = new XFormDeserializer(xml: xml, xForm: dom)
             def form = ds.toForm()
             markup = "### $form.name\n${MarkUpSerializer.toFormMarkUp(form)}\n"
         }
-        markup = MarkupAligner.align(markup)
         main?.loadWithConfirmation(markup)
+
         ui.hide()
     }
 
@@ -53,6 +55,10 @@ class XFormImporterPresenter {
     static boolean isForStudy(def dom) {
         String firstName = dom.name()
         return firstName.equalsIgnoreCase('study')
+    }
+
+    static boolean isForOdk(dom) {
+        return dom.name().endsWith('html')
     }
 
 
