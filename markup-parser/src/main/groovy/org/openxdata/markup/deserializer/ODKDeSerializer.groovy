@@ -301,18 +301,44 @@ class ODKDeSerializer {
         else
             qn.binding = XPathUtil.getNodeName(elem.@ref)
 
-        if (qn instanceof IQuestion) {
-            def value = xDataNode."$qn.binding".text()
-            if (value)
-                qn.value = value
-            qn.text = extractTranslation(elem.label) ?: '...'
-            qn.comment = extractTranslation(elem.hint)
-        }
+
 
 
         parent.addElement(qn)
+
+        if (qn instanceof IQuestion) {
+
+            if (!(qn instanceof RepeatQuestion)) {
+                def value = findDataNode(qn)?.text()
+                if (value)
+                    qn.value = value
+            }
+
+            qn.text = extractTranslation(elem.label) ?: '...'
+            qn.comment = extractTranslation(elem.hint)
+
+        }
+
         mayBeAddLayoutAttributes(qn, elem)
         return qn
+    }
+
+    def findDataNode(IQuestion qn) {
+        def steps = []
+
+
+        qn.firstInstanceParent
+        IFormElement p = qn
+        while (p = p.parent) {
+            if (p.id && !(p instanceof Form)) steps << p.id
+        }
+
+        steps = steps.reverse()
+        steps << qn.binding
+
+        def finalNode = steps.inject(xDataNode) { xAcc, val -> xAcc."$val" }
+
+        return finalNode
     }
 
     private static mayBeAddLayoutAttributes(IFormElement qn, def elem) {
@@ -496,18 +522,6 @@ class ODKDeSerializer {
         }
     }
 
-    private static String getDynamicChildInstanceId(String nodeset) {
-        if (!nodeset) return null
-
-        int pos1 = nodeset.indexOf("'")
-        if (pos1 < 0) return null
-
-        int pos2 = nodeset.indexOf("'", pos1 + 1)
-        if (pos2 < 0 || (pos1 == pos2)) return null
-
-        return nodeset.substring(pos1 + 1, pos2)
-    }
-
     private static List getInstanceAndParentId(String nodeset) {
         if (!nodeset) return null
 
@@ -530,7 +544,7 @@ class ODKDeSerializer {
 
     private List<Option> getSelectOptions(def select) {
         def items = select.item
-        return items.collect { new Option(extractTranslation(it.label)?: '...', it.value.text()) }
+        return items.collect { new Option(extractTranslation(it.label) ?: '...', it.value.text()) }
     }
 
     private String extractTranslation(Object xLabel) {

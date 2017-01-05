@@ -195,9 +195,13 @@ class XFormDeserializer {
             qn.binding = elem.@bind
 
         if (qn instanceof IQuestion) {
-            def value = model."$qn.binding".text()
-            if (value)
-                qn.value = value
+
+            if (!(qn instanceof RepeatQuestion)) {
+                def value = findDataNode(qn)?.text()
+                if (value)
+                    qn.value = value
+            }
+
             qn.text = elem.label.text()
             qn.comment = elem.hint.text()
             mayBeParseCommentAttribute(qn)
@@ -207,6 +211,24 @@ class XFormDeserializer {
         parent.addElement(qn)
         mayBeAddLayoutAttributes(qn, elem)
         return qn
+    }
+
+    def findDataNode(IQuestion qn) {
+        def steps = []
+
+
+        qn.firstInstanceParent
+        IFormElement p = qn
+        while (p = p.parent) {
+            if (p.id && !(p instanceof Form)) steps << p.id
+        }
+
+        steps = steps.reverse()
+        steps << qn.binding
+
+        def finalNode = steps.inject(model) { xAcc, val -> xAcc."$val" }
+
+        return finalNode
     }
 
     private static mayBeAddLayoutAttributes(IFormElement qn, def elem) {
