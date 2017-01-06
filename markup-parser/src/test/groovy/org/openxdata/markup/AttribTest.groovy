@@ -157,10 +157,6 @@ class AttribTest extends GroovyTestCase {
 
     void testLineNumbers() {
 
-        ParserUtils.printTree(MarkupDeserializer.createAST(Fixtures.oxdSampleForm))
-
-
-
         def parser = new MarkupDeserializer(Fixtures.oxdSampleForm)
         def form = parser.study().forms[0]
 
