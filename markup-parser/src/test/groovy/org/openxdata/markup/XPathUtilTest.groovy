@@ -71,7 +71,7 @@ class XPathUtilTest extends GroovyTestCase {
 
     }
 
-    void testVariableResolving() {
+    void testVariableDelayedXpathValidation() {
 
         def simpleForm = '''
 ### study
@@ -116,7 +116,7 @@ repeat{ repeat
             '''
 
         try {
-            ConversionHelper.markup2Form(markup)
+            Converter.markup2Form(markup)
         } catch (Exception x) {
             x.printStackTrace()
             fail("Double dot should not throw exception")
@@ -139,7 +139,7 @@ repeat{ repeat
             '''
 
         try {
-            ConversionHelper.markup2Form(markup)
+            Converter.markup2Form(markup)
         } catch (Exception x) {
             x.printStackTrace()
             fail("Double dot should not throw exception")

@@ -1,10 +1,6 @@
 package org.openxdata.markup
 
-import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.InvalidAttributeException
-
-import static ConversionHelper.markup2Form
-import static org.openxdata.markup.ConversionHelper.markup2Oxd
 
 /**
  * Created with IntelliJ IDEA.
@@ -157,8 +153,7 @@ class AttribTest extends GroovyTestCase {
 
     void testLineNumbers() {
 
-        def parser = new MarkupDeserializer(Fixtures.oxdSampleForm)
-        def form = parser.study().forms[0]
+        def form = Converter.toFormFrom(FORMAT.MARKUP, Fixtures.oxdSampleForm)
 
         def questions = form.allQuestions
 
@@ -196,7 +191,7 @@ class AttribTest extends GroovyTestCase {
     void testJRCountCannotBeSetOnOtherQuestion() {
         def f = '''### s\n## f\n @jrcount\nq1'''
         try {
-            markup2Form(f)
+            Converter.toFormFrom(FORMAT.MARKUP, f)
             fail('Expecting validation exception')
         } catch (InvalidAttributeException e) {
             assert e.message.contains('be set on Repeat Question')
@@ -211,7 +206,8 @@ class AttribTest extends GroovyTestCase {
 
         def xml = '<xforms>\n  <model>\n    <instance id="f_v3">\n      <f_v3 id="0" name="f" formKey="f_v3">\n        <one />\n      </f_v3>\n    </instance>\n    <bind id="one" nodeset="/f_v3/one" type="xsd:string" />\n  </model>\n  <group id="1" isSynthetic="true">\n    <label>Page1</label>\n    <input bind="one">\n      <label>one</label>\n    </input>\n  </group>\n</xforms>'
 
-        assertEquals xml, markup2Oxd(f)
+        assertEquals xml, Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, f)
+
     }
 
     void testFormAttribsAreSet() {
@@ -221,7 +217,7 @@ class AttribTest extends GroovyTestCase {
                 ## f
                 one'''
 
-        def form = markup2Form(f)
+        def form = Converter.toFormFrom(FORMAT.MARKUP, f)
 
         assert form.dbIdLine == 2
         assert form.idLine == 3

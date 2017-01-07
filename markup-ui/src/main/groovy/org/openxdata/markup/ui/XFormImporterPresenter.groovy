@@ -1,6 +1,7 @@
 package org.openxdata.markup.ui
 
-import org.openxdata.markup.ConversionHelper
+import org.openxdata.markup.Converter
+import org.openxdata.markup.FORMAT
 import org.openxdata.markup.deserializer.StudyDeSerializer
 import org.openxdata.markup.deserializer.XFormDeserializer
 import org.openxdata.markup.serializer.MarkUpSerializer
@@ -36,7 +37,8 @@ class XFormImporterPresenter {
             def study = sd.toStudy(xml)
             markup = MarkUpSerializer.toStudyMarkup(study)
         } else if (isForOdk(dom)) {
-            markup = MarkUpSerializer.toFormMarkUp(ConversionHelper.odk2Form(xml))
+//            markup = MarkUpSerializer.toFormMarkUp(ConversionHelper.odk2Form(xml))
+            markup = Converter.from(FORMAT.ODK).to(FORMAT.MARKUP).convert(xml)
             main?.enableODKMode()
         } else {
             XFormDeserializer ds = new XFormDeserializer(xml: xml, xForm: dom)

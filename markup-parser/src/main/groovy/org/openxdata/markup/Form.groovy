@@ -77,7 +77,7 @@ class Form implements HasQuestions {
         if (!qn.binding) return
         def otherQns = getElements(qn.binding)
         if (otherQns.size() > 1)
-            throw new DuplicateElementException(question1: qn, question2: otherQns[0])
+            throw new DuplicateElementException(otherQns)
     }
 
 

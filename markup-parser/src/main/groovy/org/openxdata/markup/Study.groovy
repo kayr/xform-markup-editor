@@ -39,6 +39,8 @@ class Study {
         return new ArrayList<Form>(forms)
     }
 
+    Form getFirstForm() { forms.first() }
+
     String toString() {
         name
     }

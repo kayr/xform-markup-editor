@@ -1,44 +1,39 @@
 package org.openxdata.markup
-
-import org.openxdata.markup.deserializer.MarkupDeserializer
-import org.openxdata.markup.deserializer.ODKDeSerializer
-import org.openxdata.markup.deserializer.XFormDeserializer
-import org.openxdata.markup.serializer.ODKSerializer
-import org.openxdata.markup.serializer.XFormSerializer
-
-import java.util.concurrent.ConcurrentHashMap
-
 /**
- * Created by kay on 6/29/2016.
+ * Deprecated use {@link Converter}
  */
+@Deprecated
 class ConversionHelper {
     static Form markup2Form(String markup) {
-        new MarkupDeserializer(markup).study().forms[0]
+        return Converter.markup2Form(markup)
     }
 
     static String markup2Odk(String markup, boolean number = false, boolean oxd = false, boolean addMetaInstance = false) {
+
         form2Odk(markup2Form(markup), number, oxd, addMetaInstance)
     }
 
     static String form2Odk(Form form, boolean number = false, boolean oxd = false, boolean addMetaInstance = true) {
-        ODKSerializer serializer = new ODKSerializer()
-        serializer.oxdConversion = oxd
-        serializer.addMetaInstanceId = addMetaInstance
-        serializer.numberQuestions = number
-        serializer.numberBindings = number
-        serializer.toXForm(form)
+
+        def flags = FLAGS.none()
+
+        if (number) flags << FLAGS.NUMBER_IDS << FLAGS.NUMBER_LABELS
+        if (oxd) flags << FLAGS.ODK_OXD_MODE
+        if (addMetaInstance) flags << FLAGS.ODK_ADD_META_INSTANCE
+
+        return Converter.fromFormTo(FORMAT.ODK, form, flags)
     }
 
     static Form odk2Form(String xml) {
-        return new ODKDeSerializer(xml).parse()
+        return Converter.toFormFrom(FORMAT.ODK, xml)
     }
 
     static Form oxd2Form(String xml) {
-        new XFormDeserializer(xml).parse()
+        return Converter.toFormFrom(FORMAT.OXD, xml)
     }
 
     static String oxd2Odk(String xml) {
-        ODKSerializer.oxd2Odk(xml)
+        return Converter.toFrom(FORMAT.OXD, FORMAT.ODK, xml)
     }
 
 
@@ -48,29 +43,25 @@ class ConversionHelper {
 
 
     static String form2Oxd(Form form, boolean numberQuestions = false, boolean putExtraAttributesInComments = false) {
-        def serializer = new XFormSerializer()
-        serializer.numberBindings = numberQuestions
-        serializer.numberBindings = numberQuestions
-        serializer.putExtraAttributesInComments = putExtraAttributesInComments
-        serializer.toXForm(form)
-    }
 
-    private static def cache = new ConcurrentHashMap<Object, Form>()
+        def flags = FLAGS.none()
+
+        if (numberQuestions) flags << FLAGS.NUMBER_IDS << FLAGS.NUMBER_LABELS
+        if (putExtraAttributesInComments) flags << FLAGS.OXD_EXTRA_ATTRIBUTES_IN_COMMENTS
+
+        return Converter.fromFormTo(FORMAT.OXD, form, flags)
+    }
 
     static Form oxd2FormWithCache(String xform, def cacheID = xform, boolean pClearCache = false) {
 
-        if (pClearCache) {
-            clearCache()
-        }
+        def flags = FLAGS.of(FLAGS.USE_CACHE)
 
-        def cachedForm = cache[cacheID]
-        if (!cachedForm) {
-            cachedForm = new XFormDeserializer(xform).parse()
-            cache[cacheID] = cachedForm
-        }
+        if (pClearCache) flags << FLAGS.CLEAR_CACHE
 
-        return cachedForm
+        return Converter.toFormFrom(FORMAT.OXD, xform, flags, cacheID)
+
     }
 
-    static void clearCache() { cache.clear() }
+
 }
+

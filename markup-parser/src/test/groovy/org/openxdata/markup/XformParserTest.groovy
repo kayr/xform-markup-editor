@@ -4,7 +4,6 @@ import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.DuplicateElementException
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
-import org.openxdata.markup.serializer.XFormSerializer
 
 /**
  * Created with IntelliJ IDEA.
@@ -162,9 +161,8 @@ jeelopo
     }
 
     public void testTypeParsing() {
-        def parser = createParser(Fixtures.formWithAttribs)
-        def study = parser.study()
-        def questions = study.forms[0].allQuestions
+
+        def questions = Converter.markup2Form(Fixtures.formWithAttribs).allQuestions
 
         assertEquals "Expecting 1 invisile quesion", 1, questions.count { !it.visible }
 
@@ -176,11 +174,8 @@ jeelopo
     }
 
     void testFormWithDuplicatesThrowsException() {
-
-        def parser = createParser(Fixtures.formWithDuplicates)
-
         try {
-            def study = parser.study()
+            Converter.markup2Form(Fixtures.formWithDuplicates, FLAGS.of(FLAGS.VALIDATE_FORM))
             fail('An exception is expected here')
         } catch (DuplicateElementException ex) {
 
@@ -188,63 +183,47 @@ jeelopo
     }
 
     void testRepeatWithAttributes() {
-        def parser = createParser(Fixtures.formRepeatWithAttributesOnRepeats)
-
-        def study = parser.study()
-
-        def qn = study.forms[0].allQuestions[0]
+        def qn = Converter.markup2Form(Fixtures.formRepeatWithAttributesOnRepeats).allQuestions[0]
         assertEquals 'child_repeat', qn.binding
         assertEquals 'Details', qn.comment
     }
 
 
     void testFormWithSkipLogic() {
-        def parser = createParser(Fixtures.formWithSkipLogic)
 
-        def study = parser.study()
+        def form = Converter.markup2Form(Fixtures.formWithSkipLogic)
 
-        def qn = Form.findQuestionWithBinding('pregnant', study.forms[0])
-
+        def qn = form['pregnant'] as IQuestion
         assertNotNull qn
         assertEquals 'enable', qn.skipAction
         assertEquals qn.skipLogic, "\$sex = 'female'"
 
-        qn = Form.findQuestionWithBinding('male_question', study.forms[0])
+        qn = form['male_question']
 
         assertNotNull qn
-
         assertEquals 'show', qn.skipAction
-
         assertEquals "\$sex = 'male'", qn.skipLogic
 
     }
 
     void testFormWithActionAttributesSkipLogic() {
-        def parser = createParser(Fixtures.formWithActionAttributes)
+        def form = Converter.markup2Form(Fixtures.formWithActionAttributes)
 
-        def study = parser.study()
-
-        def qn = Form.findQuestionWithBinding('pregnant', study.forms[0])
-
+        def qn = form['pregnant']
         assertNotNull qn
         assertEquals 'enable', qn.skipAction
         assertEquals qn.skipLogic, "\$sex = 'female'"
 
-        qn = Form.findQuestionWithBinding('male_question', study.forms[0])
-
+        qn = form['male_question']
         assertNotNull qn
-
         assertEquals 'show', qn.skipAction
-
         assertEquals "\$sex = 'male'", qn.skipLogic
 
     }
 
     void testFromWithErraticVariableSkipLogic() {
-        def parser = createParser(Fixtures.formWithErraticVariableSkipLogic)
-
         try {
-            def study = parser.study()
+            Converter.markup2Form(Fixtures.formWithErraticVariableSkipLogic)
             fail("Expecting unknown variable exception")
         } catch (ValidationException e) {
             if (!(e.message.contains('unknown variable')))
@@ -254,10 +233,8 @@ jeelopo
     }
 
     void testFormWithErraticXPath() {
-        def parser = createParser(Fixtures.formWithErraticXPathSkipLogic)
-
         try {
-            parser.study()
+            Converter.markup2Form(Fixtures.formWithErraticXPathSkipLogic)
             fail('Expecting a recognition exception')
         } catch (ValidationException e) {
             if (!(e.message.contains("Error parsing XPATH")))
@@ -266,22 +243,16 @@ jeelopo
     }
 
     void testFormWithValidValidationLogic() {
-        def parser = createParser(Fixtures.formWithValidationLogic)
+        def form = Converter.markup2Form(Fixtures.formWithValidationLogic)
 
-        def study = parser.study()
-
-        def qn = Form.findQuestionWithBinding('age', study.forms[0])
-
+        def qn = form['age']
         assertEquals '. > 5', qn.validationLogic
-
         assertEquals 'valid when greater than 5', qn.message
     }
 
     void testFromWithValidationLogicNoMessage() {
-        def parser = createParser(Fixtures.formWithValidationLogicNoMessage)
-
         try {
-            def study = parser.study()
+            Converter.markup2Form(Fixtures.formWithValidationLogicNoMessage)
             fail("Expecting a validation Exception")
         } catch (ValidationException e) {
             if (!(e.message.contains("Validation message has not been set")))
@@ -290,17 +261,11 @@ jeelopo
     }
 
     void testFormWithPages() {
-        def parser = createParser(Fixtures.formWithMultiplePage)
 
-        def study = parser.study();
-
-        def form = study.forms[0]
+        def form = Converter.markup2Form(Fixtures.formWithMultiplePage)
 
         assertEquals 2, form.pages.size()
-
-
         assertEquals 3, form.pages[0].questions.size()
-
         assertEquals 4, form.pages[1].questions.size()
 
         assertEquals '_1gender', form.getElement('gender').indexedBinding
@@ -312,102 +277,78 @@ jeelopo
 
 
     void testFormWithDuplicatePages() {
-        def parser = createParser(Fixtures.formWithDupePages)
-
         shouldFail(DuplicateElementException) {
-            parser.study()
+            Converter.markup2Form(Fixtures.formWithDupePages)
             fail("Expecting duplicate page exception")
         }
     }
 
     void testDupeQuestionInPagedForm() {
-        def parser = createParser(Fixtures.formMultiplePageDupeQuestion)
-
         try {
-            parser.study()
+            Converter.markup2Form(Fixtures.formMultiplePageDupeQuestion)
             fail("Expecting duplicate question exception")
         } catch (DuplicateElementException ex) {
-            //this is ok
+            assert ex.message.contains('line:8')
+            assert ex.message.contains('line:13')
         }
     }
 
     void testBadSkipLogicInRepeat() {
 
-        def parser = createParser(Fixtures.badSkipLogicInRepeat)
-
         try {
-            def study = parser.study()
-            fail("Expectiong a validation Exception")
+            Converter.markup2Form(Fixtures.badSkipLogicInRepeat)
+            fail("Expecting a validation Exception")
         } catch (ValidationException ex) {
-
+            assert ex.message.contains('$evaluation_period')
+            assert ex.message.contains('Line:11')
         }
-
     }
 
     void testSkipLogicInRepeat() {
 
-        def parser = createParser(Fixtures.skipLogicInRepeat)
-        def study = parser.study()
+        def form = Converter.markup2Form(Fixtures.skipLogicInRepeat)
 
-        def rptQn = study.forms[0].allQuestions.find { it instanceof RepeatQuestion }
+        def rptQn = form.allQuestions.find { it instanceof RepeatQuestion }
 
         assertNotNull rptQn.questions[0].skipLogic
     }
 
     void testRequiredWithStarsMatchesAnnotatedRequired() {
-        def parser = createParser(Fixtures.requiredTwo)
+        def xml1 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.requiredTwo, FLAGS.of(FLAGS.VALIDATE_FORM))
 
-        def parser2 = createParser(Fixtures.requiredQns)
-
-        def study1 = parser.study()
-
-        def study2 = parser2.study()
-
-        XFormSerializer ser = new XFormSerializer()
-
-        def xml1 = ser.toStudyXml(study1)
-
-        def xml2 = ser.toStudyXml(study2)
+        def xml2 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.requiredQns, FLAGS.of(FLAGS.VALIDATE_FORM))
 
         assertEquals xml1, xml2
     }
 
     void testDuplicateRepeatWithChild() {
-        def parser = createParser(Fixtures.formRepeatChildDuplicates)
-
         try {
-            def study = parser.study()
+            Converter.markup2Form(Fixtures.formRepeatChildDuplicates)
             fail('Expecting duplicate question Exception')
         } catch (DuplicateElementException e) {
-            assertEquals e.question1.binding, e.question2.binding
+            assert e.message.contains('line:7')
+            assert e.message.contains('line:11')
         }
     }
 
     void testDynamicWithInstanceVariables() {
-        def form1 = new MarkupDeserializer(Fixtures.normalPurcform).study().forms[0]
-
-        def form2 = new MarkupDeserializer(Fixtures.normalPurcform2).study().forms[0]
-
-        XFormSerializer ser = new XFormSerializer()
-
-        def xForm1 = ser.toXForm(form1)
-        def xForm2 = ser.toXForm(form2)
-
+        def xForm1 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.normalPurcform)
+        def xForm2 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.normalPurcform2)
         assertEquals xForm1, xForm2
-
-
     }
 
     void testFormWithValidationAChildOfARepeat() {
-        def form = new MarkupDeserializer(Fixtures.formWithValidationOnInnerRepeat).study().forms[0]
+        //fixme whats the use of this
+        def form = Converter.markup2Form(Fixtures.formWithValidationOnInnerRepeat)
         assertEquals form.allQuestions.size(), 5
 
     }
 
     void testForDynamicInstanceValidation() {
-        def form = createParser(Fixtures.formWithDynamicInstanceReferences).study().forms[0]
 
-        DynamicQuestion dynamicQuestion = Form.findQuestionWithBinding("subregion", form)
+        def form = Converter.markup2Form(Fixtures.formWithDynamicInstanceReferences)
+
+        DynamicQuestion dynamicQuestion = form["subregion"]
 
         assertNotNull dynamicQuestion
 
@@ -444,7 +385,7 @@ jeelopo
         dynamicQuestion.parentQuestionId = 'blahDynamicInstance';
         try {
             form.validate()
-            fail("Expectiong a Validation Exception")
+            fail("Expecting a Validation Exception")
         } catch (InvalidAttributeException ex) {
             assertTrue ex.message.contains("has an invalid parent question id")
         }
@@ -457,7 +398,7 @@ jeelopo
 
         Fixtures.setFormDirectory()
 
-        def form = createParser(Fixtures.formWithCSVImport).study().forms[0]
+        def form = Converter.markup2Form(Fixtures.formWithCSVImport)
 
         assertEquals 1, form.allQuestions.size()
         assertEquals 1, form.dynamicOptions.size()
@@ -465,7 +406,7 @@ jeelopo
 
     void testMultilineParsing() {
 
-        def form = createParser(Fixtures.form_With_Multiline).study().forms.first()
+        def form = Converter.markup2Form(Fixtures.form_With_Multiline)
 
         assertEquals form.allQuestions.size(), 7
     }
@@ -475,7 +416,7 @@ jeelopo
 Q1
 '''
 
-        def form = ConversionHelper.markup2Form(markup)
+        def form = Converter.markup2Form(markup)
 
         assert form.binding == 'form_v1'
         assert form.allQuestions.size() == 1

@@ -10,7 +10,7 @@ trait IFormElement {
     String id
     int line
     boolean hasAbsoluteId = false
-    String skipAction
+    String skipAction = 'enable'
 
     //use this map to store common bind attributes to work around groovy trait bug
     //where traits with > 10 fields cannot compile
@@ -169,6 +169,21 @@ trait IFormElement {
         if (shouldHaveId)
             throw new ValidationException("Element[$this] Has No Id But Has Logic Attributes", line)
 
+    }
+
+    String getDebugString() {
+        StringBuilder b = new StringBuilder()
+        b << '( '
+        if (binding)
+            b << "id:$binding "
+        if (xformType)
+            b << "type:$xformType.value "
+        if (line)
+            b << "line:$line "
+        b << ')'
+        if (text)
+            b << text
+        return b.toString()
     }
 
 }

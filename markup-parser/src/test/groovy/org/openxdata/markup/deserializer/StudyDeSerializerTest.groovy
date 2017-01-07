@@ -1,4 +1,4 @@
-package org.openxdata.markup.deserializer;
+package org.openxdata.markup.deserializer
 
 import junit.framework.TestCase
 import org.openxdata.markup.Fixtures
@@ -20,4 +20,6 @@ public class StudyDeSerializerTest extends TestCase {
 
         assertEquals 'form2', study.forms[1].name
     }
+
+
 }

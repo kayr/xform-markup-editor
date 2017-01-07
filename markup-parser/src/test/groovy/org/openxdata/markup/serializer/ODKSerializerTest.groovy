@@ -1,9 +1,7 @@
 package org.openxdata.markup.serializer
 
-import org.openxdata.markup.Fixtures
-import org.openxdata.markup.Form
+import org.openxdata.markup.*
 
-import static org.openxdata.markup.ConversionHelper.*
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.groupWithSkipLogic
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
 import static org.openxdata.markup.serializer.ODKFixtures.*
@@ -15,15 +13,15 @@ class ODKSerializerTest extends GroovyTestCase {
     def serializer = new ODKSerializer();
 
     void testReadonlyAndInvisibleIsConvertedToReadonly() {
-        assertEquals formWithInvisible.xml, markup2Odk(formWithInvisible.form)
+        assertEquals formWithInvisible.xml, Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, formWithInvisible.form)
     }
 
     void testReadonlyAndSkipLogicAreProcessedOk() {
-        assertEquals formWithSkipLogicAndReadOnly.xml, markup2Odk(formWithSkipLogicAndReadOnly.form)
+        assertEquals formWithSkipLogicAndReadOnly.xml, Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, formWithSkipLogicAndReadOnly.form)
     }
 
     void testStartTimeAnd() {
-        assertEquals markup2Odk(timeStamp.form, false, true), timeStamp.xml
+        assertEquals Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, timeStamp.form, FLAGS.of(FLAGS.ODK_OXD_MODE)), timeStamp.xml
     }
 
     void testFormWithRelativeValidation() {
@@ -34,12 +32,25 @@ class ODKSerializerTest extends GroovyTestCase {
         assertEquals oxdSampleForm.xml, markup2Odk(oxdSampleForm.form, false, true)
     }
 
+
     void testMultiSelectConversion() {
         assertEquals oxdSampleForm.xml, markup2Odk(oxdSampleForm.form, false, true)
     }
 
     void testOxdExternalApp() {
         assertEquals formWithAppearanceComment.xml, markup2Odk(formWithAppearanceComment.form, false, true)
+    }
+
+    String markup2Odk(String xml, boolean number = false, boolean oxd = false, boolean addMetaId = false) {
+        def flags = FLAGS.of(FLAGS.VALIDATE_FORM)
+
+        if (number) flags << FLAGS.NUMBER_LABELS << FLAGS.NUMBER_IDS
+        if (oxd) flags << FLAGS.ODK_OXD_MODE
+        if (addMetaId) flags << FLAGS.ODK_ADD_META_INSTANCE
+
+        def result = Converter.to(FORMAT.ODK) from(FORMAT.MARKUP) flags(flags) convert(xml)
+        return result
+
     }
 
     void testSkipActionsAndLogic() {
@@ -65,7 +76,7 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testToODKMultiSelect() {
-        Form form = markup2Form(multiSelectConversion.form)
+        Form form = Converter.markup2Form(multiSelectConversion.form)
 
         [
                 '$s = \'calculus\' and ($ps != null or (3-4) = 9 or $s = \'grades\') and $s = \'biology\''                       :
@@ -131,7 +142,10 @@ class ODKSerializerTest extends GroovyTestCase {
     }
 
     void testNestedGroupNumber() {
-        def oxd = form2Odk(markup2Form(nestedGroups.markUp), true)
+        def oxd = Converter.to(FORMAT.ODK)
+                           .from(FORMAT.MARKUP)
+                           .flags(FLAGS.NUMBER_IDS, FLAGS.NUMBER_LABELS,FLAGS.ODK_ADD_META_INSTANCE)
+                           .convert(nestedGroups.markUp)
         assertEquals nestedGroups.odkNumberd, oxd
     }
 
@@ -152,7 +166,7 @@ class ODKSerializerTest extends GroovyTestCase {
                             group 2
                       }'''
         def odk = markup2Odk(form)
-        def oxd = markup2Oxd(form)
+        def oxd = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, form)
 
         assertEquals groupWithSkipLogic.odkXml, odk
         assertEquals groupWithSkipLogic.oxdXml, oxd

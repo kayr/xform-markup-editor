@@ -118,11 +118,10 @@ class XFormDeserializerTest extends XMLTestCase {
     }
 
     void testTypeResolving() {
-        def serializer = new XFormSerializer()
-        def mkpForm = new MarkupDeserializer(oxdSampleForm).study().forms[0]
+        def rootForm = Converter.toFormFrom(FORMAT.MARKUP, oxdSampleForm, FLAGS.of(FLAGS.VALIDATE_FORM))
 
-        def xForm = serializer.toXForm(mkpForm)
-        def formFromXml = new XFormDeserializer(xml: xForm).parse()
+        def oxd = Converter.fromFormTo(FORMAT.OXD, rootForm, FLAGS.of(FLAGS.VALIDATE_FORM))
+        def formFromOxd = new XFormDeserializer(xml: oxd).parse()
 
 
         def validateType = { Form form ->
@@ -192,23 +191,19 @@ class XFormDeserializerTest extends XMLTestCase {
             }
         }
 
-        validateType(mkpForm)
-        validateType(formFromXml)
+        validateType(rootForm)
+        validateType(formFromOxd)
 
     }
 
     void testGroupTypeIsDetected() {
-        def groupedForm = ConversionHelper.oxd2Form(nestedGroups.xml)
+        def groupedForm = Converter.toFormFrom(FORMAT.OXD, nestedGroups.xml)
         def grp = groupedForm['group_page_1']
         assert grp.xformType == XformType.GROUP
     }
 
     void testSkipLogic() {
         def form = new XFormDeserializer(xml: advancedMarkedUp.xform).parse()
-
-
-        form.printAll(System.out)
-
         IQuestion question = form.getElement('armpain')
         assert question.validationLogic == '. = false() or $chestpain = true()'
         assert question.message == "You can't have angina without chestpain!"
@@ -217,9 +212,7 @@ class XFormDeserializerTest extends XMLTestCase {
         assert form.getElement('diastolic').validationLogic == '. >= 10 and . <= 150'
         assert form.getElement('birthdate').validationLogic == '(today() - .) > (365*18)'
 
-        XFormSerializer ser = new XFormSerializer()
-
-        String newForm = ser.toXForm(form)
+        String newForm = Converter.fromFormTo(FORMAT.OXD, form)
         String oldForm = advancedMarkedUp.xform
         assertEquals oldForm, newForm
 
@@ -261,10 +254,13 @@ class XFormDeserializerTest extends XMLTestCase {
 
     void testRoundTrip(String markup) {
         def form1 = new MarkupDeserializer(markup).study().forms[0]
-        def oxd1 = ConversionHelper.markup2Oxd(markup)
+        def flags = FLAGS.of(FLAGS.VALIDATE_FORM)
+        if (serializer.numberBindings) {
+            flags.add(FLAGS.NUMBER_IDS)
+        }
 
-        def form2 = ConversionHelper.oxd2Form(oxd1)
-        def oxd2 = ConversionHelper.form2Oxd(form2)
+        String oxd1 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, markup, flags)
+        def oxd2 = Converter.toFrom(FORMAT.OXD, FORMAT.OXD, oxd1)
 
         try {
             assertEquals oxd1, oxd2
@@ -273,12 +269,13 @@ class XFormDeserializerTest extends XMLTestCase {
             assertXMLEqual oxd1, oxd2
         }
 
-        def odk1 = ConversionHelper.markup2Odk(markup, false, false, false)
 
-        form2 = ConversionHelper.odk2Form(odk1)
-        def odk2 = ConversionHelper.form2Odk(form2, false, false, false)
+        String odk1 = Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, markup, flags)
+        String odk2 = Converter.toFrom(FORMAT.ODK, FORMAT.ODK, odk1, FLAGS.of(FLAGS.VALIDATE_FORM))
+
 
         try {
+            assert odk1.startsWith('<h:html')
             assertEquals odk1, odk2
         } catch (ComparisonFailure f) {
             System.err.println("Some form failed to pass round trip $form1.name")

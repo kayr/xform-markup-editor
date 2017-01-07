@@ -1,8 +1,10 @@
 package org.openxdata.markup.deserializer
 
+import org.openxdata.markup.Converter
+import org.openxdata.markup.FLAGS
+import org.openxdata.markup.FORMAT
 import org.openxdata.markup.HasQuestions
 import org.openxdata.markup.exception.ValidationException
-import org.openxdata.markup.serializer.XFormSerializer
 
 import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroups
 
@@ -12,7 +14,7 @@ import static org.openxdata.markup.deserializer.DeSerializerFixtures.nestedGroup
 class MarkupDeserializerTest extends GroovyTestCase {
 
 
-    void testParse() {
+    void testShouldFailParsingWithUnclosedTripleQuotes() {
 
         def erraticForm = """### fkfkf
 
@@ -22,11 +24,9 @@ uu
 ONew
 
 sdsdsd''"""
-        def ser = new MarkupDeserializer(erraticForm)
-
 
         shouldFail(RuntimeException) {
-            ser.parse()
+            new MarkupDeserializer(erraticForm).parse()
         }
 
     }
@@ -44,14 +44,14 @@ sdsdsd''"""
         assert (f['oldpageid'] as HasQuestions).allFirstLevelQuestions.size() == 3
 
 
-        def xform = new XFormSerializer(numberBindings: true, numberQuestions: true).toXForm(f)
+        def xform = Converter.fromFormTo(FORMAT.OXD, f, FLAGS.of(FLAGS.NUMBER_IDS, FLAGS.NUMBER_LABELS))
         assertEquals nestedGroups.xmlNumbered, xform
 
     }
 
     void testSerializingNestedGroups() {
         def f = new MarkupDeserializer(nestedGroups.markUp).study().forms.first()
-        def xform = new XFormSerializer(numberBindings: false, numberQuestions: false).toXForm(f)
+        def xform = Converter.fromFormTo(FORMAT.OXD, f)
         assertEquals nestedGroups.xml, xform
 
     }

@@ -171,11 +171,9 @@ trait HasQuestions implements IFormElement {
         def question = elementMap[binding]
 
         if (question instanceof List<IFormElement>) {
-            rt.addAll(question as List<IQuestion>)
-        }
-
-        if (question) {
-            rt << (question as IQuestion)
+            rt.addAll(question as List<IFormElement>)
+        } else if (question) {
+            rt << (question as IFormElement)
         }
 
         for (hq in hasQuestions) {
@@ -183,7 +181,7 @@ trait HasQuestions implements IFormElement {
             if (qns) rt.addAll(qns)
         }
 
-        return rt.unique() as List<IQuestion>
+        return rt.unique() as List<IFormElement>
     }
 
     IFormElement getElementClosestToLine(int lineOfInterest) {

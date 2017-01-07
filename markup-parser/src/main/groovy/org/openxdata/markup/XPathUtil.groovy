@@ -120,7 +120,7 @@ class XPathUtil {
             if (path == '.' || path == '$.' || path == '..' || path == 'null' || path?.startsWith('@')) continue
 
             def qn = question.parentForm.getElement(name)
-            if (!qn) throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for has an unknown variable [$v]", question.line)
+            if (!qn) throw new ValidationException("Error parsing XPATH[$xpath] $logicType logic for[${question.debugString}] because it has an unknown variable [$v]", question.line)
         }
     }
 
