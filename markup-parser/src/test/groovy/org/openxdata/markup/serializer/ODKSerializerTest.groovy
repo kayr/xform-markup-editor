@@ -13,15 +13,15 @@ class ODKSerializerTest extends GroovyTestCase {
     def serializer = new ODKSerializer();
 
     void testReadonlyAndInvisibleIsConvertedToReadonly() {
-        assertEquals formWithInvisible.xml, Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, formWithInvisible.form)
+        assertEquals formWithInvisible.xml, Converter.to(FORMAT.ODK, FORMAT.MARKUP, formWithInvisible.form)
     }
 
     void testReadonlyAndSkipLogicAreProcessedOk() {
-        assertEquals formWithSkipLogicAndReadOnly.xml, Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, formWithSkipLogicAndReadOnly.form)
+        assertEquals formWithSkipLogicAndReadOnly.xml, Converter.to(FORMAT.ODK, FORMAT.MARKUP, formWithSkipLogicAndReadOnly.form)
     }
 
     void testStartTimeAnd() {
-        assertEquals Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, timeStamp.form, FLAGS.of(FLAGS.ODK_OXD_MODE)), timeStamp.xml
+        assertEquals Converter.to(FORMAT.ODK, FORMAT.MARKUP, timeStamp.form, FLAGS.of(FLAGS.ODK_OXD_MODE)), timeStamp.xml
     }
 
     void testFormWithRelativeValidation() {
@@ -166,7 +166,7 @@ class ODKSerializerTest extends GroovyTestCase {
                             group 2
                       }'''
         def odk = markup2Odk(form)
-        def oxd = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, form)
+        def oxd = Converter.to(FORMAT.OXD, FORMAT.MARKUP, form)
 
         assertEquals groupWithSkipLogic.odkXml, odk
         assertEquals groupWithSkipLogic.oxdXml, oxd

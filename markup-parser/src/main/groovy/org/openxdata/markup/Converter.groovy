@@ -31,11 +31,12 @@ class Converter {
 
         def <T> T convert(def src, EnumSet<FLAGS> flags = _flags) {
             if (to && from) {
-                return (T) toFrom(to, from, src, flags, cacheId)
+                //noinspection UnnecessaryQualifiedReference
+                return (T) Converter.to(to, from, src, flags, cacheId)
             }
 
             if (to) {
-                return (T) fromFormTo(to, src as Form, flags, cacheId)
+                return (T) fromFormTo(this.to, src as Form, flags, cacheId)
             }
 
             if (from) {
@@ -73,19 +74,19 @@ class Converter {
         return new ConverterBuilder(from: to)
     }
 
-    static def <T> T toFrom(FORMAT to, FORMAT from, def src) {
-        toFrom(to, from, src, FLAGS.none(), null)
+    static def <T> T to(FORMAT toFormat, FORMAT from, def src) {
+        to(toFormat, from, src, FLAGS.none(), null)
     }
 
-    static def <T> T toFrom(FORMAT to, FORMAT from, def src, def cacheId) {
-        toFrom(to, from, src, FLAGS.none(), cacheId)
+    static def <T> T to(FORMAT toFormat, FORMAT from, def src, def cacheId) {
+        to(toFormat, from, src, FLAGS.none(), cacheId)
     }
 
-    static def <T> T toFrom(FORMAT to, FORMAT from, def src, EnumSet<FLAGS> flags) {
-        toFrom(to, from, src, flags, null)
+    static def <T> T to(FORMAT toFormat, FORMAT from, def src, EnumSet<FLAGS> flags) {
+        to(toFormat, from, src, flags, null)
     }
 
-    static def <T> T toFrom(FORMAT to, FORMAT from, def src, EnumSet<FLAGS> flags, def cacheId) {
+    static def <T> T to(FORMAT to, FORMAT from, def src, EnumSet<FLAGS> flags, def cacheId) {
 
         def key = generateKey(cacheId ?: src, to, from)
 

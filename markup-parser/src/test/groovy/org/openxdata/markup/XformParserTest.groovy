@@ -314,9 +314,9 @@ jeelopo
     }
 
     void testRequiredWithStarsMatchesAnnotatedRequired() {
-        def xml1 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.requiredTwo, FLAGS.of(FLAGS.VALIDATE_FORM))
+        def xml1 = Converter.to(FORMAT.OXD, FORMAT.MARKUP, Fixtures.requiredTwo, FLAGS.of(FLAGS.VALIDATE_FORM))
 
-        def xml2 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.requiredQns, FLAGS.of(FLAGS.VALIDATE_FORM))
+        def xml2 = Converter.to(FORMAT.OXD, FORMAT.MARKUP, Fixtures.requiredQns, FLAGS.of(FLAGS.VALIDATE_FORM))
 
         assertEquals xml1, xml2
     }
@@ -332,8 +332,8 @@ jeelopo
     }
 
     void testDynamicWithInstanceVariables() {
-        def xForm1 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.normalPurcform)
-        def xForm2 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, Fixtures.normalPurcform2)
+        def xForm1 = Converter.to(FORMAT.OXD, FORMAT.MARKUP, Fixtures.normalPurcform)
+        def xForm2 = Converter.to(FORMAT.OXD, FORMAT.MARKUP, Fixtures.normalPurcform2)
         assertEquals xForm1, xForm2
     }
 

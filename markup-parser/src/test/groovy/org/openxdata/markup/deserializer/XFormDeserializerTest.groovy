@@ -259,8 +259,8 @@ class XFormDeserializerTest extends XMLTestCase {
             flags.add(FLAGS.NUMBER_IDS)
         }
 
-        String oxd1 = Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, markup, flags)
-        def oxd2 = Converter.toFrom(FORMAT.OXD, FORMAT.OXD, oxd1)
+        String oxd1 = Converter.to(FORMAT.OXD, FORMAT.MARKUP, markup, flags)
+        def oxd2 = Converter.to(FORMAT.OXD, FORMAT.OXD, oxd1)
 
         try {
             assertEquals oxd1, oxd2
@@ -270,17 +270,17 @@ class XFormDeserializerTest extends XMLTestCase {
         }
 
 
-        String odk1 = Converter.toFrom(FORMAT.ODK, FORMAT.MARKUP, markup, flags)
-        String odk2 = Converter.toFrom(FORMAT.ODK, FORMAT.ODK, odk1, FLAGS.of(FLAGS.VALIDATE_FORM))
+        String odk1 = Converter.to(FORMAT.ODK, FORMAT.MARKUP, markup, flags)
+        String odk2 = Converter.to(FORMAT.ODK, FORMAT.ODK, odk1, FLAGS.of(FLAGS.VALIDATE_FORM))
 
 
-        try {
+//        try {
             assert odk1.startsWith('<h:html')
             assertEquals odk1, odk2
-        } catch (ComparisonFailure f) {
-            System.err.println("Some form failed to pass round trip $form1.name")
-            assertXMLEqual odk1, odk2
-        }
+//        } catch (ComparisonFailure f) {
+//            System.err.println("Some form failed to pass round trip $form1.name")
+//            assertXMLEqual odk1, odk2
+//        }
 
     }
 

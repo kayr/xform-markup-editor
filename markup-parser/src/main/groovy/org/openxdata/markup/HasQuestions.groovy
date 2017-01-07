@@ -37,7 +37,8 @@ trait HasQuestions implements IFormElement {
     }
 
     void addAfterElement(IFormElement after, IFormElement toAdd) {
-        addAfterElement(after.binding, toAdd)
+        HasQuestions parent = after.parent ?: this
+        parent.addAfterElement(after.binding, toAdd)
     }
 
     void addAfterElement(String after, IFormElement toAdd) {

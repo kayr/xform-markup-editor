@@ -33,7 +33,7 @@ class ConversionHelper {
     }
 
     static String oxd2Odk(String xml) {
-        return Converter.toFrom(FORMAT.OXD, FORMAT.ODK, xml)
+        return Converter.to(FORMAT.OXD, FORMAT.ODK, xml)
     }
 
 

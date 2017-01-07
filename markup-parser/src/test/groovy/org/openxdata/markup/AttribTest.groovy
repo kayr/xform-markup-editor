@@ -206,7 +206,7 @@ class AttribTest extends GroovyTestCase {
 
         def xml = '<xforms>\n  <model>\n    <instance id="f_v3">\n      <f_v3 id="0" name="f" formKey="f_v3">\n        <one />\n      </f_v3>\n    </instance>\n    <bind id="one" nodeset="/f_v3/one" type="xsd:string" />\n  </model>\n  <group id="1" isSynthetic="true">\n    <label>Page1</label>\n    <input bind="one">\n      <label>one</label>\n    </input>\n  </group>\n</xforms>'
 
-        assertEquals xml, Converter.toFrom(FORMAT.OXD, FORMAT.MARKUP, f)
+        assertEquals xml, Converter.to(FORMAT.OXD, FORMAT.MARKUP, f)
 
     }
 
