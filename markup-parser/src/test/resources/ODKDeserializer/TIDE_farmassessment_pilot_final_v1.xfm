@@ -31,75 +31,75 @@
 @appearance field-list
 group {
 
-@id photo_pasture_overview
-@comment If zero-grazing, leave blank
-@picture
-Pasture: Overview picture
+    @id photo_pasture_overview
+    @comment If zero-grazing, leave blank
+    @picture
+    Pasture: Overview picture
 
 
-@id photo_pasture_close
-@comment If zero-grazing, leave blank
-@picture
-Pasture: Close-up picture
+    @id photo_pasture_close
+    @comment If zero-grazing, leave blank
+    @picture
+    Pasture: Close-up picture
 
 
-@id photo_milkcows_day
-@comment If only one location for day and night, only make a day time picture
-@picture
-Location of the milking cows: Daytime location
+    @id photo_milkcows_day
+    @comment If only one location for day and night, only make a day time picture
+    @picture
+    Location of the milking cows: Daytime location
 
 
-@id photo_milkcows_night
-@comment If only one location for day and night, only make a day time picture
-@picture
-Location of the milking cows: Nighttime location
+    @id photo_milkcows_night
+    @comment If only one location for day and night, only make a day time picture
+    @picture
+    Location of the milking cows: Nighttime location
 
 
-@id photo_youngstock_day
-@comment If only one location for day and night, only make a day time picture
-@picture
-Location of young stock: Daytime location
+    @id photo_youngstock_day
+    @comment If only one location for day and night, only make a day time picture
+    @picture
+    Location of young stock: Daytime location
 
 
-@id photo_youngstock_night
-@comment If only one location for day and night, only make a day time picture
-@picture
-Location of young stock: Nighttime location
+    @id photo_youngstock_night
+    @comment If only one location for day and night, only make a day time picture
+    @picture
+    Location of young stock: Nighttime location
 
 
-@id photo_water_source
-@picture
-Cows drinking water source
+    @id photo_water_source
+    @picture
+    Cows drinking water source
 
 
-@id photo_barn
-@picture
-Cow barn or cow shed (if present)
+    @id photo_barn
+    @picture
+    Cow barn or cow shed (if present)
 
 
-@id photo_fodder
-@picture
-Fodder bank(s) (if present)
+    @id photo_fodder
+    @picture
+    Fodder bank(s) (if present)
 
 
-@id photo_manure
-@picture
-Manure storage (if present)
+    @id photo_manure
+    @picture
+    Manure storage (if present)
 
 
-@id photo_hay
-@picture
-Hay storage (if present)
+    @id photo_hay
+    @picture
+    Hay storage (if present)
 
 
-@id photo_silage
-@picture
-Silage storage (if present)
+    @id photo_silage
+    @picture
+    Silage storage (if present)
 
 
-@id photo_water_store
-@picture
-Water storage (if present)
+    @id photo_water_store
+    @picture
+    Water storage (if present)
 
 
 }
@@ -109,44 +109,49 @@ Water storage (if present)
 @appearance field-list
 group {
 
-*Enumerator name
->$8 Carol Wabule
->$3 Catherine Nabaasa
->$5 Gumisiriza John Bosco
->$7 Kagwisagye Emmanuel
->$6 Kasibante Julius
->$1 Mwine Lemuel
->$4 Karakwende Norman
->$10 Paul Kimbugwe
->$9 Tumukunde Olivia
->$777 Other
+    *Enumerator name
+        >$8 Carol Wabule
+        >$3 Catherine Nabaasa
+        >$5 Gumisiriza John Bosco
+        >$7 Kagwisagye Emmanuel
+        >$6 Kasibante Julius
+        >$1 Mwine Lemuel
+        >$4 Karakwende Norman
+        >$10 Paul Kimbugwe
+        >$9 Tumukunde Olivia
+        >$777 Other
 
 
-@comment Your initials and survey number (eg AW001 when your name is Anja Wolsky, and this is the first survey you do). Please continue numbering from the last survey you did, and do NOT start counting from 1 each day. This means that Anja's second survey will be named AW002 etc.
-*Enumerator code
+    @comment Your initials and survey number (eg AW001 when your name is Anja Wolsky, and this is the first survey you do). Please continue numbering from the last survey you did, and do NOT start counting from 1 each day. This means that Anja's second survey will be named AW002 etc.
+    *Enumerator code
 
 
-@id id_farmer_intake
-@comment This is the number that is provided to you on the list of farmers to interview.
-*FOR THE ENUMERATOR ONLY: What is the unique identifier that was used for this farmer during the farmer intake?
+    @id id_farmer_intake
+    @comment This is the number that is provided to you on the list of farmers to interview.
+    *FOR THE ENUMERATOR ONLY: What is the unique identifier that was used for this farmer during the farmer intake?
 
 
-@id name
-@comment Write down the name of the farmer you are interviewing - even if you already did in MonQI
-*Name of Respondent (as in National ID)
+    @id name
+    @comment Write down the name of the farmer you are interviewing - even if you already did in MonQI
+    *Name of Respondent (as in National ID)
 
 
-@id dairy_farmer
-Are you the person who attended the PDTF trainings and is is knowledgable about dairy farming within your household?
->$1 Yes
->$0 No
+    @id dairy_farmer
+    Are you the person who attended the PDTF trainings and is is knowledgable about dairy farming within your household?
+        >$1 Yes
+        >$0 No
 
 
-@id respondent_language
-@comment Please ask the farmer
-*What language do you speak and read best?
->$1 English
->$2 Runyakitara
+    @id given
+    @trigger
+    *ENUMERTOR ONLY: Please check if the name of the person you are interviewing is the same name as the person who attended the Practical Dairy Farm training.
+
+
+    @id respondent_language
+    @comment Please ask the farmer
+    *What language do you speak and read best?
+        >$1 English
+        >$2 Runyakitara
 
 
 }
@@ -161,26 +166,26 @@ ENUMERATOR ONLY Please write down your name
 @appearance field-list
 group {
 
-@id english
-@readonly
-@showif  $respondent_language = 1
-Hello. My name is _____________ and I am working with the SNV Uganda under The Inclusive Dairy Enterprise Project (TIDE) and I am here to conduct a survey on dairy development in South Western Uganda. You have been selected for this survey because attended a training at one of the Practical Dairy Training Farms (PDTFs). The Inclusive Dairy Enterprise (TIDE) Project aims at improving the production in the dairy sector in several ways. We are interested to hear more about your dairy farm and the activities you implement at your farm. The total length of the interview will be about 4 hours. The information you give us is confidential and only the researchers will have access to it. Your participation is voluntary and you can choose to stop the survey any time you want. You may also choose not to answer any questions that you don't want to. You will not directly benefit from this survey. However, the information you will provide us may give important information to SNV Uganda and other parties involved in dairy to improve their policies to improve their service delivery, and you may indirectly benefit from that.
+    @id english
+    @readonly
+    @showif  $respondent_language = 1
+    Hello. My name is _____________ and I am working with the SNV Uganda under The Inclusive Dairy Enterprise Project (TIDE) and I am here to conduct a survey on dairy development in South Western Uganda. You have been selected for this survey because attended a training at one of the Practical Dairy Training Farms (PDTFs). The Inclusive Dairy Enterprise (TIDE) Project aims at improving the production in the dairy sector in several ways. We are interested to hear more about your dairy farm and the activities you implement at your farm. The total length of the interview will be about 4 hours. The information you give us is confidential and only the researchers will have access to it. Your participation is voluntary and you can choose to stop the survey any time you want. You may also choose not to answer any questions that you don't want to. You will not directly benefit from this survey. However, the information you will provide us may give important information to SNV Uganda and other parties involved in dairy to improve their policies to improve their service delivery, and you may indirectly benefit from that.
 
 
-@id runyakitara
-@readonly
-@showif  $respondent_language =2
-Wasiba ota Nyabo/sebo……….Amazina ngagye ninye ……nikora na SNV Uganda hamwe na The Inclusive Dairy Enterprise (TIDE) project. Ninja aha nkukubuza aha bya amate ne ente zawe kandi nintukorera omukikweka enkya burengye bweizoba.Otoreinwe kubuzibwa ahabwokuba oka inja ahamushoma gwa abarisa (PDTF). TIDE nengenderera okuntugura emihendo ya amate omumiringo nyinji. Twaba nitwenda kunkubuza ebiri kukwata aha bye ente zawe hamwe ne emirimo yawe. Nituza kutwara eshaha ina (4hours). Ebyorantugambire nituza kubimbika ka ekihama, okutwikiriza kungamba naiwe kiri ahariwe okutwikiriza. Kandi nobasa kurekyeraho kutungarikamu eshaha yona. Nonyikiriza kugarikamu ninga obutangarikamu, ntihaine ekinturi kuza kunkuhereza bwanyima yo kunkubunza. Konka ebyoratungambire nibingasha SNV Uganda hamwe n’ebitongore ebindi ebiri kunkora na SNV omukuntugura obuhereza aho nobasa kuhwerwamu.
+    @id runyakitara
+    @readonly
+    @showif  $respondent_language =2
+    Wasiba ota Nyabo/sebo……….Amazina ngagye ninye ……nikora na SNV Uganda hamwe na The Inclusive Dairy Enterprise (TIDE) project. Ninja aha nkukubuza aha bya amate ne ente zawe kandi nintukorera omukikweka enkya burengye bweizoba.Otoreinwe kubuzibwa ahabwokuba oka inja ahamushoma gwa abarisa (PDTF). TIDE nengenderera okuntugura emihendo ya amate omumiringo nyinji. Twaba nitwenda kunkubuza ebiri kukwata aha bye ente zawe hamwe ne emirimo yawe. Nituza kutwara eshaha ina (4hours). Ebyorantugambire nituza kubimbika ka ekihama, okutwikiriza kungamba naiwe kiri ahariwe okutwikiriza. Kandi nobasa kurekyeraho kutungarikamu eshaha yona. Nonyikiriza kugarikamu ninga obutangarikamu, ntihaine ekinturi kuza kunkuhereza bwanyima yo kunkubunza. Konka ebyoratungambire nibingasha SNV Uganda hamwe n’ebitongore ebindi ebiri kunkora na SNV omukuntugura obuhereza aho nobasa kuhwerwamu.
 
 
-@id given
-@invisible
-*...
+    @id given
+    @trigger
+    *Does the respondent agree to participate?
 
 
-@appearance signature
-@picture
-Signature
+    @appearance signature
+    @picture
+    Signature
 
 
 }
@@ -190,65 +195,65 @@ Signature
 @appearance field-list
 group {
 
-@id ppi_schooled
-Are all household members ages 6 to 12 currently in school?
->$0 No
->$2 Yes
->$5 No one ages 6 to 12
+    @id ppi_schooled
+    Are all household members ages 6 to 12 currently in school?
+        >$0 No
+        >$2 Yes
+        >$5 No one ages 6 to 12
 
 
-@id ppi_read
-Can the female head or wife of household head read and write with understanding in any language?
->$1 Yes
->$0 No
->$2 No female head/spouse
+    @id ppi_read
+    Can the female head or wife of household head read and write with understanding in any language?
+        >$1 Yes
+        >$0 No
+        >$2 No female head/spouse
 
 
-@id ppi_wall
-@comment Observe and select
-ENUMERATOR ONLY: What type of material is mainly used for construction of the wall of the dwelling?
->$0 Unburnt bricks with mud, mud and poles, or other
->$4 Unburnt bricks with cement, wood, tin/iron sheets, concrete/stones, burnt stabilized bricks, or cement blocks
+    @id ppi_wall
+    @comment Observe and select
+    ENUMERATOR ONLY: What type of material is mainly used for construction of the wall of the dwelling?
+        >$0 Unburnt bricks with mud, mud and poles, or other
+        >$4 Unburnt bricks with cement, wood, tin/iron sheets, concrete/stones, burnt stabilized bricks, or cement blocks
 
 
-@id ppi_roof
-@comment Observe and select
-ENUMERATOR ONLY: What type of material is mainly used for construction of the roof of the dwelling?
->$0 Thatch, or tins
->$5 Iron sheets, concrete, tiles, asbestos, or other
+    @id ppi_roof
+    @comment Observe and select
+    ENUMERATOR ONLY: What type of material is mainly used for construction of the roof of the dwelling?
+        >$0 Thatch, or tins
+        >$5 Iron sheets, concrete, tiles, asbestos, or other
 
 
-@id ppi_cook
-What source of energy does the household mainly use for cooking?
->$0 Firewood, cow dung, or grass (reeds)
->$6 Charcoal, paraffin stove, gas, biogas, electricity (regardless of source), or other
+    @id ppi_cook
+    What source of energy does the household mainly use for cooking?
+        >$0 Firewood, cow dung, or grass (reeds)
+        >$6 Charcoal, paraffin stove, gas, biogas, electricity (regardless of source), or other
 
 
-@id ppi_toilet
-What type of toilet facility does the household mainly use?
->$0 No facility/bush/polythene bags/bucket/etc., or other
->$4 Uncovered pit latrine (with or without slab), Ecosan (compost toilet), or covered pit latrine without slab
->$6 Covered pit latrine with slab
->$11 VIP latrine, or flush toilet
+    @id ppi_toilet
+    What type of toilet facility does the household mainly use?
+        >$0 No facility/bush/polythene bags/bucket/etc., or other
+        >$4 Uncovered pit latrine (with or without slab), Ecosan (compost toilet), or covered pit latrine without slab
+        >$6 Covered pit latrine with slab
+        >$11 VIP latrine, or flush toilet
 
 
-@id ppi_phone
-@comment Total number of mobile phones in the household
-@number
-How many mobile phones do members of your household own?
+    @id ppi_phone
+    @comment Total number of mobile phones in the household
+    @number
+    How many mobile phones do members of your household own?
 
 
-@id ppi_radio
-@comment Is there at least ONE radio in the houshold?
-Does any member of your household own a radio?
->$1 Yes
->$0 No
+    @id ppi_radio
+    @comment Is there at least ONE radio in the houshold?
+    Does any member of your household own a radio?
+        >$1 Yes
+        >$0 No
 
 
-@id ppi_shoes
-Does every member of the household have at least one pair of shoes?
->$1 Yes
->$0 No
+    @id ppi_shoes
+    Does every member of the household have at least one pair of shoes?
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -258,127 +263,127 @@ Does every member of the household have at least one pair of shoes?
 @appearance field-list
 group {
 
-@id food_items
-@readonly
-I would like to ask you about all the different foods that your household members have eaten in the last 7 days. Could you please tell me HOW MANY DAYS in the past week your household has eaten the following food items?
+    @id food_items
+    @readonly
+    I would like to ask you about all the different foods that your household members have eaten in the last 7 days. Could you please tell me HOW MANY DAYS in the past week your household has eaten the following food items?
 
 
-@id maize
-@validif .<=7
-@message Max 7 days per week
-@number
-Maize/ sorgum/ rice / millet
+    @id maize
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Maize/ sorgum/ rice / millet
 
 
-@id bread
-@validif .<=7
-@message Max 7 days per week
-@comment WHEAT: e.g. chapati, bun, bread; PASTA: e.g. spaghetti/ macaroni
-@number
-Bread/ wheat/ pasta
+    @id bread
+    @validif .<=7
+    @message Max 7 days per week
+    @comment WHEAT: e.g. chapati, bun, bread; PASTA: e.g. spaghetti/ macaroni
+    @number
+    Bread/ wheat/ pasta
 
 
-@id tubers
-@validif .<=7
-@message Max 7 days per week
-@number
-Casava/ Matoke/ yam/ sweet potato / irish potatoe
+    @id tubers
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Casava/ Matoke/ yam/ sweet potato / irish potatoe
 
 
-@id gnut
-@validif .<=7
-@message Max 7 days per week
-@comment PULSES: e.g. beans, peas, cowpeas
-@number
-Groundnut and pulses
+    @id gnut
+    @validif .<=7
+    @message Max 7 days per week
+    @comment PULSES: e.g. beans, peas, cowpeas
+    @number
+    Groundnut and pulses
 
 
-@id fish
-@validif .<=7
-@message Max 7 days per week
-@number
-Fish (main food)
+    @id fish
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Fish (main food)
 
 
-@id meat_red
-@validif .<=7
-@message Max 7 days per week
-@number
-Red meat (sheep/goat/beef)
+    @id meat_red
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Red meat (sheep/goat/beef)
 
 
-@id meat_white
-@validif .<=7
-@message Max 7 days per week
-@number
-White meat (poultry/pork)
+    @id meat_white
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    White meat (poultry/pork)
 
 
-@id oil_veg
-@validif .<=7
-@message Max 7 days per week
-@comment E.g. blue band, mukwano, sunflower oil. Be aware that a lot of products contain vegetable oil, such as cookies, cakes.
-@number
-Vegetable oils, fats, simsim
+    @id oil_veg
+    @validif .<=7
+    @message Max 7 days per week
+    @comment E.g. blue band, mukwano, sunflower oil. Be aware that a lot of products contain vegetable oil, such as cookies, cakes.
+    @number
+    Vegetable oils, fats, simsim
 
 
-@id ghee
-@validif .<=7
-@message Max 7 days per week
-@comment Expensive cakes/pastries are often made with butter
-@number
-Ghee and butter
+    @id ghee
+    @validif .<=7
+    @message Max 7 days per week
+    @comment Expensive cakes/pastries are often made with butter
+    @number
+    Ghee and butter
 
 
-@id egg
-@validif .<=7
-@message Max 7 days per week
-@number
-Eggs
+    @id egg
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Eggs
 
 
-@id dairy
-@validif .<=7
-@message Max 7 days per week
-@number
-Milk, yoghurt and dairy (main food)
+    @id dairy
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Milk, yoghurt and dairy (main food)
 
 
-@id milk_tea
-@validif .<=7
-@message Max 7 days per week
-@number
-Milk in tea (in small amounts)
+    @id milk_tea
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Milk in tea (in small amounts)
 
 
-@id veg_green
-@validif .<=7
-@message Max 7 days per week
-@comment E.g. spinach, dodo, etc
-@number
-Green leafy vegetables
+    @id veg_green
+    @validif .<=7
+    @message Max 7 days per week
+    @comment E.g. spinach, dodo, etc
+    @number
+    Green leafy vegetables
 
 
-@id veg_other
-@validif .<=7
-@message Max 7 days per week
-@comment E.g. tomatoes, onion, eggplant, carrot, etc.
-@number
-Other Vegetables
+    @id veg_other
+    @validif .<=7
+    @message Max 7 days per week
+    @comment E.g. tomatoes, onion, eggplant, carrot, etc.
+    @number
+    Other Vegetables
 
 
-@validif .<=7
-@message Max 7 days per week
-@comment E.g. yellow banana, mango, pineapple, passion fruit, etc.
-@number
-Fruit
+    @validif .<=7
+    @message Max 7 days per week
+    @comment E.g. yellow banana, mango, pineapple, passion fruit, etc.
+    @number
+    Fruit
 
 
-@id sweet
-@validif .<=7
-@message Max 7 days per week
-@number
-Sweet, Sugar, Honey
+    @id sweet
+    @validif .<=7
+    @message Max 7 days per week
+    @number
+    Sweet, Sugar, Honey
 
 
 }
@@ -388,404 +393,404 @@ Sweet, Sugar, Honey
 @appearance field-list
 group {
 
-@id maize_source1
-@showif  $maize >0
-Maize/ sorgum/ Rice/ Millet: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id maize_source1
+    @showif  $maize >0
+    Maize/ sorgum/ Rice/ Millet: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id maize_source2
-@showif  $maize >0
-Maize/ sorgum/ Rice/ Millet: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id maize_source2
+    @showif  $maize >0
+    Maize/ sorgum/ Rice/ Millet: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id bread_source1
-@showif  $bread >0
-Bread/wheat/pasta: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id bread_source1
+    @showif  $bread >0
+    Bread/wheat/pasta: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id bread_source2
-@showif  $bread >0
-Bread/ wheat/ pasta: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id bread_source2
+    @showif  $bread >0
+    Bread/ wheat/ pasta: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id tubers_source1
-@showif  $tubers >0
-Casava/Matoke/ yam/ sweet potato/ Irish potatoe: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id tubers_source1
+    @showif  $tubers >0
+    Casava/Matoke/ yam/ sweet potato/ Irish potatoe: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id tubers_source2
-@showif  $tubers >0
-Casava/Matoke/ yam/ sweet potato/ Irish potatoe: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id tubers_source2
+    @showif  $tubers >0
+    Casava/Matoke/ yam/ sweet potato/ Irish potatoe: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id gnut_source1
-@showif  $gnut >0
-Groundnut and pulses: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id gnut_source1
+    @showif  $gnut >0
+    Groundnut and pulses: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id gnut_source2
-@showif  $gnut >0
-Groundnut and pulses: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id gnut_source2
+    @showif  $gnut >0
+    Groundnut and pulses: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id fish_source1
-@showif  $fish >0
-Fish (main food): PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id fish_source1
+    @showif  $fish >0
+    Fish (main food): PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id fish_source2
-@showif  $fish >0
-Fish (main food): SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id fish_source2
+    @showif  $fish >0
+    Fish (main food): SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id meat_red_source1
-@showif  $meat_red >0
-Red Meat (sheep/goat/beef): PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id meat_red_source1
+    @showif  $meat_red >0
+    Red Meat (sheep/goat/beef): PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id meat_red_source2
-@showif  $meat_red >0
-Red Meat (sheep/goat/beef): SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id meat_red_source2
+    @showif  $meat_red >0
+    Red Meat (sheep/goat/beef): SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id meat_white_source1
-@showif  $meat_white >0
-White meat (poultry): PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id meat_white_source1
+    @showif  $meat_white >0
+    White meat (poultry): PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id meat_white_source2
-@showif  $meat_white >0
-White meat (poultry): SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id meat_white_source2
+    @showif  $meat_white >0
+    White meat (poultry): SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id oil_veg_source1
-@showif  $oil_veg >0
-Vegetable oils, fats, simsim: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id oil_veg_source1
+    @showif  $oil_veg >0
+    Vegetable oils, fats, simsim: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id oil_veg_source2
-@showif  $oil_veg >0
-Vegetable oils, fats, simsim: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id oil_veg_source2
+    @showif  $oil_veg >0
+    Vegetable oils, fats, simsim: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id ghee_source1
-@showif  $ghee >0
-Ghee and butter: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id ghee_source1
+    @showif  $ghee >0
+    Ghee and butter: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id ghee_source2
-@showif  $ghee >0
-Ghee and butter: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id ghee_source2
+    @showif  $ghee >0
+    Ghee and butter: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id egg_source1
-@showif  $egg >0
-Eggs: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id egg_source1
+    @showif  $egg >0
+    Eggs: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id egg_source2
-@showif  $egg >0
-Eggs: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id egg_source2
+    @showif  $egg >0
+    Eggs: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id dairy_source1
-@showif  $dairy >0
-Milk, yoghurt and dairy (main food): PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id dairy_source1
+    @showif  $dairy >0
+    Milk, yoghurt and dairy (main food): PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id dairy_source2
-@showif  $dairy >0
-Milk, yoghurt and dairy (main food): SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id dairy_source2
+    @showif  $dairy >0
+    Milk, yoghurt and dairy (main food): SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id milk_tea_source1
-@showif  $milk_tea >0
-Milk in tea (in small amounts): PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id milk_tea_source1
+    @showif  $milk_tea >0
+    Milk in tea (in small amounts): PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id milk_tea_source2
-@showif  $milk_tea >0
-Milk in tea (in small amounts): SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id milk_tea_source2
+    @showif  $milk_tea >0
+    Milk in tea (in small amounts): SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id veg_green_source1
-@showif  $veg_green >0
-Green leafy vegetables: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id veg_green_source1
+    @showif  $veg_green >0
+    Green leafy vegetables: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id veg_green_source2
-@showif  $veg_green >0
-Green leafy vegetables: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id veg_green_source2
+    @showif  $veg_green >0
+    Green leafy vegetables: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id veg_other_source1
-@showif  $veg_other >0
-Other Vegetables: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id veg_other_source1
+    @showif  $veg_other >0
+    Other Vegetables: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id veg_other_source2
-@showif  $veg_other >0
-Other Vegetables: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id veg_other_source2
+    @showif  $veg_other >0
+    Other Vegetables: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id fruit_source1
-@showif  $fruit >0
-Fruit: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id fruit_source1
+    @showif  $fruit >0
+    Fruit: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id fruit_source2
-@showif  $fruit >0
-Fruit: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id fruit_source2
+    @showif  $fruit >0
+    Fruit: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id sweet_source1
-@showif  $sweet >0
-Sweet, Sugar: PRIMARY food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id sweet_source1
+    @showif  $sweet >0
+    Sweet, Sugar: PRIMARY food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
-@id sweet_source2
-@showif  $sweet >0
-Sweet, Sugar: SECOND MAIN food source (if any)
->$0 No second food source
->$1 Purchase
->$2 Own production
->$3 Barter
->$4 Borrowed
->$5 Received as gift
->$6 Food Aid
->$777 Others
+    @id sweet_source2
+    @showif  $sweet >0
+    Sweet, Sugar: SECOND MAIN food source (if any)
+        >$0 No second food source
+        >$1 Purchase
+        >$2 Own production
+        >$3 Barter
+        >$4 Borrowed
+        >$5 Received as gift
+        >$6 Food Aid
+        >$777 Others
 
 
 }
@@ -795,47 +800,47 @@ Sweet, Sugar: SECOND MAIN food source (if any)
 @appearance field-list
 group {
 
-@id n_meals
-@number
-Yesterday, how many meals did the adults (above 15 years) in this household eat?
+    @id n_meals
+    @number
+    Yesterday, how many meals did the adults (above 15 years) in this household eat?
 
 
-@id meals_prep
-Who is mainly responsible for preparing the meals in the household?
->$1 Myself
->$2 My spouse
->$3 Other male relative
->$4 Other female relative
->$5 Other person
+    @id meals_prep
+    Who is mainly responsible for preparing the meals in the household?
+        >$1 Myself
+        >$2 My spouse
+        >$3 Other male relative
+        >$4 Other female relative
+        >$5 Other person
 
 
-@id meals_decide
-Who mainly decides on the type of foods that are used as ingredients in a meal?
->$1 Myself
->$2 My spouse
->$3 Other male relative
->$4 Other female relative
->$5 Other person
+    @id meals_decide
+    Who mainly decides on the type of foods that are used as ingredients in a meal?
+        >$1 Myself
+        >$2 My spouse
+        >$3 Other male relative
+        >$4 Other female relative
+        >$5 Other person
 
 
-@id meals_income
-Who’s income is mainly used to buy food items?
->$1 Myself
->$2 My spouse
->$3 Other male relative
->$4 Other female relative
->$5 Other person
+    @id meals_income
+    Who’s income is mainly used to buy food items?
+        >$1 Myself
+        >$2 My spouse
+        >$3 Other male relative
+        >$4 Other female relative
+        >$5 Other person
 
 
-@id meals_priority
-When food is limited: Who gets priority in sharing limited food?
->$0 No one, we share equally
->$1 Men
->$2 Pregnant and lactating women
->$3 Other women
->$4 Young children (below 2 years old)
->$5 Elderly/ sick/ HIV+
->$6 Others
+    @id meals_priority
+    When food is limited: Who gets priority in sharing limited food?
+        >$0 No one, we share equally
+        >$1 Men
+        >$2 Pregnant and lactating women
+        >$3 Other women
+        >$4 Young children (below 2 years old)
+        >$5 Elderly/ sick/ HIV+
+        >$6 Others
 
 
 }
@@ -845,77 +850,77 @@ When food is limited: Who gets priority in sharing limited food?
 @appearance field-list
 group {
 
-@id milk_scarce
-In the last month, did it happen that you sold so much milk that you did not have enough left for your own household consumption?
->$1 Yes
->$0 No
->$888 Don’t know
+    @id milk_scarce
+    In the last month, did it happen that you sold so much milk that you did not have enough left for your own household consumption?
+        >$1 Yes
+        >$0 No
+        >$888 Don’t know
 
 
-@id food_scarce_note
-@readonly
-@comment When responding to these questions, please think back over the last 12 months, from now to the same time last year. Were there months, in the past 12 months, in which you did not have enough food to meet your family’s needs? If yes, which were the months in the past 12 months during which you did not have enough food to meet your family’s needs?
-Were there times, in the past 12 months, when the household did not have enough food to meet the family’s needs? Did you have any food shortage/ limited food in the following months?
+    @id food_scarce_note
+    @readonly
+    @comment When responding to these questions, please think back over the last 12 months, from now to the same time last year. Were there months, in the past 12 months, in which you did not have enough food to meet your family’s needs? If yes, which were the months in the past 12 months during which you did not have enough food to meet your family’s needs?
+    Were there times, in the past 12 months, when the household did not have enough food to meet the family’s needs? Did you have any food shortage/ limited food in the following months?
 
 
-@id scarce_aug
-August 2016
->$1 Yes
+    @id scarce_aug
+    August 2016
+        >$1 Yes
 
 
-@id scarce_july
-July 2016
->$1 Yes
+    @id scarce_july
+    July 2016
+        >$1 Yes
 
 
-@id scarce_june
-June 2016
->$1 Yes
+    @id scarce_june
+    June 2016
+        >$1 Yes
 
 
-@id scarce_may
-May 2016
->$1 Yes
+    @id scarce_may
+    May 2016
+        >$1 Yes
 
 
-@id scarce_april
-April 2016
->$1 Yes
+    @id scarce_april
+    April 2016
+        >$1 Yes
 
 
-@id scarce_march
-March 2016
->$1 Yes
+    @id scarce_march
+    March 2016
+        >$1 Yes
 
 
-@id scarce_feb
-February 2016
->$1 Yes
+    @id scarce_feb
+    February 2016
+        >$1 Yes
 
 
-@id scarce_jan
-January 2016
->$1 Yes
+    @id scarce_jan
+    January 2016
+        >$1 Yes
 
 
-@id scarce_dec
-December 2015
->$1 Yes
+    @id scarce_dec
+    December 2015
+        >$1 Yes
 
 
-@id scarce_nov
-November 2015
->$1 Yes
+    @id scarce_nov
+    November 2015
+        >$1 Yes
 
 
-@id scarce_oct
-October 2015
->$1 Yes
+    @id scarce_oct
+    October 2015
+        >$1 Yes
 
 
-@id scarce_sep
-September 2015
->$1 Yes
+    @id scarce_sep
+    September 2015
+        >$1 Yes
 
 
 }
@@ -925,18 +930,18 @@ September 2015
 @appearance field-list
 group {
 
-@id healthy_most
-Do you think you eat healthy meals most of the time?
->$1 Yes
->$0 No
->$888 Don’t know
+    @id healthy_most
+    Do you think you eat healthy meals most of the time?
+        >$1 Yes
+        >$0 No
+        >$888 Don’t know
 
 
-@id healthy_diff
-Do you find it difficult to eat healthy meals every day?
->$1 Yes
->$0 No
->$888 Don’t know
+    @id healthy_diff
+    Do you find it difficult to eat healthy meals every day?
+        >$1 Yes
+        >$0 No
+        >$888 Don’t know
 
 
 }
@@ -947,59 +952,59 @@ Do you find it difficult to eat healthy meals every day?
 @appearance field-list
 group {
 
-@id healthy_diff_why_note
-@readonly
-@comment Please select all reasons mentioned by the farmer
-Why is it difficult to eat healthy meals every day?
+    @id healthy_diff_why_note
+    @readonly
+    @comment Please select all reasons mentioned by the farmer
+    Why is it difficult to eat healthy meals every day?
 
 
-@id healthy_noprod
-@default 0
-I do not produce enough healthy food
->$1 Yes
->$0 No
+    @id healthy_noprod
+    @default 0
+    I do not produce enough healthy food
+        >$1 Yes
+        >$0 No
 
 
-@id healthy_sell
-@default 0
-I sell the healthy food I produce
->$1 Yes
->$0 No
+    @id healthy_sell
+    @default 0
+    I sell the healthy food I produce
+        >$1 Yes
+        >$0 No
 
 
-@id healthy_afford
-@default 0
-I cannot afford healthy food
->$1 Yes
->$0 No
+    @id healthy_afford
+    @default 0
+    I cannot afford healthy food
+        >$1 Yes
+        >$0 No
 
 
-@id healthy_na
-@default 0
-The healthy food is not available in the market
->$1 Yes
->$0 No
+    @id healthy_na
+    @default 0
+    The healthy food is not available in the market
+        >$1 Yes
+        >$0 No
 
 
-@id healthy_diff_why
-@default 0
-The healthy food is too difficult or time consuming to cook/ prepare
->$1 Yes
->$0 No
+    @id healthy_diff_why
+    @default 0
+    The healthy food is too difficult or time consuming to cook/ prepare
+        >$1 Yes
+        >$0 No
 
 
-@id healthy_tasty
-@default 0
-The healthy food is not easy to eator digest or is not tasty
->$1 Yes
->$0 No
+    @id healthy_tasty
+    @default 0
+    The healthy food is not easy to eator digest or is not tasty
+        >$1 Yes
+        >$0 No
 
 
-@id healthy_other
-@default 0
-Other
->$1 Yes
->$0 No
+    @id healthy_other
+    @default 0
+    Other
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1014,82 +1019,82 @@ Specify other reason why it is difficult to eat healthy meals every day.
 @appearance field-list
 group {
 
-@id healthy_know
-Do you think you have enough knowledge about how to feed your family/ children?
->$1 Yes
->$0 No
->$888 Don’t know
+    @id healthy_know
+    Do you think you have enough knowledge about how to feed your family/ children?
+        >$1 Yes
+        >$0 No
+        >$888 Don’t know
 
 
-@id feed_info_note
-@readonly
-Where do you get your information about feeding your family/ children? Select all options mentioned.
+    @id feed_info_note
+    @readonly
+    Where do you get your information about feeding your family/ children? Select all options mentioned.
 
 
-@id feed_info_clinic
-Health clinic or health centre; growth monitoring session; antenatal care
->$1 Yes
->$0 No
+    @id feed_info_clinic
+    Health clinic or health centre; growth monitoring session; antenatal care
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_vht
-Village Health Team (VHT); Health volunteer; Community health worker
->$1 Yes
->$0 No
+    @id feed_info_vht
+    Village Health Team (VHT); Health volunteer; Community health worker
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_trad
-Traditional birth attendant; traditional medicine worker
->$1 Yes
->$0 No
+    @id feed_info_trad
+    Traditional birth attendant; traditional medicine worker
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_fem
-Female family members; female friends; female neighbours
->$1 Yes
->$0 No
+    @id feed_info_fem
+    Female family members; female friends; female neighbours
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_male
-Male family members; male friends; male neighbours
->$1 Yes
->$0 No
+    @id feed_info_male
+    Male family members; male friends; male neighbours
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_media
-Radio; newspaper; television; internet
->$1 Yes
->$0 No
+    @id feed_info_media
+    Radio; newspaper; television; internet
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_group
-Group meetings of e.g. Village Saving and Loan groups
->$1 Yes
->$0 No
+    @id feed_info_group
+    Group meetings of e.g. Village Saving and Loan groups
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_reli
-Church/ Mosque
->$1 Yes
->$0 No
+    @id feed_info_reli
+    Church/ Mosque
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_ngo
-NGO
->$1 Yes
->$0 No
+    @id feed_info_ngo
+    NGO
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_none
-I don’t get information
->$1 Yes
->$0 No
+    @id feed_info_none
+    I don’t get information
+        >$1 Yes
+        >$0 No
 
 
-@id feed_info_other
-Other information source
->$1 Yes
->$0 No
+    @id feed_info_other
+    Other information source
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1104,82 +1109,82 @@ Specify other source of information about feeding your family/ children.
 @appearance field-list
 group {
 
-@id milk_ben_note
-@readonly
-@comment Read out loud all the different options and cross YES when the farmer agrees.
-What benefits could people get from drinking milk you think? Please select all the options mentioned.
+    @id milk_ben_note
+    @readonly
+    @comment Read out loud all the different options and cross YES when the farmer agrees.
+    What benefits could people get from drinking milk you think? Please select all the options mentioned.
 
 
-@id milk_ben_skin
-Healthy skin
->$1 Yes
->$0 No
+    @id milk_ben_skin
+    Healthy skin
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_bone
-Strong bones and teeth
->$1 Yes
->$0 No
+    @id milk_ben_bone
+    Strong bones and teeth
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_eye
-Good eyesight
->$1 Yes
->$0 No
+    @id milk_ben_eye
+    Good eyesight
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_strong
-Makes one stronger
->$1 Yes
->$0 No
+    @id milk_ben_strong
+    Makes one stronger
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_energy
-Gives more energy
->$1 Yes
->$0 No
+    @id milk_ben_energy
+    Gives more energy
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_brain
-Developing the brain
->$1 Yes
->$0 No
+    @id milk_ben_brain
+    Developing the brain
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_prevent
-Preventing illness
->$1 Yes
->$0 No
+    @id milk_ben_prevent
+    Preventing illness
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_child
-For children to grow
->$1 Yes
->$0 No
+    @id milk_ben_child
+    For children to grow
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_nofat
-Keeping one from getting fat
->$1 Yes
->$0 No
+    @id milk_ben_nofat
+    Keeping one from getting fat
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_fibre
-Intake of fibre
->$1 Yes
->$0 No
+    @id milk_ben_fibre
+    Intake of fibre
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_
-Don’t know
->$1 Yes
->$0 No
+    @id milk_ben_
+    Don’t know
+        >$1 Yes
+        >$0 No
 
 
-@id milk_ben_other
-Other benefit
->$1 Yes
->$0 No
+    @id milk_ben_other
+    Other benefit
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1194,19 +1199,19 @@ Specify other benefit
 @appearance field-list
 group {
 
-@id cows_milk
-@number
-How many milking cows do you have?
+    @id cows_milk
+    @number
+    How many milking cows do you have?
 
 
-@id cows_dry
-@number
-How many dry cows do you have?
+    @id cows_dry
+    @number
+    How many dry cows do you have?
 
 
-@id young_stock
-@number
-How many young stock do you have?
+    @id young_stock
+    @number
+    How many young stock do you have?
 
 
 }
@@ -1216,96 +1221,96 @@ How many young stock do you have?
 @appearance field-list
 group {
 
-@id income_source
-What is the MOST IMPORTANT source of income for your household?
->$1 Non-cash crops
->$2 Cash crops
->$3 Dairy products (milk, meat, live animals)
->$4 Other livestock products (milk, meat, eggs, live animals)
->$5 Off-farm labour
->$777 Other, namely
+    @id income_source
+    What is the MOST IMPORTANT source of income for your household?
+        >$1 Non-cash crops
+        >$2 Cash crops
+        >$3 Dairy products (milk, meat, live animals)
+        >$4 Other livestock products (milk, meat, eggs, live animals)
+        >$5 Off-farm labour
+        >$777 Other, namely
 
 
-@id inc_other_spec
-@comment Only specify when "Other income"is the most important source of income
-Specify other income
+    @id inc_other_spec
+    @comment Only specify when "Other income"is the most important source of income
+    Specify other income
 
 
-@id hh_depend
-@number
-How many people in your household depend on the income from dairy farming, including yourself?
+    @id hh_depend
+    @number
+    How many people in your household depend on the income from dairy farming, including yourself?
 
 
-@id years_dairy
-@comment If less than 1 year, fill in 0.
-@number
-How many years have you been a dairy farmer?
+    @id years_dairy
+    @comment If less than 1 year, fill in 0.
+    @number
+    How many years have you been a dairy farmer?
 
 
-@id cattle_purp_note
-@readonly
-@comment READ OUT LOUD and select all options mentioned by the farmer
-What is the purpose of keeping cattle on your farm? (more than one answer is possible)
+    @id cattle_purp_note
+    @readonly
+    @comment READ OUT LOUD and select all options mentioned by the farmer
+    What is the purpose of keeping cattle on your farm? (more than one answer is possible)
 
 
-@id cattle_purp_milk_sell
-Milk (products) for sales
->$1 Yes
->$0 No
+    @id cattle_purp_milk_sell
+    Milk (products) for sales
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_milk_cons
-Milk (products) for home consumption
->$1 Yes
->$0 No
+    @id cattle_purp_milk_cons
+    Milk (products) for home consumption
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_meat_sell
-Meat (products) for sales
->$1 Yes
->$0 No
+    @id cattle_purp_meat_sell
+    Meat (products) for sales
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_meat_cons
-Meat (products) for home consumption
->$1 Yes
->$0 No
+    @id cattle_purp_meat_cons
+    Meat (products) for home consumption
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_asset
-Capital asset
->$1 Yes
->$0 No
+    @id cattle_purp_asset
+    Capital asset
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_insur
-Insurance
->$1 Yes
->$0 No
+    @id cattle_purp_insur
+    Insurance
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_status
-Social status
->$1 Yes
->$0 No
+    @id cattle_purp_status
+    Social status
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_manure
-Manure as a fertilizer
->$1 Yes
->$0 No
+    @id cattle_purp_manure
+    Manure as a fertilizer
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_draft
-Work/draft animal
->$1 Yes
->$0 No
+    @id cattle_purp_draft
+    Work/draft animal
+        >$1 Yes
+        >$0 No
 
 
-@id cattle_purp_other
-Other purpose
->$1 Yes
->$0 No
+    @id cattle_purp_other
+    Other purpose
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1320,124 +1325,124 @@ Specify other purpose for keeping cattle
 @appearance field-list
 group {
 
-@id challenges_note
-@readonly
-@comment Please read out loud all options and select yes when the farmer experiences this as one of their 3 KEY challenges
-If any at all, what are key challenges that you experience with your dairy farm and business? Select a maximum of 3 challenges.
+    @id challenges_note
+    @readonly
+    @comment Please read out loud all options and select yes when the farmer experiences this as one of their 3 KEY challenges
+    If any at all, what are key challenges that you experience with your dairy farm and business? Select a maximum of 3 challenges.
 
 
-@id chal_lowprod
-Low milk production
->$1 Yes
->$0 No
+    @id chal_lowprod
+    Low milk production
+        >$1 Yes
+        >$0 No
 
 
-@id chal_lowprice
-Low milk price
->$1 Yes
->$0 No
+    @id chal_lowprice
+    Low milk price
+        >$1 Yes
+        >$0 No
 
 
-@id chal_water
-Lack of access to water
->$1 Yes
->$0 No
+    @id chal_water
+    Lack of access to water
+        >$1 Yes
+        >$0 No
 
 
-@id chal_soil
-Poor soil quality
->$1 Yes
->$0 No
+    @id chal_soil
+    Poor soil quality
+        >$1 Yes
+        >$0 No
 
 
-@id chal_onfarm
-Low on-farm fodder production
->$1 Yes
->$0 No
+    @id chal_onfarm
+    Low on-farm fodder production
+        >$1 Yes
+        >$0 No
 
 
-@id chal_qual_past
-Poor quality of pasture
->$1 Yes
->$0 No
+    @id chal_qual_past
+    Poor quality of pasture
+        >$1 Yes
+        >$0 No
 
 
-@id chal_qual_fod
-Poor quality of fodder
->$1 Yes
->$0 No
+    @id chal_qual_fod
+    Poor quality of fodder
+        >$1 Yes
+        >$0 No
 
 
-@id chal_qual_conc
-Poor quality of concentrate
->$1 Yes
->$0 No
+    @id chal_qual_conc
+    Poor quality of concentrate
+        >$1 Yes
+        >$0 No
 
 
-@id chal_qual_breed
-Lack of high quality breed of dairy cows
->$1 Yes
->$0 No
+    @id chal_qual_breed
+    Lack of high quality breed of dairy cows
+        >$1 Yes
+        >$0 No
 
 
-@id chal_sick
-Cattle get sick easily
->$1 Yes
->$0 No
+    @id chal_sick
+    Cattle get sick easily
+        >$1 Yes
+        >$0 No
 
 
-@id chal_time
-Much time needed to manage cattle
->$1 Yes
->$0 No
+    @id chal_time
+    Much time needed to manage cattle
+        >$1 Yes
+        >$0 No
 
 
-@id chal_price_fod
-High price for purchasing fodder
->$1 Yes
->$0 No
+    @id chal_price_fod
+    High price for purchasing fodder
+        >$1 Yes
+        >$0 No
 
 
-@id chal_price_conc
-High price for concentrate
->$1 Yes
->$0 No
+    @id chal_price_conc
+    High price for concentrate
+        >$1 Yes
+        >$0 No
 
 
-@id chal_price_lab
-High price for hiring labour
->$1 Yes
->$0 No
+    @id chal_price_lab
+    High price for hiring labour
+        >$1 Yes
+        >$0 No
 
 
-@id chal_price_cows
-High price for purchasing dairy cows
->$1 Yes
->$0 No
+    @id chal_price_cows
+    High price for purchasing dairy cows
+        >$1 Yes
+        >$0 No
 
 
-@id chal_price_fuel
-High fuel prices
->$1 Yes
->$0 No
+    @id chal_price_fuel
+    High fuel prices
+        >$1 Yes
+        >$0 No
 
 
-@id chal_price_land
-High price for renting or buying land
->$1 Yes
->$0 No
+    @id chal_price_land
+    High price for renting or buying land
+        >$1 Yes
+        >$0 No
 
 
-@id chal_road
-Bad roads
->$1 Yes
->$0 No
+    @id chal_road
+    Bad roads
+        >$1 Yes
+        >$0 No
 
 
-@id chal_other
-Other
->$1 Yes
->$0 No
+    @id chal_other
+    Other
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1452,18 +1457,18 @@ Specify other key challenge
 @appearance field-list
 group {
 
-@id herd_year_good
-@comment milk production for the total herd
-Do you consider the past year as a good year in terms of dairy herd productivity?
->$5 Very good
->$4 Good
->$3 Not good, not bad
->$2 Bad
->$1 Very bad
+    @id herd_year_good
+    @comment milk production for the total herd
+    Do you consider the past year as a good year in terms of dairy herd productivity?
+        >$5 Very good
+        >$4 Good
+        >$3 Not good, not bad
+        >$2 Bad
+        >$1 Very bad
 
 
-@id herd_year_good_why
-Why?
+    @id herd_year_good_why
+    Why?
 
 
 }
@@ -1473,37 +1478,37 @@ Why?
 @appearance field-list
 group {
 
-@id milk_prod_note
-@readonly
-We would like to ask some (additional) questions about the milk production of your herd.
+    @id milk_prod_note
+    @readonly
+    We would like to ask some (additional) questions about the milk production of your herd.
 
 
-@id prod_herd
-@decimal
-How much milk was produced by your TOTAL HERD yesterday (litres/ herd/ day) ?
+    @id prod_herd
+    @decimal
+    How much milk was produced by your TOTAL HERD yesterday (litres/ herd/ day) ?
 
 
-@id prod_cow
-@comment litres/milking cow/day
-@decimal
-How much milk was produced per cow yesterday, on average?
+    @id prod_cow
+    @comment litres/milking cow/day
+    @decimal
+    How much milk was produced per cow yesterday, on average?
 
 
-@id prod_herd_sold
-@comment litres
-@decimal
-Of this amount of milk, how much did you sell? (litres)
+    @id prod_herd_sold
+    @comment litres
+    @decimal
+    Of this amount of milk, how much did you sell? (litres)
 
 
-@id prod_herd_home
-@comment litres
-@decimal
-Of this amount of milk, how much did you keep at home? (consumed by calves or HH members) (litres)
+    @id prod_herd_home
+    @comment litres
+    @decimal
+    Of this amount of milk, how much did you keep at home? (consumed by calves or HH members) (litres)
 
 
-@id payment_slip
-@picture
-If available: Can I take a picture of the last month's payment slip of the coop?
+    @id payment_slip
+    @picture
+    If available: Can I take a picture of the last month's payment slip of the coop?
 
 
 }
@@ -1513,55 +1518,55 @@ If available: Can I take a picture of the last month's payment slip of the coop?
 @appearance field-list
 group {
 
-@id prod_past_note
-@readonly
-I would like to ask you to think of the producitivity of your cows in the previous three seasons:
+    @id prod_past_note
+    @readonly
+    I would like to ask you to think of the producitivity of your cows in the previous three seasons:
 
 
-@id prod_past_dry_jun
-@comment per cow per day
-@decimal
-Over the PAST DRY SEASON (June-August 2016), what was the average milk production per cow per day? (kg/cow/day)
+    @id prod_past_dry_jun
+    @comment per cow per day
+    @decimal
+    Over the PAST DRY SEASON (June-August 2016), what was the average milk production per cow per day? (kg/cow/day)
 
 
-@id prod_past_dry_jun_home
-@comment total per day
-@decimal
-In that season, how much milk did you keep at home each day? (milk not sold) (kg/day)
+    @id prod_past_dry_jun_home
+    @comment total per day
+    @decimal
+    In that season, how much milk did you keep at home each day? (milk not sold) (kg/day)
 
 
-@id prod_past_wet
-@comment per cow per day
-@decimal
-Over the PAST WET SEASON (March-May 2016), what was the average milk production per cow per day? (kg/cow/day)
+    @id prod_past_wet
+    @comment per cow per day
+    @decimal
+    Over the PAST WET SEASON (March-May 2016), what was the average milk production per cow per day? (kg/cow/day)
 
 
-@id prod_past_wet_home
-@comment total per day
-@decimal
-In that season, how much milk did you keep at home each day? (milk not sold) (kg/day)
+    @id prod_past_wet_home
+    @comment total per day
+    @decimal
+    In that season, how much milk did you keep at home each day? (milk not sold) (kg/day)
 
 
-@id prod_past_dry_dec
-@comment per cow per day
-@decimal
-Over the DRY SEASON of Dec 2015-Feb 2016, what was the average milk production per cow per day? (kg/cow/day)
+    @id prod_past_dry_dec
+    @comment per cow per day
+    @decimal
+    Over the DRY SEASON of Dec 2015-Feb 2016, what was the average milk production per cow per day? (kg/cow/day)
 
 
-@id prod_past_dry_dec_home
-@comment total per day
-@decimal
-In this season, how much milk did you keep at home each day? (milk not sold) (kg/day)
+    @id prod_past_dry_dec_home
+    @comment total per day
+    @decimal
+    In this season, how much milk did you keep at home each day? (milk not sold) (kg/day)
 
 
-@id past_year_lact_long
-@decimal
-Over the past year, what was the longest lactation length? (months in lactation)
+    @id past_year_lact_long
+    @decimal
+    Over the past year, what was the longest lactation length? (months in lactation)
 
 
-@id past_year_lact_short
-@number
-Over the past year, what was the shortest lactation length? (months in lactation)
+    @id past_year_lact_short
+    @number
+    Over the past year, what was the shortest lactation length? (months in lactation)
 
 
 }
@@ -1571,54 +1576,54 @@ Over the past year, what was the shortest lactation length? (months in lactation
 @appearance field-list
 group {
 
-@id past_year_calves
-@number
-How many calves were born (dead and alive) over the past ONE YEAR ?
+    @id past_year_calves
+    @number
+    How many calves were born (dead and alive) over the past ONE YEAR ?
 
 
-@id past_year_calves_died
-@number
-Of these calves, how many were born dead or died in the first month after birth?
+    @id past_year_calves_died
+    @number
+    Of these calves, how many were born dead or died in the first month after birth?
 
 
-@id breeding_data
-Do you keep records of the breeding data (insemination dates, examination data, calving dates etc.) on your farm?
->$1 Yes
->$0 No
->$888 Don’t know
+    @id breeding_data
+    Do you keep records of the breeding data (insemination dates, examination data, calving dates etc.) on your farm?
+        >$1 Yes
+        >$0 No
+        >$888 Don’t know
 
 
-@id opendays_note
-@readonly
-@comment If the farmers does not know, ask for a good guess. If they really don't know write 888
-I would like to ask you to take 3 pregnant cows in mind. For each of these cows, what was the number of days between the last calving and the cow becoming pregnant again? ("open days")
+    @id opendays_note
+    @readonly
+    @comment If the farmers does not know, ask for a good guess. If they really don't know write 888
+    I would like to ask you to take 3 pregnant cows in mind. For each of these cows, what was the number of days between the last calving and the cow becoming pregnant again? ("open days")
 
 
-@id opendays_cow1
-@number
-Cow 1
+    @id opendays_cow1
+    @number
+    Cow 1
 
 
-@id opendays_cow2
-@comment If no second cow, write 999
-@number
-Cow 2
+    @id opendays_cow2
+    @comment If no second cow, write 999
+    @number
+    Cow 2
 
 
-@id opendays_cow3
-@comment If no third cow, write 999
-@number
-Cow 3
+    @id opendays_cow3
+    @comment If no third cow, write 999
+    @number
+    Cow 3
 
 
-@id notpreg_heifer
-@number
-How many heifers did not get pregnant AT ALL over the past ONE YEAR?
+    @id notpreg_heifer
+    @number
+    How many heifers did not get pregnant AT ALL over the past ONE YEAR?
 
 
-@id notpreg_cow
-@number
-How many adult cows currently on the farm have NOT produced any calf over the past 3 YEARS?
+    @id notpreg_cow
+    @number
+    How many adult cows currently on the farm have NOT produced any calf over the past 3 YEARS?
 
 
 }
@@ -1627,8 +1632,8 @@ How many adult cows currently on the farm have NOT produced any calf over the pa
 @id any_feed
 @comment Examples are maize SILAGE, maize STOVER, maize BRAN, elephant grass HAY, FRESH CUT elephant grass, wheat bran, banana peelings, urea, etc. If cows are grazing only and get no supplemental feeding, select "No".
 In the last year, did you give any of your dairy cattle any (supplemental) feed or fodder apart from having them graze the paddocks? With feed and fodder we mean forage/ tree/ crop residue/ by-product/ concentrate feed/ minerals and vitamin supplement, and its forms.
->$1 Yes
->$0 No
+    >$1 Yes
+    >$0 No
 
 
 @id feed
@@ -1636,10 +1641,10 @@ In the last year, did you give any of your dairy cattle any (supplemental) feed 
 @appearance field-list
 group {
 
-@id feed_note
-@readonly
-@comment READ OUT LOUD and move to the next page to start with the most recent season.
-Which types and what amounts of feed and fodder do you give to your dairy cattle? We will ask for several types of cattle (milking cows, dry cows and young stock) and for all the seasons in the last year.
+    @id feed_note
+    @readonly
+    @comment READ OUT LOUD and move to the next page to start with the most recent season.
+    Which types and what amounts of feed and fodder do you give to your dairy cattle? We will ask for several types of cattle (milking cows, dry cows and young stock) and for all the seasons in the last year.
 
 
 }
@@ -1650,32 +1655,32 @@ Which types and what amounts of feed and fodder do you give to your dairy cattle
 @appearance field-list
 group {
 
-@id any_feed_wet_sep
-@comment wet season (mid August-Nov 2016)
-Any feed/fodder given to your dairy animals in the CURRENT WET SEASON?
->$1 Yes
->$0 No
+    @id any_feed_wet_sep
+    @comment wet season (mid August-Nov 2016)
+    Any feed/fodder given to your dairy animals in the CURRENT WET SEASON?
+        >$1 Yes
+        >$0 No
 
 
-@id any_feed_dry_jun
-@comment dry season (June-mid August 2016)
-Any feed/fodder given to your dairy animals in the previous DRY SEASON?
->$1 Yes
->$0 No
+    @id any_feed_dry_jun
+    @comment dry season (June-mid August 2016)
+    Any feed/fodder given to your dairy animals in the previous DRY SEASON?
+        >$1 Yes
+        >$0 No
 
 
-@id any_feed_wet_mar
-@comment wet season (March-May 2016)
-Any feed/fodder given to your dairy animals in the previous WET SEASON?
->$1 Yes
->$0 No
+    @id any_feed_wet_mar
+    @comment wet season (March-May 2016)
+    Any feed/fodder given to your dairy animals in the previous WET SEASON?
+        >$1 Yes
+        >$0 No
 
 
-@id any_feed_dry_dec
-@comment dry season (Dec 2015-Feb 2016)
-Any feed/fodder given to your dairy animals in the past DRY SEASON?
->$1 Yes
->$0 No
+    @id any_feed_dry_dec
+    @comment dry season (Dec 2015-Feb 2016)
+    Any feed/fodder given to your dairy animals in the past DRY SEASON?
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1686,118 +1691,118 @@ Any feed/fodder given to your dairy animals in the past DRY SEASON?
 @appearance field-list
 group {
 
-@id wet_sep_cow_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
+    @id wet_sep_cow_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
 
 
-@id wet_sep_cow_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id wet_sep_cow_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id wet_sep_cow_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id wet_sep_cow_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id wet_sep_cow_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id wet_sep_cow_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id wet_sep_cow_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id wet_sep_cow_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id wet_sep_cow_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id wet_sep_cow_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id wet_sep_cow_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id wet_sep_cow_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id wet_sep_cow_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id wet_sep_cow_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id wet_sep_cow_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id wet_sep_cow_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id wet_sep_cow_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id wet_sep_cow_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id wet_sep_cow_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id wet_sep_cow_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id wet_sep_cow_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id wet_sep_cow_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id wet_sep_cow_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id wet_sep_cow_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id wet_sep_cow_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id wet_sep_cow_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id wet_sep_cow_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id wet_sep_cow_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id wet_sep_cow_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id wet_sep_cow_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id wet_sep_cow_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id wet_sep_cow_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id wet_sep_cow_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id wet_sep_cow_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id wet_sep_cow_graze
-Grazing only
->$1 Yes
->$0 No
+    @id wet_sep_cow_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1808,51 +1813,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id wet_sep_cow_other1_spec
-Specify other feed/fodder type #1
+    @id wet_sep_cow_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id wet_sep_cow_other1_n
-@decimal
-How much?
+    @id wet_sep_cow_other1_n
+    @decimal
+    How much?
 
 
-@id wet_sep_cow_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_cow_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_sep_cow_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id wet_sep_cow_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id wet_sep_cow_other2_n
-@decimal
-How much?
+    @id wet_sep_cow_other2_n
+    @decimal
+    How much?
 
 
-@id wet_sep_cow_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_cow_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_sep_cow_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id wet_sep_cow_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id wet_sep_cow_other3_n
-@decimal
-How much?
+    @id wet_sep_cow_other3_n
+    @decimal
+    How much?
 
 
-@id wet_sep_cow_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_cow_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -1863,118 +1868,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id wet_sep_dry_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
+    @id wet_sep_dry_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
 
 
-@id wet_sep_dry_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id wet_sep_dry_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id wet_sep_dry_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id wet_sep_dry_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id wet_sep_dry_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id wet_sep_dry_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id wet_sep_dry_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id wet_sep_dry_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id wet_sep_dry_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id wet_sep_dry_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id wet_sep_dry_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id wet_sep_dry_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id wet_sep_dry_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id wet_sep_dry_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id wet_sep_dry_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id wet_sep_dry_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id wet_sep_dry_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id wet_sep_dry_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id wet_sep_dry_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id wet_sep_dry_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id wet_sep_dry_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id wet_sep_dry_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id wet_sep_dry_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id wet_sep_dry_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id wet_sep_dry_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id wet_sep_dry_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id wet_sep_dry_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id wet_sep_dry_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id wet_sep_dry_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id wet_sep_dry_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id wet_sep_dry_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id wet_sep_dry_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id wet_sep_dry_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id wet_sep_dry_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id wet_sep_dry_graze
-Grazing only
->$1 Yes
->$0 No
+    @id wet_sep_dry_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -1985,51 +1990,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id wet_sep_dry_other1_spec
-Specify other feed/fodder type #1
+    @id wet_sep_dry_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id wet_sep_dry_other1_n
-@decimal
-How much?
+    @id wet_sep_dry_other1_n
+    @decimal
+    How much?
 
 
-@id wet_sep_dry_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_dry_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_sep_dry_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id wet_sep_dry_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id wet_sep_dry_other2_n
-@decimal
-How much?
+    @id wet_sep_dry_other2_n
+    @decimal
+    How much?
 
 
-@id wet_sep_dry_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_dry_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_sep_dry_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id wet_sep_dry_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id wet_sep_dry_other3_n
-@decimal
-How much?
+    @id wet_sep_dry_other3_n
+    @decimal
+    How much?
 
 
-@id wet_sep_dry_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_dry_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -2040,118 +2045,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id wet_sep_young_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
+    @id wet_sep_young_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
 
 
-@id wet_sep_young_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id wet_sep_young_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id wet_sep_young_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id wet_sep_young_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id wet_sep_young_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id wet_sep_young_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id wet_sep_young_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id wet_sep_young_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id wet_sep_young_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id wet_sep_young_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id wet_sep_young_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id wet_sep_young_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id wet_sep_young_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id wet_sep_young_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id wet_sep_young_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id wet_sep_young_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id wet_sep_young_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id wet_sep_young_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id wet_sep_young_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id wet_sep_young_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id wet_sep_young_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id wet_sep_young_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id wet_sep_young_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id wet_sep_young_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id wet_sep_young_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id wet_sep_young_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id wet_sep_young_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id wet_sep_young_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id wet_sep_young_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id wet_sep_young_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id wet_sep_young_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id wet_sep_young_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id wet_sep_young_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id wet_sep_young_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id wet_sep_young_graze
-Grazing only
->$1 Yes
->$0 No
+    @id wet_sep_young_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -2162,51 +2167,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id wet_sep_young_other1_spec
-Specify other feed/fodder type #1
+    @id wet_sep_young_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id wet_sep_young_other1_n
-@decimal
-How much?
+    @id wet_sep_young_other1_n
+    @decimal
+    How much?
 
 
-@id wet_sep_young_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_young_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_sep_young_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id wet_sep_young_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id wet_sep_young_other2_n
-@decimal
-How much?
+    @id wet_sep_young_other2_n
+    @decimal
+    How much?
 
 
-@id wet_sep_young_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_young_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_sep_young_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id wet_sep_young_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id wet_sep_young_other3_n
-@decimal
-How much?
+    @id wet_sep_young_other3_n
+    @decimal
+    How much?
 
 
-@id wet_sep_young_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_sep_young_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -2217,118 +2222,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id dry_jun_cow_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
+    @id dry_jun_cow_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
 
 
-@id dry_jun_cow_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id dry_jun_cow_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id dry_jun_cow_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id dry_jun_cow_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id dry_jun_cow_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id dry_jun_cow_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id dry_jun_cow_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id dry_jun_cow_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id dry_jun_cow_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id dry_jun_cow_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id dry_jun_cow_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id dry_jun_cow_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id dry_jun_cow_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id dry_jun_cow_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id dry_jun_cow_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id dry_jun_cow_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id dry_jun_cow_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id dry_jun_cow_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id dry_jun_cow_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id dry_jun_cow_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id dry_jun_cow_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id dry_jun_cow_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id dry_jun_cow_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id dry_jun_cow_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id dry_jun_cow_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id dry_jun_cow_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id dry_jun_cow_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id dry_jun_cow_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id dry_jun_cow_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id dry_jun_cow_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id dry_jun_cow_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id dry_jun_cow_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id dry_jun_cow_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id dry_jun_cow_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id dry_jun_cow_graze
-Grazing only
->$1 Yes
->$0 No
+    @id dry_jun_cow_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -2339,51 +2344,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id dry_jun_cow_other1_spec
-Specify other feed/fodder type #1
+    @id dry_jun_cow_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id dry_jun_cow_other1_n
-@decimal
-How much?
+    @id dry_jun_cow_other1_n
+    @decimal
+    How much?
 
 
-@id dry_jun_cow_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_cow_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_jun_cow_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id dry_jun_cow_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id dry_jun_cow_other2_n
-@decimal
-How much?
+    @id dry_jun_cow_other2_n
+    @decimal
+    How much?
 
 
-@id dry_jun_cow_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_cow_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_jun_cow_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id dry_jun_cow_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id dry_jun_cow_other3_n
-@decimal
-How much?
+    @id dry_jun_cow_other3_n
+    @decimal
+    How much?
 
 
-@id dry_jun_cow_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_cow_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -2394,118 +2399,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id dry_jun_dry_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
+    @id dry_jun_dry_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
 
 
-@id dry_jun_dry_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id dry_jun_dry_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id dry_jun_dry_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id dry_jun_dry_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id dry_jun_dry_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id dry_jun_dry_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id dry_jun_dry_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id dry_jun_dry_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id dry_jun_dry_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id dry_jun_dry_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id dry_jun_dry_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id dry_jun_dry_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id dry_jun_dry_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id dry_jun_dry_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id dry_jun_dry_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id dry_jun_dry_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id dry_jun_dry_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id dry_jun_dry_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id dry_jun_dry_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id dry_jun_dry_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id dry_jun_dry_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id dry_jun_dry_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id dry_jun_dry_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id dry_jun_dry_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id dry_jun_dry_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id dry_jun_dry_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id dry_jun_dry_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id dry_jun_dry_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id dry_jun_dry_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id dry_jun_dry_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id dry_jun_dry_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id dry_jun_dry_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id dry_jun_dry_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id dry_jun_dry_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id dry_jun_dry_graze
-Grazing only
->$1 Yes
->$0 No
+    @id dry_jun_dry_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -2516,51 +2521,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id dry_jun_dry_other1_spec
-Specify other feed/fodder type #1
+    @id dry_jun_dry_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id dry_jun_dry_other1_n
-@decimal
-How much?
+    @id dry_jun_dry_other1_n
+    @decimal
+    How much?
 
 
-@id dry_jun_dry_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_dry_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_jun_dry_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id dry_jun_dry_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id dry_jun_dry_other2_n
-@decimal
-How much?
+    @id dry_jun_dry_other2_n
+    @decimal
+    How much?
 
 
-@id dry_jun_dry_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_dry_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_jun_dry_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id dry_jun_dry_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id dry_jun_dry_other3_n
-@decimal
-How much?
+    @id dry_jun_dry_other3_n
+    @decimal
+    How much?
 
 
-@id dry_jun_dry_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_dry_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -2571,118 +2576,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id dry_jun_young_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
+    @id dry_jun_young_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
 
 
-@id dry_jun_young_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id dry_jun_young_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id dry_jun_young_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id dry_jun_young_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id dry_jun_young_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id dry_jun_young_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id dry_jun_young_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id dry_jun_young_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id dry_jun_young_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id dry_jun_young_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id dry_jun_young_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id dry_jun_young_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id dry_jun_young_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id dry_jun_young_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id dry_jun_young_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id dry_jun_young_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id dry_jun_young_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id dry_jun_young_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id dry_jun_young_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id dry_jun_young_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id dry_jun_young_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id dry_jun_young_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id dry_jun_young_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id dry_jun_young_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id dry_jun_young_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id dry_jun_young_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id dry_jun_young_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id dry_jun_young_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id dry_jun_young_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id dry_jun_young_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id dry_jun_young_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id dry_jun_young_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id dry_jun_young_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id dry_jun_young_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id dry_jun_young_graze
-Grazing only
->$1 Yes
->$0 No
+    @id dry_jun_young_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -2693,51 +2698,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id dry_jun_young_other1_spec
-Specify other feed/fodder type #1
+    @id dry_jun_young_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id dry_jun_young_other1_n
-@decimal
-How much?
+    @id dry_jun_young_other1_n
+    @decimal
+    How much?
 
 
-@id dry_jun_young_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_young_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_jun_young_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id dry_jun_young_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id dry_jun_young_other2_n
-@decimal
-How much?
+    @id dry_jun_young_other2_n
+    @decimal
+    How much?
 
 
-@id dry_jun_young_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_young_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_jun_young_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id dry_jun_young_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id dry_jun_young_other3_n
-@decimal
-How much?
+    @id dry_jun_young_other3_n
+    @decimal
+    How much?
 
 
-@id dry_jun_young_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_jun_young_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -2748,118 +2753,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id wet_mar_cow_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
+    @id wet_mar_cow_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
 
 
-@id wet_mar_cow_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id wet_mar_cow_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id wet_mar_cow_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id wet_mar_cow_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id wet_mar_cow_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id wet_mar_cow_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id wet_mar_cow_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id wet_mar_cow_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id wet_mar_cow_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id wet_mar_cow_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id wet_mar_cow_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id wet_mar_cow_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id wet_mar_cow_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id wet_mar_cow_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id wet_mar_cow_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id wet_mar_cow_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id wet_mar_cow_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id wet_mar_cow_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id wet_mar_cow_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id wet_mar_cow_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id wet_mar_cow_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id wet_mar_cow_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id wet_mar_cow_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id wet_mar_cow_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id wet_mar_cow_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id wet_mar_cow_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id wet_mar_cow_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id wet_mar_cow_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id wet_mar_cow_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id wet_mar_cow_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id wet_mar_cow_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id wet_mar_cow_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id wet_mar_cow_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id wet_mar_cow_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id wet_mar_cow_graze
-Grazing only
->$1 Yes
->$0 No
+    @id wet_mar_cow_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -2870,51 +2875,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id wet_mar_cow_other1_spec
-Specify other feed/fodder type #1
+    @id wet_mar_cow_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id wet_mar_cow_other1_n
-@decimal
-How much?
+    @id wet_mar_cow_other1_n
+    @decimal
+    How much?
 
 
-@id wet_mar_cow_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_cow_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_mar_cow_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id wet_mar_cow_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id wet_mar_cow_other2_n
-@decimal
-How much?
+    @id wet_mar_cow_other2_n
+    @decimal
+    How much?
 
 
-@id wet_mar_cow_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_cow_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_mar_cow_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id wet_mar_cow_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id wet_mar_cow_other3_n
-@decimal
-How much?
+    @id wet_mar_cow_other3_n
+    @decimal
+    How much?
 
 
-@id wet_mar_cow_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_cow_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -2925,118 +2930,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id wet_mar_dry_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
+    @id wet_mar_dry_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
 
 
-@id wet_mar_dry_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id wet_mar_dry_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id wet_mar_dry_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id wet_mar_dry_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id wet_mar_dry_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id wet_mar_dry_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id wet_mar_dry_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id wet_mar_dry_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id wet_mar_dry_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id wet_mar_dry_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id wet_mar_dry_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id wet_mar_dry_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id wet_mar_dry_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id wet_mar_dry_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id wet_mar_dry_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id wet_mar_dry_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id wet_mar_dry_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id wet_mar_dry_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id wet_mar_dry_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id wet_mar_dry_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id wet_mar_dry_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id wet_mar_dry_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id wet_mar_dry_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id wet_mar_dry_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id wet_mar_dry_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id wet_mar_dry_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id wet_mar_dry_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id wet_mar_dry_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id wet_mar_dry_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id wet_mar_dry_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id wet_mar_dry_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id wet_mar_dry_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id wet_mar_dry_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id wet_mar_dry_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id wet_mar_dry_graze
-Grazing only
->$1 Yes
->$0 No
+    @id wet_mar_dry_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -3047,51 +3052,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id wet_mar_dry_other1_spec
-Specify other feed/fodder type #1
+    @id wet_mar_dry_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id wet_mar_dry_other1_n
-@decimal
-How much?
+    @id wet_mar_dry_other1_n
+    @decimal
+    How much?
 
 
-@id wet_mar_dry_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_dry_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_mar_dry_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id wet_mar_dry_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id wet_mar_dry_other2_n
-@decimal
-How much?
+    @id wet_mar_dry_other2_n
+    @decimal
+    How much?
 
 
-@id wet_mar_dry_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_dry_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_mar_dry_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id wet_mar_dry_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id wet_mar_dry_other3_n
-@decimal
-How much?
+    @id wet_mar_dry_other3_n
+    @decimal
+    How much?
 
 
-@id wet_mar_dry_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_dry_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -3102,118 +3107,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id wet_mar_young_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
+    @id wet_mar_young_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
 
 
-@id wet_mar_young_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id wet_mar_young_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id wet_mar_young_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id wet_mar_young_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id wet_mar_young_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id wet_mar_young_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id wet_mar_young_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id wet_mar_young_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id wet_mar_young_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id wet_mar_young_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id wet_mar_young_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id wet_mar_young_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id wet_mar_young_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id wet_mar_young_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id wet_mar_young_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id wet_mar_young_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id wet_mar_young_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id wet_mar_young_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id wet_mar_young_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id wet_mar_young_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id wet_mar_young_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id wet_mar_young_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id wet_mar_young_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id wet_mar_young_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id wet_mar_young_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id wet_mar_young_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id wet_mar_young_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id wet_mar_young_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id wet_mar_young_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id wet_mar_young_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id wet_mar_young_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id wet_mar_young_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id wet_mar_young_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id wet_mar_young_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id wet_mar_young_graze
-Grazing only
->$1 Yes
->$0 No
+    @id wet_mar_young_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -3224,51 +3229,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id wet_mar_young_other1_spec
-Specify other feed/fodder type #1
+    @id wet_mar_young_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id wet_mar_young_other1_n
-@decimal
-How much?
+    @id wet_mar_young_other1_n
+    @decimal
+    How much?
 
 
-@id wet_mar_young_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_young_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_mar_young_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id wet_mar_young_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id wet_mar_young_other2_n
-@decimal
-How much?
+    @id wet_mar_young_other2_n
+    @decimal
+    How much?
 
 
-@id wet_mar_young_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_young_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id wet_mar_young_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id wet_mar_young_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id wet_mar_young_other3_n
-@decimal
-How much?
+    @id wet_mar_young_other3_n
+    @decimal
+    How much?
 
 
-@id wet_mar_young_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id wet_mar_young_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -3279,118 +3284,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id dry_dec_cow_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
+    @id dry_dec_cow_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your MILKING COWS?
 
 
-@id dry_dec_cow_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id dry_dec_cow_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id dry_dec_cow_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id dry_dec_cow_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id dry_dec_cow_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id dry_dec_cow_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id dry_dec_cow_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id dry_dec_cow_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id dry_dec_cow_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id dry_dec_cow_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id dry_dec_cow_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id dry_dec_cow_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id dry_dec_cow_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id dry_dec_cow_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id dry_dec_cow_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id dry_dec_cow_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id dry_dec_cow_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id dry_dec_cow_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id dry_dec_cow_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id dry_dec_cow_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id dry_dec_cow_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id dry_dec_cow_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id dry_dec_cow_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id dry_dec_cow_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id dry_dec_cow_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id dry_dec_cow_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id dry_dec_cow_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id dry_dec_cow_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id dry_dec_cow_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id dry_dec_cow_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id dry_dec_cow_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id dry_dec_cow_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id dry_dec_cow_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id dry_dec_cow_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id dry_dec_cow_graze
-Grazing only
->$1 Yes
->$0 No
+    @id dry_dec_cow_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -3401,51 +3406,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id dry_dec_cow_other1_spec
-Specify other feed/fodder type #1
+    @id dry_dec_cow_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id dry_dec_cow_other1_n
-@decimal
-How much?
+    @id dry_dec_cow_other1_n
+    @decimal
+    How much?
 
 
-@id dry_dec_cow_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_cow_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_dec_cow_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id dry_dec_cow_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id dry_dec_cow_other2_n
-@decimal
-How much?
+    @id dry_dec_cow_other2_n
+    @decimal
+    How much?
 
 
-@id dry_dec_cow_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_cow_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_dec_cow_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id dry_dec_cow_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id dry_dec_cow_other3_n
-@decimal
-How much?
+    @id dry_dec_cow_other3_n
+    @decimal
+    How much?
 
 
-@id dry_dec_cow_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_cow_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -3456,118 +3461,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id dry_dec_dry_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
+    @id dry_dec_dry_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your DRY COWS?
 
 
-@id dry_dec_dry_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id dry_dec_dry_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id dry_dec_dry_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id dry_dec_dry_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id dry_dec_dry_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id dry_dec_dry_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id dry_dec_dry_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id dry_dec_dry_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id dry_dec_dry_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id dry_dec_dry_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id dry_dec_dry_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id dry_dec_dry_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id dry_dec_dry_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id dry_dec_dry_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id dry_dec_dry_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id dry_dec_dry_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id dry_dec_dry_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id dry_dec_dry_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id dry_dec_dry_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id dry_dec_dry_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id dry_dec_dry_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id dry_dec_dry_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id dry_dec_dry_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id dry_dec_dry_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id dry_dec_dry_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id dry_dec_dry_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id dry_dec_dry_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id dry_dec_dry_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id dry_dec_dry_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id dry_dec_dry_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id dry_dec_dry_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id dry_dec_dry_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id dry_dec_dry_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id dry_dec_dry_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id dry_dec_dry_graze
-Grazing only
->$1 Yes
->$0 No
+    @id dry_dec_dry_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -3578,51 +3583,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id dry_dec_dry_other1_spec
-Specify other feed/fodder type #1
+    @id dry_dec_dry_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id dry_dec_dry_other1_n
-@decimal
-How much?
+    @id dry_dec_dry_other1_n
+    @decimal
+    How much?
 
 
-@id dry_dec_dry_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_dry_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_dec_dry_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id dry_dec_dry_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id dry_dec_dry_other2_n
-@decimal
-How much?
+    @id dry_dec_dry_other2_n
+    @decimal
+    How much?
 
 
-@id dry_dec_dry_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_dry_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_dec_dry_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id dry_dec_dry_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id dry_dec_dry_other3_n
-@decimal
-How much?
+    @id dry_dec_dry_other3_n
+    @decimal
+    How much?
 
 
-@id dry_dec_dry_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_dry_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -3633,118 +3638,118 @@ Measurement?
 @appearance field-list
 group {
 
-@id dry_dec_young_note
-@readonly
-@comment mid August - Nov 2016
-Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
+    @id dry_dec_young_note
+    @readonly
+    @comment mid August - Nov 2016
+    Which types and what amounts of feed do you CURRENTLY feed your YOUNG STOCK?
 
 
-@id dry_dec_young_maize
-@comment basin/animal/day
-@decimal
-Maize stover
+    @id dry_dec_young_maize
+    @comment basin/animal/day
+    @decimal
+    Maize stover
 
 
-@id dry_dec_young_grass
-@comment basin/animal/day
-@decimal
-Elephant grass
+    @id dry_dec_young_grass
+    @comment basin/animal/day
+    @decimal
+    Elephant grass
 
 
-@id dry_dec_young_hay
-@comment basin/animal/day
-@decimal
-Hay
+    @id dry_dec_young_hay
+    @comment basin/animal/day
+    @decimal
+    Hay
 
 
-@id dry_dec_young_sil
-@comment basin/animal/day
-@decimal
-Silage
+    @id dry_dec_young_sil
+    @comment basin/animal/day
+    @decimal
+    Silage
 
 
-@id dry_dec_young_brew
-@comment basin/animal/day
-@decimal
-Brewers spent grain
+    @id dry_dec_young_brew
+    @comment basin/animal/day
+    @decimal
+    Brewers spent grain
 
 
-@id dry_dec_young_tree
-@comment basin/animal/day
-@decimal
-Tree leaves
+    @id dry_dec_young_tree
+    @comment basin/animal/day
+    @decimal
+    Tree leaves
 
 
-@id dry_dec_young_peel
-@comment basin/animal/day
-@decimal
-Banana peelings
+    @id dry_dec_young_peel
+    @comment basin/animal/day
+    @decimal
+    Banana peelings
 
 
-@id dry_dec_young_ban
-@comment basin/animal/day
-@decimal
-Banana stems
+    @id dry_dec_young_ban
+    @comment basin/animal/day
+    @decimal
+    Banana stems
 
 
-@id dry_dec_young_leg
-@comment basin/animal/day
-@decimal
-Leguminous crops: Lablab, desmodium, alfalfa, etc.
+    @id dry_dec_young_leg
+    @comment basin/animal/day
+    @decimal
+    Leguminous crops: Lablab, desmodium, alfalfa, etc.
 
 
-@id dry_dec_young_cal
-@comment basin/animal/day
-@decimal
-Caliandra
+    @id dry_dec_young_cal
+    @comment basin/animal/day
+    @decimal
+    Caliandra
 
 
-@id dry_dec_young_meal
-@comment kg/animal/day
-@decimal
-Dairy meal
+    @id dry_dec_young_meal
+    @comment kg/animal/day
+    @decimal
+    Dairy meal
 
 
-@id dry_dec_young_bran_m
-@comment kg/animal/day
-@decimal
-Maize bran
+    @id dry_dec_young_bran_m
+    @comment kg/animal/day
+    @decimal
+    Maize bran
 
 
-@id dry_dec_young_bran_w
-@comment kg/animal/day
-@decimal
-Wheat bran
+    @id dry_dec_young_bran_w
+    @comment kg/animal/day
+    @decimal
+    Wheat bran
 
 
-@id dry_dec_young_soy
-@comment kg/animal/day
-@decimal
-Soy bean
+    @id dry_dec_young_soy
+    @comment kg/animal/day
+    @decimal
+    Soy bean
 
 
-@id dry_dec_young_conc
-@comment kg/animal/day
-@decimal
-Concentrates
+    @id dry_dec_young_conc
+    @comment kg/animal/day
+    @decimal
+    Concentrates
 
 
-@id dry_dec_young_min
-@comment kg/animal/day
-@decimal
-Mineral salts
+    @id dry_dec_young_min
+    @comment kg/animal/day
+    @decimal
+    Mineral salts
 
 
-@id dry_dec_young_other
-Other (please specify)
->$1 Yes
->$0 No
+    @id dry_dec_young_other
+    Other (please specify)
+        >$1 Yes
+        >$0 No
 
 
-@id dry_dec_young_graze
-Grazing only
->$1 Yes
->$0 No
+    @id dry_dec_young_graze
+    Grazing only
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -3755,51 +3760,51 @@ Grazing only
 @appearance field-list
 group {
 
-@id dry_dec_young_other1_spec
-Specify other feed/fodder type #1
+    @id dry_dec_young_other1_spec
+    Specify other feed/fodder type #1
 
 
-@id dry_dec_young_other1_n
-@decimal
-How much?
+    @id dry_dec_young_other1_n
+    @decimal
+    How much?
 
 
-@id dry_dec_young_other1_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_young_other1_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_dec_young_other2_spec
-@comment leave blank if no 2nd other type of feed/fodder
-Specify other feed/fodder type #2
+    @id dry_dec_young_other2_spec
+    @comment leave blank if no 2nd other type of feed/fodder
+    Specify other feed/fodder type #2
 
 
-@id dry_dec_young_other2_n
-@decimal
-How much?
+    @id dry_dec_young_other2_n
+    @decimal
+    How much?
 
 
-@id dry_dec_young_other2_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_young_other2_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
-@id dry_dec_young_other3_spec
-@comment leave blank if no 3rd other type of feed/fodder
-Specify other feed/fodder type #3
+    @id dry_dec_young_other3_spec
+    @comment leave blank if no 3rd other type of feed/fodder
+    Specify other feed/fodder type #3
 
 
-@id dry_dec_young_other3_n
-@decimal
-How much?
+    @id dry_dec_young_other3_n
+    @decimal
+    How much?
 
 
-@id dry_dec_young_other3_meas
-Measurement?
->$1 basin/animal/day
->$2 kg/animal/day
+    @id dry_dec_young_other3_meas
+    Measurement?
+        >$1 basin/animal/day
+        >$2 kg/animal/day
 
 
 }
@@ -3809,86 +3814,86 @@ Measurement?
 @appearance field-list
 group {
 
-@id pasture_short_note
-@readonly
-@comment Not Applicable when the farmer uses zero-grazing.
-In which seasons was pasture grass insufficient?
+    @id pasture_short_note
+    @readonly
+    @comment Not Applicable when the farmer uses zero-grazing.
+    In which seasons was pasture grass insufficient?
 
 
-@id pasture_short_wet_sept
-(Current) wet season (mid August - Nov 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id pasture_short_wet_sept
+    (Current) wet season (mid August - Nov 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id pasture_short_dry_june
-Dry season (June- mid August 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id pasture_short_dry_june
+    Dry season (June- mid August 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id pasture_short_wet_march
-Wet season (March-May 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id pasture_short_wet_march
+    Wet season (March-May 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id pasture_short_dry_dec
-Dry season (Dec 2015-Feb 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id pasture_short_dry_dec
+    Dry season (Dec 2015-Feb 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id feed_short_note
-@readonly
-@comment Not Applicable when the farmer gives no additional feed/fodder at all.
-In which seasons was cattle feed insufficient?
+    @id feed_short_note
+    @readonly
+    @comment Not Applicable when the farmer gives no additional feed/fodder at all.
+    In which seasons was cattle feed insufficient?
 
 
-@id feed_short_wet_sept
-(Current) wet season (mid August - Nov 2016)
->$1 Yes
->$0 No
+    @id feed_short_wet_sept
+    (Current) wet season (mid August - Nov 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id feed_short_dry_june
-Dry season (June- mid August 2016)
->$1 Yes
->$0 No
+    @id feed_short_dry_june
+    Dry season (June- mid August 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id feed_short_wet_march
-Wet season (March-May 2016)
->$1 Yes
->$0 No
+    @id feed_short_wet_march
+    Wet season (March-May 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id feed_short_wet_dec
-Dry season (Dec 2015-Feb 2016)
->$1 Yes
->$0 No
+    @id feed_short_wet_dec
+    Dry season (Dec 2015-Feb 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id fodder_qual
-Overall how would you rate the QUALITY of fodder (e.g. forage, crop residues) for your dairy cattle?
->$1 Very poor quality
->$2 Poor quality
->$3 Average quality
->$4 Good quality
->$5 Very good quality
+    @id fodder_qual
+    Overall how would you rate the QUALITY of fodder (e.g. forage, crop residues) for your dairy cattle?
+        >$1 Very poor quality
+        >$2 Poor quality
+        >$3 Average quality
+        >$4 Good quality
+        >$5 Very good quality
 
 
-@id pasture_qual
-Overall how would you rate the QUALITY of PASTURE for your dairy cattle?
->$1 Very poor quality
->$2 Poor quality
->$3 Average quality
->$4 Good quality
->$5 Very good quality
+    @id pasture_qual
+    Overall how would you rate the QUALITY of PASTURE for your dairy cattle?
+        >$1 Very poor quality
+        >$2 Poor quality
+        >$3 Average quality
+        >$4 Good quality
+        >$5 Very good quality
 
 
 }
@@ -3898,86 +3903,86 @@ Overall how would you rate the QUALITY of PASTURE for your dairy cattle?
 @appearance field-list
 group {
 
-@id water_short_cattle
-@readonly
-@comment When was there a shortage of drinking water for your cattle
-In which seasons was drinking water for cows insufficient?
+    @id water_short_cattle
+    @readonly
+    @comment When was there a shortage of drinking water for your cattle
+    In which seasons was drinking water for cows insufficient?
 
 
-@id water_cattle_wet_sept
-(Current) wet season (mid August - Nov 2016)
->$1 Yes
->$0 No
+    @id water_cattle_wet_sept
+    (Current) wet season (mid August - Nov 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id water_cattle_dry_june
-Dry season (June- mid August 2016)
->$1 Yes
->$0 No
+    @id water_cattle_dry_june
+    Dry season (June- mid August 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id water_cattle_wet_march
-Wet season (March-May 2016)
->$1 Yes
->$0 No
+    @id water_cattle_wet_march
+    Wet season (March-May 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id water_cattle_dry_dec
-Dry season (Dec 2015-Feb 2016)
->$1 Yes
->$0 No
+    @id water_cattle_dry_dec
+    Dry season (Dec 2015-Feb 2016)
+        >$1 Yes
+        >$0 No
 
 
-@id water_cattle_qual
-How would you rate the quality of the water that is available for the cows at your farm?
->$1 Very poor quality
->$2 Poor quality
->$3 Average quality
->$4 Good quality
->$5 Very good quality
+    @id water_cattle_qual
+    How would you rate the quality of the water that is available for the cows at your farm?
+        >$1 Very poor quality
+        >$2 Poor quality
+        >$3 Average quality
+        >$4 Good quality
+        >$5 Very good quality
 
 
-@id water_short_irr
-@readonly
-@comment When was there a shortage of irrigation water?
-In which seasons was irrigation water insufficient?
+    @id water_short_irr
+    @readonly
+    @comment When was there a shortage of irrigation water?
+    In which seasons was irrigation water insufficient?
 
 
-@id water_irr_wet_sept
-(Current) wet season (mid August - Nov 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id water_irr_wet_sept
+    (Current) wet season (mid August - Nov 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id water_irr_dry_june
-Dry season (June- mid August 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id water_irr_dry_june
+    Dry season (June- mid August 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id water_irr_wet_march
-Wet season (March-May 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id water_irr_wet_march
+    Wet season (March-May 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id water_irr_dry_dec
-Dry season (Dec 2015-Feb 2016)
->$1 Yes
->$0 No
->$999 Not applicable
+    @id water_irr_dry_dec
+    Dry season (Dec 2015-Feb 2016)
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id water_irr_qual
-How would you rate the quality of the irrigation water at your farm?
->$1 Very poor quality
->$2 Poor quality
->$3 Average quality
->$4 Good quality
->$5 Very good quality
+    @id water_irr_qual
+    How would you rate the quality of the irrigation water at your farm?
+        >$1 Very poor quality
+        >$2 Poor quality
+        >$3 Average quality
+        >$4 Good quality
+        >$5 Very good quality
 
 
 }
@@ -3985,38 +3990,38 @@ How would you rate the quality of the irrigation water at your farm?
 
 @id feed_silage
 Do you feed your cattle any conserved feed such as hay or silage?
->$1 Yes
->$0 No
+    >$1 Yes
+    >$0 No
 
 
 @id conserv
 @appearance field-list
 group {
 
-@id note_conserv
-@readonly
-We would like to ask some questions about conserved feed, such as hay, silage or corn silage.
+    @id note_conserv
+    @readonly
+    We would like to ask some questions about conserved feed, such as hay, silage or corn silage.
 
 
-@id conser_yes
-Do you have a stock of conserved feed/fodder to be used in dry season?
->$1 Yes
->$0 No
+    @id conser_yes
+    Do you have a stock of conserved feed/fodder to be used in dry season?
+        >$1 Yes
+        >$0 No
 
 
-@id conserv_supply
-Which would have your preference when it comes to ease of management: making conserved feed yourself or to buy it from suppliers?
->$1 Making conservation feed myself
->$0 Buying conservation feed from suppliers
+    @id conserv_supply
+    Which would have your preference when it comes to ease of management: making conserved feed yourself or to buy it from suppliers?
+        >$1 Making conservation feed myself
+        >$0 Buying conservation feed from suppliers
 
 
-@id conserv_difficult
-In your view, how difficult is it to make conserved feed ?
->$1 Not at all difficult
->$2 Not difficult
->$3 Neither difficult nor easy
->$4 Difficult
->$5 Very difficult
+    @id conserv_difficult
+    In your view, how difficult is it to make conserved feed ?
+        >$1 Not at all difficult
+        >$2 Not difficult
+        >$3 Neither difficult nor easy
+        >$4 Difficult
+        >$5 Very difficult
 
 
 }
@@ -4026,51 +4031,51 @@ In your view, how difficult is it to make conserved feed ?
 @appearance field-list
 group {
 
-@id conserv_diff_reason
-@readonly
-In your view, what makes it difficult to make conserved feed for your dairy cattle?
+    @id conserv_diff_reason
+    @readonly
+    In your view, what makes it difficult to make conserved feed for your dairy cattle?
 
 
-@id conserv_diff_labour
-It requires too much labour
->$1 Yes
->$0 No
+    @id conserv_diff_labour
+    It requires too much labour
+        >$1 Yes
+        >$0 No
 
 
-@id conserv_diff_equip
-I do not have the right equipment
->$1 Yes
->$0 No
+    @id conserv_diff_equip
+    I do not have the right equipment
+        >$1 Yes
+        >$0 No
 
 
-@id conserv_diff_skills
-I do not have the skills
->$1 Yes
->$0 No
+    @id conserv_diff_skills
+    I do not have the skills
+        >$1 Yes
+        >$0 No
 
 
-@id conserv_diff_supply
-There is not enough supply of raw material.
->$1 Yes
->$0 No
+    @id conserv_diff_supply
+    There is not enough supply of raw material.
+        >$1 Yes
+        >$0 No
 
 
-@id conserv_diff_nostore
-I do not have any storage place
->$1 Yes
->$0 No
+    @id conserv_diff_nostore
+    I do not have any storage place
+        >$1 Yes
+        >$0 No
 
 
-@id conserv_diff_oth
-Other
->$1 Yes
->$0 No
+    @id conserv_diff_oth
+    Other
+        >$1 Yes
+        >$0 No
 
 
-@id conserv_diff_dk
-I don't know
->$1 Yes
->$0 No
+    @id conserv_diff_dk
+    I don't know
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -4083,8 +4088,8 @@ Specify other difficulty in making conserved feed
 
 @id confined
 Are your cattle (partly) confined (e.g. in a barn, pen, kraal, corral, etc. ?
->$1 Yes
->$0 No
+    >$1 Yes
+    >$0 No
 
 
 @id manure
@@ -4092,23 +4097,23 @@ Are your cattle (partly) confined (e.g. in a barn, pen, kraal, corral, etc. ?
 @appearance field-list
 group {
 
-@id manure_water
-Do you use water for flushing away excreta on cattle barns and floors?
->$1 Yes
->$0 No
+    @id manure_water
+    Do you use water for flushing away excreta on cattle barns and floors?
+        >$1 Yes
+        >$0 No
 
 
-@id manure_bedding
-In case you use bedding material: is it mixed with animal excretions?
->$1 Yes
->$0 No
->$999 Not applicable
+    @id manure_bedding
+    In case you use bedding material: is it mixed with animal excretions?
+        >$1 Yes
+        >$0 No
+        >$999 Not applicable
 
 
-@id manure_anaer
-Do you use one or more anaerobic digesters (bio-digesters)?
->$1 Yes
->$0 No
+    @id manure_anaer
+    Do you use one or more anaerobic digesters (bio-digesters)?
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -4119,29 +4124,29 @@ Do you use one or more anaerobic digesters (bio-digesters)?
 @appearance field-list
 group {
 
-@id man_anaer_n
-@number
-How many anaerobic digesters (biodigesters) do you use?
+    @id man_anaer_n
+    @number
+    How many anaerobic digesters (biodigesters) do you use?
 
 
-@id man_anaer_m3
-@decimal
-What is their total holding capacity in m3?
+    @id man_anaer_m3
+    @decimal
+    What is their total holding capacity in m3?
 
 
-@id man_anaer_farc_onfarm
-@number
-Immediately after leaving the digester, which fraction (%) of the digestate is used for on-farm fertilization?
+    @id man_anaer_farc_onfarm
+    @number
+    Immediately after leaving the digester, which fraction (%) of the digestate is used for on-farm fertilization?
 
 
-@id man_anaer_farc_offfarm
-@number
-Immediately after leaving the digester, which fraction (%) of the digestate is stored? (liquid storage)
+    @id man_anaer_farc_offfarm
+    @number
+    Immediately after leaving the digester, which fraction (%) of the digestate is stored? (liquid storage)
 
 
-@id man_anaer_frac_discharge
-@number
-Immediately after leaving the digester, which fraction (%) of the digestate is discharged?
+    @id man_anaer_frac_discharge
+    @number
+    Immediately after leaving the digester, which fraction (%) of the digestate is discharged?
 
 
 }
@@ -4149,8 +4154,8 @@ Immediately after leaving the digester, which fraction (%) of the digestate is d
 
 @id manure_urine
 Do you store urine (keeping it separate from dung)?
->$1 Yes
->$0 No
+    >$1 Yes
+    >$0 No
 
 
 @id man_urine
@@ -4158,16 +4163,16 @@ Do you store urine (keeping it separate from dung)?
 @appearance field-list
 group {
 
-@id man_urine_fraction
-@number
-Which fraction (%) of the stored urine is used as on-farm fertilizer? (rest is discharged)
+    @id man_urine_fraction
+    @number
+    Which fraction (%) of the stored urine is used as on-farm fertilizer? (rest is discharged)
 
 
-@id man_urine_store
-What MAIN type of storage do you use for urine?
->$1 Cellar/ Silo / Tank
->$2 Lagoon
->$777 Other, namely
+    @id man_urine_store
+    What MAIN type of storage do you use for urine?
+        >$1 Cellar/ Silo / Tank
+        >$2 Lagoon
+        >$777 Other, namely
 
 
 }
@@ -4180,8 +4185,8 @@ Specify other type of urine storage
 
 @id manure_slurry
 Do you store liquid manure ("slurry": mixture of urine and dung)?
->$1 Yes
->$0 No
+    >$1 Yes
+    >$0 No
 
 
 @id man_slurry
@@ -4189,33 +4194,33 @@ Do you store liquid manure ("slurry": mixture of urine and dung)?
 @appearance field-list
 group {
 
-@id man_slurry_dry
-Do you dry liquid manure to become solid and stackable?
->$1 Yes
->$0 No
+    @id man_slurry_dry
+    Do you dry liquid manure to become solid and stackable?
+        >$1 Yes
+        >$0 No
 
 
-@id man_slurry_sepa
-Do you separate liquid manure into a liquid and solid fraction?
->$1 Yes
->$0 No
+    @id man_slurry_sepa
+    Do you separate liquid manure into a liquid and solid fraction?
+        >$1 Yes
+        >$0 No
 
 
-@id man_slurry_onfarm
-@number
-Which fraction (%) of the yearly liquid manure is used as on-farm fertilizer?
+    @id man_slurry_onfarm
+    @number
+    Which fraction (%) of the yearly liquid manure is used as on-farm fertilizer?
 
 
-@id man_slurry_discharge
-@number
-Which fraction (%) of the yearly liquid manure is discharged?
+    @id man_slurry_discharge
+    @number
+    Which fraction (%) of the yearly liquid manure is discharged?
 
 
-@id man_slurry_store
-What MAIN type of storage do you use for slurry?
->$1 Cellar/ Silo / Tank
->$2 Lagoon
->$777 Other, namely
+    @id man_slurry_store
+    What MAIN type of storage do you use for slurry?
+        >$1 Cellar/ Silo / Tank
+        >$2 Lagoon
+        >$777 Other, namely
 
 
 }
@@ -4228,8 +4233,8 @@ Specify other type of urine storage
 
 @id manure_solid
 Do you store solid manure (stackable products)?
->$1 Yes
->$0 No
+    >$1 Yes
+    >$0 No
 
 
 @id man_solid
@@ -4237,40 +4242,40 @@ Do you store solid manure (stackable products)?
 @appearance field-list
 group {
 
-@id man_solid_compost
-Do you actively compost solid manure?
->$1 Yes
->$0 No
+    @id man_solid_compost
+    Do you actively compost solid manure?
+        >$1 Yes
+        >$0 No
 
 
-@id man_solid_dry
-Do you actively dry solid manure?
->$1 Yes
->$0 No
+    @id man_solid_dry
+    Do you actively dry solid manure?
+        >$1 Yes
+        >$0 No
 
 
-@id man_solid_onfarm
-@number
-Which fraction (%) of the solid manure is used as on-farm fertilizer?
+    @id man_solid_onfarm
+    @number
+    Which fraction (%) of the solid manure is used as on-farm fertilizer?
 
 
-@id man_solid_offfarm
-@number
-Which fraction (%) of the solid manure is sold or given away for off-farm agricultural use?
+    @id man_solid_offfarm
+    @number
+    Which fraction (%) of the solid manure is sold or given away for off-farm agricultural use?
 
 
-@id man_solid_fuel
-@number
-Which fraction (%) of the solid manure is used, sold or given away for fuel?
+    @id man_solid_fuel
+    @number
+    Which fraction (%) of the solid manure is used, sold or given away for fuel?
 
 
-@id man_solid_store
-What MAIN type of storage do you use for solid manure?
->$1 Deep bedding
->$2 Pile/ Heap
->$3 Pit
->$4 Kraal/ Boma/ Dry lot
->$777 Other, namely
+    @id man_solid_store
+    What MAIN type of storage do you use for solid manure?
+        >$1 Deep bedding
+        >$2 Pile/ Heap
+        >$3 Pit
+        >$4 Kraal/ Boma/ Dry lot
+        >$777 Other, namely
 
 
 }
@@ -4283,11 +4288,11 @@ Specify other type of urine storage
 
 @id manure_value
 How valuable is the use of cattle manure to you?
->$5 Very valuable
->$4 Valuable
->$3 Neither valuable, nor not valuable
->$2 Not valuable
->$1 Not at all valuable
+    >$5 Very valuable
+    >$4 Valuable
+    >$3 Neither valuable, nor not valuable
+    >$2 Not valuable
+    >$1 Not at all valuable
 
 
 @id manure_val
@@ -4295,45 +4300,45 @@ How valuable is the use of cattle manure to you?
 @appearance field-list
 group {
 
-@id manure_val_reason
-@readonly
-What makes the manure valueable for you?
+    @id manure_val_reason
+    @readonly
+    What makes the manure valueable for you?
 
 
-@id manure_val_yield
-When applied on the land it increases crop yields
->$1 Yes
->$0 No
+    @id manure_val_yield
+    When applied on the land it increases crop yields
+        >$1 Yes
+        >$0 No
 
 
-@id manure_val_sale
-It can give me money (sales)
->$1 Yes
->$0 No
+    @id manure_val_sale
+    It can give me money (sales)
+        >$1 Yes
+        >$0 No
 
 
-@id manure_val_soil
-It maintains the soil fertility of my land
->$1 Yes
->$0 No
+    @id manure_val_soil
+    It maintains the soil fertility of my land
+        >$1 Yes
+        >$0 No
 
 
-@id manure_val_gas
-It is a good ingredient for making biogas
->$1 Yes
->$0 No
+    @id manure_val_gas
+    It is a good ingredient for making biogas
+        >$1 Yes
+        >$0 No
 
 
-@id manure_val_other
-Other reason
->$1 Yes
->$0 No
+    @id manure_val_other
+    Other reason
+        >$1 Yes
+        >$0 No
 
 
-@id manure_val_dk
-I don’t know
->$1 Yes
->$0 No
+    @id manure_val_dk
+    I don’t know
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -4348,16 +4353,16 @@ Specify other reason why manure is valueable for you
 @appearance field-list
 group {
 
-@id manure_inc_month
-@comment UGX/ month
-@number
-How much money did you make over the past MONTH from sales of manure ?
+    @id manure_inc_month
+    @comment UGX/ month
+    @number
+    How much money did you make over the past MONTH from sales of manure ?
 
 
-@id manure_inc_kg
-@comment UGX/ kg
-@number
-Which price did you receive per kg manure?
+    @id manure_inc_kg
+    @comment UGX/ kg
+    @number
+    Which price did you receive per kg manure?
 
 
 }
@@ -4367,45 +4372,45 @@ Which price did you receive per kg manure?
 @appearance field-list
 group {
 
-@id manure_diff_note
-@readonly
-What constraints are prohibiting optimal manure management on your farm?
+    @id manure_diff_note
+    @readonly
+    What constraints are prohibiting optimal manure management on your farm?
 
 
-@id manure_diff_labour
-It requires too much labour
->$1 Yes
->$0 No
+    @id manure_diff_labour
+    It requires too much labour
+        >$1 Yes
+        >$0 No
 
 
-@id manure_diff_barn
-My barn design is not fit for good collection of manure
->$1 Yes
->$0 No
+    @id manure_diff_barn
+    My barn design is not fit for good collection of manure
+        >$1 Yes
+        >$0 No
 
 
-@id manure_diff_dirty
-It is too dirty work; nobody likes to do it
->$1 Yes
->$0 No
+    @id manure_diff_dirty
+    It is too dirty work; nobody likes to do it
+        >$1 Yes
+        >$0 No
 
 
-@id manure_diff_noben
-It does not give enough benefit (e.g. money, higher yields)
->$1 Yes
->$0 No
+    @id manure_diff_noben
+    It does not give enough benefit (e.g. money, higher yields)
+        >$1 Yes
+        >$0 No
 
 
-@id manure_diff_oth
-Other constraint
->$1 Yes
->$0 No
+    @id manure_diff_oth
+    Other constraint
+        >$1 Yes
+        >$0 No
 
 
-@id manure_diff_dk
-I don't know
->$1 Yes
->$0 No
+    @id manure_diff_dk
+    I don't know
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -4420,402 +4425,402 @@ Specify other constraint that is prohibiting optimal manure managementon your fa
 @appearance field-list
 group {
 
-@id activities_note
-@readonly
-Could you tell us who is mainly performing the different tasks at the dairy farm enterprise
+    @id activities_note
+    @readonly
+    Could you tell us who is mainly performing the different tasks at the dairy farm enterprise
 
 
-@id act_clean
-Cleaning the shelter
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_clean
+    Cleaning the shelter
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_water
-Watering the dairy cattle
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_water
+    Watering the dairy cattle
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_herding
-Grazing the cattle by herding
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_herding
+    Grazing the cattle by herding
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_herd_pad
-Grazing the cattle by sending the herd to the paddock
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_herd_pad
+    Grazing the cattle by sending the herd to the paddock
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_feed_coll
-Feeding the dairy cattle: Collecting and preparing the feed
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_feed_coll
+    Feeding the dairy cattle: Collecting and preparing the feed
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_feed_give
-Feeding the dairy cattle: Giving the feed
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_feed_give
+    Feeding the dairy cattle: Giving the feed
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_milk
-Milking the cows
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_milk
+    Milking the cows
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_milk_boil
-Boiling the milk before selling it
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_milk_boil
+    Boiling the milk before selling it
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_process
-@comment e.g.making cheese/ yoghurt, etc.
-Milk processing
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_process
+    @comment e.g.making cheese/ yoghurt, etc.
+    Milk processing
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_sell_milk_raw
-Selling raw milk
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_sell_milk_raw
+    Selling raw milk
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_sell_milk_proc
-Selling pasteurized milk / boiled milk
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_sell_milk_proc
+    Selling pasteurized milk / boiled milk
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_sell_dairy
-@comment e.g. yoghurt, cheese, ghee, butter, buttermilk, cultured milk, etc.
-Selling processed dairy products
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_sell_dairy
+    @comment e.g. yoghurt, cheese, ghee, butter, buttermilk, cultured milk, etc.
+    Selling processed dairy products
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_milk_trans
-Milk transport
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_milk_trans
+    Milk transport
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_padd_fence
-Maintenance of paddock: Making sure fencing is intact
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_padd_fence
+    Maintenance of paddock: Making sure fencing is intact
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_padd_weed
-Maintenance of paddock: Weeding the paddock
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_padd_weed
+    Maintenance of paddock: Weeding the paddock
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_cons_plant
-Conserved feed: Planting the grass
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_cons_plant
+    Conserved feed: Planting the grass
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_cons_cut
-Conserved feed: Cutting grass
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_cons_cut
+    Conserved feed: Cutting grass
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_cons_hay
-Conserved feed: Hay making
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_cons_hay
+    Conserved feed: Hay making
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_cons_silage
-Conserved feed: Silage making
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_cons_silage
+    Conserved feed: Silage making
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_fym_coll
-Collection of farm yard manure (FYM)
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_fym_coll
+    Collection of farm yard manure (FYM)
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_fym_apply
-Applying farm yard manure (FYM) to the farm fields
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_fym_apply
+    Applying farm yard manure (FYM) to the farm fields
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_fym_sell
-Selling farm yard manure (FYM)
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_fym_sell
+    Selling farm yard manure (FYM)
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_bio_feed
-Biogas production: Feed the digester (manure plus some water)
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_bio_feed
+    Biogas production: Feed the digester (manure plus some water)
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_bio_slurry
-Biogas production: Removing slurry
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_bio_slurry
+    Biogas production: Removing slurry
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_dis_tick
-Disease control: Spraying against ticks
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_dis_tick
+    Disease control: Spraying against ticks
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_dis_deworm
-Disease control: Deworming
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_dis_deworm
+    Disease control: Deworming
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_dis_vac
-Disease control: Vaccinations
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_dis_vac
+    Disease control: Vaccinations
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_dis_rout
-@comment e.g. wounds, scratches etc.
-Disease control: Routine treatments
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_dis_rout
+    @comment e.g. wounds, scratches etc.
+    Disease control: Routine treatments
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_care
-Caring for sick animals
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_care
+    Caring for sick animals
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
-@id act_sell_cattle
-Selling animals
->$1 Man older than 35 (from household)
->$2 Man younger than 35 (from household)
->$3 Woman older than 35 (from household)
->$4 Woman younger than 35 (from household)
->$5 External person: Man older than 35
->$6 External person: Man younger than 35
->$7 External person: Woman older than 35
->$8 External person: Woman younger than 35
->$999 Not applicable (this activity is not performed at all)
+    @id act_sell_cattle
+    Selling animals
+        >$1 Man older than 35 (from household)
+        >$2 Man younger than 35 (from household)
+        >$3 Woman older than 35 (from household)
+        >$4 Woman younger than 35 (from household)
+        >$5 External person: Man older than 35
+        >$6 External person: Man younger than 35
+        >$7 External person: Woman older than 35
+        >$8 External person: Woman younger than 35
+        >$999 Not applicable (this activity is not performed at all)
 
 
 }
@@ -4825,172 +4830,172 @@ Selling animals
 @appearance field-list
 group {
 
-@id invest_note
-@readonly
-@comment When an investment was made in the past 12 months, change the 0 into the real amount in k UGX
-We now like to hear if and how much you invested in the following in the last year (1000 UGX/year):
+    @id invest_note
+    @readonly
+    @comment When an investment was made in the past 12 months, change the 0 into the real amount in k UGX
+    We now like to hear if and how much you invested in the following in the last year (1000 UGX/year):
 
 
-@id invest_store
-@comment 1000 UGX/year
-@default 0
-@number
-Water storage facility
+    @id invest_store
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Water storage facility
 
 
-@id invest_pen
-@comment 1000 UGX/year
-@default 0
-@number
-Calf pens
+    @id invest_pen
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Calf pens
 
 
-@id invest_crush
-@comment 1000 UGX/year
-@default 0
-@number
-Cattle crush
+    @id invest_crush
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Cattle crush
 
 
-@id invest_spray
-@comment 1000 UGX/year
-@default 0
-@number
-Dip/spray race construction
+    @id invest_spray
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Dip/spray race construction
 
 
-@id invest_parlour
-@comment 1000 UGX/year
-@default 0
-@number
-Milking parlour
+    @id invest_parlour
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Milking parlour
 
 
-@id invest_mach
-@comment 1000 UGX/year
-@default 0
-@number
-Milking machine
+    @id invest_mach
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Milking machine
 
 
-@id invest_cans
-@comment 1000 UGX/year
-@default 0
-@number
-Milk cans: Aluminium or stainless steel
+    @id invest_cans
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Milk cans: Aluminium or stainless steel
 
 
-@id invest_cooler
-@comment 1000 UGX/year
-@default 0
-@number
-Milk cooler
+    @id invest_cooler
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Milk cooler
 
 
-@id invest_silage
-@comment 1000 UGX/year
-@default 0
-@number
-On-farm silage storage
+    @id invest_silage
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    On-farm silage storage
 
 
-@id invest_hay
-@comment 1000 UGX/year
-@default 0
-@number
-On-farm hay storage
+    @id invest_hay
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    On-farm hay storage
 
 
-@id invest_bank
-@comment 1000 UGX/year
-@default 0
-@number
-Fodder bank
+    @id invest_bank
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Fodder bank
 
 
-@id invest_zero
-@comment 1000 UGX/year
-@default 0
-@number
-Cow shed for zero grazing
+    @id invest_zero
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Cow shed for zero grazing
 
 
-@id invest_biogas
-@comment 1000 UGX/year
-@default 0
-@number
-Biogas digester
+    @id invest_biogas
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Biogas digester
 
 
-@id invest_solar
-@comment 1000 UGX/year
-@default 0
-@number
-Solar panels
+    @id invest_solar
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Solar panels
 
 
-@id invest_tractor
-@comment 1000 UGX/year
-@default 0
-@number
-Tractor
+    @id invest_tractor
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Tractor
 
 
-@id invest_soil
-@comment 1000 UGX/year
-@default 0
-@number
-Soil preparation equipment
+    @id invest_soil
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Soil preparation equipment
 
 
-@id invest_plant
-@comment 1000 UGX/year
-@default 0
-@number
-Planting equipment
+    @id invest_plant
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Planting equipment
 
 
-@id invest_harvest
-@comment 1000 UGX/year
-@default 0
-@number
-Harvesting equipment
+    @id invest_harvest
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Harvesting equipment
 
 
-@id invest_chop
-@comment 1000 UGX/year
-@default 0
-@number
-Fodder chopper
+    @id invest_chop
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Fodder chopper
 
 
-@id invest_irri
-@comment 1000 UGX/year
-@default 0
-@number
-Irrigation equipment
+    @id invest_irri
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Irrigation equipment
 
 
-@id invest_incalf
-@comment 1000 UGX/year
-@default 0
-@number
-In-calf heifers
+    @id invest_incalf
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    In-calf heifers
 
 
-@id invest_train
-@comment 1000 UGX/year
-@default 0
-@number
-Farm trainings
+    @id invest_train
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Farm trainings
 
 
-@id invest_other
-@comment 1000 UGX/year
-@default 0
-Other
->$1 Yes
->$0 No
+    @id invest_other
+    @comment 1000 UGX/year
+    @default 0
+    Other
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -5001,36 +5006,36 @@ Other
 @appearance field-list
 group {
 
-@id invest_other1_spec
-Specify other investment #1
+    @id invest_other1_spec
+    Specify other investment #1
 
 
-@id invest_other1_n
-@comment 1000 UGX/year
-@number
-Amount
+    @id invest_other1_n
+    @comment 1000 UGX/year
+    @number
+    Amount
 
 
-@id invest_other2_spec
-Specify other investment #2
+    @id invest_other2_spec
+    Specify other investment #2
 
 
-@id invest_other2_n
-@comment 1000 UGX/year
-@default 0
-@number
-Amount
+    @id invest_other2_n
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Amount
 
 
-@id invest_other3_spec
-Specify other investment #3
+    @id invest_other3_spec
+    Specify other investment #3
 
 
-@id invest_other3_n
-@comment 1000 UGX/year
-@default 0
-@number
-Amount
+    @id invest_other3_n
+    @comment 1000 UGX/year
+    @default 0
+    @number
+    Amount
 
 
 }
@@ -5040,52 +5045,52 @@ Amount
 @appearance field-list
 group {
 
-@id fin_credit
-Credit
->$1 Yes
->$0 No
+    @id fin_credit
+    Credit
+        >$1 Yes
+        >$0 No
 
 
-@id fin_farmer
-Borrow from other farmers
->$1 Yes
->$0 No
+    @id fin_farmer
+    Borrow from other farmers
+        >$1 Yes
+        >$0 No
 
 
-@id fin_fam
-Borrow from friends or family members
->$1 Yes
->$0 No
+    @id fin_fam
+    Borrow from friends or family members
+        >$1 Yes
+        >$0 No
 
 
-@id fin_savings
-Own savings
->$1 Yes
->$0 No
+    @id fin_savings
+    Own savings
+        >$1 Yes
+        >$0 No
 
 
-@id fin_gov
-Government support
->$1 Yes
->$0 No
+    @id fin_gov
+    Government support
+        >$1 Yes
+        >$0 No
 
 
-@id fin_profit
-Profit from the previous year
->$1 Yes
->$0 No
+    @id fin_profit
+    Profit from the previous year
+        >$1 Yes
+        >$0 No
 
 
-@id fin_cattle
-Selling cattle
->$1 Yes
->$0 No
+    @id fin_cattle
+    Selling cattle
+        >$1 Yes
+        >$0 No
 
 
-@id fin_other
-Other
->$1 Yes
->$0 No
+    @id fin_other
+    Other
+        >$1 Yes
+        >$0 No
 
 
 }
@@ -5100,48 +5105,48 @@ Specify other way(s) of financing investments in your dairy farm enterprise
 @appearance field-list
 group {
 
-@id apir_n
-Do you think the number of dairy cows on your farm will be decreased or increased in 5 years from now?
->$0 Decrease
->$1 Increase
+    @id apir_n
+    Do you think the number of dairy cows on your farm will be decreased or increased in 5 years from now?
+        >$0 Decrease
+        >$1 Increase
 
 
-@id aspir_n_change
-@number
-By how much will this increase or decrease?
+    @id aspir_n_change
+    @number
+    By how much will this increase or decrease?
 
 
-@id aspir_prod
-Do you think the average daily production of the dairy cows on your farm will be decreased or increased in 5 years from now?
->$0 Decrease
->$1 Increase
+    @id aspir_prod
+    Do you think the average daily production of the dairy cows on your farm will be decreased or increased in 5 years from now?
+        >$0 Decrease
+        >$1 Increase
 
 
-@id aspir_prod_change
-@number
-By how much will this increase or decrease?
+    @id aspir_prod_change
+    @number
+    By how much will this increase or decrease?
 
 
-@id aspir_inc_milk
-Do you think that your monthly income from milk sales will be decreased or increased in 5 years from now?
->$0 Decrease
->$1 Increase
+    @id aspir_inc_milk
+    Do you think that your monthly income from milk sales will be decreased or increased in 5 years from now?
+        >$0 Decrease
+        >$1 Increase
 
 
-@id aspir_inc_milk_change
-@number
-By how much will this increase or decrease?
+    @id aspir_inc_milk_change
+    @number
+    By how much will this increase or decrease?
 
 
-@id aspir_inc_dairy
-Do you think that your monthly income from dairy related activities will de decreased or increased in 5 years from now?
->$0 Decrease
->$1 Increase
+    @id aspir_inc_dairy
+    Do you think that your monthly income from dairy related activities will de decreased or increased in 5 years from now?
+        >$0 Decrease
+        >$1 Increase
 
 
-@id aspir_inc_dairy_change
-@number
-By how much will this increase or decrease?
+    @id aspir_inc_dairy_change
+    @number
+    By how much will this increase or decrease?
 
 
 }
@@ -5151,19 +5156,19 @@ By how much will this increase or decrease?
 @appearance field-list
 group {
 
-@id note_end
-@readonly
-This is the end of the survey. Thank you very much for your time and help. It is well appreciated by me and the rest of the evaluation team.
+    @id note_end
+    @readonly
+    This is the end of the survey. Thank you very much for your time and help. It is well appreciated by me and the rest of the evaluation team.
 
 
-@id any_comments
-ENUMERATOR ONLY: In case you have any comments related to this interview, please write them down here. Think of e.g. difficulties faced, problems with specific questions, interviews of good quality that were stopped halfway, and were not finalized.
+    @id any_comments
+    ENUMERATOR ONLY: In case you have any comments related to this interview, please write them down here. Think of e.g. difficulties faced, problems with specific questions, interviews of good quality that were stopped halfway, and were not finalized.
 
 
-@id survey_location_geopoint
-@comment Switch your GPS on, and do not forget to switch of off afterwards. You need to be outside to record the location. If the accuracy is less or equal to 12 meter, you can save the location. Do not forget to SWITCH ON YOUR GPS and switch off afterwards.
-@gps
-Record your location:
+    @id survey_location_geopoint
+    @comment Switch your GPS on, and do not forget to switch of off afterwards. You need to be outside to record the location. If the accuracy is less or equal to 12 meter, you can save the location. Do not forget to SWITCH ON YOUR GPS and switch off afterwards.
+    @gps
+    Record your location:
 
 
 }
@@ -5173,17 +5178,17 @@ Record your location:
 @invisible
 group {
 
-@id instanceID
-@readonly
-@invisible
-@calculate concat('uuid:', uuid())
-...
+    @id instanceID
+    @readonly
+    @invisible
+    @calculate concat('uuid:', uuid())
+    ...
 
 
-@id instanceName
-@invisible
-@calculate  $id_farmer_intake
-...
+    @id instanceName
+    @invisible
+    @calculate  $id_farmer_intake
+    ...
 
 
 }

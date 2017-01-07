@@ -1,0 +1,47 @@
+@id ggg_v1
+## ggg
+
+
+kk
+
+
+group {
+
+    as
+
+
+    @id hidden_group
+    @invisible
+    group {
+
+        @id deep_hidden
+        @invisible
+        ...
+
+
+        @absoluteid unique_id
+        @invisible
+        @calculate once(concat('uuid:',uuid()))
+        ...
+
+
+    }
+
+
+}
+
+
+@id meta
+@invisible
+group {
+
+    @id instanceID
+    @readonly
+    @invisible
+    @calculate concat('uuid:', uuid())
+    ...
+
+
+}
+
+

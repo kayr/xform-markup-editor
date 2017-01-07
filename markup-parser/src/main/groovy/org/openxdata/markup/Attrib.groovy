@@ -15,7 +15,7 @@ import org.openxdata.markup.exception.ValidationException
 class Attrib {
 
     static List types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
-                         'picture', 'gps', 'barcode', 'longtext']
+                         'picture', 'gps', 'barcode', 'longtext',XformType.TRIGGER.value]
 
     static
     List allowedAttributes = ['readonly', 'required', 'jrcount', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',

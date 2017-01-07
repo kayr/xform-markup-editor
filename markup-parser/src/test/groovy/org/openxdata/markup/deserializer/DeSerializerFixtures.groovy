@@ -716,5 +716,21 @@ q4
 </xforms>'''
     ]
 
+    static def formWithTrigger = [
+            markUp: '''## f
+
+                       @trigger
+                       Trigger her
+
+                       Question
+                       group{
+
+                       @trigger
+                       Inner tigger
+
+
+                       }'''
+    ]
+
 
 }

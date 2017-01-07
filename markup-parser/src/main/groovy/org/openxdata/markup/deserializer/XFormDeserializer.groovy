@@ -187,7 +187,7 @@ class XFormDeserializer {
         return elem.itemset.size() > 0
     }
 
-    private IFormElement addIdMetaInfo(IFormElement qn, HasQuestions parent, def elem) {
+    private <T extends IFormElement> T addIdMetaInfo(T qn, HasQuestions parent, def elem) {
         //repeats do not have a bind attribute
         if (isRepeatGroup(elem))
             qn.binding = elem.@id

@@ -1,0 +1,37 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+    <h:head>
+        <h:title>ggg</h:title>
+        <model>
+            <instance>
+                <ggg_v1 id="0" name="ggg">
+                    <kk />
+                    <as />
+                    <hidden_group>
+                        <deep_hidden />
+                    </hidden_group>
+                    <unique_id />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </ggg_v1>
+            </instance>
+            <bind id="kk" nodeset="/ggg_v1/kk" type="string" />
+            <bind id="as" nodeset="/ggg_v1/as" type="string" />
+            <bind id="hidden_group" nodeset="/ggg_v1/hidden_group" />
+            <bind id="deep_hidden" nodeset="/ggg_v1/hidden_group/deep_hidden" type="string" />
+            <bind id="unique_id" nodeset="/ggg_v1/unique_id" type="string" calculate="once(concat('uuid:',uuid()))" />
+            <bind calculate="concat('uuid:', uuid())" nodeset="/ggg_v1/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/ggg_v1/kk">
+            <label>kk</label>
+        </input>
+        <group>
+            <label></label>
+            <input ref="/ggg_v1/as">
+                <label>as</label>
+            </input>
+        </group>
+    </h:body>
+</h:html>

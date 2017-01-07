@@ -8,12 +8,28 @@ import org.openxdata.markup.serializer.MarkUpSerializer
  */
 class ODKDeSerializerTest extends GroovyTestCase {
     void testParsingTide() {
-        def f = new ODKDeSerializer(TestUtils.loadResourceText('ODKDeserializer/TIDE_farmassessment_pilot_final_v1.xml')).parse()
-        def markup = TestUtils.trimAllLines(MarkUpSerializer.toFormMarkUp(f))
+        testConversion(
+                'ODKDeserializer/TIDE_farmassessment_pilot_final_v1.xml',
+                'ODKDeserializer/TIDE_farmassessment_pilot_final_v1.xfm')
+    }
 
-        def expected = TestUtils.loadResourceText('ODKDeserializer/TIDE_farmassessment_pilot_final_v1.xfm')
-        expected = TestUtils.trimAllLines(expected)
+    void testParsingHiddenGroupInVirtualGroup() {
+        testConversion(
+                'ODKDeserializer/hidden_group_in_virtual_group.xml',
+                'ODKDeserializer/hidden_group_in_virtual_group.xfm')
+    }
 
-        assertEquals expected, markup
+    static void testConversion(String pathToXml, String pathToXfm, boolean printOutput = false) {
+        def f = new ODKDeSerializer(TestUtils.loadResourceText(pathToXml)).parse()
+        def unTrimmedMarkup = MarkUpSerializer.toFormMarkUp(f)
+        def markup = TestUtils.trimAllLines(unTrimmedMarkup)
+
+        def expected = TestUtils.loadResourceText(pathToXfm)
+
+        if (printOutput) {
+            println(unTrimmedMarkup)
+        }
+
+        assertEquals TestUtils.trimAllLines(expected), markup
     }
 }

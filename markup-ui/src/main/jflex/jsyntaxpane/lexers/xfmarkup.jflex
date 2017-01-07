@@ -100,6 +100,7 @@ Group = "group"[ \t]*"{"
   "@readonly"|
   "@date"|
   "@datetime"|
+  "@trigger"|
   "@time"|
   "}"|
   "@skipaction" |

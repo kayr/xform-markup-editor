@@ -264,7 +264,7 @@ class ODKSerializer {
     }
 
     private boolean shouldRenderLayout(IFormElement q) {
-        return !q.visible  && !q.skipLogic
+        return !q.visible && !q.skipLogic
     }
 
 
@@ -321,9 +321,16 @@ class ODKSerializer {
             if (oxdConversion && externalApp) {
                 inputAttrs['appearance'] = externalApp
             }
-            x.input(inputAttrs) {
-                buildQuestionLabelAndHint(x, question)
+            if (question.xformType == XformType.TRIGGER) {
+                x.trigger(inputAttrs) {
+                    buildQuestionLabelAndHint(x, question)
+                }
+            } else {
+                x.input(inputAttrs) {
+                    buildQuestionLabelAndHint(x, question)
+                }
             }
+
         }
     }
 
@@ -462,6 +469,8 @@ class ODKSerializer {
                 return [type: 'string']
             case 'boolean':
                 return [type: 'string']
+            case 'trigger':
+                return [:]
             default:
                 return [type: "$question.type"]
 

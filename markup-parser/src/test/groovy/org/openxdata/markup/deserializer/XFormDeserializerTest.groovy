@@ -238,6 +238,7 @@ class XFormDeserializerTest extends XMLTestCase {
         testRoundTrip(normalPurcform)
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
+        testRoundTrip(formWithTrigger.markUp)
         serializer.numberBindings = true
         testRoundTrip(wssbForm.markUp)
         testRoundTrip(gpsForm.markUp)

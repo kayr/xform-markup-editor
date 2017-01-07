@@ -183,14 +183,20 @@ class ODKDeSerializer {
                 finalParent.addElementAt(0, question)
             }
         } else {
-            System.err.println("Could not add [$nodeset] invalid ")
+            System.err.println("Could not add [$nodeset] invalid finaParent=[$finalParent.debugString]")
         }
     }
 
-    private TextQuestion createQuestionFromBind(def bind) {
-        def t = new TextQuestion('...')
+    private IFormElement createQuestionFromBind(def bind) {
+        IFormElement t
+        if (bind.@type) {
+            t = new TextQuestion('...')
+        } else {
+            t = new Page()
+        }
         t.binding = XPathUtil.getNodeName(bind.@nodeset)
-        t.setType(resolveType(t, null))
+        if(t instanceof IQuestion)//set type after setting bing coz its used to get bind node
+            t.setType(resolveType(t, null))
         t.setVisible(false)
         addBehaviourInfo(t)
 
@@ -252,6 +258,12 @@ class ODKDeSerializer {
     private IQuestion process_input(HasQuestions page, def elem) {
         def qn = addIdMetaInfo new TextQuestion(), page, elem
         qn.setType(resolveType(qn, elem))
+        return qn
+    }
+
+    private IQuestion process_trigger(HasQuestions page, def elem) {
+        def qn = addIdMetaInfo new TextQuestion(), page, elem
+        qn.setType(XformType.TRIGGER.value)
         return qn
     }
 
@@ -365,8 +377,8 @@ class ODKDeSerializer {
         if (qn instanceof IQuestion) {
             mayBeMakeReadOnly(bindNode, qn)
             mayBeAddCalculation(bindNode, qn)
+            mayBeMakeRequired(bindNode, qn)
         }
-        mayBeMakeRequired(bindNode, qn)
 
         mayBeAddSkipLogic(bindNode, qn)
         mayBeAddValidationLogic(bindNode, qn)
@@ -427,7 +439,7 @@ class ODKDeSerializer {
         }
     }
 
-    private static void mayBeMakeRequired(bindNode, IFormElement qn) {
+    private static void mayBeMakeRequired(bindNode, IQuestion qn) {
         String required = bindNode.@required
         if (required && required.contains('true')) {
             qn.required = true

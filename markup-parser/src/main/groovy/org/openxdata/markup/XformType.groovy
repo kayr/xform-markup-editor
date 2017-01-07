@@ -28,6 +28,7 @@ enum XformType {
     DATE('date'),
     TIME('time'),
     FORM('form'),
+    TRIGGER('trigger'),
     /**
      * Generica data type for binary data
      */

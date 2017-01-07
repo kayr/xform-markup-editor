@@ -12,7 +12,7 @@ class MarkUpSerializer {
     static String toStudyMarkup(Study study) {
         use(StringBuildCategory) {
             StringWriter w = new StringWriter()
-            def builder = new IndentPrinter(w, "  ", true, true)
+            def builder = new IndentPrinter(w, "    ", true, true)
             builder << "### $study.name"
             study.forms.each {
                 builder << toFormMarkUp(it)
@@ -25,7 +25,7 @@ class MarkUpSerializer {
         use(StringBuildCategory) {
 
             StringWriter w = new StringWriter()
-            def builder = new IndentPrinter(w, "  ", true, true)
+            def builder = new IndentPrinter(w, "    ", true, true)
             builder.toString()
 
 
