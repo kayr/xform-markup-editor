@@ -20,7 +20,7 @@ class ConverterTest extends GroovyTestCase {
         def flags = FLAGS.of(FLAGS.VALIDATE_FORM)
 
         for (toFormat in ALL_FORMATS) {
-            def toText = Converter.to(toFormat).from(BASE_UNIT).flags(flags).convert(BASE_OUTPUT)
+            def toText = Converter.to(toFormat,Form).from(BASE_UNIT).flags(flags).convert(BASE_OUTPUT)
             def reverseText = Converter.from(toFormat).to(BASE_UNIT).convert(toText)
             assertEquals BASE_OUTPUT, reverseText
         }

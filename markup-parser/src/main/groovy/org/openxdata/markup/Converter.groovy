@@ -1,7 +1,5 @@
 package org.openxdata.markup
 
-import groovy.transform.builder.Builder
-import groovy.transform.builder.SimpleStrategy
 import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.deserializer.ODKDeSerializer
 import org.openxdata.markup.deserializer.StudyDeSerializer
@@ -11,7 +9,6 @@ import org.openxdata.markup.serializer.ODKSerializer
 import org.openxdata.markup.serializer.XFormSerializer
 
 import java.util.concurrent.ConcurrentHashMap
-
 /**
  * Convenience class for converting between the different formats
  * Created by kay on 1/6/2017.
@@ -22,18 +19,36 @@ class Converter {
     private static Map<FORMAT, Closure<Form>> TO_FORM = [:]
     private static Map<FORMAT, Closure<String>> FROM_BASE = [:]
 
-    @Builder(builderStrategy = SimpleStrategy, prefix = '')
-    static class ConverterBuilder {
+    static class ConverterBuilder<T> {
         FORMAT to
         FORMAT from
         private EnumSet<FLAGS> _flags = FLAGS.none()
         def cacheId
 
-        def <T> T convert(def src, FLAGS flag, FLAGS... flags) {
+        ConverterBuilder<T> from(FORMAT from) {
+            this.from = from
+            return this
+        }
+
+        ConverterBuilder<T> to(FORMAT to) {
+            this.to = to
+            return this
+        }
+
+        ConverterBuilder<T> cacheId(def cacheId) {
+            this.cacheId = cacheId
+            return this
+        }
+
+        def <T> ConverterBuilder<T> returnType(Class<T> classype) {
+            return this
+        }
+
+        def T convert(def src, FLAGS flag, FLAGS... flags) {
             convert(src, FLAGS.of(flag, flags))
         }
 
-        def <T> T convert(def src, EnumSet<FLAGS> flags = _flags) {
+        def T convert(def src, EnumSet<FLAGS> flags = _flags) {
             if (to && from) {
                 //noinspection UnnecessaryQualifiedReference
                 return (T) Converter.to(to, from, src, flags, cacheId)
@@ -51,12 +66,12 @@ class Converter {
         }
 
 
-        ConverterBuilder flags(FLAGS... flags) {
+        ConverterBuilder<T> flags(FLAGS... flags) {
             _flags.addAll(flags)
             return this
         }
 
-        ConverterBuilder flags(EnumSet<FLAGS> flags) {
+        ConverterBuilder<T> flags(EnumSet<FLAGS> flags) {
             _flags.addAll(flags)
             return this
         }
@@ -71,12 +86,12 @@ class Converter {
 
     }
 
-    static def ConverterBuilder to(FORMAT to) {
-        return new ConverterBuilder(to: to)
+    static def <T> ConverterBuilder to(FORMAT to, Class<T> aClass = String) {
+        return new ConverterBuilder<T>(to: to)
     }
 
-    static def ConverterBuilder from(FORMAT to) {
-        return new ConverterBuilder(from: to)
+    static def <T> ConverterBuilder<T> from(FORMAT to, Class<T> aClass = String) {
+        return new ConverterBuilder<T>(from: to)
     }
 
     static def <T> T to(FORMAT toFormat, FORMAT from, def src) {
