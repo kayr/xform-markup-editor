@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openxdata</groupId>
     <artifactId>oxdmarkup</artifactId>
-    <version>0.12-SNAPSHOT</version>
+    <version>0.12</version>
     <name>OpenXdata Markup</name>
     <packaging>pom</packaging>
 
@@ -54,7 +54,7 @@
         <connection>scm:git:file://localhost/${basedir}</connection>
         <developerConnection>scm:git:file://localhost/${basedir}</developerConnection>
         <url>https://trac.openxdata.org/browser/J2ME/trunk</url>
-      <tag>HEAD</tag>
+      <tag>oxdmarkup-0.12</tag>
   </scm>
 
     <distributionManagement>
