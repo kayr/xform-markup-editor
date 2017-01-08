@@ -88,7 +88,6 @@ class XFormDeserializerTest extends XMLTestCase {
         assert form.dynamicOptions.school.find { it.bind == 'kenya_kampala_bugiroad' }.option == 'Bugiroad'
         assert form.dynamicOptions.school.find { it.bind == 'kenya_kampala_bugiroad' }.parentBinding == 'kenya_kampala'
 
-        println form.dynamicOptions
 
         DynamicQuestion districtQn = form.allQuestions.find { it.binding == 'district' }
         assert districtQn.class == DynamicQuestion

@@ -151,6 +151,6 @@ repeat{ repeat
 
         def ast = XPathUtil.createAST(xpath)
 
-        printTree(ast)
+//        printTree(ast)
     }
 }
