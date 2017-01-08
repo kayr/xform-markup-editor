@@ -90,8 +90,8 @@ class Converter {
         return new ConverterBuilder<T>(to: to)
     }
 
-    static def <T> ConverterBuilder<T> from(FORMAT to, Class<T> aClass = String) {
-        return new ConverterBuilder<T>(from: to)
+    static def <T> ConverterBuilder<T> from(FORMAT from, Class<T> aClass = String) {
+        return new ConverterBuilder<T>(from: from)
     }
 
     static def <T> T to(FORMAT toFormat, FORMAT from, def src) {
