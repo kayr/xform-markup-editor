@@ -9,6 +9,11 @@ class ConverterTest extends GroovyTestCase {
     def BASE_UNIT = FORMAT.ODK
     def BASE_OUTPUT = Converter.to(BASE_UNIT).from(FORMAT.MARKUP).convert(Fixtures.oxdSampleForm)
 
+    @Override
+    protected void setUp() throws Exception {
+        Converter.clearCache()
+        Converter.clearStats()
+    }
 
     void testAllPathsAndFormatsReturnTheRightData() {
 

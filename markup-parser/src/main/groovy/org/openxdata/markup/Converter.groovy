@@ -199,6 +199,8 @@ class Converter {
 
     static void clearCache() { cacheData.clear() }
 
+    static void clearStats() { cacheHits = 0; cacheMiss = 0; }
+
     static int cacheSize() { cacheData.size() }
 
     static Set cacheKeys() { cacheData.keySet() }
