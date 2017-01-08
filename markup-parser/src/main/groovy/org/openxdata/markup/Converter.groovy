@@ -29,6 +29,10 @@ class Converter {
         private EnumSet<FLAGS> _flags = FLAGS.none()
         def cacheId
 
+        def <T> T convert(def src, FLAGS flag, FLAGS... flags) {
+            convert(src, FLAGS.of(flag, flags))
+        }
+
         def <T> T convert(def src, EnumSet<FLAGS> flags = _flags) {
             if (to && from) {
                 //noinspection UnnecessaryQualifiedReference
@@ -45,6 +49,7 @@ class Converter {
 
             throw new RuntimeException("Cannot Convert neither (TO) nor (FROM) was set")
         }
+
 
         ConverterBuilder flags(FLAGS... flags) {
             _flags.addAll(flags)
@@ -88,20 +93,26 @@ class Converter {
 
     static def <T> T to(FORMAT to, FORMAT from, def src, EnumSet<FLAGS> flags, def cacheId) {
 
-        def key = generateKey(cacheId ?: src, to, from)
+        def key = generateKey(notNull(cacheId, src), to, from)
+
+
 
         def flagsCopy = flags.clone()
 
         def result = fromCacheOrEval(key, flagsCopy) {
-            def form = toFormFrom(from, src, flagsCopy)
+            def form = toFormFrom(from, src, flagsCopy, cacheId)
 
             if (to == FORMAT.FORM) return form
             flagsCopy.remove(FLAGS.VALIDATE_FORM)
-            return fromFormTo(to, form, flagsCopy)
+            return fromFormTo(to, form, flagsCopy, cacheId)
         }
 
 
         return result as T
+    }
+
+    private static def <T> T notNull(def ... objects) {
+        return (T) objects.findResult(Closure.IDENTITY)
     }
 
     static Form markup2Form(def src) {
@@ -124,7 +135,7 @@ class Converter {
 
     static Form toFormFrom(FORMAT from, def src, EnumSet<FLAGS> flags = FLAGS.none(), def cacheId = null) {
         def func = TO_FORM[from]
-        def key = generateKey(cacheId ?: src, from)
+        def key = generateKey(notNull(cacheId, src), from)
 
         def form = fromCacheOrEval(key, flags) { func.call(src, flags) }
 
@@ -137,7 +148,7 @@ class Converter {
         if (FLAGS.VALIDATE_FORM in flags) { validateForm(flags, src) }
 
         def func = FROM_BASE[to]
-        def key = generateKey(cacheId ?: src, to)
+        def key = generateKey(notNull(cacheId, src), to)
         return fromCacheOrEval(key, flags) { func.call(src, flags) }
     }
 
@@ -164,6 +175,7 @@ class Converter {
     }
 
     static cacheHits = 0;// simply fo testing purposes
+    static cacheMiss = 0;// simply fo testing purposes
 
     static def <T> T fromCacheOrEval(def key, EnumSet<FLAGS> flags, Closure<T> eval) {
 
@@ -177,6 +189,7 @@ class Converter {
                 cacheHits = ++cacheHits
                 return (T) val
             }
+            cacheMiss = ++cacheMiss
             val = eval.call()
             return cache(key, val)
         } else {
@@ -187,6 +200,8 @@ class Converter {
     static void clearCache() { cacheData.clear() }
 
     static int cacheSize() { cacheData.size() }
+
+    static Set cacheKeys() { cacheData.keySet() }
 
 
     static
