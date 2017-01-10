@@ -9,6 +9,7 @@ import org.openxdata.markup.serializer.ODKSerializer
 import org.openxdata.markup.serializer.XFormSerializer
 
 import java.util.concurrent.ConcurrentHashMap
+
 /**
  * Convenience class for converting between the different formats
  * Created by kay on 1/6/2017.
@@ -225,8 +226,15 @@ class Converter {
     {
         //MARKUP
         TO_FORM[FORMAT.MARKUP] = { String src, EnumSet<FLAGS> flags ->
-            def deserializer = new MarkupDeserializer(src, FLAGS.VALIDATE_FORM in flags)
-            return deserializer.study().forms.first()
+            def quickParse = Study.quickParse.get()
+            try {
+                Study.quickParse.set(FLAGS.USE_QUICK_PARSE in flags)
+                def deserializer = new MarkupDeserializer(src, FLAGS.VALIDATE_FORM in flags)
+                return deserializer.study().forms.first()
+
+            } finally {
+                Study.quickParse.set(quickParse)
+            }
         }
         FROM_BASE[FORMAT.MARKUP] = { Form form, EnumSet<FLAGS> flags ->
             MarkUpSerializer.toFormMarkUp(form)
