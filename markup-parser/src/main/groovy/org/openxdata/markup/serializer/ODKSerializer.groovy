@@ -255,15 +255,15 @@ class ODKSerializer {
     private void mayBeBuildLayout(MarkupBuilder xml, IFormElement q) {
         // implement visibility here
         // if a question is invisible and has no skipLogic do not render its layout
-        if (shouldRenderLayout(q)) return
+        if (shouldNotRenderLayout(q)) return
         buildLayout(xml, q)
     }
 
-    private boolean shouldRenderLayout(HasQuestions q) {
-        return q.allQuestions.any { shouldRenderLayout(it) }
+    private boolean shouldNotRenderLayout(HasQuestions q) {
+        return q.allElements.every { shouldNotRenderLayout(it) }
     }
 
-    private boolean shouldRenderLayout(IFormElement q) {
+    private boolean shouldNotRenderLayout(IFormElement q) {
         return !q.visible && !q.skipLogic
     }
 

@@ -19,16 +19,16 @@ group {
         ...
 
 
-        @absoluteid unique_id
-        @invisible
-        @calculate once(concat('uuid:',uuid()))
-        ...
-
-
     }
 
 
 }
+
+
+@absoluteid unique_id
+@invisible
+@calculate once(concat('uuid:',uuid()))
+...
 
 
 @id meta
@@ -43,5 +43,3 @@ group {
 
 
 }
-
-

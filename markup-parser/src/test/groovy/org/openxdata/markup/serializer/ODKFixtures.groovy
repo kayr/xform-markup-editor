@@ -1353,6 +1353,50 @@ No. Kids
 </h:html>'''
     ]
 
+    static def formWithHiddenQuestionInPage = [
+         form   : '''## F
+                        #> Page 1
+
+                        Values
+
+                        #> Page 2
+
+                        @invisible
+                        Invisible
+
+                        Visible''',
+            xml: '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>F</h:title>
+    <model>
+      <instance>
+        <f_v1 id="0" name="F">
+          <values />
+          <invisible />
+          <visible />
+        </f_v1>
+      </instance>
+      <bind id="values" nodeset="/f_v1/values" type="string" />
+      <bind id="invisible" nodeset="/f_v1/invisible" type="string" />
+      <bind id="visible" nodeset="/f_v1/visible" type="string" />
+    </model>
+  </h:head>
+  <h:body>
+    <group>
+      <label>Page 1</label>
+      <input ref="/f_v1/values">
+        <label>1. Values</label>
+      </input>
+    </group>
+    <group>
+      <label>Page 2</label>
+      <input ref="/f_v1/visible">
+        <label>3. Visible</label>
+      </input>
+    </group>
+  </h:body>
+</h:html>'''
+    ]
 
 
 }

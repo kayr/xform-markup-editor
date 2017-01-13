@@ -58,7 +58,7 @@ class MarkUpSerializer {
                 renderDynamicOptions(builder, o.key, o.value)
             }
 
-            return w.toString()
+            return w.toString().trim()
         }
     }
 

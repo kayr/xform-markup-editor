@@ -144,12 +144,12 @@ class ODKSerializerTest extends GroovyTestCase {
     void testNestedGroupNumber() {
         def oxd = Converter.to(FORMAT.ODK)
                            .from(FORMAT.MARKUP)
-                           .flags(FLAGS.NUMBER_IDS, FLAGS.NUMBER_LABELS,FLAGS.ODK_ADD_META_INSTANCE)
+                           .flags(FLAGS.NUMBER_IDS, FLAGS.NUMBER_LABELS, FLAGS.ODK_ADD_META_INSTANCE)
                            .convert(nestedGroups.markUp)
         assertEquals nestedGroups.odkNumberd, oxd
     }
 
-    void testGroupWithValidaionAndSkipLogic() {
+    void testGroupWithValidationAndSkipLogic() {
 
         def form = '''###s
                       ## f
@@ -171,5 +171,12 @@ class ODKSerializerTest extends GroovyTestCase {
         assertEquals groupWithSkipLogic.odkXml, odk
         assertEquals groupWithSkipLogic.oxdXml, oxd
     }
+
+    void testBugFixWhereGroupWithAnyInvisibleQuestionIsNotRendered() {
+        def outPut = Converter.from(FORMAT.MARKUP, String).to(FORMAT.ODK).flags(FLAGS.NUMBER_LABELS).convert(formWithHiddenQuestionInPage.form)
+        assertEquals formWithHiddenQuestionInPage.xml, outPut
+
+    }
+
 
 }

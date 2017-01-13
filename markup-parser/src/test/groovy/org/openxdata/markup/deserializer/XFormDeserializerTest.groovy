@@ -253,6 +253,8 @@ class XFormDeserializerTest extends XMLTestCase {
     }
 
     void testRoundTrip(String markup) {
+
+
         def form1 = new MarkupDeserializer(markup).study().forms[0]
         def flags = FLAGS.of(FLAGS.VALIDATE_FORM)
         if (serializer.numberBindings) {
@@ -273,10 +275,9 @@ class XFormDeserializerTest extends XMLTestCase {
         String odk1 = Converter.to(FORMAT.ODK, FORMAT.MARKUP, markup, flags)
         String odk2 = Converter.to(FORMAT.ODK, FORMAT.ODK, odk1, FLAGS.of(FLAGS.VALIDATE_FORM))
 
-
 //        try {
-            assert odk1.startsWith('<h:html')
-            assertEquals odk1, odk2
+        assert odk1.startsWith('<h:html')
+        assertEquals odk1, odk2
 //        } catch (ComparisonFailure f) {
 //            System.err.println("Some form failed to pass round trip $form1.name")
 //            assertXMLEqual odk1, odk2
@@ -330,6 +331,70 @@ class XFormDeserializerTest extends XMLTestCase {
             ...
             '''
 
+        testRoundTrip(markup)
+    }
+
+    void testBugFixWhereRoundTripWasNotConsitent() {
+
+        def markup = '''@id TEST_form
+@dbid TEST_form
+## TEST form
+
+
+@id catch_grp
+group {
+
+    @id catch_specie
+    Kies die vis
+      >>Perlemoen
+      >>Stokvis
+      >>Kreef
+      >>Seekat
+      >>Tunny
+
+
+    @id repeat_details_count
+    @readonly
+    @calculate count-selected( $catch_specie )
+    ...
+}
+
+
+@id repeat_details
+@jrcount $repeat_details_count
+repeat{ Vangs Besonderhede
+
+    @id sel_specie
+    @calculate selected-at( $catch_specie ,position(..)-1)
+    ...
+
+
+    @id sel_field
+    @calculate selected-at( $catch_specie ,position(..)-1)
+    ...
+
+
+    @id note1
+    @readonly
+    -
+}
+
+
+@id meta
+@invisible
+group {
+
+    @id instanceID
+    @readonly
+    @invisible
+    @calculate concat('uuid:', uuid())
+    ...
+}
+'''
+
+
+
+        Study.validateWithXML.set(true)
         testRoundTrip(markup)
     }
 
