@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.openxdata</groupId>
         <artifactId>oxdmarkup</artifactId>
-        <version>0.13-SNAPSHOT</version>
+        <version>0.13</version>
     </parent>
     <!-- =======================================================================
          A quickstart pom.xml that creates a sample project that uses ANTLR 3.x
@@ -49,7 +49,7 @@
     <name>OpenXdata Markup Parser</name>
 
     <!-- This is the version of YOUR project -->
-    <version>0.13-SNAPSHOT</version>
+    <version>0.13</version>
 
     <packaging>jar</packaging>
     <url>http://antlr.org</url>
