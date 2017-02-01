@@ -1,0 +1,1340 @@
+//Allowed Attributes: [@readonly, @required, @id, @absoluteid, @invisible, @comment, @skiplogic, @skipaction, @hideif, @enableif, @disableif, @showif, @validif, @message, @calculate, @parent, @hint, @default]
+        //Allowed Types: [@number, @decimal, @date, @boolean, @time, @datetime, @picture, @video, @audio, @picture, @gps, @barcode, @longtext]
+        //Use Ctrl + K for auto-completion
+        //This is a product of http://omnitech.co.ug and http://www.openxdata.org
+
+
+        ## Farmer Intake and Evaluation form
+
+
+        #> Farmer details
+
+
+        @id instruction
+        @readonly
+
+
+        '''
+        ####ENUMERATOR: READ BEFORE PROCEEDING
+        1.1: This form is used to collect data when recruiting farmers and conduct evaluations
+        1.2: For recruitments, you are required to conduct a baseline (Select evaluation stage should be baseline)
+        1.3: For evaluations, you are required to select evaluation stage as review.
+        1.4: You should always ensure that you do not create duplicate farmers. Always make sure your farmer list is upto date and is checked.
+
+
+        '''
+
+
+        @id stage_info
+        @appearance field-list
+        group {
+
+        @id period
+        @appearance minimal
+        *Select Evaluation stage
+        >$base Baseline
+        >Review I 2017
+        >Review II 2017
+        >Review I 2018
+        >Review II 2018
+        >Review I 2019
+        >Review II 2019
+        >Review I 2020
+        >Review II 2020
+        >Review I 2021
+        >Review II 2021
+
+
+        @id evaluation_date
+        @layout:appearance no-calendar
+        @date
+        *Evaluation date
+        }
+
+        @showif $period != 'base'
+        @id registered_farmer
+        @comment Establish if the farmer is already in the system first by searching.
+        @appearance ex:org.odk.collect.android.activities.entities.PrefillActivity(table_name='farmer_entity',key_field='uid',display_field='farmer_name,sex,contact')
+        *Check for farmer
+
+
+
+        @id no_farmer
+        @readonly
+        @id instruction1
+        @showif $period != 'base' and $registered_farmer = ""
+        @readonly
+
+
+        '''
+        #### ENUMERATOR: READ
+        Instruction: You are doing a review on a farmer whose record doesnot exist. Please select baseline.
+        '''
+
+
+        @id instruction2
+        @showif $period = 'base' and $registered_farmer != ""
+        @readonly
+
+
+        '''
+        #### ENUMERATOR: READ
+        Instruction: You are doing a baseline on a farmer whose record already exists. Please select a review period.
+        '''
+
+
+        @id instruction3
+        @showif $period = 'base' and $registered_farmer = ""
+        @readonly
+
+
+        '''
+        #### ENUMERATOR: READ
+        Instruction: You are filling a form for a new farmer. Please proceed to provide relevant information.
+        '''
+
+
+        @showif $period = 'base'
+        @id district
+        *District
+        >BUSHENYI
+        >ISINGIRO
+        >KIRUHURA
+        >MBARARA
+        >NTUNGAMO
+        >SHEEMA
+
+
+        @showif $period = 'base'
+        @id subcounty
+        @parent district
+        *Subcounty
+        $> subcounty
+
+
+        @id farmer_info
+        @appearance field-list
+        group {
+
+        @showif $period = 'base'
+        @id intake
+        @layout:appearance no-calendar
+        @date
+        *In take date
+
+
+        @layout:appearance no-calendar
+        @showif $period = 'base'
+        @id name
+        *Name of the farmer
+
+
+        @showif $period = 'base'
+        @id contact
+        @validif regex(., "^07[0-9]{8}$")
+        @message "Please enter a valid phone number. e.g. 0778345678"
+        *Phone number
+
+
+        @showif $period = 'base'
+        @id age
+        @appearance minimal
+        *Farmers age
+        >18-25
+        >26-35
+        >36-45
+        >46-60
+        >Over 60
+
+
+        @showif $period = 'base'
+        @id group
+        *Farmer's Associated primary Cooperative(Dairy processor hub / group, Dairy traders group)
+
+
+        @showif $period = 'base'
+        @id relation
+        @appearance minimal
+        *What is your relation with the household head?
+        >Spouse,
+        >Son/daughter,
+        >Manager
+        >Father/Mother
+        >Brother/sister
+        >Spouse Of Son/Daughter,
+        >$other Others
+        }
+
+
+        @id relation_other
+        @showif $relation = 'other'
+        *Specify your relationship with the household head.
+
+
+        @id trainee_info
+        @appearance field-list
+        group {
+
+        @showif $period = 'base'
+        @id sex
+        *Sex of farmer/trainee
+        >Male
+        >Female
+
+
+        @showif $period = 'base'
+        @id martial_status
+        *Marital status of farmer/trainee
+        >Married
+        >Single
+        >Divorced
+        >Widowed
+
+
+        @showif $period = 'base'
+        @id literacy
+        *Literacy levels of farmer/trainee
+        >Read only
+        >Read and write
+        >Neither
+
+
+        @showif $period = 'base'
+        @id adults
+        @number
+        *Number of Adults in the farmer's household
+
+
+        @showif $period = 'base'
+        @id youth
+        @number
+        *Number of youth in the farmer's household
+
+
+        @showif $period = 'base'
+        @id children
+        @number
+        *Number of children in the farmer's household
+        }
+
+
+        #>Evaluation
+
+
+        @id activity
+        *Type of Activity the farmer is registered for
+        >>$train Training
+        >>$invest Investments
+
+
+        @id pdtf
+        @showif $activity = 'train'
+        @appearance minimal
+        *PDTF training farm
+        >AGDI farm
+        >Mutanoga farm
+        >Rubyerwa farm
+
+
+        @id investment
+        @showif $activity = 'invest'
+        *Type of investment
+        >>Milking Parlour
+        >>Spray Race
+        >>Silage Bunker
+
+
+        #> Dairy production
+
+
+        @id land_use_details
+        repeat{Land details (Acreage details)
+
+        @appearance field-list
+        group {
+
+        @appearance minimal
+        Land use
+        >Natural pastures
+        >Improved pastures
+        >Fodder production
+        >Other crops
+        >Agroforestry
+
+
+        @id acreage
+        @number
+        No. of Acres
+
+
+        @appearance minimal
+        Land tenure system
+        >Freehold
+        >Communal
+        >Private mailo
+        >Lease holding
+
+
+        @appearance minimal
+        Land ownership
+        >House hold head
+        >Parents
+        >In laws
+        }
+        }
+
+
+        @id grazing_system
+        What grazing system is applied
+        >>Open
+        >>Fenced perimeter
+        >>Fenced with Paddocks
+        >>Zero grazing
+
+
+        @id animalbreeds
+        *select the breeds available on the farm
+        >>$indigenous Indigenous
+        >>$crossbreed Cross breed
+        >>$exotic Exotic
+
+
+        @id animal_group
+        @appearance field-list
+        group {
+
+        @readonly
+        Instruction: for the selected breeds specify the number of animals
+
+
+        @showif $animalbreeds= 'indigenous'
+        @number
+        *Indigenous Calves
+
+
+        @showif $animalbreeds= 'indigenous'
+        @number
+        *Indigenous Bulls
+
+
+        @showif $animalbreeds= 'indigenous'
+        @number
+        *Indigenous Heifers
+
+
+        @showif $animalbreeds= 'indigenous'
+        @number
+        *Indigenous Adult cows
+
+
+        @showif $animalbreeds= 'crossbreed'
+        @number
+        *Cross breed Calves
+
+
+        @showif $animalbreeds= 'crossbreed'
+        @number
+        *Cross breed Bulls
+
+
+        @showif $animalbreeds= 'crossbreed'
+        @number
+        *Cross breed Heifers
+
+
+        @showif $animalbreeds= 'crossbreed'
+        @number
+        *Cross breed Adult cows
+
+
+        @showif $animalbreeds= 'exotic'
+        @number
+        *Exotic calves
+
+
+        @showif $animalbreeds= 'exotic'
+        @number
+        *Exotic Bulls
+
+
+        @showif $animalbreeds= 'exotic'
+        @number
+        *Exotic Heifers
+
+
+        @showif $animalbreeds= 'exotic'
+        @number
+        *Exotic Adult cows
+        }
+
+
+        @id cattle_deaths
+        @appearance field-list
+        group {
+
+        @readonly
+        Enter the number of cattle that died in the last 12 months
+
+
+        @number
+        Calves
+
+
+        @number
+        Bulls
+
+
+        @number
+        Heifers
+
+
+        @number
+        Adult cows
+        }
+
+
+        @id milk_group
+        @appearance field-list
+        group {
+
+        @id adultcows
+        @number
+        How many adult cows did not produce any calf over the past 3 years?
+
+
+        @id amount_of_milk_dry
+        @number
+        *Total milk production per day(in litres)during the dry season
+
+
+        @id amount_of_milk_wet
+        @number
+        *Total milk production per day(in litres)during the wet season
+
+
+        @id milking_time
+        How many times do you milk per day
+        >Once
+        >Twice
+
+
+        @id milking_place
+        Where are the cows milked from?
+        >>Milk shed
+        >>Compound
+        >>Field
+        >>$other Others
+        }
+
+
+        @showif $milking_place = 'other'
+        @id milking_place_other
+        Specify where else the cows are milked from.
+
+
+        @id water_source_group
+        @appearance field-list
+        group {
+
+        @id water_sorce_dry
+        What are the main sources of water on your farm for cattle during the dry season
+        >>Borehole
+        >>Ponds
+        >>River
+        >>Stream
+        >>Valley dam
+        >>Pipe water
+        >>Lake
+        >>$other Other
+
+
+        @id water_sorce_wet
+        What are the main sources of water on your farm for cattle during the wet season
+        >>Borehole
+        >>Ponds
+        >>River
+        >>Stream
+        >>Valley dam
+        >>Pipe water
+        >>Lake
+        >>$other Other
+        }
+
+
+        @id water_source_other_group
+        @appearance field-list
+        group {
+
+        @showif $water_sorce_dry = 'other'
+        @id water_sorce_dry_other
+        Specify any other main sources of water on your farm for cattle during the dry season.
+
+
+        @showif $water_sorce_wet = 'other'
+        @id water_sorce_wet_other
+        Specify any other main sources of water on your farm for cattle during the wet season.
+        }
+
+
+        @id workers_group
+        @appearance field-list
+        group {
+
+        @id employment
+        @number
+        *Year round, how many people are working on the dairy farm?
+
+
+        @id not_employed
+        @number
+        *How many of those people working on the dairy farm are not employed?
+        }
+
+
+        @id age_details
+        repeat{Number of employees per age category?
+
+        @appearance field-list
+        group {
+
+        Age Category
+        >Below 18
+        >18-35
+        >35 - 60
+        >Above 60
+
+
+        @id number_age
+        @number
+        Number of employees
+
+
+        @id employee_gender_female
+        @number
+        *Number of female employees?
+
+
+        @id employee_gender_male
+        @number
+        *Number of male employees?
+        }
+        }
+
+
+        @id responsbility_group
+        @appearance field-list
+        group {
+
+        @id employee_manager
+        Which of the following cores on the farm is the Farm manager responsible for?
+        >>Grazing the animals
+        >>Feeding the animals
+        >>Milking the cows
+        >>Milk sales
+
+
+        @id employee_herds
+        Which of the following cores on the farm is the Herds man responsible for?
+        >>Grazing the animals
+        >>Feeding the animals
+        >>Milking the cows
+        >>Milk sales
+
+
+        @id employee_casual
+        Which of the following cores on the farm is the Casual labourer responsible for?
+        >>Grazing the animals
+        >>Feeding the animals
+        >>Milking the cows
+        >>Milk sales
+
+
+        @id payform
+        @appearance minimal
+        *What are labour conditions/ form of payment
+        >Fixed salary
+        >Informal arrangement
+        >percentage of harvest/ produce
+        }
+
+
+        #>Dairy Utilization
+
+
+        @id dairy_group
+        @appearance field-list
+        group {
+
+        @id milk_consumed_hh
+        @number
+        *How much milk (in litres) is consumed by House Hold members
+
+
+        @id milk_consumed_calves
+        @number
+        *How much milk (in litres) is consumed by calves
+
+
+        @id milk_other
+        *Is there any other way milk produced from your farm is Utilised?
+        >$yes Yes
+        >No
+        }
+
+
+        @id dairy_yes_group
+        @appearance field-list
+        group {
+
+        @showif $milk_other = 'yes'
+        @id milk_other_yes
+        *Specify how else milk from your farm is utilised.
+
+
+        @showif $milk_other = 'yes'
+        @id milk_other_amount
+        @number
+        How much milk(in litres) is utilised?
+        }
+
+
+        @id milk_price
+        repeat{ Provide information on Milk Prices and where it is sold.
+
+        @appearance field-list
+        group {
+
+        *Season
+        >Dry
+        >Wet
+
+
+        @id sold_to
+        *Milk sold
+        >To Cooperative
+        >To Vendor
+        >To Processors
+
+
+        @id litres_sold
+        @number
+        *Amount sold (litres)
+
+
+        @id price_per_litre
+        @number
+        *Price per litre (Shs)
+        }
+        }
+
+
+        @id control_group
+        @appearance field-list
+        group {
+
+        @id utilise
+        Who decides how milk is utilized?
+
+
+        @id income
+        Who controls the income out of milk?
+
+
+        @id test
+        *Is your milk tested before being sold?
+        >$yes Yes
+        >$no No
+
+
+        @id test_yes
+        @showif $test = 'yes'
+        *What tests are carried out?
+
+
+        @id reject
+        *Is there any rejection of your milk?
+        >$yes Yes
+        >$no No
+
+
+        @id reject_yes
+        @showif $reject = 'yes'
+        *Why is the milk rejected?
+        }
+
+
+        #>House hold asset ownership
+
+
+        @id info_group
+        @appearance field-list
+        group {
+
+        @id assets
+        Do you own any of the following assets?
+        >>Smart mobile phone
+        >>Mobile phone
+        >>Radio
+        >>TV
+
+
+        @id info
+        Do you use this technology to receive / get information about dairy activities in your region?
+        >$yes Yes
+        >$no No
+
+
+        @id info_yes
+        @showif $ info = 'yes'
+        What kind of information do you obtain?
+        }
+
+
+        #> Dairy farming practices
+
+
+        @id climate
+        *What main challenges do you face in your dairy farm related to climate variability?
+        >>Harvest damage and yield losses due to droughts
+        >>Waterlogged fields or washing away of crops due to floods
+        >>Reduced availability of animal fodders
+        >>Insufficient animal drinking water
+        >>Land degradation (poor soil quality)
+        >>Animal heat stress
+        >>$other Other
+
+
+        @id climate_other
+        @showif $climate = 'other'
+        *Specify which other challenges you face in your dairy farm related to climate variability?
+
+
+        @id feed_group
+        @appearance field-list
+        group {
+
+        @id feed
+        @number
+        How many months is cattle feed sufficient?
+
+
+        @id water
+        @number
+        How many months is cattle drinking water sufficient?
+        }
+
+
+        @id disease
+        What types of cattle disease incidences occurred over the last 12 months?
+        >>Rift Valley Fever
+        >>Foot and Mouth Disease
+        >>East Coast Fever
+        >>Mastitis
+        >>Other
+
+
+        @id disease_other
+        @showif $disease = 'other'
+        Specify which other types of cattle disease incidences occurred over the last 12 months?
+
+
+        @id soil_group
+        @appearance field-list
+        group {
+
+        @id soil
+        How would you rate your soil quality?
+        >Very good
+        >Good
+        >Sufficient
+        >Poor
+        >Very poor
+
+
+        @id soil_erosion
+        @boolean
+        Do you observe any problems related to soil erosion?
+
+
+        @id manure
+        *How is manure collected at your farm?
+        >>Not coiiected(year round grazing)
+        >>Pile or heap (solid manure)
+        >>Dry lot
+        >>Bio- slurry pit/silo/tank/lagoon
+        >>Compost pit
+        >>$other Others
+
+
+        @id manure_other
+        @showif $manure = 'other'
+        *Specify how else manure managed at your farm
+
+
+        @id apply_manure
+        *Where is manure applied?
+        >>Natural pastures
+        >>Improved pastures
+        >>Fodder establishment
+        >>Other crops
+        }
+
+
+        @id supplement_group
+        @appearance field-list
+        group {
+
+        @id supplement_diet_dry
+        *Which of the following supplements are in the dairy cow diet that you use on your farm during the dry season?
+        >>Dairy meal
+        >>Brewers spent grain
+        >>Hay
+        >>Silage
+        >>Wheat Bran
+        >>Maize bran
+        >>Urea
+        >>Banana peelings
+        >>$other Others
+
+
+        @id supplement_diet_wet
+        *Which of the following supplements are in the dairy cow diet that you use on your farm during the wet season?
+        >>Dairy meal
+        >>Brewers spent grain
+        >>Hay
+        >>Silage
+        >>Wheat Bran
+        >>Maize bran
+        >>Urea
+        >>Banana peelings
+        >>$other Others
+        }
+
+
+        @id supplement_other_group
+        @appearance field-list
+        group {
+
+        @id supplement_diet_dry_other
+        @showif $supplement_diet_dry = 'other'
+        *Specify which supplements are in the dairy cow diet that you use on your farm during the dry season
+
+
+        @id supplement_diet_wet_other
+        @showif $supplement_diet_wet = 'other'
+        *Specify which supplements are in the dairy cow diet that you use on your farm during the dry season.
+        }
+
+
+        @id feed_mix
+        Do you feed concentrates?
+        >$yes Yes
+        >$no No
+
+
+        @id concentrates_group
+        @appearance field-list
+        group {
+
+        @id feed_mix_lac
+        @showif $feed_mix = 'yes'
+        How many Kilo grams(kgs) of concentrates do you feed to Lactating cows?
+
+
+        @id feed_mix_dry
+        @showif $feed_mix = 'yes'
+        How many Kilo grams(kgs) of concentrates do you feed to dry cows?
+
+
+        @id feed_often
+        @showif $feed_mix = 'yes'
+        How often do you feed Lactating cows on concentrates?
+        >Same amount per day over whole lactation period
+        >Amount varied depending on lactation stage
+        }
+
+
+        @id practices
+        *Which of the following practices do you perform on your farm?
+        >>Agroforestry
+        >>Improved pasture management
+        >>Biogas production
+        >>Terracing
+        >>Mulching
+        >>Inorganic fertilizer use
+        >>Compost
+        >>Farmyard manure
+        >>Contour ploughing
+        >>Burning, cover
+        >>Green manure
+        >>Use of bio-slurry
+        >>Solar energy production
+        >>Rainwater harvesting
+        >>Zero tillage
+        >>Irrigation
+        >>Intercropping
+        >>Fallowing
+        >>Crop rotation
+        >>Organic agriculture
+        >>Cover crops
+        >>Ridges/bunds
+
+
+        @id farm_investiments
+        *which of the following do exist on your farm?)
+        >>Water storage facility
+        >>Calf pens
+        >>Cattle crush
+        >>Dip/spray race
+        >>Milking parlour
+        >>Milking machine
+        >>Milk cans
+        >>Milk cooler
+        >>On-farm silage storage
+        >>On-farm hay storage
+        >>Fodder bank
+        >>Cow shed for zero grazing
+        >>Biogas digester
+        >>Solar panels
+        >>Tractor
+        >>Pasture planting equipment
+        >>Pasture harvesting equipment
+        >>Fodder chopper
+        >>Irrigation equipment
+        >>$other Others
+
+
+        @id farm_investiments_other
+        @showif $farm_investiments='other'
+        *Specify any other on-farm investments that exist on your farm
+
+
+        @id services
+        *Which of the following services and purchased products does your household use?
+        >>AI services
+        >>Mobile tick control services
+        >>Extension services
+        >>Veterinary services
+        >>Equipment hire services (such as tractor or equipment)
+        >>Milk quality testing
+        >>Soil quality testing
+        >>Purchase of fodder, hay, or silage
+        >>Purchase of feed supplements
+        >>Purchase of pasture and fodder seeds
+        >>Purchase of tree seedlings
+        >>Purchase of in calf heifers
+        >>$other Others
+
+
+        @id services_other
+        @showif $services ='other'
+        *Specify any other on-farm investments that exist on your farm
+
+
+        @id income_feeding_group
+        @appearance field-list
+        group {
+
+        @id food_ependiture
+        Whose income is used to buy the food items?
+        >>Farm income
+        >>Father
+        >>House Help
+        >>Mother
+        >>Farm worker
+        >>Self Catering
+        >>Son/Daughter
+
+
+        @id food_preparation
+        @appearance minimal
+        Who mainly decides the type of foods that are used as ingredients in a meal?
+        >Father
+        >Mother
+        >House Help
+        >Farm worker
+        >Self Catering
+        >Son/Daughter
+        >$other Other
+
+
+        @id meal
+        @appearance minimal
+        Who is mainly responsible for preparing the meals in the households?
+        >Father
+        >House Help
+        >Mother
+        >Farm worker
+        >Self Catering
+        >Son/Daughter
+        >$other Other
+        }
+
+
+        @id income_feeding_other_group
+        @appearance field-list
+        group {
+
+        @id food_prep_other
+        @showif $food_preparation = 'other'
+        Specify who mainly decides the type of foods that are used as ingredients in a meal?
+
+
+        @id meal_other
+        @showif $meal = 'other'
+        Specify who mainly decides the type of foods that are used as ingredients in a meal?
+        }
+
+
+        @id learn
+        Are you interested to learn more about health and nutrition?
+        >$yes Yes
+        >$no No
+
+
+        @id learn_yes
+        @showif $learn ='yes'
+        what would you like to learn?
+
+
+        @id record_keeping
+        Do you keep any farm records?
+        >$yes Yes
+        >$no No
+
+
+        @id records_group
+        @appearance field-list
+        group {
+
+        @id record_keeping_pic
+        @showif $record_keeping ='yes'
+        @picture
+        Take a picture of the records
+
+
+        @id record_keeping_yes
+        @showif $record_keeping ='yes'
+        What records do you keep?
+
+
+        @id record_keeping_update
+        @showif $record_keeping ='yes'
+        How often do you update these records?
+
+
+        @id record_keeping_no
+        @showif $record_keeping ='no'
+        Why don't you keep farm records?
+        }
+
+
+        #> Training
+
+
+        @id training
+        Have you or any member of your household participated in any dairy or farm management training or workshop?
+        >$yes Yes
+        >$no No
+
+
+        @id training_group
+        @appearance field-list
+        group {
+
+        @id training_yes
+        @showif $training ='yes'
+        What was the topic of training?
+        >>Improved dairy production
+        >>Financial management
+        >>Business development
+        >>$other Others
+
+
+        @id trained_farmers
+        What are the main sources of information in the community for dairy farm management year?
+        >>Fellow farmer
+        >>Extension staff
+        >>Community workers
+        >>Other NGOs
+        }
+
+
+        @id training_yes_other
+        @showif $training_yes ='other'
+        Specify the topic of training.
+
+
+        @id motivation_group
+        @appearance field-list
+        group {
+
+        @showif $training ='yes'
+        @id motivation_rank
+        @readonly
+        Instruction: Rank the Motivation for training farmers
+
+
+        @showif $training ='yes'
+        @appearance minimal
+        Amount of payment received
+        >Strongly agree
+        >Agree
+        >Disagree
+        >Strongly disagree
+
+
+        @showif $training ='yes'
+        @appearance minimal
+        Expenses involved
+        >Strongly agree
+        >Agree
+        >Disagree
+        >Strongly disagree
+
+
+        @showif $training ='yes'
+        @appearance minimal
+        Time taken to train
+        >Strongly agree
+        >Agree
+        >Disagree
+        >Strongly disagree
+
+
+        @showif $training ='yes'
+        @appearance minimal
+        The gratitude of farmers
+        >Strongly agree
+        >Agree
+        >Disagree
+        >Strongly disagree
+
+
+        @showif $training ='yes'
+        @appearance minimal
+        The effect it has on the farmers
+        >Strongly agree
+        >Agree
+        >Disagree
+        >Strongly disagree
+        }
+
+
+        @id consider
+        *Would you consider giving other farmers some form of training?
+        >$yes Yes
+        >$no No
+
+
+        @id consider_no
+        @showif $consider = 'no'
+        *Why would you not consider giving other farmers some form of training?
+
+
+        @showif $consider ='yes'
+        @id knowledge_pasture
+        *Do you think you have enough knowledge on the following production practices?
+        >>$pas Pasture production and improvement
+        >>$health Animal health management
+        >>$breed Animal breed improvement
+        >>$feed Animal feeding and feeds management
+        >>$clean Clean milk production and handling
+        >>$fodder Fodder conservation ( silage making)
+        >>$fin Farm economics / financial management
+        >>$res Responsible use of antibiotics and pesticides
+        >>$man Manure management
+
+
+        @id reasons_group
+        @appearance field-list
+        group {
+
+        @id knowledge_pasture_no
+        @showif $knowledge_pasture != 'pas'
+        *Give reasons for lack of enough knowledge on Pasture production and improvement?
+
+
+        @id knowledge_1_no
+        @showif $knowledge_pasture != 'health'
+        *Give reasons for lack of enough knowledge on Animal health management?
+
+
+        @id knowledge_2_no
+        @showif $knowledge_pasture != 'breed'
+        *Give reasons for lack of enough knowledge on Animal breed improvement?
+
+
+        @id knowledge_3_no
+        @showif $knowledge_pasture != 'clean'
+        *Give reasons for lack of enough knowledge on Clean milk production and handling?
+
+
+        @id knowledge_4_no
+        @showif $knowledge_pasture != 'fodder'
+        *Give reasons for lack of enough knowledge on Fodder conservation ( silage making)?
+
+
+        @id knowledge_5_no
+        @showif $knowledge_pasture != 'fin'
+        *Give reasons for lack of enough knowledge on Farm economics / financial management?
+
+
+        @id knowledge_6_no
+        @showif $knowledge_pasture != 'res'
+        *Give reasons for lack of enough knowledge on Responsible use of antibiotics and pesticides?
+
+
+        @id knowledge_7_no
+        @showif $knowledge_pasture != 'man'
+        *Give reasons for lack of enough knowledge on Manure management?
+        }
+
+
+        @id feedback_group
+        @appearance field-list
+        group {
+
+        @showif $period != 'base'
+        @id feedback1
+        @appearance textarea
+        *What are you doing differently from the previous evaluation?
+
+
+        @id feedback2
+        @appearance textarea
+        Provide any feedback to this project.
+
+
+        @showif $period != 'base'
+        @id feedback3
+        @appearance textarea
+        What extension visit advice has been provided?
+        }
+
+
+        @id end_group
+        @appearance field-list
+        group {
+
+        @id picture
+        @picture
+        @layout:appearance annotate
+        Take a picture of the farm
+
+
+        @id gps
+        @gps
+        *Record Location
+
+
+        @id date
+        @datetime
+        @readonly
+        @layout:appearance dateTime
+        *Date and time of completion (this is auto filled)
+        }
+
+
+        @absoluteid unique_id
+        @calculate once(concat('uuid:',uuid()))
+        @invisible
+        Unique Id
+
+
+        dynamic_instance{
+        "root","subcounty"
+        "bushenyi","BUMBAIRE"
+        "bushenyi","KYABUGIMBI"
+        "bushenyi","KYEIZOBA"
+        "bushenyi","IBAARE"
+        "bushenyi","RUHUMURO"
+        "bushenyi","KAKANJU"
+        "bushenyi","KYAMUHUNGA"
+        "bushenyi","NYABUBARE"
+        "bushenyi","BITOOMA"
+        "bushenyi","CENTRAL DIVISION"
+        "bushenyi","ISHAKA DIVISION"
+        "bushenyi","NYAKABIRIZI DIVISION"
+        "isingiro","ENDINZI"
+        "isingiro","KASHUMBA"
+        "isingiro","NGARAMA"
+        "isingiro","RUGAAGA"
+        "isingiro","MBAARE"
+        "isingiro","RUSHASHA"
+        "isingiro","BIRERE"
+        "isingiro","KABINGO"
+        "isingiro","MASHA"
+        "isingiro","ISINGIRO TOWN COUNCIL"
+        "isingiro","NYAMUYANJA"
+        "isingiro","KABEREBERE TOWN COUNCIL"
+        "isingiro","KABUYANDA"
+        "isingiro","KIKAGATE"
+        "isingiro","NYAKITUNDA"
+        "isingiro","RUBOROGOTA"
+        "isingiro","KABUYANDA TOWN COUNCIL"
+        "kiruhura","BUREMBA"
+        "kiruhura","BURUNGA"
+        "kiruhura","KANONI"
+        "kiruhura","KAZO"
+        "kiruhura","RWEMIKOMA"
+        "kiruhura","ENGARI"
+        "kiruhura","NKUNGU"
+        "kiruhura","KAZO TOWN COUNCIL"
+        "kiruhura","KANYARYERU"
+        "kiruhura","KASHONGI"
+        "kiruhura","KENSHUNGA"
+        "kiruhura","KIKATSI"
+        "kiruhura","KINONI"
+        "kiruhura","NYAKASHASHARA"
+        "kiruhura","SANGA"
+        "kiruhura","KIRUHURA TOWN COUNCIL"
+        "kiruhura","KITURA"
+        "kiruhura","SANGA TOWN COUNCIL"
+        "mbarara","BUBAARE"
+        "mbarara","BUKIIRO"
+        "mbarara","KAGONGI"
+        "mbarara","KAKIIKA"
+        "mbarara","KASHARE"
+        "mbarara","RUBAYA"
+        "mbarara","RUBINDI"
+        "mbarara","RWANYAMAHEMBE"
+        "mbarara","BIHARWE"
+        "mbarara","BUGAMBA"
+        "mbarara","MWIZI"
+        "mbarara","NDEIJA"
+        "mbarara","NYAKAYOJO"
+        "mbarara","RUGANDO"
+        "mbarara","KAKOBA"
+        "mbarara","KAMUKUZI"
+        "mbarara","NYAMITANGA"
+        "ntungamo","BWONGYERA"
+        "ntungamo","IHUNGA"
+        "ntungamo","KIBATSI"
+        "ntungamo","NYABIHOKO"
+        "ntungamo","NTUNGAMO"
+        "ntungamo","NYAKYERA"
+        "ntungamo","RUHAAMA"
+        "ntungamo","RUKONI WEST"
+        "ntungamo","RWEIKINIRO"
+        "ntungamo","ITOJO"
+        "ntungamo","RUKONI EAST"
+        "ntungamo","KAYONZA"
+        "ntungamo","NGOMA"
+        "ntungamo","RUBAARE"
+        "ntungamo","RUGARAMA"
+        "ntungamo","EASTERN DIVISION"
+        "ntungamo","$ntungamo_central_division CENTRAL DIVISION"
+        "ntungamo","WESTERN DIVISION"
+        "sheema","KAGANGO"
+        "sheema","KIGARAMA"
+        "sheema","KYANGYENYI"
+        "sheema","KABWOHE/ITENDERO TOWN COUN"
+        "sheema","MASHERUKA"
+        "sheema","KIBINGO TOWN COUNCIL"
+        "sheema","BUGONGI"
+        "sheema","KITAGATA"
+        "sheema","SHUUKU"
+        "sheema","KASAANA"
+        "sheema","BUGONGI TOWN COUNCIL"
+        }
