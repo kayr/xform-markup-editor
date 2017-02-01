@@ -33,9 +33,11 @@ class MarkUpSerializerTest extends GroovyTestCase {
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
         testRoundTrip(formWithDollarInString)
+        testRoundTrip(form_With_Multiline)
         testRoundTrip(DeSerializerFixtures.dynFormWithQuotes.markUp)
         testRoundTrip(DeSerializerFixtures.nestedGroups.markUp)
         testRoundTrip(Fixtures.formWithLayoutAndBindAttributes)
+        testRoundTrip(this.class.getResourceAsStream('/failing-form-xml.xfm').text)
     }
 
     void testRoundTrip(String form) {

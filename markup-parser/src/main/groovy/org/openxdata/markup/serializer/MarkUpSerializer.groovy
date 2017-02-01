@@ -13,7 +13,9 @@ class MarkUpSerializer {
         use(StringBuildCategory) {
             StringWriter w = new StringWriter()
             def builder = new IndentPrinter(w, "    ", true, true)
-            builder << "### $study.name"
+            if (study.name?.trim()) {
+                builder << "### $study.name"
+            }
             study.forms.each {
                 builder << toFormMarkUp(it)
             }
@@ -132,9 +134,9 @@ class MarkUpSerializer {
 
         renderBehaviourInfo(builder, qn)
 
-        def instanceParent = qn.firstInstanceParent
-        def isFormWithPages = instanceParent instanceof Form && instanceParent.isHoldingPagesOnly()
-        if (isFormWithPages) {
+        def instanceParent = qn.parent
+        def isFormWithPagesOnly = instanceParent instanceof Form && instanceParent.isHoldingPagesOnly()
+        if (isFormWithPagesOnly) {
             builder << "#> ${qn.text ?: "Page $qn.questionIdx"}"
         } else {
             builder << "group { ${qn.text ?: ''}"
@@ -142,12 +144,12 @@ class MarkUpSerializer {
 
         builder.println()
 
-        isFormWithPages ?: ++builder
+        isFormWithPagesOnly ?: ++builder
         for (e in qn.elements) {
             serialize(builder, e)
         }
-        isFormWithPages ?: --builder
-        if (!isFormWithPages) builder << '}'
+        isFormWithPagesOnly ?: --builder
+        if (!isFormWithPagesOnly) builder << '}'
         seprator(builder)
     }
 
@@ -156,7 +158,14 @@ class MarkUpSerializer {
         renderQuestionText(builder, qn)
         ++builder
         qn.options.each {
-            builder << ">>$it.markUpText"
+            if (it.markUpText?.contains('\n')) {
+                builder << ">>'''"
+                builder << it.markUpText
+                builder << "'''"
+
+            } else {
+                builder << ">>$it.markUpText"
+            }
         }
         --builder
         seprator(builder)
@@ -167,7 +176,14 @@ class MarkUpSerializer {
         renderQuestionText(builder, qn)
         ++builder
         qn.options.each {
-            builder << ">$it.markUpText"
+            if (it.markUpText?.contains('\n')) {
+                builder << ">'''"
+                builder << it.markUpText
+                builder << "'''"
+
+            } else {
+                builder << ">$it.markUpText"
+            }
         }
         --builder
         seprator(builder)
@@ -239,7 +255,15 @@ class MarkUpSerializer {
         if (qn.type && qn.type != 'string') {
             builder << "@$qn.type"
         }
-        builder << "${qn.required ? '*' : ''}$qn.text"
+        if (qn.text?.contains('\n')) {
+            builder << "${qn.required ? '*' : ''}'''"
+            builder << qn.text
+            builder << "'''"
+
+        } else {
+            builder << "${qn.required ? '*' : ''}$qn.text"
+
+        }
     }
 }
 

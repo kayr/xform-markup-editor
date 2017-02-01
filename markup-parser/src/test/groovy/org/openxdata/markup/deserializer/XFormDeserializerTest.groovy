@@ -238,6 +238,7 @@ class XFormDeserializerTest extends XMLTestCase {
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
         testRoundTrip(formWithTrigger.markUp)
+        testRoundTrip(this.class.getResourceAsStream('/failing-form-xml.xfm').text)
         serializer.numberBindings = true
         testRoundTrip(wssbForm.markUp)
         testRoundTrip(gpsForm.markUp)
@@ -275,13 +276,13 @@ class XFormDeserializerTest extends XMLTestCase {
         String odk1 = Converter.to(FORMAT.ODK, FORMAT.MARKUP, markup, flags)
         String odk2 = Converter.to(FORMAT.ODK, FORMAT.ODK, odk1, FLAGS.of(FLAGS.VALIDATE_FORM))
 
-//        try {
-        assert odk1.startsWith('<h:html')
-        assertEquals odk1, odk2
-//        } catch (ComparisonFailure f) {
-//            System.err.println("Some form failed to pass round trip $form1.name")
-//            assertXMLEqual odk1, odk2
-//        }
+        try {
+            assert odk1.startsWith('<h:html')
+            assertEquals odk1, odk2
+        } catch (ComparisonFailure f) {
+            System.err.println("Some form failed to pass round trip $form1.name")
+            assertXMLEqual odk1, odk2
+        }
 
     }
 
