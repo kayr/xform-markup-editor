@@ -92,6 +92,9 @@ class MainPresenter implements DocumentListener {
 
         form.menuEnableODKMode.addActionListener { enableODKMode() }
 
+        form.btnIncreaseFont.addActionListener { increaseFont() }
+        form.btnDecreaseFont.addActionListener { decreaseFont() }
+
 
 
         def windowCloseHandler = new WindowAdapter() {
@@ -109,6 +112,15 @@ class MainPresenter implements DocumentListener {
         loadForm(addHeader(Resources.sampleStudy))
 
         renderHistory()
+    }
+
+    private decreaseFont() {
+        form.decreaseFont()
+    }
+
+    private increaseFont() {
+        form.increaseFont()
+
     }
 
     def align() {

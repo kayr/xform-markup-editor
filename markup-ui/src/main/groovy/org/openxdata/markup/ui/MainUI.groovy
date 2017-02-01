@@ -3,6 +3,9 @@ package org.openxdata.markup.ui
 import groovy.swing.SwingBuilder
 import jsyntaxpane.DefaultSyntaxKit
 import jsyntaxpane.actions.CaretMonitor
+import jsyntaxpane.components.LineNumbersRuler
+import jsyntaxpane.components.SyntaxComponent
+import org.openxdata.markup.ReflectionUtils
 
 import javax.swing.*
 import javax.swing.text.DefaultStyledDocument
@@ -32,9 +35,24 @@ class MainUI {
     PrintStream info
 
     MainUI() {
-        DefaultSyntaxKit.registerContentType("text/xform", "org.openxdata.markup.ui.XFormMarkupSyntaxKit");
+        initSyntaxKit();
         initUi()
 
+    }
+
+    def initSyntaxKit() {
+        DefaultSyntaxKit.initKit()
+        // override default syntax values
+        def config = DefaultSyntaxKit.getConfig(DefaultSyntaxKit.class);
+        for (it in ["Consolas 12", "Monospaced 13", "Courier New 12"]) {
+            if (Font.decode(it)) {
+                println("Default Font Set To: [$it]")
+                config.put("DefaultFont", it)
+                break
+            }
+        }
+
+        DefaultSyntaxKit.registerContentType("text/xform", "org.openxdata.markup.ui.XFormMarkupSyntaxKit")
     }
 
     def initUi() {
@@ -46,9 +64,11 @@ class MainUI {
                 menu(text: 'File', mnemonic: 'F') {
                     menuOpen = menuItem(text: 'Open', mnemonic: 'O', icon: ICON_OPEN)
                     menuSave = menuItem(text: 'Save', mnemonic: 'S', icon: ICON_SAVE)
+
                     separator()
                     menuRecent = menu(text: 'Recent', font: new Font(Font.SANS_SERIF, Font.BOLD, 12), icon: ICON_FORM)
                     separator()
+
                     menuNew = menuItem(text: 'New', mnemonic: 'N', icon: ICON_NEW)
                     menuImport = menuItem(text: 'Import', mnemonic: 'I', icon: ICON_IMPORT)
 
@@ -99,7 +119,7 @@ class MainUI {
                     }
 
                     separator()
-                    menuItem(text: 'About', actionPerformed: { showAbout() })
+                    menuItem(text: 'About', actionPerformed: { showDialogue(15) })
                 }
             }
         }
@@ -115,6 +135,8 @@ class MainUI {
                 btnPreviewXml = button(text: "Preview in Enketo")
                 chkNumberLabels = checkBox(text: 'Number Labels', selected: true)
                 chkODKValidate = checkBox(text: 'ODK Validate', selected: true)
+                btnIncreaseFont = button(text: 'A+', selected: true, toolTipText: 'Increase Font')
+                btnDecreaseFont = button(text: 'A-', selected: true, toolTipText: 'Decrease Font')
 
             }
         }
@@ -198,6 +220,21 @@ class MainUI {
                 label('Developed By')
                 label('web:   http://www.omnitech.co.ug')
                 label('Email: rk@omnitech.co.ug')
+
+            }
+
+        }
+    }
+
+    private void showDialogue(int fontSize) {
+        s.dialog(owner: frame, locationRelativeTo: frame, title: 'About OxdMarkup',
+                visible: true, defaultCloseOperation: DISPOSE_ON_CLOSE, size: [200, 100],
+                modal: true) {
+            panel {
+                gridLayout(columns: 1, rows: 3)
+                label('Developed By')
+                textField()
+                button(text: "Set", actionPerformed: {})
             }
 
         }
@@ -223,6 +260,33 @@ class MainUI {
         frame.title = s
     }
 
+    void setFontSize(int fontSize) {
+        def kit = txtMarkUp.getEditorKit() as XFormMarkupSyntaxKit
+
+        invokeLater {
+            kit.deinstallComponent(txtMarkUp, LineNumbersRuler.name)
+            def f = txtMarkUp.getFont()
+            txtMarkUp.setFont(new Font(f.name, f.style, fontSize))
+            kit.installComponent(txtMarkUp, LineNumbersRuler.name)
+
+            Map<JEditorPane, java.util.List<SyntaxComponent>> comps = ReflectionUtils.getValue(kit, kit.class.superclass, true, 'editorComponents')
+            def ruler = comps.get(txtMarkUp).find { it instanceof LineNumbersRuler } as LineNumbersRuler
+            ruler?.setMinimumDisplayDigits(2)
+        }
+    }
+
+    void increaseFont() {
+        def size = txtMarkUp.font.getSize()
+        studyTreeBuilder.increaseFont()
+        setFontSize(size + 1)
+    }
+
+    void decreaseFont() {
+        def size = txtMarkUp.font.getSize()
+        studyTreeBuilder.decreaseFont()
+        setFontSize(size - 1)
+    }
+
     static protected ImageIcon createImageIcon(String path,
                                                String description) {
         java.net.URL imgURL = getClass().getResource(path);
@@ -239,6 +303,8 @@ class MainUI {
     JButton btnShowOdkXml
     JButton btnRefreshTree
     JButton btnPreviewXml
+    JButton btnIncreaseFont
+    JButton btnDecreaseFont
 
     JCheckBoxMenuItem chkGenerateLayout
     JCheckBoxMenuItem chkNumberBindings

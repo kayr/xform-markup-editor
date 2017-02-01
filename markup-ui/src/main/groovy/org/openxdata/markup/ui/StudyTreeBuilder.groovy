@@ -13,6 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import java.awt.*
 
+import static javax.swing.SwingUtilities.invokeLater
 import static javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION
 
 /**
@@ -160,6 +161,25 @@ class StudyTreeBuilder extends JPanel implements TreeSelectionListener {
         keyboardUpdateTriggered = true
         expandTo(element)
         keyboardUpdateTriggered = false
+    }
+
+    void increaseFont() {
+        def size = tree.font.getSize()
+        setFontSize(size + 1)
+    }
+
+    void decreaseFont() {
+        def size = tree.font.getSize()
+        setFontSize(size - 1)
+    }
+
+
+    void setFontSize(int fontSize) {
+        invokeLater {
+            def f = tree.getFont()
+            tree.setFont(new Font(f.name, f.style, fontSize))
+
+        }
     }
 
 
