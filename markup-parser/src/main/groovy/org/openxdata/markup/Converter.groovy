@@ -80,8 +80,8 @@ class Converter {
         @SuppressWarnings("GroovyUnusedDeclaration")
         ConverterBuilder log() {
             println("Covert $from -> $to ")
-            println("   $from -> $FORMAT.FORM ")
-            println("   $FORMAT.FORM -> $to ")
+            println("   1). $from -> $FORMAT.FORM ")
+            println("   2). $FORMAT.FORM -> $to ")
             return this
         }
 
@@ -131,23 +131,6 @@ class Converter {
         return (T) objects.findResult(Closure.IDENTITY)
     }
 
-    static Form markup2Form(def src) {
-        markup2Form(src, FLAGS.of(FLAGS.VALIDATE_FORM), null)
-    }
-
-    static Form markup2Form(def src, def cacheId) {
-        markup2Form(src, FLAGS.none(), cacheId)
-    }
-
-    static Form markup2Form(def src, EnumSet<FLAGS> flags) {
-        markup2Form(src, flags, null)
-
-    }
-
-    static Form markup2Form(def src, EnumSet<FLAGS> flags, def cacheId) {
-        return toFormFrom(FORMAT.MARKUP, src, flags, cacheId)
-
-    }
 
     static Form toFormFrom(FORMAT from, def src, EnumSet<FLAGS> flags = FLAGS.none(), def cacheId = null) {
         def func = TO_FORM[from]
@@ -300,6 +283,42 @@ class Converter {
         ser.generateView = FLAGS.OXD_GENERATE_VIEW in flags
         ser.putExtraAttributesInComments = FLAGS.OXD_EXTRA_ATTRIBUTES_IN_COMMENTS in flags
         return ser
+    }
+
+    // SOME CONVENIENCE METHODS
+    static Form markup2Form(def src) {
+        markup2Form(src, FLAGS.of(FLAGS.VALIDATE_FORM), null)
+    }
+
+    static Form markup2Form(def src, def cacheId) {
+        markup2Form(src, FLAGS.none(), cacheId)
+    }
+
+    static Form markup2Form(def src, EnumSet<FLAGS> flags) {
+        markup2Form(src, flags, null)
+
+    }
+
+    static Form odk2Form(String xml) {
+        return toFormFrom(FORMAT.ODK, xml)
+    }
+
+    static Form oxd2Form(String xml) {
+        return toFormFrom(FORMAT.OXD, xml)
+    }
+
+    static String oxd2Odk(String xml) {
+        return from(FORMAT.OXD).to(FORMAT.ODK).convert(xml)
+    }
+
+    static String markup2Oxd(String markup) {
+        from(FORMAT.MARKUP).to(FORMAT.OXD).convert(markup)
+    }
+
+
+    static Form markup2Form(def src, EnumSet<FLAGS> flags, def cacheId) {
+        return toFormFrom(FORMAT.MARKUP, src, flags, cacheId)
+
     }
 
 }
