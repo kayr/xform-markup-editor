@@ -66,6 +66,28 @@ trait HasQuestions implements IFormElement {
 
     }
 
+    List<IQuestion> getAllFirstLevelQuestionsNotInRepeat() {
+        def thisObject = this
+        getAllElements { IFormElement q ->
+            if (!(q instanceof IQuestion)) return false
+
+            if ((thisObject as HasQuestions).hasRepeatBetweenThisAnd(q)) return false
+
+            return true
+        } as List<IQuestion>
+    }
+
+    boolean hasRepeatBetweenThisAnd(IFormElement otherElem) {
+        def otherElemParents = otherElem.parentList
+        for (p in otherElemParents) {
+            if (p == this) return false
+
+            if (p instanceof RepeatQuestion) return true
+        }
+        return false
+    }
+
+
     List<IFormElement> getAllFirstLevelElements() {
         def thisObject = this
         return getAllElements { IFormElement q -> q.firstInstanceParent == thisObject }

@@ -103,6 +103,17 @@ trait IFormElement {
         return parent
     }
 
+    List<HasQuestions> getParentList() {
+        List<HasQuestions> parentList = []
+        def currentItem = this
+        while (currentItem) {
+            parentList << currentItem.parent
+            currentItem = currentItem.parent
+        }
+        return parentList
+    }
+
+
     def getContextIdx() {
         return "${parent.questions.indexOf(this) + 1}"
     }
