@@ -23,19 +23,19 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
 class MainUI {
 
     //UIManager.getDefaults().findAll{it.key.toString().toLowerCase().endsWith('icon')}
-    static def ICON_OPEN = getIcon('Tree.openIcon')
-    static def ICON_SAVE = getIcon('FileView.floppyDriveIcon')
-    static def ICON_NEW = getIcon('FileView.fileIcon')
-    static def ICON_IMPORT = getIcon('FileChooser.upFolderIcon')
-    static def ICON_FORM = getIcon('FileChooser.detailsViewIcon')
-    static def ICON_REFRESH = createImageIcon('/refresh.png', 'Refresh')
+    static Icon ICON_OPEN = getIcon('Tree.openIcon')
+    static Icon ICON_SAVE = getIcon('FileView.floppyDriveIcon')
+    static Icon ICON_NEW = getIcon('FileView.fileIcon')
+    static Icon ICON_IMPORT = getIcon('FileChooser.upFolderIcon')
+    static Icon ICON_FORM = getIcon('FileChooser.detailsViewIcon')
+    static Icon ICON_REFRESH = createImageIcon('/refresh.png', 'Refresh')
 
     Closure formLoader
     SwingBuilder s
     PrintStream info
 
     MainUI() {
-        initSyntaxKit();
+        initSyntaxKit()
         initUi()
 
     }
@@ -171,16 +171,22 @@ class MainUI {
         def _textArea = {
             s.splitPane(orientation: JSplitPane.VERTICAL_SPLIT, resizeWeight: 0.70) {
 
+
                 scrollPane(constraints: 'top') {
                     txtMarkUp = editorPane()
-                    txtMarkUp.setContentType("text/xform");
+                    txtMarkUp.setContentType("text/xform")
                 }
 
-                scrollPane(constraints: 'bottom') {
-                    txtConsole = textPane(styledDocument: new DefaultStyledDocument(),
+                s.scrollPane(constraints: 'bottom') {
+                    txtConsole = s.widget(new JTextWrapPane(
+                            styledDocument: new DefaultStyledDocument(),
                             font: new Font(Font.MONOSPACED, Font.PLAIN, 12),
                             background: new Color(255, 255, 218))
-                }
+                    ) as JTextWrapPane
+                }.getViewport().setBackground(new Color(255, 255, 218))
+//Set the background of the scrollPane same as textPane
+
+
             }
         }
 
@@ -289,12 +295,12 @@ class MainUI {
 
     static protected ImageIcon createImageIcon(String path,
                                                String description) {
-        java.net.URL imgURL = getClass().getResource(path);
+        URL imgURL = getClass().getResource(path)
         if (imgURL != null) {
-            return new ImageIcon(imgURL, description);
+            return new ImageIcon(imgURL, description)
         } else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
+            System.err.println("Couldn't find file: " + path)
+            return null
         }
     }
 
@@ -342,3 +348,4 @@ class MainUI {
 
 
 }
+
