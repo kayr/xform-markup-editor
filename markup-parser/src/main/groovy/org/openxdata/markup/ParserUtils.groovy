@@ -13,47 +13,47 @@ import static groovy.transform.stc.FirstParam.FirstGenericType
 @CompileStatic
 class ParserUtils {
 
-    static def <T extends Tree> List findResults(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> List findResults(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, true, false)
     }
 
-    static def <T extends Tree> List findResultsDeep(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> List findResultsDeep(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, true, true)
     }
 
-    static def <T extends Tree> List<T> findAllDeep(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> List<T> findAllDeep(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, false, true)
     }
 
-    static def <T extends Tree> List<T> findAllDeepSelf(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> List<T> findAllDeepSelf(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, false, true, false, true)
     }
 
-    static def <T extends Tree> List<T> findAll(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> List<T> findAll(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, false, false)
     }
 
-    static def <T extends Tree> List<T> findAllBreadth1st(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> List<T> findAllBreadth1st(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplBreadth(tree, filter, false, false)
     }
 
-    static def <T extends Tree> T find(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> T find(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, false, false, true)?.get(0) as T
     }
 
-    static def <T extends Tree> T findSelf(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> T findSelf(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, false, false, true, true)?.get(0) as T
     }
 
-    static def <T extends Tree> T findDeep(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> T findDeep(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, true, true)?.get(0) as T
     }
 
-    static def <T extends Tree> T findDeepSelf(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> T findDeepSelf(T tree, @CP(FirstGenericType) Closure filter) {
         findResultsImplDeep(tree, filter, false, true, true, true)?.get(0) as T
     }
 
-    static def <T extends Tree> void each(T tree, @CP(FirstGenericType) Closure filter) {
+    static <T extends Tree> void each(T tree, @CP(FirstGenericType) Closure filter) {
         eachImpl(tree, filter, false)
     }
 
@@ -61,12 +61,12 @@ class ParserUtils {
      * Walks down(depth first) a tree till it finds an element the closure matches then finds similar
      * elements at that same depth
      */
-    static def <T extends Tree> List findResultsImplDeep(T tree,
-                                                         @CP(FirstGenericType) Closure filter,
-                                                         boolean transform,
-                                                         boolean deep,
-                                                         boolean breakOnFirst = false,
-                                                         boolean includeParent = false) {
+    static <T extends Tree> List findResultsImplDeep(T tree,
+                                                     @CP(FirstGenericType) Closure filter,
+                                                     boolean transform,
+                                                     boolean deep,
+                                                     boolean breakOnFirst = false,
+                                                     boolean includeParent = false) {
 
 
         List trees = []
@@ -97,12 +97,12 @@ class ParserUtils {
      * Walks down a tree till it finds an element the closure matches then finds similar
      * elements at that same level
      */
-    static def <T extends Tree> List findResultsImplBreadth(T tree,
-                                                         @CP(FirstGenericType) Closure filter,
-                                                         boolean transform,
-                                                         boolean deep,
-                                                         boolean breakOnFirst = false,
-                                                         boolean includeParent = false) {
+    static <T extends Tree> List findResultsImplBreadth(T tree,
+                                                        @CP(FirstGenericType) Closure filter,
+                                                        boolean transform,
+                                                        boolean deep,
+                                                        boolean breakOnFirst = false,
+                                                        boolean includeParent = false) {
 
 
         List trees = []
@@ -139,9 +139,9 @@ class ParserUtils {
     }
 
 
-    static def <T extends Tree> void eachImpl(T tree,
-                                              @CP(FirstGenericType) Closure visitor,
-                                              boolean deep) {
+    static <T extends Tree> void eachImpl(T tree,
+                                          @CP(FirstGenericType) Closure visitor,
+                                          boolean deep) {
 
         int count = tree.getChildCount()
         for (int i = 0; i < count; i++) {
@@ -155,7 +155,7 @@ class ParserUtils {
 
 
     static void printTree(CommonTree ast, PrintStream w = System.out) {
-        print(ast, 0, w);
+        print(ast, 0, w)
     }
 
     private static void print(CommonTree tree, int level, PrintStream w) {
@@ -173,7 +173,7 @@ class ParserUtils {
     }
 
     /** Print out only the tails */
-    public static String emitTailString(Tree tree) {
+    static String emitTailString(Tree tree) {
         if (tree.getChildCount() == 0) {
             return tree.toString()
         }

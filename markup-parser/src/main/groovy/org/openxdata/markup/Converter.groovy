@@ -45,11 +45,11 @@ class Converter {
             return this
         }
 
-        def T convert(def src, FLAGS flag, FLAGS... flags) {
+        T convert(src, FLAGS flag, FLAGS... flags) {
             convert(src, FLAGS.of(flag, flags))
         }
 
-        def T convert(def src, EnumSet<FLAGS> flags = _flags) {
+        T convert(src, EnumSet<FLAGS> flags = _flags) {
             if (to && from) {
                 //noinspection UnnecessaryQualifiedReference
                 return (T) Converter.to(to, from, src, flags, cacheId)
@@ -91,7 +91,7 @@ class Converter {
         return new ConverterBuilder<T>(to: to)
     }
 
-    static def <T> ConverterBuilder<T> from(FORMAT from, Class<T> aClass = String) {
+    static <T> ConverterBuilder<T> from(FORMAT from, Class<T> aClass = String) {
         return new ConverterBuilder<T>(from: from)
     }
 
@@ -318,6 +318,16 @@ class Converter {
 
     static Form markup2Form(def src, EnumSet<FLAGS> flags, def cacheId) {
         return toFormFrom(FORMAT.MARKUP, src, flags, cacheId)
+
+    }
+
+    static Form oxd2FormWithCache(String xform, cacheID = xform, boolean pClearCache = false) {
+
+        def flags = FLAGS.of(FLAGS.USE_CACHE)
+
+        if (pClearCache) flags << FLAGS.CLEAR_CACHE
+
+        return toFormFrom(FORMAT.OXD, xform, flags, cacheID)
 
     }
 
