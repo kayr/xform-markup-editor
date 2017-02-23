@@ -154,7 +154,6 @@ public final class TimeFormat  {
    * add a timeformat
    * 
    * 
-   * @param t
    */
   public void add(TimeFormat t) {
     days += t.days;
@@ -167,7 +166,6 @@ public final class TimeFormat  {
    * get days from a time format
    * 
    * 
-   * @param t
    */
   public void getDays(TimeFormat t) {
     if (t.remainder >= ONE_DAY) {
@@ -193,7 +191,6 @@ public final class TimeFormat  {
    * get minutes from a time format
    * 
    * 
-   * @param t
    */
   public void getMinutes(TimeFormat t) {
     if (t.remainder >= ONE_MINUTE && t.remainder < ONE_HOUR) {
@@ -206,7 +203,6 @@ public final class TimeFormat  {
    * get seconds from a time format
    * 
    * 
-   * @param t
    */
   public void getSeconds(TimeFormat t) {
     if (t.remainder >= ONE_SECOND && t.remainder < ONE_MINUTE) {
@@ -222,7 +218,6 @@ public final class TimeFormat  {
    * update time
    * 
    * 
-   * @param t
    */
   public void getTime(TimeFormat t) {
     t.getTime();
@@ -314,9 +309,6 @@ public final class TimeFormat  {
   /**
    * FIXME: Missing Method declaration
    * 
-   * 
-   * @param empty
-   * @return
    */
   private String formatDays(boolean empty) {
     if (days <= 0) {
@@ -330,8 +322,6 @@ public final class TimeFormat  {
    * FIXME: Missing Method declaration
    * 
    * 
-   * @param empty
-   * @return
    */
   private String formatHours(boolean empty) {
     if (hours <= 0) {
@@ -345,8 +335,6 @@ public final class TimeFormat  {
    * FIXME: Missing Method declaration
    * 
    * 
-   * @param empty
-   * @return
    */
   private String formatMinutes(boolean empty) {
     if (minutes <= 0) {
@@ -360,8 +348,6 @@ public final class TimeFormat  {
    * FIXME: Missing Method declaration
    * 
    * 
-   * @param empty
-   * @return
    */
   private String formatSeconds(boolean empty) {
     if (seconds <= 0) {
@@ -386,8 +372,6 @@ public final class TimeFormat  {
    * return a string formatted version of time <code>t</code> rounding to
    * <code>round</code>
    * 
-   * @param t
-   * @param round
    * @return String value
    */
   public static String valueOf(long t, int round) {
@@ -400,7 +384,6 @@ public final class TimeFormat  {
    * return a string formatted version of time <code>t</code> rounding to
    * <code>round</code>
    * 
-   * @param t
    * @return String value
    */
   public static String valueOf(long t) {
@@ -535,12 +518,6 @@ public final class TimeFormat  {
     return r + s;
   }
 
-  /**
-   * test
-   * 
-   * 
-   * @param args
-   */
   public static void main(String args[]) {
     String FORMAT = "D 'days,' HH 'hours,' mm 'minutes and ' ss 'seconds, 'zz 'milliseconds'";
 
