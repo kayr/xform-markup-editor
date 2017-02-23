@@ -11,6 +11,12 @@ import org.openxdata.markup.exception.InvalidAttributeException
  */
 class AttribTest extends GroovyTestCase {
 
+    @Override
+    protected void setUp() throws Exception {
+        Study.validateWithXML.set(false)
+    }
+
+
     TextQuestion qn = new TextQuestion("Hello")
     SingleSelectQuestion sn = new SingleSelectQuestion("Other")
     DynamicQuestion dn = new DynamicQuestion("Dynamic")
