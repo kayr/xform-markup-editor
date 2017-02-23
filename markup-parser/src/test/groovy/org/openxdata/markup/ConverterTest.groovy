@@ -89,4 +89,13 @@ class ConverterTest extends GroovyTestCase {
         assert Converter.cacheMiss == 3
 
     }
+
+    void test_oxd2FormWithCache(){
+        def oxd = Converter.markup2Oxd(Fixtures.oxdSampleForm)
+        Converter.oxd2FormWithCache(oxd)
+        Converter.oxd2FormWithCache(oxd)
+
+        assert Converter.cacheHits == 1
+        assert Converter.cacheSize() == 1
+    }
 }
