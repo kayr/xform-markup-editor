@@ -140,6 +140,13 @@ trait HasQuestions implements IFormElement {
         return null
     }
 
+    List<RepeatQuestion> getFirstChildRepeats() {
+        def thisElem = this
+        return getAllElements { IFormElement it ->
+            it instanceof RepeatQuestion && it.firstRepeatParentOrForm == thisElem
+        } as List<RepeatQuestion>
+    }
+
     IFormElement getFirstElementsText() {
         def all = getAllElements(true) { IFormElement e -> e.text as boolean }
         if (all) return all.first()

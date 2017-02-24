@@ -103,6 +103,17 @@ trait IFormElement {
         return parent
     }
 
+    HasQuestions getFirstRepeatParentOrForm() {
+        def parent = this.parent
+        while (parent && !(parent instanceof RepeatQuestion) && !(parent instanceof Form)) {
+            parent = parent.parent
+        }
+        return parent
+    }
+
+
+
+
     List<HasQuestions> getParentList() {
         List<HasQuestions> parentList = []
         def currentItem = this
