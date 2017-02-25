@@ -2,8 +2,8 @@ package org.openxdata.markup.ui
 
 import org.openxdata.markup.Converter
 import org.openxdata.markup.FORMAT
+import org.openxdata.markup.Form
 import org.openxdata.markup.deserializer.StudyDeSerializer
-import org.openxdata.markup.deserializer.XFormDeserializer
 import org.openxdata.markup.serializer.MarkUpSerializer
 
 /**
@@ -36,19 +36,25 @@ class XFormImporterPresenter {
         if (isForStudy(dom)) {
             StudyDeSerializer sd = new StudyDeSerializer()
             def study = sd.toStudy(xml)
+            study.forms.each { makeUniqueIdAbsoluteMayBe(it) }
             markup = MarkUpSerializer.toStudyMarkup(study)
         } else if (isForOdk(dom)) {
-//            markup = MarkUpSerializer.toFormMarkUp(ConversionHelper.odk2Form(xml))
-            markup = Converter.to(FORMAT.MARKUP, FORMAT.ODK, xml)
+            def form = Converter.toFormFrom(FORMAT.ODK, xml)
+            makeUniqueIdAbsoluteMayBe(form)
+            markup = Converter.fromFormTo(FORMAT.MARKUP, form)
             main?.enableODKMode()
         } else {
-            XFormDeserializer ds = new XFormDeserializer(xml: xml, xForm: dom)
-            def form = ds.toForm()
+            def form = Converter.toFormFrom(FORMAT.OXD, xml)
+            makeUniqueIdAbsoluteMayBe(form)
             markup = "### $form.name\n${MarkUpSerializer.toFormMarkUp(form)}\n"
         }
         main?.loadWithConfirmation(markup)
 
         ui.hide()
+    }
+
+    static makeUniqueIdAbsoluteMayBe(Form form) {
+        form['unique_id']?.setHasAbsoluteId(true)
     }
 
     def show() {
