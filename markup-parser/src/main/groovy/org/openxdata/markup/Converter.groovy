@@ -36,7 +36,7 @@ class Converter {
             return this
         }
 
-        ConverterBuilder<T> cacheId(def cacheId) {
+        ConverterBuilder<T> cacheId(cacheId) {
             this.cacheId = cacheId
             return this
         }
@@ -87,7 +87,7 @@ class Converter {
 
     }
 
-    static def <T> ConverterBuilder to(FORMAT to, Class<T> aClass = String) {
+    static <T> ConverterBuilder to(FORMAT to, Class<T> aClass = String) {
         return new ConverterBuilder<T>(to: to)
     }
 
@@ -95,19 +95,19 @@ class Converter {
         return new ConverterBuilder<T>(from: from)
     }
 
-    static def <T> T to(FORMAT toFormat, FORMAT from, def src) {
+    static <T> T to(FORMAT toFormat, FORMAT from, src) {
         to(toFormat, from, src, FLAGS.none(), null)
     }
 
-    static def <T> T to(FORMAT toFormat, FORMAT from, def src, def cacheId) {
+    static <T> T to(FORMAT toFormat, FORMAT from, src, cacheId) {
         to(toFormat, from, src, FLAGS.none(), cacheId)
     }
 
-    static def <T> T to(FORMAT toFormat, FORMAT from, def src, EnumSet<FLAGS> flags) {
+    static <T> T to(FORMAT toFormat, FORMAT from, src, EnumSet<FLAGS> flags) {
         to(toFormat, from, src, flags, null)
     }
 
-    static def <T> T to(FORMAT to, FORMAT from, def src, EnumSet<FLAGS> flags, def cacheId) {
+    static  <T> T to(FORMAT to, FORMAT from,  src, EnumSet<FLAGS> flags,  cacheId) {
 
         def key = generateKey(notNull(cacheId, src), to, from)
 
@@ -127,12 +127,12 @@ class Converter {
         return result as T
     }
 
-    private static def <T> T notNull(def ... objects) {
+    private static <T> T notNull(... objects) {
         return (T) objects.findResult(Closure.IDENTITY)
     }
 
 
-    static Form toFormFrom(FORMAT from, def src, EnumSet<FLAGS> flags = FLAGS.none(), def cacheId = null) {
+    static Form toFormFrom(FORMAT from, src, EnumSet<FLAGS> flags = FLAGS.none(), cacheId = null) {
         def func = TO_FORM[from]
         def key = generateKey(notNull(cacheId, src), from)
 
@@ -143,7 +143,7 @@ class Converter {
         return form
     }
 
-    static def fromFormTo(FORMAT to, Form src, EnumSet<FLAGS> flags = FLAGS.none(), def cacheId = null) {
+    static fromFormTo(FORMAT to, Form src, EnumSet<FLAGS> flags = FLAGS.none(), cacheId = null) {
         if (FLAGS.VALIDATE_FORM in flags) { validateForm(flags, src) }
 
         def func = FROM_BASE[to]
@@ -164,19 +164,19 @@ class Converter {
 
     private static Map cacheData = new ConcurrentHashMap()
 
-    static List generateKey(def ... keys) {
+    static List generateKey(... keys) {
         return Arrays.asList(keys)
     }
 
-    static def <T> T cache(def key, T value) {
+    static <T> T cache(key, T value) {
         cacheData[key] = value
         return value
     }
 
-    static cacheHits = 0;// simply fo testing purposes
-    static cacheMiss = 0;// simply fo testing purposes
+    static cacheHits = 0// simply fo testing purposes
+    static cacheMiss = 0// simply fo testing purposes
 
-    static def <T> T fromCacheOrEval(def key, EnumSet<FLAGS> flags, Closure<T> eval) {
+    static <T> T fromCacheOrEval(key, EnumSet<FLAGS> flags, Closure<T> eval) {
 
         if (FLAGS.CLEAR_CACHE in flags) {
             cacheData.clear()
@@ -198,7 +198,7 @@ class Converter {
 
     static void clearCache() { cacheData.clear() }
 
-    static void clearStats() { cacheHits = 0; cacheMiss = 0; }
+    static void clearStats() { cacheHits = 0; cacheMiss = 0 }
 
     static int cacheSize() { cacheData.size() }
 
@@ -286,15 +286,15 @@ class Converter {
     }
 
     // SOME CONVENIENCE METHODS
-    static Form markup2Form(def src) {
+    static Form markup2Form(src) {
         markup2Form(src, FLAGS.of(FLAGS.VALIDATE_FORM), null)
     }
 
-    static Form markup2Form(def src, def cacheId) {
+    static Form markup2Form(src, cacheId) {
         markup2Form(src, FLAGS.none(), cacheId)
     }
 
-    static Form markup2Form(def src, EnumSet<FLAGS> flags) {
+    static Form markup2Form(src, EnumSet<FLAGS> flags) {
         markup2Form(src, flags, null)
 
     }
@@ -316,7 +316,7 @@ class Converter {
     }
 
 
-    static Form markup2Form(def src, EnumSet<FLAGS> flags, def cacheId) {
+    static Form markup2Form(src, EnumSet<FLAGS> flags, cacheId) {
         return toFormFrom(FORMAT.MARKUP, src, flags, cacheId)
 
     }
