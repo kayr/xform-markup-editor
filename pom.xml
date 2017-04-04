@@ -40,6 +40,13 @@
                 </configuration>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.12</version>
+            </extension>
+        </extensions>
     </build>
 
     <scm>
@@ -52,12 +59,12 @@
     <distributionManagement>
         <repository>
             <id>kayr.release</id>
-            <url>file:///C:/m2/releases</url>
+            <url>scp://maven@omnitech.co.ug/home/maven/m2repo/releases</url>
         </repository>
 
         <snapshotRepository>
             <id>kayr.snapshots</id>
-            <url>file:///C:/m2/snapshots</url>
+            <url>scp://maven@omnitech.co.ug/home/maven/m2repo/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
