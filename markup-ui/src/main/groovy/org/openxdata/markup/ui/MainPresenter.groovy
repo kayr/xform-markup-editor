@@ -4,8 +4,8 @@ import groovy.transform.CompileStatic
 import groovy.transform.WithWriteLock
 import jsyntaxpane.actions.ActionUtils
 import org.codehaus.groovy.runtime.StackTraceUtils
-import org.odk.validate.ErrorListener
-import org.odk.validate.FormValidator
+import org.opendatakit.validate.ErrorListener
+import org.opendatakit.validate.FormValidator
 import org.openxdata.markup.*
 import org.openxdata.markup.deserializer.MarkupDeserializer
 import org.openxdata.markup.exception.ValidationException
