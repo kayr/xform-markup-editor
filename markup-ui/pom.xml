@@ -7,7 +7,6 @@
     </parent>
 
     <artifactId>oxdmarkup-ui</artifactId>
-    <version>0.18-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>OpenXdata Markup Editor</name>
