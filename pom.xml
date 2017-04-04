@@ -10,6 +10,8 @@
     <properties>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
+        <deployUser>${deployU}</deployUser>
+        <deployPass>${deployP}</deployPass>
     </properties>
 
     <modules>
@@ -59,12 +61,12 @@
     <distributionManagement>
         <repository>
             <id>kayr.release</id>
-            <url>scp://maven@omnitech.co.ug/home/maven/m2repo/releases</url>
+            <url>scp://${deployUser}:${deployPass}@omnitech.co.ug/home/maven/m2repo/releases</url>
         </repository>
 
         <snapshotRepository>
             <id>kayr.snapshots</id>
-            <url>scp://maven@omnitech.co.ug/home/maven/m2repo/snapshots</url>
+            <url>scp://${deployUser}:${deployPass}@omnitech.co.ug/home/maven/m2repo/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
