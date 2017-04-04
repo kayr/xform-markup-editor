@@ -71,7 +71,7 @@
                         </manifest>
                     </archive>
                     <!--DO NOT ATTACH THE ARTEFACT FOR DEPLOYMENT-->
-                    <attach>false</attach>
+                    <!--<attach>false</attach>-->
                 </configuration>
                 <executions>
                     <execution>

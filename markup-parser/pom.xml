@@ -151,16 +151,4 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>kayr.release</id>
-            <url>file:///C:/m2/releases</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>kayr.snapshots</id>
-            <url>file:///C:/m2/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
 </project>
