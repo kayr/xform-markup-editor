@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.openxdata</groupId>
         <artifactId>oxdmarkup</artifactId>
-        <version>0.18-SNAPSHOT</version>
+        <version>0.19-SNAPSHOT</version>
     </parent>
 
     <artifactId>oxdmarkup-ui</artifactId>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.openxdata</groupId>
             <artifactId>oxdmarkup-parser</artifactId>
-            <version>0.18-SNAPSHOT</version>
+            <version>0.19-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>jsyntaxpane</groupId>
