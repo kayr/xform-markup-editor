@@ -539,7 +539,7 @@ class MainPresenter implements DocumentListener {
             void info(Object o) { System.out.println(o) }
         }
 
-        def validator = new FormValidator(odkErrorListener)
+        def validator = new FormValidator().setErrorListener(odkErrorListener)
         validator.validateText(xform)
         if (gotError) {
             System.err.println("****************************************************************************************")
