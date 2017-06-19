@@ -40,15 +40,15 @@ import static org.openxdata.markup.ui.IOHelper.save
  */
 class MainPresenter implements DocumentListener {
 
-    public static final String ENKETO_URL = "http://forms.omnitech.co.ug:7005"
-    public static final String CLIPBOARD_URL = "http://clip.omnitech.co.ug/clip"
-    XFormImporterPresenter xFormImporter
-    MainUI form
-    File currentFile
-    FileFilter xfmFilter
-    def allowedAttribs
-    def allowedTypes
-    Executor e = Executors.newSingleThreadExecutor()
+    public static final String                 ENKETO_URL    = "http://forms.omnitech.co.ug:7005"
+    public static final String                 CLIPBOARD_URL = "http://clip.omnitech.co.ug/clip"
+                        XFormImporterPresenter xFormImporter
+                        MainUI                 form
+                        File                   currentFile
+                        FileFilter             xfmFilter
+    def                                        allowedAttribs
+    def                                        allowedTypes
+                        Executor               e             = Executors.newSingleThreadExecutor()
 
 
     MainPresenter() {
@@ -493,7 +493,7 @@ class MainPresenter implements DocumentListener {
     }
 
     private Study currentStudy
-    private int previousCaretLine
+    private int   previousCaretLine
 
     void quickParseStudy() {
         invokeLater {//start this thread when u r sure all UI events are done
@@ -577,6 +577,12 @@ class MainPresenter implements DocumentListener {
 
     }
 
+    private mayBeShowAutoComplete() {
+        invokeLater {
+            def action = form.txtMarkUp.actionMap.get('complete-word')
+            action?.actionPerformed(new ActionEvent(form.txtMarkUp, 0, 'complete-word'))
+        }
+    }
 
     def updateTree(Study study) {
         form.studyTreeBuilder.updateTree(study) { IFormElement qn -> selectLine(qn.line) }
@@ -614,6 +620,7 @@ class MainPresenter implements DocumentListener {
         form.studyTreeBuilder.selectNodeForLine(caretLine + 1)
     }
 
+
     String previousInsertedChar
 
     public void insertUpdate(final DocumentEvent e) {
@@ -623,21 +630,14 @@ class MainPresenter implements DocumentListener {
         previousInsertedChar = charInserted
     }
 
-    private mayBeShowAutoComplete() {
-        invokeLater {
-            def action = form.txtMarkUp.actionMap.get('complete-word')
-            action?.actionPerformed(new ActionEvent(form.txtMarkUp, 0, 'complete-word'))
-        }
-    }
-
 
     public void removeUpdate(DocumentEvent e) { refreshTreeLater() }
 
     public void changedUpdate(DocumentEvent e) { refreshTreeLater() }
 
-    private updating = false
-    private long updateTime = System.currentTimeMillis()
-    private TREE_UPDATE_PERIOD = 500
+    private      updating           = false
+    private long updateTime         = System.currentTimeMillis()
+    private      TREE_UPDATE_PERIOD = 500
 
     private void refreshTreeLater() {
         updateTime = System.currentTimeMillis()
