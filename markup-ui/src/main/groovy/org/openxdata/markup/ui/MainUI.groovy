@@ -90,6 +90,7 @@ class MainUI {
                     chkNumberBindings = checkBoxMenuItem(text: 'Number IDs')
                     chkUseXMLValidation = checkBoxMenuItem(text: 'Allow Invalid OXD IDs(OpenXData Lower Case Ids Only)')
                     chkEnsureUniqueIdentifier = checkBoxMenuItem(text: 'Ensure Unique Identifier Question Exists', selected: true)
+                    chkEnableAutoSave = checkBoxMenuItem(text: 'AutoSave every 5mins', selected: true)
 
 
                     separator()
@@ -321,6 +322,7 @@ class MainUI {
     JCheckBox chkAutoUpdateTree
     JCheckBoxMenuItem chkUseXMLValidation
     JCheckBoxMenuItem chkEnsureUniqueIdentifier
+    JCheckBoxMenuItem chkEnableAutoSave
     JCheckBoxMenuItem chkSerializeExtraAttributesToComment
     JLabel lblCaret
 

@@ -25,6 +25,7 @@ import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 import static javax.swing.JOptionPane.WARNING_MESSAGE
 import static javax.swing.JOptionPane.YES_NO_OPTION
@@ -50,6 +51,7 @@ class MainPresenter implements DocumentListener {
     def                                        allowedTypes
                         Executor               e             = Executors.newSingleThreadExecutor()
                         CompletionDialog       completionDialog
+                        java.util.Timer        t             = new java.util.Timer()
 
 
     MainPresenter() {
@@ -97,6 +99,16 @@ class MainPresenter implements DocumentListener {
         form.btnDecreaseFont.addActionListener { decreaseFont() }
 
         completionDialog = new CompletionDialog(form.txtMarkUp)
+
+        t.scheduleAtFixedRate(
+                {
+                    if (form.chkEnableAutoSave.selected) {
+                        invokeLater { mayBeSaveFile(true) }
+                    }
+                },
+                TimeUnit.MINUTES.toMillis(5),
+                TimeUnit.MINUTES.toMillis(5))
+
 
 
 
@@ -301,7 +313,10 @@ class MainPresenter implements DocumentListener {
         reset()
     }
 
-    private boolean mayBeSaveFile() {
+    private boolean mayBeSaveFile(boolean isAutoSave = false) {
+
+        if (isAutoSave && form.txtMarkUp.text == Resources.sampleStudy) return false
+
         if (doesFileNeedSaving() &&
                 form.txtMarkUp.text != addHeader(Resources.sampleStudy) &&
                 JOptionPane.showConfirmDialog(form.frame, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION
@@ -699,5 +714,6 @@ class MainPresenter implements DocumentListener {
         new MainPresenter()
 
     }
+
 
 }
