@@ -17,13 +17,13 @@ import static java.lang.System.err
 class XFormSerializer {
 
 
-    boolean numberQuestions = false
-    boolean numberBindings = false
+    boolean numberQuestions              = false
+    boolean numberBindings               = false
     boolean putExtraAttributesInComments = false
-    boolean generateView = true
+    boolean generateView                 = true
 
     Map<Form, String> xforms = [:]
-    def studyXML
+    def               studyXML
 
     public String toStudyXml(Study study) {
         def printWriter = new StringWriter();
@@ -270,6 +270,11 @@ class XFormSerializer {
                 commentMap['layout'] = question.layoutAttributes
             }
 
+            def jrCount = question.layoutAttributes['jrcount']
+            if (jrCount) {
+                commentMap['layout']['jrcount'] = getAbsoluteBindingXPath(jrCount, question)
+            }
+
             if (commentMap) {
 
                 if (comment) commentMap['comment'] = comment
@@ -326,8 +331,17 @@ class XFormSerializer {
         xml.group(id: binding(question)) {
             buildQuestionLabelAndHint(xml, question)
 
+            def layoutAttributes = [:] + question.layoutAttributes
 
-            def map = [bind: binding(question)] + question.layoutAttributes
+
+            String removedJR = layoutAttributes.remove('jrcount')
+
+            if (removedJR) {
+                layoutAttributes['jrcount'] = getAbsoluteBindingXPath(removedJR, question)
+            }
+
+
+            def map = [bind: binding(question)] + layoutAttributes
             xml.repeat(map) {
                 question.elements.each { e ->
                     buildLayout(xml, e)

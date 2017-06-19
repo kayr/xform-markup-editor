@@ -1759,6 +1759,7 @@ dynamic{
         <score_history />
         <total_score />
         <children />
+        <__child_details_count />
         <child_details>
           <child_name />
         </child_details>
@@ -1788,6 +1789,7 @@ dynamic{
     <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="xsd:int" />
     <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="xsd:string" />
     <bind id="children" nodeset="/sample_markup_study_simple_form_v1/children" name="10" type="xsd:int" />
+    <bind id="__child_details_count" nodeset="/sample_markup_study_simple_form_v1/__child_details_count" type="xsd:string" visible="false()" calculate="/sample_markup_study_simple_form_v1/children" />
     <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
     <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="xsd:string" />
     <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
@@ -1846,9 +1848,12 @@ dynamic{
     <input bind="children" appearance="w1" name="lo 10">
       <label>Number of children</label>
     </input>
+    <input bind="__child_details_count">
+      <label>JR Count For (child_details)</label>
+    </input>
     <group id="child_details">
       <label>Child details</label>
-      <repeat bind="child_details" name="lo 11" jrcount="$children">
+      <repeat bind="child_details" name="lo 11" jrcount="/sample_markup_study_simple_form_v1/__child_details_count">
         <input bind="child_name" name="lo 11.1">
           <label>Child Name</label>
         </input>
@@ -1885,6 +1890,7 @@ dynamic{
         <score_history />
         <total_score />
         <children />
+        <__child_details_count />
         <child_details>
           <child_name />
         </child_details>
@@ -1914,6 +1920,7 @@ dynamic{
     <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="xsd:int" />
     <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="xsd:string" />
     <bind id="children" nodeset="/sample_markup_study_simple_form_v1/children" name="10" type="xsd:int" />
+    <bind id="__child_details_count" nodeset="/sample_markup_study_simple_form_v1/__child_details_count" type="xsd:string" visible="false()" calculate="/sample_markup_study_simple_form_v1/children" />
     <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
     <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="xsd:string" />
     <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="xsd:string" />
@@ -1981,10 +1988,13 @@ dynamic{
       <label>Number of children</label>
       <hint>json:{"bind":{"name":"10"},"layout":{"appearance":"w1","name":"lo 10"}}</hint>
     </input>
+    <input bind="__child_details_count">
+      <label>JR Count For (child_details)</label>
+    </input>
     <group id="child_details">
       <label>Child details</label>
-      <hint>json:{"bind":{"name":"11"},"layout":{"name":"lo 11","jrcount":"$children"}}</hint>
-      <repeat bind="child_details" name="lo 11" jrcount="$children">
+      <hint>json:{"bind":{"name":"11"},"layout":{"name":"lo 11","jrcount":"/sample_markup_study_simple_form_v1/__child_details_count"}}</hint>
+      <repeat bind="child_details" name="lo 11" jrcount="/sample_markup_study_simple_form_v1/__child_details_count">
         <input bind="child_name" name="lo 11.1">
           <label>Child Name</label>
           <hint>json:{"bind":{"name":"11.1"},"layout":{"name":"lo 11.1"}}</hint>

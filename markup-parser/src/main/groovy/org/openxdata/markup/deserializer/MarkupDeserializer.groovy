@@ -6,6 +6,7 @@ import org.antlr.runtime.CharStream
 import org.antlr.runtime.CommonTokenStream
 import org.antlr.runtime.tree.CommonTree
 import org.openxdata.markup.*
+import org.openxdata.markup.transformers.TransformerResolver
 
 import static org.openxdata.markup.ParserUtils.each
 
@@ -14,8 +15,8 @@ class MarkupDeserializer {
 
 
     CommonTree tree
-    String text
-    boolean validating = true
+    String     text
+    boolean    validating = true
 
     MarkupDeserializer(String text) {
         this.text = text
@@ -55,6 +56,13 @@ class MarkupDeserializer {
                 case XformParser.T_FORM:
                     def form = constructForm(it)
                     study.addForm(form)
+
+                    if (validating)
+                        TransformerResolver.instance.doTransformations(FLAGS.of(FLAGS.VALIDATE_FORM), form)
+                    else {
+                        TransformerResolver.instance.doTransformations(FLAGS.none(), form)
+                    }
+
                     form.buildIndex()
                     break
 
@@ -90,6 +98,7 @@ class MarkupDeserializer {
                     break
             }
         }
+
 
         return form
     }

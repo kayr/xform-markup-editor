@@ -2,30 +2,47 @@ package org.openxdata.markup
 
 import groovy.transform.CompileStatic
 import org.openxdata.markup.exception.ValidationException
+import org.openxdata.markup.transformers.TransformAttribute
 
 
 @CompileStatic
 trait IFormElement {
-    String name
-    String id
-    int line
+    String  name
+    String  id
+    int     line
     boolean hasAbsoluteId = false
-    String skipAction = 'enable'
+//    String  skipAction    = 'enable'
 
     //use this map to store common bind attributes to work around groovy trait bug
     //where traits with > 10 fields cannot compile
-    private Map _bindAttr = [visible: true]
+    private Map _bindAttr = [visible: true, skipAction: 'enable']
+
+    private Map _dataMap = [
+            transformAttributes: [:]
+    ]
 
     //this will store any other extra bind attributes
-    Map bindAttributes = [:]
 
-
+    Map                 bindAttributes   = [:]
     Map<String, String> layoutAttributes = [:]
 
     HasQuestions parent
 
     void setName(String name) {
         this.name = name
+    }
+
+    String getSkipAction() {
+        return _bindAttr['skipAction']
+    }
+
+
+    Map<String, TransformAttribute> getTransformAttributes() {
+        return _dataMap['transformAttributes'] as Map
+    }
+
+    void setSkipAction(String skipAction) {
+        _bindAttr['skipAction'] = skipAction
     }
 
     void setSkipLogic(String string) {
@@ -112,8 +129,6 @@ trait IFormElement {
     }
 
 
-
-
     List<HasQuestions> getParentList() {
         List<HasQuestions> parentList = []
         def currentItem = this
@@ -163,6 +178,18 @@ trait IFormElement {
 
     }
 
+    IFormElement insertAfterMe(IFormElement element) {
+        def parent = this.parent
+        parent.addAfterElement(this, element)
+        return this
+    }
+
+    IFormElement insertBeforeMe(IFormElement element) {
+        def parent = this.parent
+        parent.addBeforeElement(this, element)
+        return this
+    }
+
     String getQuestionIdx() {
         parentForm.getIndex(this)
     }
@@ -186,7 +213,7 @@ trait IFormElement {
 
 
     void validateIdExistsIfNecessary() {
-        def DEFAULT_BIND_ATTRS = [visible: true]
+        def DEFAULT_BIND_ATTRS = [visible: true, skipAction: 'enable']
         def shouldHaveId = binding == null && (_bindAttr != DEFAULT_BIND_ATTRS || bindAttributes.size() > 0)
         if (shouldHaveId)
             throw new ValidationException("Element[$this] Has No Id But Has Logic Attributes", line)

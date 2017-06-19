@@ -8,10 +8,10 @@ import groovy.transform.stc.FirstParam
 trait HasQuestions implements IFormElement {
 
     //Map to speed up question look up
-    private Map<String, Object> elementMap = [:]
-    private List<IFormElement> elements = []
-    private List<HasQuestions> hasQuestions = []
-    XformType xformType
+    private Map<String, Object> elementMap   = [:]
+    private List<IFormElement>  elements     = []
+    private List<HasQuestions>  hasQuestions = []
+            XformType           xformType
 
 
     List<IFormElement> getElements() {
@@ -36,13 +36,54 @@ trait HasQuestions implements IFormElement {
         elements << question
     }
 
-    void addAfterElement(IFormElement after, IFormElement toAdd) {
-        if (after.firstInstanceParent != this) {//the after seems to belong to another instance
-            addAfterElement(after.binding, toAdd)
+    void addBeforeElement(IFormElement element, IFormElement toAdd) {
+        if (element.firstInstanceParent != this) {
+
+            addBeforeElement(element.binding, toAdd)
         } else {
-            HasQuestions parent = after.parent ?: this
-            parent.addAfterElement(after.binding, toAdd)
+            HasQuestions parent = element.parent ?: this
+            parent.addBeforeElement(element.binding, toAdd)
         }
+    }
+
+    void addBeforeElement(String elementId, IFormElement toAdd) {
+        def idx = elements.findIndexOf { IFormElement e -> e.binding == elementId }
+        if (idx == -1) {
+            addElement(toAdd)
+        } else {
+            addElementAt(idx, toAdd)
+        }
+    }
+
+    /**
+     * Add an element $toAdd to the end after $element if they belong to the same instance parent
+     */
+    void addAfterElement(IFormElement element, IFormElement toAdd) {
+        if (element.firstInstanceParent != this) {
+            //the after seems to belong to another instance so just add it to the end or this group or else it might end up in the wrong group
+            //this might also be a non instance group so just try to add it to the any way
+            def closestChild = closestChildToItem(element)
+            if (closestChild) {
+                //lets try to see if the element is a child of this element and if so add the new question
+                //next to that parent
+                addAfterElement(closestChild.binding, toAdd)
+            } else {
+                addAfterElement(element.binding, toAdd)
+            }
+        } else {
+            HasQuestions parent = element.parent ?: this
+            parent.addAfterElement(element.binding, toAdd)
+        }
+    }
+
+    IFormElement closestChildToItem(IFormElement e) {
+        def p = e
+        while (p) {
+            if (p.firstInstanceParent == this) return p
+            else p = p.firstInstanceParent
+        }
+        return null
+
     }
 
     void addAfterElement(String after, IFormElement toAdd) {
@@ -98,7 +139,7 @@ trait HasQuestions implements IFormElement {
 
         //first store the Container
         if (question instanceof HasQuestions) {
-            (hasQuestions as List) << question as HasQuestions
+            (hasQuestions as List).add(question as HasQuestions)
         }
 
         //cache question for future reference

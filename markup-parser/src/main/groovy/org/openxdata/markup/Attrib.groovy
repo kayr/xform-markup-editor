@@ -3,6 +3,8 @@ package org.openxdata.markup
 import groovy.transform.CompileStatic
 import org.openxdata.markup.exception.InvalidAttributeException
 import org.openxdata.markup.exception.ValidationException
+import org.openxdata.markup.transformers.TransformAttribute
+import org.openxdata.markup.transformers.TransformerResolver
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,10 +17,10 @@ import org.openxdata.markup.exception.ValidationException
 class Attrib {
 
     static List types = ['number', 'decimal', 'date', 'boolean', 'time', 'datetime', 'picture', 'video', 'audio',
-                         'picture', 'gps', 'barcode', 'longtext',XformType.TRIGGER.value]
+                         'picture', 'gps', 'barcode', 'longtext', XformType.TRIGGER.value]
 
     static
-    List allowedAttributes = ['readonly', 'required', 'jrcount', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
+    List allowedAttributes = ['readonly', 'required', 'id', 'absoluteid', 'invisible', 'comment', 'skiplogic', 'skipaction',
                               'hideif', 'appearance', 'style (on forms)', 'enableif', 'disableif', 'showif', 'validif', 'message', 'calculate', 'parent', 'hint', 'default']
 
 
@@ -58,6 +60,9 @@ class Attrib {
         } else if (allowedAttributes.contains(lowCaseAttrib)) {
             setElementAttribute(question, lowCaseAttrib, param, line)
             setQuestionAttribute(question, lowCaseAttrib, param, line)
+
+        } else if (TransformerResolver.instance.canHandle(lowCaseAttrib)) {
+            question.transformAttributes.put(lowCaseAttrib, new TransformAttribute(line: line, annotation: lowCaseAttrib, param: param))
         } else {
             throw new InvalidAttributeException("""Attibute [@$attribute] has no meaning.\n""" +
                     """Supported attributes include $types \n$allowedAttributes""", line)
@@ -251,12 +256,6 @@ class Attrib {
             case 'default':
                 (question as IQuestion).value = param
                 break
-            case 'jrcount':
-                if (question instanceof RepeatQuestion)
-                    question.layoutAttributes['jrcount'] = param
-                else
-                    throw new InvalidAttributeException('Arribute jrcount can only be set on Repeat Question', line)
-
             default:
                 if (throwException)
                     throw new InvalidAttributeException("Attribute $attribute on Question $question.name in not supported", line)

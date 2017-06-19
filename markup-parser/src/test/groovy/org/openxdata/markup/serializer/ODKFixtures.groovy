@@ -1231,6 +1231,7 @@ No. Kids
           <score_history />
           <total_score />
           <children />
+          <__child_details_count />
           <child_details>
             <child_name />
           </child_details>
@@ -1260,6 +1261,7 @@ No. Kids
       <bind id="score_history" nodeset="/sample_markup_study_simple_form_v1/score_history" name="8" type="int" />
       <bind id="total_score" nodeset="/sample_markup_study_simple_form_v1/total_score" name="9" type="string" />
       <bind id="children" nodeset="/sample_markup_study_simple_form_v1/children" name="10" type="int" />
+      <bind id="__child_details_count" nodeset="/sample_markup_study_simple_form_v1/__child_details_count" type="string" calculate="/sample_markup_study_simple_form_v1/children" />
       <bind id="child_details" nodeset="/sample_markup_study_simple_form_v1/child_details" name="11" />
       <bind id="child_name" nodeset="/sample_markup_study_simple_form_v1/child_details/child_name" name="11.1" type="string" />
       <bind id="district" nodeset="/sample_markup_study_simple_form_v1/district" type="string" />
@@ -1328,7 +1330,7 @@ No. Kids
     </input>
     <group>
       <label>Child details</label>
-      <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" jr:count="/sample_markup_study_simple_form_v1/children" name="lo 11">
+      <repeat nodeset="/sample_markup_study_simple_form_v1/child_details" jr:count="/sample_markup_study_simple_form_v1/__child_details_count" name="lo 11">
         <input ref="/sample_markup_study_simple_form_v1/child_details/child_name" name="lo 11.1">
           <label>Child Name</label>
         </input>
