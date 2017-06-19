@@ -49,6 +49,7 @@ class MainPresenter implements DocumentListener {
     def                                        allowedAttribs
     def                                        allowedTypes
                         Executor               e             = Executors.newSingleThreadExecutor()
+                        CompletionDialog       completionDialog
 
 
     MainPresenter() {
@@ -94,6 +95,8 @@ class MainPresenter implements DocumentListener {
 
         form.btnIncreaseFont.addActionListener { increaseFont() }
         form.btnDecreaseFont.addActionListener { decreaseFont() }
+
+        completionDialog = new CompletionDialog(form.txtMarkUp)
 
 
 
@@ -577,7 +580,7 @@ class MainPresenter implements DocumentListener {
 
     }
 
-    private mayBeShowAutoComplete() {
+    private mayBeShowIdAutocomplete() {
         invokeLater {
             def action = form.txtMarkUp.actionMap.get('complete-word')
             action?.actionPerformed(new ActionEvent(form.txtMarkUp, 0, 'complete-word'))
@@ -626,7 +629,8 @@ class MainPresenter implements DocumentListener {
     public void insertUpdate(final DocumentEvent e) {
         def charInserted = e.document.getText(e.getOffset(), 1)
         refreshTreeLater()
-        if (previousInsertedChar == '$') { mayBeShowAutoComplete() }
+        if (previousInsertedChar == '$') { mayBeShowIdAutocomplete() }
+        if (charInserted == '@') { invokeLater { completionDialog.showForAnnotations() } }
         previousInsertedChar = charInserted
     }
 
