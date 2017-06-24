@@ -41,18 +41,18 @@ import static org.openxdata.markup.ui.IOHelper.save
  */
 class MainPresenter implements DocumentListener {
 
-    public static final String                 ENKETO_URL    = "http://forms.omnitech.co.ug:7005"
-    public static final String                 CLIPBOARD_URL = "http://clip.omnitech.co.ug/clip"
-                        XFormImporterPresenter xFormImporter
-                        MainUI                 form
-                        File                   currentFile
-                        FileFilter             xfmFilter
-    def                                        allowedAttribs
-    def                                        allowedTypes
-                        Executor               e             = Executors.newSingleThreadExecutor()
-                        CompletionDialog       completionDialog
-                        java.util.Timer        t             = new java.util.Timer()
+    public static final String ENKETO_URL    = "http://forms.omnitech.co.ug:7005"
+    public static final String CLIPBOARD_URL = "http://clip.omnitech.co.ug/clip"
 
+    XFormImporterPresenter xFormImporter
+    MainUI                 form
+    File                   currentFile
+    FileFilter             xfmFilter
+    def                    allowedAttribs
+    def                    allowedTypes
+    Executor               e = Executors.newSingleThreadExecutor()
+    CompletionDialog       completionDialog
+    java.util.Timer        t = new java.util.Timer(true)
 
     MainPresenter() {
         form = new MainUI()
@@ -100,18 +100,6 @@ class MainPresenter implements DocumentListener {
 
         completionDialog = new CompletionDialog(form.txtMarkUp)
 
-        t.scheduleAtFixedRate(
-                {
-                    if (form.chkEnableAutoSave.selected) {
-                        invokeLater { mayBeSaveFile(true) }
-                    }
-                },
-                TimeUnit.MINUTES.toMillis(5),
-                TimeUnit.MINUTES.toMillis(5))
-
-
-
-
         def windowCloseHandler = new WindowAdapter() {
             @Override
             void windowClosing(WindowEvent e) {
@@ -127,6 +115,11 @@ class MainPresenter implements DocumentListener {
         loadForm(addHeader(Resources.sampleStudy))
 
         renderHistory()
+
+
+        t.scheduleAtFixedRate({
+            e.execute { mayBeAutoSave() }
+        }, TimeUnit.SECONDS.toMillis(60), TimeUnit.SECONDS.toMillis(60))
     }
 
     private decreaseFont() {
@@ -166,6 +159,7 @@ class MainPresenter implements DocumentListener {
     private def static doExit() {
         System.exit(0)
     }
+
 
     private void loadForm(String markupTxt, boolean reloadTree = true) {
         //first remove the listener before you load the form this is to avoid double parsing of the study
@@ -317,6 +311,7 @@ class MainPresenter implements DocumentListener {
 
         if (isAutoSave && form.txtMarkUp.text == Resources.sampleStudy) return false
 
+
         if (doesFileNeedSaving() &&
                 form.txtMarkUp.text != addHeader(Resources.sampleStudy) &&
                 JOptionPane.showConfirmDialog(form.frame, "Save File First?", 'Confirm', YES_NO_OPTION) == JOptionPane.OK_OPTION
@@ -360,6 +355,7 @@ class MainPresenter implements DocumentListener {
         } else {
             save currentFile, form.txtMarkUp.text
         }
+        lastSaveTime = System.currentTimeMillis()
     }
 
     private void setWindowTitle(File file) {
@@ -431,12 +427,15 @@ class MainPresenter implements DocumentListener {
         return directory
     }
 
+    long lastSaveTime = System.currentTimeMillis()
+
     void openFile(File f) {
 
         def text = IOHelper.loadText(f)
         System.setProperty('form.dir', f.parent)
 
         loadForm(text)
+        lastSaveTime = System.currentTimeMillis()
 
         currentFile = f
         setWindowTitle(f)
@@ -657,6 +656,7 @@ class MainPresenter implements DocumentListener {
     private      updating           = false
     private long updateTime         = System.currentTimeMillis()
     private      TREE_UPDATE_PERIOD = 500
+    private long AUTO_SAVE_PERIOD   = TimeUnit.MINUTES.toMillis(5)
 
     private void refreshTreeLater() {
         updateTime = System.currentTimeMillis()
@@ -664,17 +664,31 @@ class MainPresenter implements DocumentListener {
 
         toggleUpdating()
         e.execute {
-            while (lastUpdatePeriod() <= TREE_UPDATE_PERIOD) Thread.sleep(TREE_UPDATE_PERIOD)
+            while (periodSinceLastUpdated() <= TREE_UPDATE_PERIOD) Thread.sleep(TREE_UPDATE_PERIOD)
             quickParseStudy()
             toggleUpdating()
+            mayBeAutoSave()
         }
     }
 
-    private long lastUpdatePeriod() { System.currentTimeMillis() - updateTime }
+    private long periodSinceLastUpdated() { System.currentTimeMillis() - updateTime }
 
     private synchronized boolean isUpdating() { updating }
 
     private synchronized void toggleUpdating() { updating = !updating }
+
+    private mayBeAutoSave() {
+
+        def currentTimeMillis = System.currentTimeMillis()
+        if (currentTimeMillis - this.lastSaveTime >= AUTO_SAVE_PERIOD) {
+            lastSaveTime = currentTimeMillis
+
+            if (form.chkEnableAutoSave.selected) {
+                mayBeSaveFile(true)
+            }
+        }
+
+    }
 
     def executeSafely(Closure closure) {
         try {
