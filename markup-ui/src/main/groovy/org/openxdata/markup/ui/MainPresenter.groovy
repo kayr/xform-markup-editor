@@ -17,6 +17,7 @@ import javax.swing.*
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 import javax.swing.filechooser.FileFilter
+import javax.swing.text.DefaultEditorKit
 import java.awt.*
 import java.awt.datatransfer.Clipboard
 import java.awt.datatransfer.StringSelection
@@ -50,9 +51,10 @@ class MainPresenter implements DocumentListener {
     FileFilter             xfmFilter
     def                    allowedAttribs
     def                    allowedTypes
-    Executor               e = Executors.newSingleThreadExecutor()
+    Executor               e         = Executors.newSingleThreadExecutor()
     CompletionDialog       completionDialog
-    java.util.Timer        t = new java.util.Timer(true)
+    java.util.Timer        t         = new java.util.Timer(true)
+    boolean                isPasting = true
 
     MainPresenter() {
         form = new MainUI()
@@ -115,6 +117,8 @@ class MainPresenter implements DocumentListener {
         loadForm(addHeader(Resources.sampleStudy))
 
         renderHistory()
+
+        form.txtMarkUp.actionMap.put(DefaultEditorKit.pasteAction, new CustomPasteAction(this))
 
 
         t.scheduleAtFixedRate({
@@ -643,8 +647,11 @@ class MainPresenter implements DocumentListener {
     public void insertUpdate(final DocumentEvent e) {
         def charInserted = e.document.getText(e.getOffset(), 1)
         refreshTreeLater()
-        if (previousInsertedChar == '$') { mayBeShowIdAutocomplete() }
-        if (charInserted == '@') { invokeLater { completionDialog.showForAnnotations() } }
+        if (previousInsertedChar == '$') {
+            mayBeShowIdAutocomplete()
+        } else if (charInserted == '@' && !isPasting) {
+            invokeLater { completionDialog.showForAnnotations() }
+        }
         previousInsertedChar = charInserted
     }
 
@@ -656,7 +663,7 @@ class MainPresenter implements DocumentListener {
     private      updating           = false
     private long updateTime         = System.currentTimeMillis()
     private      TREE_UPDATE_PERIOD = 500
-    private long AUTO_SAVE_PERIOD   = TimeUnit.MINUTES.toMillis(5)
+    private long AUTO_SAVE_PERIOD   = TimeUnit.SECONDS.toMillis(20)
 
     private void refreshTreeLater() {
         updateTime = System.currentTimeMillis()
