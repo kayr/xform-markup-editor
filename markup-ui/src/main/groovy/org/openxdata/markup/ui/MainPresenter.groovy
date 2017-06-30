@@ -652,7 +652,7 @@ class MainPresenter implements DocumentListener {
     public void insertUpdate(final DocumentEvent e) {
         def charInserted = e.document.getText(e.getOffset(), 1)
         refreshTreeLater()
-        if (previousInsertedChar == '$') {
+        if (previousInsertedChar == '$' && !isPasting) {
             mayBeShowIdAutocomplete()
         } else if (charInserted == '@' && !isPasting) {
             invokeLater { completionDialog.showForAnnotations() }
