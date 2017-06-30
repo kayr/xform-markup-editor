@@ -668,7 +668,7 @@ class MainPresenter implements DocumentListener {
     private      updating           = false
     private long updateTime         = System.currentTimeMillis()
     private      TREE_UPDATE_PERIOD = 500
-    private long AUTO_SAVE_PERIOD   = TimeUnit.SECONDS.toMillis(20)
+    private long AUTO_SAVE_PERIOD   = TimeUnit.MINUTES.toMillis(5)
 
     private void refreshTreeLater() {
         updateTime = System.currentTimeMillis()
