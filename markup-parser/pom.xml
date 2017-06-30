@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.openxdata</groupId>
         <artifactId>oxdmarkup</artifactId>
-        <version>0.20</version>
+        <version>0.21-SNAPSHOT</version>
     </parent>
     <!-- =======================================================================
          A quickstart pom.xml that creates a sample project that uses ANTLR 3.x
