@@ -61,6 +61,7 @@ class MainPresenter implements DocumentListener {
 
         xFormImporter = new XFormImporterPresenter(this)
         init()
+
     }
 
     void init() {
@@ -71,7 +72,7 @@ class MainPresenter implements DocumentListener {
 
         form.menuImport.addActionListener { executeSafely { xFormImporter.show() } }
 
-        form.btnGenerateXML.addActionListener { executeSafely { btnGenerateXMLActionPerformed() } }
+        form.btnGenerateXML.addActionListener { clearOutput(); executeSafely { btnGenerateXMLActionPerformed() } }
 
         form.menuOpen.addActionListener { executeSafely { openFile() } }
 
@@ -81,17 +82,17 @@ class MainPresenter implements DocumentListener {
 
         form.menuAlign.addActionListener { executeSafely { align() } }
 
-        form.btnShowXml.addActionListener { Thread.start { executeSafely { showOxdXML() } } }
+        form.btnShowXml.addActionListener { clearOutput(); Thread.start { executeSafely { showOxdXML() } } }
 
-        form.btnShowOdkXml.addActionListener { Thread.start { executeSafely { showOdkXML() } } }
+        form.btnShowOdkXml.addActionListener { clearOutput(); Thread.start { executeSafely { showOdkXML() } } }
 
         form.chkAutoUpdateTree.addActionListener { toggleDocumentListener() }
 
         form.formLoader = { loadWithConfirmation(addHeader(it)) }
 
-        form.btnRefreshTree.addActionListener { quickParseStudy() }
+        form.btnRefreshTree.addActionListener { clearOutput(); quickParseStudy() }
 
-        form.btnPreviewXml.addActionListener { Thread.start { executeSafely { previewOdkXML() } } }
+        form.btnPreviewXml.addActionListener { clearOutput(); Thread.start { executeSafely { previewOdkXML() } } }
 
         form.txtMarkUp.addCaretListener { selectLineOnTree(it.dot) }
 
@@ -139,6 +140,10 @@ class MainPresenter implements DocumentListener {
         def text = form.txtMarkUp.text
         def align = new MarkupAligner(text).align()
         loadForm(align)
+    }
+
+    def clearOutput() {
+        invokeLater { form.txtConsole.text = "" }
     }
 
     void handleWindowCloseOperation() {

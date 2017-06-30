@@ -210,7 +210,7 @@ class MainUI {
 
         MessageConsole con = new MessageConsole(txtConsole);
         con.with {
-            setMessageLines(2000)
+            //setMessageLines(2000)
             redirectOut Color.black, System.out
             redirectErr Color.red, System.err
             info = createStream(Color.blue)
