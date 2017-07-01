@@ -49,7 +49,7 @@ class MarkupDeserializer {
     @CS
     private static Study constructStudy(CommonTree tree, Boolean validating) {
 
-        def study = new Study(validating: validating)
+        def study = new Study(validating: false)//let use do our own validation after we are done with transformations
         study.setName(tree.text)
         each(tree) { CommonTree it ->
             switch (it.type) {
@@ -57,10 +57,15 @@ class MarkupDeserializer {
                     def form = constructForm(it)
                     study.addForm(form)
 
+
                     if (validating)
                         TransformerResolver.instance.doTransformations(FLAGS.of(FLAGS.VALIDATE_FORM), form)
                     else {
                         TransformerResolver.instance.doTransformations(FLAGS.none(), form)
+                    }
+
+                    if (validating) {
+                        form.validate()
                     }
 
                     form.buildIndex()

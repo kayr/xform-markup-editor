@@ -12,4 +12,7 @@ class TestUtils {
     static String trimAllLines(String text){
         return text.readLines().collect { it.trim() }.join('\n')
     }
+    static String deleteAllEmpty(String text){
+        return text.readLines().collect { it.trim() }.findAll().join('\n')
+    }
 }

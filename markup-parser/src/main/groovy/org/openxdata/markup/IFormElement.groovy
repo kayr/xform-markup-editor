@@ -235,4 +235,8 @@ trait IFormElement {
         return b.toString()
     }
 
+    String getMarkupVaribale() {
+        return '$' + binding
+    }
+
 }

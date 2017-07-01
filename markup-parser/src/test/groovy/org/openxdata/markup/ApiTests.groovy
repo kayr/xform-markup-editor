@@ -142,7 +142,6 @@ class ApiTests extends GroovyTestCase {
 
         def text = Converter.to(FORMAT.MARKUP,String).from(FORMAT.FORM).convert(form)
 
-        println(text)
 
         def newMarkup = '''@id form_v1
 ## Form
