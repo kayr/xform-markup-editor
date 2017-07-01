@@ -29,6 +29,8 @@ class TransformerResolver {
         return transformers.containsKey(transformAnnotation)
     }
 
+    Set<String> registeredAnnotations() { return transformers.keySet() }
+
 
     void transform(EnumSet<FLAGS> flagsEnumSet, IFormElement element, TransformAttribute transformAttribute) {
 
@@ -43,8 +45,14 @@ class TransformerResolver {
 
     void doTransformations(EnumSet<FLAGS> flags, Form form) {
 
+
+        form.transformAttributes.each { annotation, transformAttribute ->
+            transform(flags, form, transformAttribute)
+        }
+
+
         form.allElements.each { e ->
-            e.transformAttributes.each { k, v -> transform(flags, e, v) }
+            e.transformAttributes.each { annotation, transformAttribute -> transform(flags, e, transformAttribute) }
         }
 
     }

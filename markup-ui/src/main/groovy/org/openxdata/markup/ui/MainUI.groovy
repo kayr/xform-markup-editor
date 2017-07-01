@@ -52,6 +52,10 @@ class MainUI {
             }
         }
 
+        registerXformType()
+    }
+
+    def registerXformType() {
         DefaultSyntaxKit.registerContentType("text/xform", "org.openxdata.markup.ui.XFormMarkupSyntaxKit")
     }
 

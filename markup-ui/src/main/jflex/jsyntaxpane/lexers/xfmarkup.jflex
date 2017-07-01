@@ -67,6 +67,7 @@ InputCharacter = [^\r\n]
 WhiteSpace = [ \t\f]+
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 XmlId = {Identifier}(":"{Identifier})?
+TransformId = "@"{Identifier}
 BindId = "@bind:"{XmlId}
 LayoutId = "@layout:"{XmlId}
 VariableReference = "$" {Identifier}
@@ -82,7 +83,6 @@ Group = "group"[ \t]*"{"
 
 <YYINITIAL> {
   /*keywords */
-   "@"|
   "@number"|
   "@boolean"|
   "@video"|
@@ -141,6 +141,13 @@ Group = "group"[ \t]*"{"
                                 {
                                 yypushState(ID_TEXT);
                                 return token(TokenType.TYPE3);
+                                }
+
+  /* labels */
+  {TransformId}
+                                {
+                                yypushState(XPATH_TEXT);
+                                return token(TokenType.DEFAULT);
                                 }
 
  ">"|">>"|"$>"                       {

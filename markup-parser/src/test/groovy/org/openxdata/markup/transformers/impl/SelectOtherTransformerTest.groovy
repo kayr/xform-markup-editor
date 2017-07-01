@@ -31,7 +31,6 @@ class SelectOtherTransformerTest extends GroovyTestCase {
 
         def generated = Converter.from(FORMAT.MARKUP, String).to(FORMAT.MARKUP).convert(f)
 
-        println(generated)
         def expected = '''@id f_v1
                           ## F
                             

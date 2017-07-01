@@ -3,6 +3,7 @@ package org.openxdata.markup.ui
 import jsyntaxpane.actions.gui.ComboCompletionDialog
 import org.openxdata.markup.Attrib
 import org.openxdata.markup.Form
+import org.openxdata.markup.transformers.TransformerResolver
 
 import javax.swing.text.JTextComponent
 
@@ -28,11 +29,9 @@ class CompletionDialog {
     }
 
     void showForAnnotations() {
-
-        def ids = Attrib.allowedAttributes + Attrib.types
-
         dialog.displayFor('', ids as List<String>)
-
     }
+
+    private def ids = Attrib.allowedAttributes + Attrib.types + TransformerResolver.instance.registeredAnnotations()
 
 }

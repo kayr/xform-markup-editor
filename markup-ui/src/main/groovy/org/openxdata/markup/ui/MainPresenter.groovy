@@ -54,10 +54,13 @@ class MainPresenter implements DocumentListener {
     Executor               e         = Executors.newSingleThreadExecutor()
     CompletionDialog       completionDialog
     java.util.Timer        t         = new java.util.Timer(true)
-    boolean                isPasting = true
+    boolean                isPasting = false
 
     MainPresenter() {
         form = new MainUI()
+
+        form.txtMarkUp.actionMap.put(DefaultEditorKit.pasteAction, new CustomPasteAction(this))
+        form.registerXformType()
 
         xFormImporter = new XFormImporterPresenter(this)
         init()
@@ -119,7 +122,6 @@ class MainPresenter implements DocumentListener {
 
         renderHistory()
 
-        form.txtMarkUp.actionMap.put(DefaultEditorKit.pasteAction, new CustomPasteAction(this))
 
 
         t.scheduleAtFixedRate({
