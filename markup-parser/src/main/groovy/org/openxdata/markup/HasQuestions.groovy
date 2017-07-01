@@ -39,7 +39,15 @@ trait HasQuestions implements IFormElement {
     void addBeforeElement(IFormElement element, IFormElement toAdd) {
         if (element.firstInstanceParent != this) {
 
-            addBeforeElement(element.binding, toAdd)
+            def closestChild = closestChildToItem(element)
+
+            if (closestChild) {
+                //lets try to see if the element is a child of this element and if so add the new question
+                //next to that parent
+                addBeforeElement(closestChild.binding, toAdd)
+            } else {
+                addBeforeElement(element.binding, toAdd)
+            }
         } else {
             HasQuestions parent = element.parent ?: this
             parent.addBeforeElement(element.binding, toAdd)
@@ -53,6 +61,20 @@ trait HasQuestions implements IFormElement {
         } else {
             addElementAt(idx, toAdd)
         }
+    }
+
+    HasQuestions remove(IFormElement element) {
+
+        elements.remove(element)
+        def elem = elementMap.get(element.binding)
+
+        if (elem instanceof List) {
+            elem.remove(element)
+        } else {
+            elementMap.remove(element.binding)
+        }
+
+        return this
     }
 
     /**
@@ -159,7 +181,6 @@ trait HasQuestions implements IFormElement {
             elementMap[qnBinding] = question
         }
 
-        parentForm.elementCache[qnBinding] = question
 
 
     }

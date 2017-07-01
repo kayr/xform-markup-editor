@@ -50,7 +50,6 @@ class XFormImporterUI {
                         }
                 )
 
-                label('Only OpenXData Xform Format Is Supported', foreground: Color.RED)
             }
         }
 

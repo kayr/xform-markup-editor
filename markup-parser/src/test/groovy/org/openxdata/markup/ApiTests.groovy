@@ -140,7 +140,7 @@ class ApiTests extends GroovyTestCase {
 
 
 
-        def text = Converter.to(FORMAT.MARKUP,String).from(FORMAT.FORM).convert(form)
+        def text = Converter.to(FORMAT.MARKUP, String).from(FORMAT.FORM).convert(form)
 
 
         def newMarkup = '''@id form_v1
@@ -206,5 +206,61 @@ group {
         assertEquals TestUtils.trimAllLines(newMarkup), TestUtils.trimAllLines(text)
 
     }
+
+    void testNextReturnsTheNextElement() {
+
+        def f = '''##F
+            
+            Q1
+            
+            Q2
+            
+            Q3
+       
+'''
+
+        def form = Converter.markup2Form(f)
+
+        assertEquals form['q3'], form['q2'].next()
+        assertEquals form['q2'], form['q3'].prev()
+
+        assertFalse form['q3'].hasNext()
+        assertFalse form['q1'].hasPrev()
+
+
+    }
+
+    void testRemoval() {
+
+        def f = '''##F
+            
+            Q1
+            
+            Q2
+            
+            Q3
+            
+            Q3
+       
+'''
+        def form = Converter.markup2Form(f, FLAGS.none())
+
+
+        form['q2'].remove()
+
+        assert form.elements.size() == 3
+        assert form['q2'] == null
+
+        form['q3'].remove()
+
+        assert form.elements.size() == 2
+        assert form['q3'] != null
+
+
+        form['q3'].remove()
+        assert form.elements.size() == 1
+        assert form['q3'] == null
+    }
+
 
 }

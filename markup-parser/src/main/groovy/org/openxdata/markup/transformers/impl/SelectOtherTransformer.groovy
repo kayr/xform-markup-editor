@@ -30,7 +30,7 @@ class SelectOtherTransformer implements Transformer {
         def question = FormBuilder.create().textQn()
                                   .text("$element.text (Other)")
                                   .binding(thisElementId)
-                                  .showIf("$element.markupVaribale = 'other'")
+                                  .showIf("$element.markupVariable = 'other'")
                                   .question()
 
         selectQn.insertAfterMe(question)

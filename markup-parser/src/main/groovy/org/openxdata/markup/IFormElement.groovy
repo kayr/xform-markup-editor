@@ -235,8 +235,30 @@ trait IFormElement {
         return b.toString()
     }
 
-    String getMarkupVaribale() {
+    String getMarkupVariable() {
         return '$' + binding
     }
 
+
+    HasQuestions remove() {
+        parent.remove(this)
+        return parent
+    }
+
+
+    IFormElement next() {
+        def idx = parent.elements.indexOf(this)
+
+        return parent.elements[idx + 1]
+    }
+
+    IFormElement prev() {
+        def idx = parent.elements.indexOf(this)
+
+        return parent.elements[idx - 1]
+    }
+
+    boolean hasNext() { parent.elements.last() != this }
+
+    boolean hasPrev() { parent.elements.first() != this }
 }

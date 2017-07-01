@@ -24,7 +24,6 @@ class Form implements HasQuestions {
     int dbIdLine
     int idLine
 
-    Map<String, IFormElement> elementCache = [:]
     Map<IFormElement, String> idxCache = [:]
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
