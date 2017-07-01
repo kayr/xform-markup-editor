@@ -106,7 +106,11 @@ class Attrib {
                 form.layoutAttributes['style'] = param
                 break
             default:
-                throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)
+                if (TransformerResolver.instance.canHandle(attrib)) {
+                    form.transformAttributes.put(attrib, new TransformAttribute(line: line, param: param, annotation: attrib))
+                } else {
+                    throw new InvalidAttributeException("Attribute $attrib on form $form.name in not supported", line)
+                }
         }
     }
 

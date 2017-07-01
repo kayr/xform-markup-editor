@@ -87,7 +87,9 @@ class MarkUpSerializer {
 
     def static renderBehaviourInfo(def builder, IFormElement elem) {
         if (elem.id && isAssignedId(elem))
-            builder << "@${elem.id == 'unique_id' ? 'absoluteid' : 'id'} $elem.binding"
+            builder << "@${elem.id == 'unique_id' || elem.hasAbsoluteId ? 'absoluteid' : 'id'} $elem.binding"
+
+
 
         if (elem instanceof IQuestion) {
             if (elem.readOnly) builder << "@readonly"

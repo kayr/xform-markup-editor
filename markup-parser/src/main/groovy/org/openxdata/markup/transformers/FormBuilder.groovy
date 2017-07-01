@@ -1,10 +1,7 @@
 package org.openxdata.markup.transformers
 
 import groovy.transform.CompileStatic
-import org.openxdata.markup.IFormElement
-import org.openxdata.markup.IQuestion
-import org.openxdata.markup.ISelectionQuestion
-import org.openxdata.markup.TextQuestion
+import org.openxdata.markup.*
 
 /**
  * Created by user on 6/30/2017.
@@ -12,7 +9,7 @@ import org.openxdata.markup.TextQuestion
 @CompileStatic
 class FormBuilder {
 
-    IFormElement elem
+    IFormElement elem = new TextQuestion()
 
     static FormBuilder create() {
         new FormBuilder()
@@ -23,6 +20,21 @@ class FormBuilder {
         return this
     }
 
+    FormBuilder groupQn() {
+        elem = new Page()
+        this
+    }
+
+    FormBuilder addElements(IFormElement... elements) {
+        for (elem in elements) {
+            group().addElement(elem)
+        }
+        this
+    }
+
+    Page group() {
+        elem as Page
+    }
 
     FormBuilder text(String txt) {
         question.setText(txt)
@@ -81,13 +93,36 @@ class FormBuilder {
         return this
     }
 
+    FormBuilder type(XformType type) {
+        question.xformType = type
+        question.type = type.value
+        this
+    }
+
+    FormBuilder bindAttr(String name, String value) {
+        elem.bindAttributes.put(name, value)
+        this
+    }
+
+    FormBuilder layoutAttr(String name, String value) {
+        elem.layoutAttributes.put(name, value)
+        this
+
+    }
+
+    FormBuilder absolute(boolean absolute) {
+        elem.setHasAbsoluteId(absolute)
+        this
+
+    }
+
     private IQuestion getQuestion() {
         (IQuestion) elem
     }
 
     IQuestion question() { (IQuestion) elem }
 
-    ISelectionQuestion getSelectQuestion() {
+    ISelectionQuestion selectQuestion() {
         (ISelectionQuestion) elem
     }
 
