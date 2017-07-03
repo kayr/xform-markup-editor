@@ -6,7 +6,7 @@ import org.openxdata.markup.FLAGS
 import org.openxdata.markup.Form
 import org.openxdata.markup.IFormElement
 import org.openxdata.markup.transformers.impl.JRCountTransformer
-import org.openxdata.markup.transformers.impl.ODKMetaDataTranformaer
+import org.openxdata.markup.transformers.impl.OdkMetaDataTransformer
 import org.openxdata.markup.transformers.impl.SelectOtherTransformer
 import org.openxdata.markup.util.Assert
 
@@ -21,9 +21,9 @@ class TransformerResolver {
     private Map<String, Transformer> transformers = [:]
 
     private TransformerResolver() {
-        addTransformer('jrcount', new JRCountTransformer())
-        addTransformer('selectother', new SelectOtherTransformer())
-        addTransformer('odkmetadata', new ODKMetaDataTranformaer())
+        addTransformer(JRCountTransformer.NAME, new JRCountTransformer())
+        addTransformer(SelectOtherTransformer.NAME, new SelectOtherTransformer())
+        addTransformer(OdkMetaDataTransformer.NAME, new OdkMetaDataTransformer())
     }
 
 

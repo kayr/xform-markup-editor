@@ -15,10 +15,12 @@ import org.openxdata.markup.util.Assert
 @CompileStatic
 class JRCountTransformer implements Transformer {
 
+    static final String NAME = 'jrcount'
+
     @Override
     void transform(EnumSet<FLAGS> flags, IFormElement element, TransformAttribute transformAttribute) {
 
-        Assert.attribute element instanceof RepeatQuestion, 'Attribute jrcount can only be set on Repeat Question', element.line
+        Assert.attribute element instanceof RepeatQuestion, "Attribute $NAME can only be set on Repeat Question", element.line
 
 
 

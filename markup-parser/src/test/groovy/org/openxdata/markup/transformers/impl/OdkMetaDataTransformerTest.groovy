@@ -7,7 +7,8 @@ import org.openxdata.markup.TestUtils
 /**
  * Created by user on 7/1/2017.
  */
-class ODKMetaDataTranformaerTest extends GroovyTestCase {
+class OdkMetaDataTransformerTest extends GroovyTestCase {
+
 
     void test_MetaDataTranformer() {
 
@@ -28,7 +29,7 @@ class ODKMetaDataTranformaerTest extends GroovyTestCase {
 Q1
 
 
-@absoluteid __meta
+@absoluteid meta
 group { 
 
     @absoluteid __start
@@ -59,11 +60,6 @@ group {
     @invisible
     @calculate concat('uuid:',uuid())
     Instance ID
-
-
-    @invisible
-    @calculate once(concat('uuid:',uuid()))
-    Unique ID
 
 
 }'''

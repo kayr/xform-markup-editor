@@ -10,6 +10,7 @@ import org.openxdata.markup.util.Assert
 
 @CompileStatic
 class SelectOtherTransformer implements Transformer {
+    final static String NAME = 'selectother'
     @Override
     void transform(EnumSet<FLAGS> flags, IFormElement element, TransformAttribute transformAttribute) {
 

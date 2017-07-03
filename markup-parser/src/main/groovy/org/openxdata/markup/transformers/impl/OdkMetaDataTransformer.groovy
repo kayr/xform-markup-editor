@@ -11,7 +11,10 @@ import org.openxdata.markup.util.Assert
  * Created by user on 7/1/2017.
  */
 @CompileStatic
-class ODKMetaDataTranformaer implements Transformer {
+class OdkMetaDataTransformer implements Transformer {
+
+    final static String NAME = "odkmetadata"
+
     @Override
     void transform(EnumSet<FLAGS> flags, IFormElement element, TransformAttribute transformAttribute) {
 
@@ -58,14 +61,7 @@ class ODKMetaDataTranformaer implements Transformer {
                            .calculation("concat('uuid:',uuid())")
                            .question()
 
-        def unique_id =
-                FormBuilder.create()
-                           .text("Unique ID")
-                           .binding("unique_id")
-                           .calculation("once(concat('uuid:',uuid()))")
-                           .question()
-
-        [startQn, endQn, dateQn, instanceID, unique_id].each { IQuestion q ->
+        [startQn, endQn, dateQn, instanceID].each { IQuestion q ->
             q.setHasAbsoluteId(true)
             q.setVisible(false)
             q.setLine(transformAttribute.line)
@@ -73,14 +69,21 @@ class ODKMetaDataTranformaer implements Transformer {
 
 
 
-        def metaGroup =
-                FormBuilder.create()
-                           .groupQn()
-                           .binding("__meta")
-                           .absolute(true)
-                           .meta(transformAttribute)
-                           .addElements(startQn, endQn, dateQn, instanceID, unique_id)
-                           .group()
+        def metaGroup = form['meta']
+
+        if (metaGroup != null)
+            Assert.attribute metaGroup instanceof Page, "The Meta Qustion Should Be A Group Type", transformAttribute.line
+        else {
+            metaGroup =
+                    FormBuilder.create()
+                               .groupQn()
+                               .binding("meta")
+                               .absolute(true)
+                               .meta(transformAttribute)
+                               .addElements(startQn, endQn, dateQn, instanceID)
+                               .group()
+        }
+
 
 
 
