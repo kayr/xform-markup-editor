@@ -24,7 +24,7 @@ enum XformType {
     PICTURE('picture'),
     VIDEO('video'),
     AUDIO('audio'),
-    DATE_TIME('datetime'),
+    DATE_TIME('dateTime'),
     DATE('date'),
     TIME('time'),
     FORM('form'),

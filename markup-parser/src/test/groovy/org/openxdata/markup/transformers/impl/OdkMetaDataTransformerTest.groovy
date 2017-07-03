@@ -36,7 +36,7 @@ group {
     @invisible
     @bind:jr:preload timestamp
     @bind:jr:preloadParams start
-    @datetime
+    @dateTime
     Start Time
 
 
@@ -44,7 +44,7 @@ group {
     @invisible
     @bind:jr:preload timestamp
     @bind:jr:preloadParams end
-    @datetime
+    @dateTime
     End Time
 
 
