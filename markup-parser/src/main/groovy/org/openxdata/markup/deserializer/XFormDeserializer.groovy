@@ -4,20 +4,21 @@ import groovy.json.JsonSlurper
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.NamespaceAwareHashMap
 import org.openxdata.markup.*
+import org.openxdata.markup.util.TextParser
 
 /**
  * Created by kay on 6/7/14.
  */
 class XFormDeserializer {
 
-    private String xml
+    private String      xml
     private GPathResult xForm
-    private Form form
-    private def model
+    private Form        form
+    private def         model
     private final
     static
-    def COMMON_BIND_ATTRIBUTES = ['locked', 'message', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
-    static def LAYOUT_NS = '{https://github.com/kayr/xform-markup-editor#layout}'
+    def                 COMMON_BIND_ATTRIBUTES = ['locked', 'message', 'id', 'readonly', 'visible', 'action', 'required', 'nodeset', 'type', 'format', 'relevant', 'constraint', 'calculate'] as HashSet
+    static def          LAYOUT_NS              = '{https://github.com/kayr/xform-markup-editor#layout}'
 
 
     XFormDeserializer() {
@@ -213,6 +214,7 @@ class XFormDeserializer {
         return qn
     }
 
+
     def findDataNode(IQuestion qn) {
         def steps = []
 
@@ -301,6 +303,8 @@ class XFormDeserializer {
         mayBeAddSkipLogic(bindNode, qn)
         mayBeAddValidationLogic(bindNode, qn)
 
+        mayBeProcessHintAndText(qn)
+
         Map bindAttributes = bindNode.attributes()
 
         nameSpaceAwareCopyInto(qn.bindAttributes, bindAttributes, COMMON_BIND_ATTRIBUTES)
@@ -311,6 +315,37 @@ class XFormDeserializer {
 //        }
 
         return qn
+    }
+
+    private void mayBeProcessHintAndText(IFormElement qn) {
+
+        if (qn.text) {
+            qn.name = getMarkupTemplateText(qn.text)
+
+        }
+
+        if (qn instanceof IQuestion && qn.comment) {
+            qn.comment = getMarkupTemplateText(qn.comment)
+        }
+
+
+    }
+
+    private String getMarkupTemplateText(String txt) {
+        def tokens = TextParser.parseOxdToken(txt)
+
+        StringBuilder b = new StringBuilder()
+        for (t in tokens) {
+
+            if (t.type == TextParser.TextToken.Type.EXPRESSION) {
+                b << '{{' + getXPathFormula(t.innerText) + '}}'
+            } else {
+                b << t.text
+            }
+        }
+
+        return b.toString()
+
     }
 
     def nameSpaceAwareCopyInto(Map target, Map<String, Object> source, Collection excludes, Map keyConversion = [:]) {

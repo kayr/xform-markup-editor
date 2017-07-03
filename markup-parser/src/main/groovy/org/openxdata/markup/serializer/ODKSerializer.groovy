@@ -4,6 +4,7 @@ import groovy.transform.CompileStatic
 import groovy.xml.MarkupBuilder
 import org.openxdata.markup.*
 import org.openxdata.markup.deserializer.XFormDeserializer
+import org.openxdata.markup.util.TextParser
 
 import static java.lang.System.err
 
@@ -17,13 +18,13 @@ import static java.lang.System.err
 //todo support for
 class ODKSerializer {
 
-    boolean numberQuestions = false
-    boolean numberBindings = false
-    boolean oxdConversion = false
-    boolean addMetaInstanceId = false
-    Map<Form, String> xforms = [:]
-    Study study
-    def studyXML
+    boolean           numberQuestions   = false
+    boolean           numberBindings    = false
+    boolean           oxdConversion     = false
+    boolean           addMetaInstanceId = false
+    Map<Form, String> xforms            = [:]
+    Study             study
+    def               studyXML
 
     ODKSerializer() {}
 
@@ -443,12 +444,29 @@ class ODKSerializer {
     private void buildQuestionLabelAndHint(MarkupBuilder xml, IFormElement element) {
 
         def label = element.getText(numberQuestions)
-        xml.label(label)
+        xml.label {
+            buildTextLayout(xml, label, element)
+        }
         if (element instanceof IQuestion) {
             def hasExternalApp = oxdConversion && element.type == 'string' && mayBeExternalApp(element.comment)
             if (element.comment && !hasExternalApp)
-                xml.hint(element.comment)
+                xml.hint {
+                    buildTextLayout(xml, element.comment, element)
+                }
         }
+    }
+
+    private void buildTextLayout(MarkupBuilder xml, String txt, IFormElement e) {
+
+        def tokens = TextParser.parseText(txt)
+        for (token in tokens) {
+            if (token.type == TextParser.TextToken.Type.EXPRESSION) {
+                xml.output(value: getAbsoluteBindingXPath(token.innerText, e))
+            } else {
+                xml.mkp.yield(token.text)
+            }
+        }
+
     }
 
     private static Map getQuestionType(IQuestion question) {

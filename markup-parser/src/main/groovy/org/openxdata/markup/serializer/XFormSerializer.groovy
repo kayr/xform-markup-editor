@@ -4,6 +4,7 @@ import groovy.json.JsonOutput
 import groovy.xml.MarkupBuilder
 import groovy.xml.XmlUtil
 import org.openxdata.markup.*
+import org.openxdata.markup.util.TextParser
 
 import static java.lang.System.err
 
@@ -256,8 +257,12 @@ class XFormSerializer {
     void buildQuestionLabelAndHint(MarkupBuilder xml, IFormElement question) {
 
         def label = question.getText(numberQuestions)
-        xml.label(label)
+        xml.label(buildTextOutput(label, question))
         def comment = question instanceof IQuestion ? question.comment : null
+
+        if (comment) {
+            comment = buildTextOutput(comment, question)
+        }
 
         if (putExtraAttributesInComments) {
             def commentMap = [:]
@@ -287,6 +292,19 @@ class XFormSerializer {
         if (comment) {
             xml.hint(comment)
         }
+    }
+
+    String buildTextOutput(String txt, IFormElement element) {
+        def tokens = TextParser.parseText(txt)
+        StringBuilder buffer = new StringBuilder()
+        for (token in tokens) {
+            if (token.type == TextParser.TextToken.Type.EXPRESSION) {
+                buffer << '${' + getAbsoluteBindingXPath(token.innerText, element) + '}$'
+            } else {
+                buffer << token.text
+            }
+        }
+        return buffer.toString()
     }
 
     void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
