@@ -126,7 +126,7 @@ class MainPresenter implements DocumentListener {
 
         t.scheduleAtFixedRate({
             e.execute { mayBeAutoSave() }
-        }, TimeUnit.SECONDS.toMillis(60), TimeUnit.SECONDS.toMillis(60))
+        }, TimeUnit.MINUTES.toMillis(10), TimeUnit.SECONDS.toMillis(10))
     }
 
     private decreaseFont() {

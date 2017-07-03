@@ -107,4 +107,38 @@ sdsdsd''"""
 
 
     }
+
+    void testThatClosestElementIsFetchedWithTranformation() {
+        def form = '''### s
+                     @odkmetadata
+                     |## f
+                     |
+                     |#> sjdjsd
+                     |kskas
+                     |sdsd
+                     |@layout:appearance jjs
+                     |
+                     |#> sdsd
+                     |sddsd
+                     |
+                     |## f2
+                     |
+                     |sdj
+                     |
+                     |ddff
+                     |>dsd
+                     |
+                     '''.stripMargin()
+
+        def study = new MarkupDeserializer(form).parse()
+
+        assert 'sjdjsd' == study.getElementClosestToLine(4).name
+        assert 'sjdjsd' == study.getElementClosestToLine(5).name
+        assert 'kskas' == study.getElementClosestToLine(6).name
+        assert 'ddff' == study.getElementClosestToLine(100).name
+        assert 'f' == study.getElementClosestToLine(-1).name
+        assert 'sdj' == study.getElementClosestToLine(15).name
+
+
+    }
 }

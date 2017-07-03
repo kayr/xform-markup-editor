@@ -18,7 +18,8 @@ trait IFormElement {
     private Map _bindAttr = [visible: true, skipAction: 'enable']
 
     private Map _dataMap = [
-            transformAttributes: [:]
+            transformAttributes: [:],
+            transformAdded: false
     ]
 
     //this will store any other extra bind attributes
@@ -34,6 +35,13 @@ trait IFormElement {
 
     String getSkipAction() {
         return _bindAttr['skipAction']
+    }
+
+    boolean isTransformAdded() { return _dataMap['transformAdded'] }
+
+    IFormElement setTransformAdded(boolean added) {
+        _dataMap['transformAdded'] = added
+        this
     }
 
 

@@ -196,6 +196,10 @@ trait HasQuestions implements IFormElement {
         getAllElements(Closure.IDENTITY)
     }
 
+    List<IFormElement> getAllElementsNotTransformed() {
+        getAllElements{IFormElement e -> !e.isTransformAdded()}
+    }
+
     IFormElement getFirstElementsWithId() {
         def all = getAllElements(true) { IFormElement e -> e.id != null && !e.id.isEmpty() }
         if (all) return all.first()
@@ -281,7 +285,7 @@ trait HasQuestions implements IFormElement {
     }
 
     IFormElement getElementClosestToLine(int lineOfInterest) {
-        def elements = getAllElements()
+        def elements = getAllElementsNotTransformed()
 
         if (lineOfInterest <= this.line) return this
 

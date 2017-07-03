@@ -9,19 +9,19 @@ import org.openxdata.markup.*
 @CompileStatic
 class FormBuilder {
 
-    IFormElement elem = new TextQuestion()
+    IFormElement elem = new TextQuestion(transformAdded: true)
 
     static FormBuilder create() {
         new FormBuilder()
     }
 
     FormBuilder textQn() {
-        elem = new TextQuestion()
+        elem = new TextQuestion(transformAdded: true)
         return this
     }
 
     FormBuilder groupQn() {
-        elem = new Page()
+        elem = new Page(transformAdded: true)
         this
     }
 
