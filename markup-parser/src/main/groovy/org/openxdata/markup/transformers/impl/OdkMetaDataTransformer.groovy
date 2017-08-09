@@ -72,7 +72,7 @@ class OdkMetaDataTransformer implements Transformer {
         def metaGroup = form['meta']
 
         if (metaGroup != null)
-            Assert.attribute metaGroup instanceof Page, "The Meta Qustion Should Be A Group Type", transformAttribute.line
+            Assert.attribute metaGroup instanceof Page, "The Meta Question Should Be A Group Type", transformAttribute.line
         else {
             metaGroup =
                     FormBuilder.create()
