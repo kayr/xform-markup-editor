@@ -33,7 +33,7 @@ class SelectOtherTransformer implements Transformer {
                                   .binding(thisElementId)
                                   .showIf("$element.markupVariable = 'other'")
                                   .meta(transformAttribute)
-                                  .question()
+                                  .asQuestion()
 
         selectQn.insertAfterMe(question)
 

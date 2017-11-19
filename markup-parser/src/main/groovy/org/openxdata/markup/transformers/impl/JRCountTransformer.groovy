@@ -34,7 +34,7 @@ class JRCountTransformer implements Transformer {
                            .binding(otherElemId)
                            .calculation(transformAttribute.param)
                            .meta(transformAttribute)
-                           .question()
+                           .asQuestion()
 
 
 

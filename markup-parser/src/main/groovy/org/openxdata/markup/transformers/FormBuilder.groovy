@@ -37,7 +37,7 @@ class FormBuilder {
     }
 
     FormBuilder text(String txt) {
-        question.setText(txt)
+        castToQuestion().setText(txt)
         return this
     }
 
@@ -47,7 +47,7 @@ class FormBuilder {
     }
 
     FormBuilder calculation(String expr) {
-        question.calculation = expr
+        castToQuestion().calculation = expr
         return this
     }
 
@@ -73,8 +73,8 @@ class FormBuilder {
 
 
     FormBuilder addSkipLogic(String action, String expr) {
-        question.skipLogic = expr
-        question.skipAction = action
+        castToQuestion().skipLogic = expr
+        castToQuestion().skipAction = action
         return this
     }
 
@@ -94,8 +94,8 @@ class FormBuilder {
     }
 
     FormBuilder type(XformType type) {
-        question.xformType = type
-        question.type = type.value
+        castToQuestion().xformType = type
+        castToQuestion().type = type.value
         this
     }
 
@@ -116,13 +116,13 @@ class FormBuilder {
 
     }
 
-    private IQuestion getQuestion() {
+    private IQuestion castToQuestion() {
         (IQuestion) elem
     }
 
-    IQuestion question() { (IQuestion) elem }
+    IQuestion asQuestion() { (IQuestion) elem }
 
-    ISelectionQuestion selectQuestion() {
+    ISelectionQuestion asSelectQuestion() {
         (ISelectionQuestion) elem
     }
 

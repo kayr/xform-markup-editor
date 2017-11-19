@@ -32,7 +32,7 @@ class OdkMetaDataTransformer implements Transformer {
                            .bindAttr("jr:preload", "timestamp")
                            .bindAttr("jr:preloadParams", "start")
                            .meta(transformAttribute)
-                           .question()
+                           .asQuestion()
 
         def endQn =
                 FormBuilder.create()
@@ -42,7 +42,7 @@ class OdkMetaDataTransformer implements Transformer {
                            .bindAttr("jr:preload", "timestamp")
                            .bindAttr("jr:preloadParams", "end")
                            .meta(transformAttribute)
-                           .question()
+                           .asQuestion()
 
         def dateQn =
                 FormBuilder.create()
@@ -52,14 +52,14 @@ class OdkMetaDataTransformer implements Transformer {
                            .bindAttr("jr:preload", "date")
                            .bindAttr("jr:preloadParams", "today")
                            .meta(transformAttribute)
-                           .question()
+                           .asQuestion()
 
         def instanceID =
                 FormBuilder.create()
                            .text("Instance ID")
                            .binding("instanceID")
                            .calculation("concat('uuid:',uuid())")
-                           .question()
+                           .asQuestion()
 
         [startQn, endQn, dateQn, instanceID].each { IQuestion q ->
             q.setHasAbsoluteId(true)
