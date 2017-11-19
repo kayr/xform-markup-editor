@@ -135,7 +135,7 @@ class XPathUtil {
         if (tree.childCount == 0)
             return (tree.token as CommonToken).stopIndex
 
-        List trees = findAllDeep(tree) { Tree t ->
+        def trees = findAllDeep(tree) { Tree t ->
             t.childCount == 0
         }
         return trees.last().token.asType(CommonToken).stopIndex
