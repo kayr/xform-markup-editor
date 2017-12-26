@@ -1,10 +1,9 @@
 package org.openxdata.markup.serializer
 
 import groovy.transform.CompileStatic
-import groovy.xml.MarkupBuilder
 import org.openxdata.markup.*
 import org.openxdata.markup.deserializer.XFormDeserializer
-import org.openxdata.markup.util.CustomIndentPrinter
+import org.openxdata.markup.util.CustomMarkupBuilder
 import org.openxdata.markup.util.TextParser
 
 import static java.lang.System.err
@@ -23,8 +22,6 @@ class ODKSerializer {
     boolean           numberBindings    = false
     boolean           oxdConversion     = false
     boolean           addMetaInstanceId = false
-    def               printWriter       = new StringWriter()
-    def               indentPrinter     = new CustomIndentPrinter(printWriter)
     Map<Form, String> xforms            = [:]
     Study             study
     def               studyXML
@@ -37,7 +34,8 @@ class ODKSerializer {
     }
 
     String toStudyXml(Study study) {
-        def xml = new MarkupBuilder(indentPrinter)
+        def writer = new StringWriter()
+        def xml =  CustomMarkupBuilder._(writer)
         xml.setDoubleQuotes(true)
 
         println "========== Converting study [${study?.name}] to XML"
@@ -52,13 +50,13 @@ class ODKSerializer {
             }
         }
         println "========== Done converting study [${study?.name}] ${new Date()}"
-        studyXML = printWriter.toString()
+        studyXML = writer.toString()
         return studyXML
     }
 
     String toXForm(Form form) {
-//        def printWriter = new StringWriter()
-        def x = new MarkupBuilder(indentPrinter)
+        def printWriter = new StringWriter()
+        def x =  CustomMarkupBuilder._(printWriter)
         x.doubleQuotes = true
         vb(form.binding)
 
@@ -186,7 +184,7 @@ class ODKSerializer {
         return bind
     }
 
-    private void addBindNode(MarkupBuilder xml, IFormElement question) {
+    private void addBindNode(CustomMarkupBuilder xml, IFormElement question) {
 
         def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
 
@@ -256,7 +254,7 @@ class ODKSerializer {
 
     }
 
-    private void mayBeBuildLayout(MarkupBuilder xml, IFormElement q) {
+    private void mayBeBuildLayout(CustomMarkupBuilder xml, IFormElement q) {
         // implement visibility here
         // if a question is invisible and has no skipLogic do not render its layout
         if (shouldNotRenderLayout(q)) return //note uses multiple dispatch
@@ -272,7 +270,7 @@ class ODKSerializer {
     }
 
 
-    private void buildDynamicModel(MarkupBuilder x, Form form) {
+    private void buildDynamicModel(CustomMarkupBuilder x, Form form) {
         def completeBinds = []
         form.allQuestions.each { question ->
             if (!(question instanceof DynamicQuestion))
@@ -297,7 +295,7 @@ class ODKSerializer {
         }
     }
 
-    private void buildLayout(MarkupBuilder x, IQuestion question) {
+    private void buildLayout(CustomMarkupBuilder x, IQuestion question) {
         def qnType = getQuestionType(question)
         def inputAttrs = [ref: absoluteBinding(question)] + question.layoutAttributes
 
@@ -346,7 +344,7 @@ class ODKSerializer {
     }
 
 
-    private void buildLayout(MarkupBuilder xml, DynamicQuestion question) {
+    private void buildLayout(CustomMarkupBuilder xml, DynamicQuestion question) {
         def inputAttrs = [ref: absoluteBinding(question)] + question.layoutAttributes
         xml.select1(inputAttrs) {
             buildQuestionLabelAndHint(xml, question)
@@ -357,7 +355,7 @@ class ODKSerializer {
         }
     }
 
-    private void buildLayout(MarkupBuilder xml, ISelectionQuestion question) {
+    private void buildLayout(CustomMarkupBuilder xml, ISelectionQuestion question) {
 
         def inputAttrs = [ref: absoluteBinding(question)] + question.layoutAttributes
         def selectRef = question instanceof SingleSelectQuestion ? '1' : ''
@@ -372,7 +370,7 @@ class ODKSerializer {
         }
     }
 
-    private void buildLayout(MarkupBuilder xml, RepeatQuestion question) {
+    private void buildLayout(CustomMarkupBuilder xml, RepeatQuestion question) {
 
         if (!question.isVisible()) return
 
@@ -413,7 +411,7 @@ class ODKSerializer {
         }
     }
 
-    private void buildLayout(MarkupBuilder xml, Page page) {
+    private void buildLayout(CustomMarkupBuilder xml, Page page) {
 
         if (!page.isVisible()) return
 
@@ -444,7 +442,7 @@ class ODKSerializer {
         return question.absParentBinding
     }
 
-    private void buildQuestionLabelAndHint(MarkupBuilder xml, IFormElement element) {
+    private void buildQuestionLabelAndHint(CustomMarkupBuilder xml, IFormElement element) {
 
         def label = element.getText(numberQuestions)
         xml.label {
@@ -459,17 +457,17 @@ class ODKSerializer {
         }
     }
 
-    private void buildTextLayout(MarkupBuilder xml, String txt, IFormElement e) {
+    private void buildTextLayout(CustomMarkupBuilder xml, String txt, IFormElement e) {
 
 
         def tokens = TextParser.parseText(txt)
         for (token in tokens) {
             if (token.type == TextParser.TextToken.Type.EXPRESSION) {
                 try {
-                    indentPrinter.newLinesEnabled = false
+                    xml.indentPrinter.newLinesEnabled = false
                     xml.output(value: getAbsoluteBindingXPath(token.innerText, e))
                 } finally {
-                    indentPrinter.newLinesEnabled = true
+                    xml.indentPrinter.newLinesEnabled = true
                 }
             } else {
                 xml.mkp.yield(token.text)
