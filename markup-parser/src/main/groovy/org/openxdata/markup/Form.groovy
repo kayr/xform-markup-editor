@@ -27,6 +27,7 @@ class Form implements HasQuestions {
     Map<IFormElement, String> idxCache = [:]
 
     Map<String, List<DynamicOption>> dynamicOptions = [:]
+    List<String> xpathInstanceAttrs,xpathBindAttr,xpathInstanceVariable
 
 
     Form() { init() }

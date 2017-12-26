@@ -1,8 +1,10 @@
 package org.openxdata.markup.deserializer
 
+import groovy.test.GroovyAssert
 import junit.framework.ComparisonFailure
 import org.custommonkey.xmlunit.XMLTestCase
 import org.openxdata.markup.*
+import org.openxdata.markup.exception.MarkUpException
 import org.openxdata.markup.serializer.XFormSerializer
 
 import static org.openxdata.markup.Fixtures.*
@@ -397,6 +399,14 @@ group {
 
         Study.validateWithXML.set(true)
         testRoundTrip(markup)
+    }
+
+    void testDeserializeWeirdForm(){
+        def text = this.getClass().getResource("/failing-form.xml").text
+        GroovyAssert.shouldFail (MarkUpException){
+            Converter.oxd2Form(text)
+        }
+
     }
 
 }

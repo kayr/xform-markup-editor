@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 import groovy.util.slurpersupport.GPathResult
 import groovy.util.slurpersupport.NamespaceAwareHashMap
 import org.openxdata.markup.*
+import org.openxdata.markup.exception.MarkUpException
 import org.openxdata.markup.util.TextParser
 
 /**
@@ -305,6 +306,10 @@ class XFormDeserializer {
 
         mayBeProcessHintAndText(qn)
 
+        //todo sometimes the xform might be corrupted and we cannot find the bind node...remember to check for this
+        if (!bindNode) {
+            throw new MarkUpException("Could not find bind node for question[$qn.id]")
+        }
         Map bindAttributes = bindNode.attributes()
 
         nameSpaceAwareCopyInto(qn.bindAttributes, bindAttributes, COMMON_BIND_ATTRIBUTES)
