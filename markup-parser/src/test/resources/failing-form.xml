@@ -1,0 +1,847 @@
+<xforms xmlns:layout="https://github.com/kayr/xform-markup-editor#layout" layout:style="pages">
+    <model>
+        <instance id="iics_survey_school_questionnaire_v1">
+            <iics_survey_school_questionnaire_v1 id="2" name="School Questionnaire"
+                                                 formKey="iics_survey_school_questionnaire_v1">
+                <visit/>
+                <select_school/>
+                <visit_date/>
+                <interviewer/>
+                <interviewer_mobile/>
+                <school_name/>
+                <address/>
+                <phone/>
+                <email/>
+                <district/>
+                <subcounty/>
+                <headteacher/>
+                <director_phone/>
+                <school_level/>
+                <enrolment>
+                    <boarding/>
+                    <day/>
+                    <total_enrolment/>
+                    <teacher_no/>
+                    <non_teacher_no/>
+                    <total_traff/>
+                </enrolment>
+                <owner/>
+                <boil_water/>
+                <spend_fuel/>
+                <spend_trucks/>
+                <stoves/>
+                <info_stone>
+                    <quantity_stone/>
+                    <pan_size_stone/>
+                    <rings_stone/>
+                    <fuel_stone/>
+                </info_stone>
+                <info_improved>
+                    <quantity_improved/>
+                    <pan_size_improved/>
+                    <rings_improved/>
+                    <fuel_improved/>
+                </info_improved>
+                <info_sigiri>
+                    <quantity_sigiri/>
+                    <pan_size_sigiri/>
+                    <rings_sigiri/>
+                    <fuel_sigiri/>
+                </info_sigiri>
+                <info_own>
+                    <quantity_own/>
+                    <pan_size_own/>
+                    <rings_own/>
+                    <fuel_own/>
+                </info_own>
+                <improved_stoves/>
+                <info_ics>
+                    <improved_stove_details>
+                        <manufacturer/>
+                        <ics_size/>
+                        <ics_ring/>
+                        <ics_condition/>
+                        <ics_repair/>
+                    </improved_stove_details>
+                </info_ics>
+                <cook_holiday/>
+                <cook_special/>
+                <cook_add/>
+                <cook_times/>
+                <cook_same/>
+                <cook_extra/>
+                <picture/>
+                <gps/>
+                <you_score/>
+                <date_entry/>
+                <unique_id/>
+            </iics_survey_school_questionnaire_v1>
+        </instance>
+        <instance id="subcounty">
+            <dynamiclist>
+                <item id="budondo" parent="jinja">
+                    <label>Budondo</label>
+                    <value>budondo</value>
+                </item>
+                <item id="busedde" parent="jinja">
+                    <label>Busedde</label>
+                    <value>busedde</value>
+                </item>
+                <item id="butagaya" parent="jinja">
+                    <label>Butagaya</label>
+                    <value>butagaya</value>
+                </item>
+                <item id="buwenge" parent="jinja">
+                    <label>Buwenge</label>
+                    <value>buwenge</value>
+                </item>
+                <item id="buwenge_tc" parent="jinja">
+                    <label>Buwenge Tc</label>
+                    <value>buwenge_tc</value>
+                </item>
+                <item id="buyengo" parent="jinja">
+                    <label>Buyengo</label>
+                    <value>buyengo</value>
+                </item>
+                <item id="central_division" parent="jinja">
+                    <label>Central Division</label>
+                    <value>central_division</value>
+                </item>
+                <item id="kakira" parent="jinja">
+                    <label>Kakira</label>
+                    <value>kakira</value>
+                </item>
+                <item id="mafubira" parent="jinja">
+                    <label>Mafubira</label>
+                    <value>mafubira</value>
+                </item>
+                <item id="masese_slash_walukuba" parent="jinja">
+                    <label>Masese/walukuba</label>
+                    <value>masese_slash_walukuba</value>
+                </item>
+                <item id="mpumudde_slash_kimaka" parent="jinja">
+                    <label>Mpumudde/kimaka</label>
+                    <value>mpumudde_slash_kimaka</value>
+                </item>
+                <item id="kampala_central_division" parent="kampala">
+                    <label>Central Division</label>
+                    <value>kampala_central_division</value>
+                </item>
+                <item id="kawempe_division" parent="kampala">
+                    <label>Kawempe Division</label>
+                    <value>kawempe_division</value>
+                </item>
+                <item id="makindye_division" parent="kampala">
+                    <label>Makindye Division</label>
+                    <value>makindye_division</value>
+                </item>
+                <item id="nakawa_division" parent="kampala">
+                    <label>Nakawa Division</label>
+                    <value>nakawa_division</value>
+                </item>
+                <item id="rubaga_division" parent="kampala">
+                    <label>Rubaga Division</label>
+                    <value>rubaga_division</value>
+                </item>
+                <item id="goma" parent="mukono">
+                    <label>Goma</label>
+                    <value>goma</value>
+                </item>
+                <item id="kasawo" parent="mukono">
+                    <label>Kasawo</label>
+                    <value>kasawo</value>
+                </item>
+                <item id="kimenyedde" parent="mukono">
+                    <label>Kimenyedde</label>
+                    <value>kimenyedde</value>
+                </item>
+                <item id="kkome_islands" parent="mukono">
+                    <label>Kkome Islands</label>
+                    <value>kkome_islands</value>
+                </item>
+                <item id="kyampisi" parent="mukono">
+                    <label>Kyampisi</label>
+                    <value>kyampisi</value>
+                </item>
+                <item id="mukono_tc" parent="mukono">
+                    <label>Mukono Tc</label>
+                    <value>mukono_tc</value>
+                </item>
+                <item id="nabaale" parent="mukono">
+                    <label>Nabaale</label>
+                    <value>nabaale</value>
+                </item>
+                <item id="nagojje" parent="mukono">
+                    <label>Nagojje</label>
+                    <value>nagojje</value>
+                </item>
+                <item id="nakisunga" parent="mukono">
+                    <label>Nakisunga</label>
+                    <value>nakisunga</value>
+                </item>
+                <item id="nama" parent="mukono">
+                    <label>Nama</label>
+                    <value>nama</value>
+                </item>
+                <item id="ntenjeru" parent="mukono">
+                    <label>Ntenjeru</label>
+                    <value>ntenjeru</value>
+                </item>
+                <item id="ntunda" parent="mukono">
+                    <label>Ntunda</label>
+                    <value>ntunda</value>
+                </item>
+                <item id="seeta_hyphen_namuganga" parent="mukono">
+                    <label>Seeta-namuganga</label>
+                    <value>seeta_hyphen_namuganga</value>
+                </item>
+                <item id="busukuma" parent="wakiso">
+                    <label>Busukuma</label>
+                    <value>busukuma</value>
+                </item>
+                <item id="division_a" parent="wakiso">
+                    <label>Division A</label>
+                    <value>division_a</value>
+                </item>
+                <item id="division_b" parent="wakiso">
+                    <label>Division B</label>
+                    <value>division_b</value>
+                </item>
+                <item id="gombe" parent="wakiso">
+                    <label>Gombe</label>
+                    <value>gombe</value>
+                </item>
+                <item id="kakiri" parent="wakiso">
+                    <label>Kakiri</label>
+                    <value>kakiri</value>
+                </item>
+                <item id="kasanje" parent="wakiso">
+                    <label>Kasanje</label>
+                    <value>kasanje</value>
+                </item>
+                <item id="katabi" parent="wakiso">
+                    <label>Katabi</label>
+                    <value>katabi</value>
+                </item>
+                <item id="kira" parent="wakiso">
+                    <label>Kira</label>
+                    <value>kira</value>
+                </item>
+                <item id="masulita" parent="wakiso">
+                    <label>Masulita</label>
+                    <value>masulita</value>
+                </item>
+                <item id="nabweru" parent="wakiso">
+                    <label>Nabweru</label>
+                    <value>nabweru</value>
+                </item>
+                <item id="namayumba" parent="wakiso">
+                    <label>Namayumba</label>
+                    <value>namayumba</value>
+                </item>
+                <item id="nangabo" parent="wakiso">
+                    <label>Nangabo</label>
+                    <value>nangabo</value>
+                </item>
+                <item id="nsangi" parent="wakiso">
+                    <label>Nsangi</label>
+                    <value>nsangi</value>
+                </item>
+                <item id="ssabagabo_hyphen_makindye" parent="wakiso">
+                    <label>Ssabagabo-makindye</label>
+                    <value>ssabagabo_hyphen_makindye</value>
+                </item>
+                <item id="ssisa" parent="wakiso">
+                    <label>Ssisa</label>
+                    <value>ssisa</value>
+                </item>
+                <item id="wakiso" parent="wakiso">
+                    <label>Wakiso</label>
+                    <value>wakiso</value>
+                </item>
+                <item id="wakiso_tc" parent="wakiso">
+                    <label>Wakiso Tc</label>
+                    <value>wakiso_tc</value>
+                </item>
+            </dynamiclist>
+        </instance>
+        <bind id="visit" nodeset="/iics_survey_school_questionnaire_v1/visit" type="xsd:string" required="true()"/>
+        <bind id="select_school" nodeset="/iics_survey_school_questionnaire_v1/select_school" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/visit = 'update'" action="show" required="true()"/>
+        <bind id="visit_date" nodeset="/iics_survey_school_questionnaire_v1/visit_date" type="xsd:date"
+              required="true()"/>
+        <bind id="interviewer" nodeset="/iics_survey_school_questionnaire_v1/interviewer" type="xsd:string"
+              required="true()"/>
+        <bind id="interviewer_mobile" nodeset="/iics_survey_school_questionnaire_v1/interviewer_mobile"
+              type="xsd:string" required="true()" constraint="regex(., &quot;^07[0-9]{8}$&quot;)"
+              message="&quot;Please enter a valid phone number. e.g. 0778345678&quot;"/>
+        <bind id="school_name" nodeset="/iics_survey_school_questionnaire_v1/school_name" type="xsd:string"
+              required="true()"/>
+        <bind id="address" nodeset="/iics_survey_school_questionnaire_v1/address" type="xsd:string" required="true()"/>
+        <bind id="phone" nodeset="/iics_survey_school_questionnaire_v1/phone" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/visit = 'baseline'" action="show"
+              constraint="regex(., &quot;^[0-9]{10}$&quot;)"
+              message="&quot;Please enter a valid phone number. e.g. 0778345678&quot;" required="true()"/>
+        <bind id="email" nodeset="/iics_survey_school_questionnaire_v1/email" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/visit = 'baseline'" action="show"
+              constraint="regex(., '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,5}')" message="put a valid email"
+              required="false()"/>
+        <bind id="district" nodeset="/iics_survey_school_questionnaire_v1/district" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/visit = 'baseline'" action="show" required="true()"/>
+        <bind id="subcounty" nodeset="/iics_survey_school_questionnaire_v1/subcounty" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/visit = 'baseline'" action="show" required="true()"/>
+        <bind id="headteacher" nodeset="/iics_survey_school_questionnaire_v1/headteacher" type="xsd:string"
+              required="true()"/>
+        <bind id="director_phone" nodeset="/iics_survey_school_questionnaire_v1/director_phone" type="xsd:string"
+              required="true()" constraint="regex(., &quot;^07[0-9]{8}$&quot;)"
+              message="&quot;Please enter a valid phone number. e.g. 0778345678&quot;"/>
+        <bind id="school_level" nodeset="/iics_survey_school_questionnaire_v1/school_level" type="xsd:string"
+              required="true()"/>
+        <bind id="enrolment" nodeset="/iics_survey_school_questionnaire_v1/enrolment"/>
+        <bind id="boarding" nodeset="/iics_survey_school_questionnaire_v1/enrolment/boarding" type="xsd:int"
+              required="true()"/>
+        <bind id="day" nodeset="/iics_survey_school_questionnaire_v1/enrolment/day" type="xsd:int" required="true()"/>
+        <bind id="total_enrolment" nodeset="/iics_survey_school_questionnaire_v1/enrolment/total_enrolment"
+              type="xsd:int" required="true()" locked="true()"
+              calculate="/iics_survey_school_questionnaire_v1/enrolment/boarding + /iics_survey_school_questionnaire_v1/enrolment/day"/>
+        <bind id="teacher_no" nodeset="/iics_survey_school_questionnaire_v1/enrolment/teacher_no" type="xsd:int"
+              required="true()"/>
+        <bind id="non_teacher_no" nodeset="/iics_survey_school_questionnaire_v1/enrolment/non_teacher_no" type="xsd:int"
+              required="true()"/>
+        <bind id="total_traff" nodeset="/iics_survey_school_questionnaire_v1/enrolment/total_traff" type="xsd:int"
+              required="true()" locked="true()"
+              calculate="/iics_survey_school_questionnaire_v1/enrolment/non_teacher_no + /iics_survey_school_questionnaire_v1/enrolment/teacher_no"/>
+        <bind id="owner" nodeset="/iics_survey_school_questionnaire_v1/owner" type="xsd:string" required="true()"/>
+        <bind id="boil_water" nodeset="/iics_survey_school_questionnaire_v1/boil_water" type="xsd:boolean"
+              required="true()"/>
+        <bind id="spend_fuel" nodeset="/iics_survey_school_questionnaire_v1/spend_fuel" type="xsd:int"
+              required="true()"/>
+        <bind id="spend_trucks" nodeset="/iics_survey_school_questionnaire_v1/spend_trucks" type="xsd:int"
+              required="true()"/>
+        <bind id="stoves" nodeset="/iics_survey_school_questionnaire_v1/stoves" type="xsd:string" required="true()"/>
+        <bind id="info_stone" nodeset="/iics_survey_school_questionnaire_v1/info_stone"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'stone'" action="show"/>
+        <bind id="quantity_stone" nodeset="/iics_survey_school_questionnaire_v1/info_stone/quantity_stone"
+              type="xsd:int" relevant="/iics_survey_school_questionnaire_v1/stoves = 'stone'" action="show"
+              required="true()"/>
+        <bind id="pan_size_stone" nodeset="/iics_survey_school_questionnaire_v1/info_stone/pan_size_stone"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/stoves = 'stone'" action="show"
+              required="true()"/>
+        <bind id="rings_stone" nodeset="/iics_survey_school_questionnaire_v1/info_stone/rings_stone" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'stone'" action="show" required="true()"/>
+        <bind id="fuel_stone" nodeset="/iics_survey_school_questionnaire_v1/info_stone/fuel_stone" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'stone'" action="show" required="true()"/>
+        <bind id="info_improved" nodeset="/iics_survey_school_questionnaire_v1/info_improved"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'improved'" action="show"/>
+        <bind id="quantity_improved" nodeset="/iics_survey_school_questionnaire_v1/info_improved/quantity_improved"
+              type="xsd:int" relevant="/iics_survey_school_questionnaire_v1/stoves = 'improved'" action="show"
+              required="true()"/>
+        <bind id="pan_size_improved" nodeset="/iics_survey_school_questionnaire_v1/info_improved/pan_size_improved"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/stoves = 'improved'" action="show"
+              required="true()"/>
+        <bind id="rings_improved" nodeset="/iics_survey_school_questionnaire_v1/info_improved/rings_improved"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/stoves = 'improved'" action="show"
+              required="true()"/>
+        <bind id="fuel_improved" nodeset="/iics_survey_school_questionnaire_v1/info_improved/fuel_improved"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/stoves = 'improved'" action="show"
+              required="true()"/>
+        <bind id="info_sigiri" nodeset="/iics_survey_school_questionnaire_v1/info_sigiri"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'sigiri'" action="show"/>
+        <bind id="quantity_sigiri" nodeset="/iics_survey_school_questionnaire_v1/info_sigiri/quantity_sigiri"
+              type="xsd:int" relevant="/iics_survey_school_questionnaire_v1/stoves = 'sigiri'" action="show"
+              required="true()"/>
+        <bind id="pan_size_sigiri" nodeset="/iics_survey_school_questionnaire_v1/info_sigiri/pan_size_sigiri"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/stoves = 'sigiri'" action="show"
+              required="true()"/>
+        <bind id="rings_sigiri" nodeset="/iics_survey_school_questionnaire_v1/info_sigiri/rings_sigiri"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/stoves = 'sigiri'" action="show"
+              required="true()"/>
+        <bind id="fuel_sigiri" nodeset="/iics_survey_school_questionnaire_v1/info_sigiri/fuel_sigiri" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'sigiri'" action="show" required="true()"/>
+        <bind id="info_own" nodeset="/iics_survey_school_questionnaire_v1/info_own"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'own'" action="show"/>
+        <bind id="quantity_own" nodeset="/iics_survey_school_questionnaire_v1/info_own/quantity_own" type="xsd:int"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'own'" action="show" required="true()"/>
+        <bind id="pan_size_own" nodeset="/iics_survey_school_questionnaire_v1/info_own/pan_size_own" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'own'" action="show" required="true()"/>
+        <bind id="rings_own" nodeset="/iics_survey_school_questionnaire_v1/info_own/rings_own" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'own'" action="show" required="true()"/>
+        <bind id="fuel_own" nodeset="/iics_survey_school_questionnaire_v1/info_own/fuel_own" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/stoves = 'own'" action="show" required="true()"/>
+        <bind id="improved_stoves" nodeset="/iics_survey_school_questionnaire_v1/improved_stoves" type="xsd:string"/>
+        <bind id="info_ics" nodeset="/iics_survey_school_questionnaire_v1/info_ics"
+              relevant="/iics_survey_school_questionnaire_v1/improved_stoves = 'yes'" action="show"/>
+        <bind id="improved_stove_details" nodeset="/iics_survey_school_questionnaire_v1/info_ics/improved_stove_details"
+              relevant="/iics_survey_school_questionnaire_v1/improved_stoves = 'yes'" action="show" required="false()"/>
+        <bind id="manufacturer"
+              nodeset="/iics_survey_school_questionnaire_v1/info_ics/improved_stove_details/manufacturer"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/improved_stoves = 'yes'" action="show"
+              required="true()"/>
+        <bind id="ics_size" nodeset="/iics_survey_school_questionnaire_v1/info_ics/improved_stove_details/ics_size"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/improved_stoves = 'yes'" action="show"
+              required="true()"/>
+        <bind id="ics_ring" nodeset="/iics_survey_school_questionnaire_v1/info_ics/improved_stove_details/ics_ring"
+              type="xsd:boolean" relevant="/iics_survey_school_questionnaire_v1/improved_stoves = 'yes'" action="show"
+              required="true()"/>
+        <bind id="ics_condition"
+              nodeset="/iics_survey_school_questionnaire_v1/info_ics/improved_stove_details/ics_condition"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/improved_stoves = 'yes'" action="show"
+              required="true()"/>
+        <bind id="ics_repair" nodeset="/iics_survey_school_questionnaire_v1/info_ics/improved_stove_details/ics_repair"
+              type="xsd:string" relevant="/iics_survey_school_questionnaire_v1/improved_stoves = 'yes'" action="show"
+              required="true()"/>
+        <bind id="cook_holiday" nodeset="/iics_survey_school_questionnaire_v1/cook_holiday" type="xsd:boolean"
+              required="true()"/>
+        <bind id="cook_special" nodeset="/iics_survey_school_questionnaire_v1/cook_special" type="xsd:string"
+              required="true()"/>
+        <bind id="cook_add" nodeset="/iics_survey_school_questionnaire_v1/cook_add" type="xsd:boolean"
+              relevant="/iics_survey_school_questionnaire_v1/cook_special = 'yes'" action="show" required="true()"/>
+        <bind id="cook_times" nodeset="/iics_survey_school_questionnaire_v1/cook_times" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/cook_special = 'yes'" action="show" required="true()"/>
+        <bind id="cook_same" nodeset="/iics_survey_school_questionnaire_v1/cook_same" type="xsd:string"
+              relevant="/iics_survey_school_questionnaire_v1/cook_special = 'yes'" action="show" required="true()"/>
+        <bind id="cook_extra" nodeset="/iics_survey_school_questionnaire_v1/cook_extra" type="xsd:boolean"
+              relevant="/iics_survey_school_questionnaire_v1/cook_same = 'no'" action="show" required="false()"/>
+        <bind id="picture" nodeset="/iics_survey_school_questionnaire_v1/picture" type="xsd:base64Binary" format="image"
+              required="true()"/>
+        <bind id="gps" nodeset="/iics_survey_school_questionnaire_v1/gps" type="xsd:string" format="gps"
+              required="true()"/>
+        <bind id="you_score" nodeset="/iics_survey_school_questionnaire_v1/you_score" type="xsd:int" required="true()"
+              constraint=". &lt;= 10" message="Score cannot be more than 10"/>
+        <bind id="date_entry" nodeset="/iics_survey_school_questionnaire_v1/date_entry" type="xsd:dateTime"
+              required="true()" locked="true()" visible="false()" calculate="now()"/>
+        <bind id="unique_id" nodeset="/iics_survey_school_questionnaire_v1/unique_id" type="xsd:string"
+              visible="false()" calculate="once(concat('uuid:',uuid()))"/>
+    </model>
+    <group id="1" isSynthetic="true">
+        <label>Page1</label>
+        <select1 bind="visit">
+            <label>1. Type of visit</label>
+            <item id="baseline">
+                <label>School Baseline Visit</label>
+                <value>baseline</value>
+            </item>
+            <item id="update">
+                <label>School Information Update</label>
+                <value>update</value>
+            </item>
+        </select1>
+        <input bind="select_school"
+               appearance="ex:org.odk.collect.android.activities.entities.PrefillActivity(table_name='schools',returnFld='school;address;subcounty;district;__code;')">
+            <label>2. Select the school</label>
+            <hint>
+                json:{"layout":{"appearance":"ex:org.odk.collect.android.activities.entities.PrefillActivity(table_name='schools',returnFld='school;address;subcounty;district;__code;')"}}
+            </hint>
+        </input>
+        <group id="3" appearance="field-list">
+            <label/>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="visit_date">
+                <label>3. Date of Visit</label>
+            </input>
+            <input bind="interviewer">
+                <label>4. Name Name of Interviewer</label>
+            </input>
+            <input bind="interviewer_mobile">
+                <label>5. Mobile Number</label>
+            </input>
+        </group>
+        <group id="4" appearance="field-list">
+            <label/>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="school_name">
+                <label>6. School Name:</label>
+            </input>
+            <input bind="address">
+                <label>7. School Address:</label>
+            </input>
+            <input bind="phone">
+                <label>8. School Telephone</label>
+            </input>
+            <input bind="email">
+                <label>9. Email</label>
+            </input>
+        </group>
+        <select1 bind="district" appearance="minimal w4">
+            <label>10. District</label>
+            <hint>json:{"layout":{"appearance":"minimal w4"}}</hint>
+            <item id="jinja">
+                <label>Jinja</label>
+                <value>jinja</value>
+            </item>
+            <item id="kampala">
+                <label>Kampala</label>
+                <value>kampala</value>
+            </item>
+            <item id="mukono">
+                <label>Mukono</label>
+                <value>mukono</value>
+            </item>
+            <item id="wakiso">
+                <label>Wakiso</label>
+                <value>wakiso</value>
+            </item>
+        </select1>
+        <select1 bind="subcounty" appearance="minimal w2">
+            <label>11. Subcounty</label>
+            <hint>json:{"layout":{"appearance":"minimal w2"}}</hint>
+            <itemset
+                    nodeset="instance('subcounty')/item[@parent=instance('iics_survey_school_questionnaire_v1')/district]">
+                <label ref="label"/>
+                <value ref="value"/>
+            </itemset>
+        </select1>
+        <group id="7" appearance="field-list">
+            <label/>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="headteacher">
+                <label>12. Name of Director/Head Teacher:</label>
+            </input>
+            <input bind="director_phone">
+                <label>13. Telephone of Director/Head Teacher:</label>
+            </input>
+            <select1 bind="school_level">
+                <label>14. Level of school</label>
+                <item id="nursery">
+                    <label>Nursery</label>
+                    <value>nursery</value>
+                </item>
+                <item id="primary">
+                    <label>Primary</label>
+                    <value>primary</value>
+                </item>
+                <item id="primary_and_nursery">
+                    <label>Primary and Nursery</label>
+                    <value>primary_and_nursery</value>
+                </item>
+                <item id="secondary">
+                    <label>Secondary</label>
+                    <value>secondary</value>
+                </item>
+                <item id="vocational">
+                    <label>Vocational</label>
+                    <value>vocational</value>
+                </item>
+            </select1>
+        </group>
+        <group id="enrolment" appearance="field-list" bind="enrolment">
+            <label>15. Provide enrolment figures</label>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="boarding">
+                <label>15.1. Boarding Students</label>
+            </input>
+            <input bind="day">
+                <label>15.2. Day School Students</label>
+            </input>
+            <input bind="total_enrolment">
+                <label>15.3. Total both Day and Boarding</label>
+                <hint>this is calculated automatically</hint>
+            </input>
+            <input bind="teacher_no">
+                <label>15.4. Teachers</label>
+            </input>
+            <input bind="non_teacher_no">
+                <label>15.5. Non Teaching Staff</label>
+            </input>
+            <input bind="total_traff">
+                <label>15.6. Total number of Staff</label>
+                <hint>this is calculated automatically</hint>
+            </input>
+        </group>
+        <select bind="owner">
+            <label>16. Ownership</label>
+            <item id="state">
+                <label>State</label>
+                <value>state</value>
+            </item>
+            <item id="private">
+                <label>Private</label>
+                <value>private</value>
+            </item>
+        </select>
+        <group id="10" appearance="field-list">
+            <label/>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="boil_water">
+                <label>17. Does the school boil water?</label>
+            </input>
+            <input bind="spend_fuel">
+                <label>18. How much does the school spend on fuel a term (UGX)?</label>
+            </input>
+            <input bind="spend_trucks">
+                <label>19. How many trucks of firewood does the school spend on fuel a term?</label>
+            </input>
+            <select bind="stoves">
+                <label>20. Which of the following stove(s) are used in the kitchen</label>
+                <item id="stone">
+                    <label>3-Stone</label>
+                    <value>stone</value>
+                </item>
+                <item id="improved">
+                    <label>Improved</label>
+                    <value>improved</value>
+                </item>
+                <item id="sigiri">
+                    <label>Sigiri</label>
+                    <value>sigiri</value>
+                </item>
+                <item id="own">
+                    <label>Construction</label>
+                    <value>own</value>
+                </item>
+            </select>
+        </group>
+        <group id="info_stone" appearance="field-list" bind="info_stone">
+            <label>21. Information on 3-Stone use in the kitchen:</label>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="quantity_stone">
+                <label>21.1. Quantity</label>
+            </input>
+            <select bind="pan_size_stone">
+                <label>21.2. Size of saucepan</label>
+                <item id="size_1">
+                    <label>size 1</label>
+                    <value>size_1</value>
+                </item>
+                <item id="size_2">
+                    <label>size 2</label>
+                    <value>size_2</value>
+                </item>
+            </select>
+            <input bind="rings_stone">
+                <label>21.3. Rings / handles</label>
+            </input>
+            <select1 bind="fuel_stone">
+                <label>21.4. Fuel Used</label>
+                <item id="option_1">
+                    <label>option 1</label>
+                    <value>option_1</value>
+                </item>
+                <item id="option_2">
+                    <label>option 2</label>
+                    <value>option_2</value>
+                </item>
+            </select1>
+        </group>
+        <group id="info_improved" appearance="field-list" bind="info_improved">
+            <label>22. Information on Improved cookstove use in the kitchen:</label>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="quantity_improved">
+                <label>22.1. Quantity</label>
+            </input>
+            <select bind="pan_size_improved">
+                <label>22.2. Size of saucepan</label>
+                <item id="size_1">
+                    <label>size 1</label>
+                    <value>size_1</value>
+                </item>
+                <item id="size_2">
+                    <label>size 2</label>
+                    <value>size_2</value>
+                </item>
+            </select>
+            <input bind="rings_improved">
+                <label>22.3. Rings / handles</label>
+            </input>
+            <select1 bind="fuel_improved">
+                <label>22.4. Fuel Used</label>
+                <item id="option_1">
+                    <label>option 1</label>
+                    <value>option_1</value>
+                </item>
+                <item id="option_2">
+                    <label>option 2</label>
+                    <value>option_2</value>
+                </item>
+            </select1>
+        </group>
+        <group id="info_sigiri" appearance="field-list" bind="info_sigiri">
+            <label>23. Information on Sigiri use in the kitchen:</label>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="quantity_sigiri">
+                <label>23.1. Quantity</label>
+            </input>
+            <select bind="pan_size_sigiri">
+                <label>23.2. Size of saucepan</label>
+                <item id="size_1">
+                    <label>size 1</label>
+                    <value>size_1</value>
+                </item>
+                <item id="size_2">
+                    <label>size 2</label>
+                    <value>size_2</value>
+                </item>
+            </select>
+            <input bind="rings_sigiri">
+                <label>23.3. Rings / handles</label>
+            </input>
+            <select1 bind="fuel_sigiri">
+                <label>23.4. Fuel Used</label>
+                <item id="option_1">
+                    <label>option 1</label>
+                    <value>option_1</value>
+                </item>
+                <item id="option_2">
+                    <label>option 2</label>
+                    <value>option_2</value>
+                </item>
+            </select1>
+        </group>
+        <group id="info_own" appearance="field-list" bind="info_own">
+            <label>24. Information on own setup in the kitchen:</label>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="quantity_own">
+                <label>24.1. Quantity</label>
+            </input>
+            <select bind="pan_size_own">
+                <label>24.2. Size of saucepans</label>
+                <item id="size_1">
+                    <label>size 1</label>
+                    <value>size_1</value>
+                </item>
+                <item id="size_2">
+                    <label>size 2</label>
+                    <value>size_2</value>
+                </item>
+            </select>
+            <input bind="rings_own">
+                <label>24.3. Rings / handles</label>
+            </input>
+            <select1 bind="fuel_own">
+                <label>24.4. Fuel Used</label>
+                <item id="option_1">
+                    <label>option 1</label>
+                    <value>option_1</value>
+                </item>
+                <item id="option_2">
+                    <label>option 2</label>
+                    <value>option_2</value>
+                </item>
+            </select1>
+        </group>
+        <select1 bind="improved_stoves">
+            <label>25. Are there any improved cook stoves in use?</label>
+            <item id="yes">
+                <label>Yes</label>
+                <value>yes</value>
+            </item>
+            <item id="no">
+                <label>No</label>
+                <value>no</value>
+            </item>
+        </select1>
+        <group id="info_ics" appearance="field-list" bind="info_ics">
+            <label>26. Information on Sigiri use in the kitchen:</label>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <group id="info_ics/improved_stove_details">
+                <label>26.1. Details of improved cook stoves</label>
+                <repeat bind="improved_stove_details">
+                    <input bind="manufacturer">
+                        <label>26.1.1. Manufacturer</label>
+                    </input>
+                    <select1 bind="ics_size">
+                        <label>26.1.2. Size of Saucepan</label>
+                        <item id="size_1">
+                            <label>size 1</label>
+                            <value>size_1</value>
+                        </item>
+                        <item id="size_2">
+                            <label>size 2</label>
+                            <value>size_2</value>
+                        </item>
+                    </select1>
+                    <input bind="ics_ring">
+                        <label>26.1.3. Rings and Handles in saucepans?</label>
+                    </input>
+                    <select1 bind="ics_condition" appearance="textarea w4">
+                        <label>26.1.4. Condition</label>
+                        <hint>json:{"layout":{"appearance":"textarea w4"}}</hint>
+                        <item id="good">
+                            <label>Good</label>
+                            <value>good</value>
+                        </item>
+                        <item id="needs_repair">
+                            <label>Needs repair</label>
+                            <value>needs_repair</value>
+                        </item>
+                    </select1>
+                    <input bind="ics_repair" appearance="textarea w4">
+                        <label>26.1.5. Please explain condition that needs repair</label>
+                        <hint>json:{"layout":{"appearance":"textarea w4"}}</hint>
+                    </input>
+                </repeat>
+            </group>
+        </group>
+        <input bind="cook_holiday">
+            <label>27. Does the school cook during holiday periods?</label>
+        </input>
+        <select1 bind="cook_special">
+            <label>28. Does the school cook for special occasions?</label>
+            <item id="yes">
+                <label>Yes</label>
+                <value>yes</value>
+            </item>
+            <item id="no">
+                <label>No</label>
+                <value>no</value>
+            </item>
+        </select1>
+        <group id="19" appearance="field-list">
+            <label/>
+            <hint>json:{"layout":{"appearance":"field-list"}}</hint>
+            <input bind="cook_add">
+                <label>29. Does the school use any extra/additional stoves for special occasions?</label>
+            </input>
+            <select1 bind="cook_times">
+                <label>30. How often do you cook for special occasions per term?</label>
+                <item id="_1_to_3">
+                    <label>1 to 3,</label>
+                    <value>_1_to_3</value>
+                </item>
+                <item id="_4_to_6">
+                    <label>4 to 6</label>
+                    <value>_4_to_6</value>
+                </item>
+                <item id="_7_to_10">
+                    <label>7 to 10</label>
+                    <value>_7_to_10</value>
+                </item>
+                <item id="more_than_10">
+                    <label>More than 10</label>
+                    <value>more_than_10</value>
+                </item>
+            </select1>
+            <select1 bind="cook_same">
+                <label>31. Do you cook for the same number of people on special occasions?</label>
+                <item id="yes">
+                    <label>Yes</label>
+                    <value>yes</value>
+                </item>
+                <item id="no">
+                    <label>No</label>
+                    <value>no</value>
+                </item>
+            </select1>
+        </group>
+        <input bind="cook_extra">
+            <label>32. For how many extra people do you cook for each special occasion?</label>
+        </input>
+        <upload bind="picture" mediatype="image/*">
+            <label>33. Picture of facility</label>
+        </upload>
+        <input bind="gps">
+            <label>34. GPS location</label>
+        </input>
+        <input bind="you_score">
+            <label>35. Internal Assessment: School Management's level of cooperation (provide score from 1 to 10)
+            </label>
+        </input>
+        <input bind="date_entry" appearance="w2">
+            <label>36. Date and time of data entry</label>
+            <hint>json:{"layout":{"appearance":"w2"},"comment":"This is picked automatically"}</hint>
+        </input>
+        <input bind="unique_id">
+            <label>37. Unique Id</label>
+        </input>
+    </group>
+</xforms>
