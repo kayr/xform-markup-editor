@@ -40,10 +40,6 @@ class CustomIndentPrinter extends IndentPrinter {
             super.printIndent()
     }
 
-    boolean getNewLinesEnabled() {
-        return newLinesEnabled
-    }
-
     private boolean mayBeEnable() {
         if (linesPrinted == 2)
             this.@newLinesEnabled = true
