@@ -236,7 +236,7 @@ class MarkUpSerializer {
     }
 
     private static def mayBeAddSkipLogic(def builder, IFormElement qn) {
-        if (!qn.skipLogic) return;
+        if (!qn.skipLogic) return
         def action = qn.skipAction?.trim() ?: 'enable'
         if (['enable', 'hide', 'show', 'disable'].contains(action)) {
             builder << "@${action}if $qn.skipLogic"
@@ -247,7 +247,7 @@ class MarkUpSerializer {
     }
 
     private static def mayBeAddValidationLogic(def builder, IFormElement qn) {
-        if (!qn.validationLogic) return;
+        if (!qn.validationLogic) return
         def logic = qn.validationLogic?.trim() ?: 'enable'
         builder << "@validif $logic"
         builder << "@message $qn.message"

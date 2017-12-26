@@ -37,7 +37,7 @@ class DynamicQuestion implements ISelectionQuestion {
         return parentForm.dynamicOptions."${dynamicInstanceId}"
     }
 
-    public boolean validate() {
+    boolean validate() {
         if (!parentForm.dynamicOptions[dynamicInstanceId])
             throw new ValidationException("DynamicQuestion[$text] Instance ID[$dynamicInstanceId] does not exit in the form")
 

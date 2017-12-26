@@ -57,10 +57,10 @@ class XFormSerializerTest extends XMLTestCase {
     void testTodStudy() {
         def studyXml = Converter.fromFormTo(FORMAT.STUDY_XML, study.firstForm,FLAGS.of(FLAGS.OXD_GENERATE_VIEW))
 
-        DifferenceListener myDifferenceListener = new IgnoreTextAndAttributeValuesDifferenceListener();
-        Diff myDiff = new Diff(Fixtures.snvStudyXML, studyXml);
-        myDiff.overrideDifferenceListener(myDifferenceListener);
-        assertTrue("test XML matches control skeleton XML", myDiff.similar());
+        DifferenceListener myDifferenceListener = new IgnoreTextAndAttributeValuesDifferenceListener()
+        Diff myDiff = new Diff(Fixtures.snvStudyXML, studyXml)
+        myDiff.overrideDifferenceListener(myDifferenceListener)
+        assertTrue("test XML matches control skeleton XML", myDiff.similar())
 //        assertEquals Fixtures.snvStudyXML, studyXml
     }
 

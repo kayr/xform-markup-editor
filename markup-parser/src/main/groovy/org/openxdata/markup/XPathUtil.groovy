@@ -31,15 +31,15 @@ class XPathUtil {
         return this
     }
 
-    public static XPathParser createXpathParser(String testString) throws IOException {
-        CharStream stream = new ANTLRStringStream(testString);
-        XPathLexer lexer = new XPathLexer(stream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        XPathParser parser = new XPathParser(tokens);
-        return parser;
+    static XPathParser createXpathParser(String testString) throws IOException {
+        CharStream stream = new ANTLRStringStream(testString)
+        XPathLexer lexer = new XPathLexer(stream)
+        CommonTokenStream tokens = new CommonTokenStream(lexer)
+        XPathParser parser = new XPathParser(tokens)
+        return parser
     }
 
-    public static CommonTree createAST(String string) throws IOException {
+    static CommonTree createAST(String string) throws IOException {
         def parser = createXpathParser(string)
         return parser.eval().tree as CommonTree
     }

@@ -21,10 +21,10 @@ class Util {
     @SuppressWarnings("UnnecessaryQualifiedReference")
     @CompileStatic
     @Memoized(protectedCacheSize = Util.CACHE_SIZE, maxCacheSize = Util.CACHE_SIZE)
-    public static String getBindName(String question) {
+    static String getBindName(String question) {
         // if len(s) < 1, return '_blank'
         if (question == null || question.length() < 1)
-            return "_blank";
+            return "_blank"
 
         def s = getTextWithoutDecTemplate(question)
         // return s.trim().replaceAll(/\s+/, "_").replaceAll(/\W/, "").toLowerCase()
@@ -33,87 +33,87 @@ class Util {
         // No spaces, start with a letter or underscore, not 'xml*'
 
         // xml tokens must start with a letter
-        String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_";
+        String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
 
         // after the leading letter, xml tokens may have
         // digits, period, or hyphen
-        String nameChars = letters + "0123456789.-";
+        String nameChars = letters + "0123456789.-"
 
         // special characters that should be replaced with valid text
         // all other invalid characters will be removed
-        HashMap<String, String> swapChars = new HashMap<String, String>();
-        swapChars.put("!", "bang");
-        swapChars.put("#", "pound");
-        swapChars.put("\\*", "star");
-        swapChars.put("'", "apos");
-        swapChars.put("\"", "quote");
-        swapChars.put("%", "percent");
-        swapChars.put("<", "lt");
-        swapChars.put(">", "gt");
-        swapChars.put("=", "eq");
-        swapChars.put("/", "slash");
-        swapChars.put("\\\\", "backslash");
-        swapChars.put("\\.", "dot");
-        swapChars.put("-", "hyphen");
+        HashMap<String, String> swapChars = new HashMap<String, String>()
+        swapChars.put("!", "bang")
+        swapChars.put("#", "pound")
+        swapChars.put("\\*", "star")
+        swapChars.put("'", "apos")
+        swapChars.put("\"", "quote")
+        swapChars.put("%", "percent")
+        swapChars.put("<", "lt")
+        swapChars.put(">", "gt")
+        swapChars.put("=", "eq")
+        swapChars.put("/", "slash")
+        swapChars.put("\\\\", "backslash")
+        swapChars.put("\\.", "dot")
+        swapChars.put("-", "hyphen")
 
-        s = s.replace("'", "");
+        s = s.replace("'", "")
 
         // start by cleaning whitespace and converting to lowercase
-        s = s.replaceAll("^\\s+", "").replaceAll(/\s+$/, "").replaceAll("\\s+", "_").toLowerCase();
+        s = s.replaceAll("^\\s+", "").replaceAll(/\s+$/, "").replaceAll("\\s+", "_").toLowerCase()
 
         // swap characters
-        Set<Map.Entry<String, String>> swaps = swapChars.entrySet();
+        Set<Map.Entry<String, String>> swaps = swapChars.entrySet()
         for (Map.Entry<String, String> entry : swaps) {
             if (entry.getValue() != null)
-                s = s.replaceAll(entry.getKey(), "_" + entry.getValue() + "_");
+                s = s.replaceAll(entry.getKey(), "_" + entry.getValue() + "_")
             else
-                s = s.replaceAll(String.valueOf(entry.getKey()), "");
+                s = s.replaceAll(String.valueOf(entry.getKey()), "")
         }
 
         // ensure that invalid characters and consecutive underscores are
         // removed
-        String token = "";
-        boolean underscoreFlag = false;
+        String token = ""
+        boolean underscoreFlag = false
         for (int i = 0; i < s.length(); i++) {
             if (nameChars.indexOf((int) s.charAt(i)) != -1) {
                 if (s.charAt(i) != '_' || !underscoreFlag) {
-                    token += s.charAt(i);
-                    underscoreFlag = (s.charAt(i) == '_');
+                    token += s.charAt(i)
+                    underscoreFlag = (s.charAt(i) == '_')
                 }
             }
         }
 
         // remove extraneous underscores before returning token
-        token = token.replaceAll("_+", "_");
-        token = token.replaceAll(/_+$/, "");
+        token = token.replaceAll("_+", "_")
+        token = token.replaceAll(/_+$/, "")
 
         if(token.isEmpty()) return '_empty'
 
         // make sure token starts with valid letter
         try {
             if (letters.indexOf((int) token.charAt(0)) == -1 || token.startsWith("xml"))
-                token = "_" + token;
+                token = "_" + token
         } catch (Exception e) {
             e.printStackTrace()
             throw e
         }
         // return token
-        return token;
+        return token
     }
 
     @CompileStatic
-    public static String getTextWithoutDecTemplate(String text) {
+    static String getTextWithoutDecTemplate(String text) {
         if (text.contains('${')) {
             if (text.indexOf('}$') < text.length() - 2)
-                text = text.substring(0, text.indexOf('${')) + text.substring(text.indexOf('}$') + 2);
+                text = text.substring(0, text.indexOf('${')) + text.substring(text.indexOf('}$') + 2)
             else
-                text = text.substring(0, text.indexOf('${'));
+                text = text.substring(0, text.indexOf('${'))
         }
-        return text;
+        return text
     }
 
     @CompileStatic
-    public static void writeToFile(String fileName, String contents) {
+    static void writeToFile(String fileName, String contents) {
         File file = new File(fileName)
         while (file.exists()) {
             println "Deleting file $file.absolutePath"
@@ -157,42 +157,42 @@ class Util {
     }
 
 
-    public static replaceFirst(String self, String searchString, String replacement) {
+    static replaceFirst(String self, String searchString, String replacement) {
         replace(self, searchString, replacement, 1)
     }
 
-    public static final int INDEX_NOT_FOUND = -1;
+    public static final int INDEX_NOT_FOUND = -1
     //copied from apache commons
     @CompileStatic
-    public static String replace(final String text, final String searchString, final String replacement, int max) {
+    static String replace(final String text, final String searchString, final String replacement, int max) {
         if (isEmpty(text) || isEmpty(searchString) || replacement == null || max == 0) {
-            return text;
+            return text
         }
-        int start = 0;
-        int end = text.indexOf(searchString, start);
+        int start = 0
+        int end = text.indexOf(searchString, start)
         if (end == INDEX_NOT_FOUND) {
-            return text;
+            return text
         }
-        final int replLength = searchString.length();
-        int increase = replacement.length() - replLength;
-        increase = increase < 0 ? 0 : increase;
-        increase *= max < 0 ? 16 : max > 64 ? 64 : max;
-        final StringBuilder buf = new StringBuilder(text.length() + increase);
+        final int replLength = searchString.length()
+        int increase = replacement.length() - replLength
+        increase = increase < 0 ? 0 : increase
+        increase *= max < 0 ? 16 : max > 64 ? 64 : max
+        final StringBuilder buf = new StringBuilder(text.length() + increase)
         while (end != INDEX_NOT_FOUND) {
-            buf.append(text.substring(start, end)).append(replacement);
-            start = end + replLength;
+            buf.append(text.substring(start, end)).append(replacement)
+            start = end + replLength
             if (--max == 0) {
-                break;
+                break
             }
-            end = text.indexOf(searchString, start);
+            end = text.indexOf(searchString, start)
         }
-        buf.append(text.substring(start));
-        return buf.toString();
+        buf.append(text.substring(start))
+        return buf.toString()
     }
 
     @CompileStatic
-    public static boolean isEmpty(final CharSequence cs) {
-        return cs == null || cs.length() == 0;
+    static boolean isEmpty(final CharSequence cs) {
+        return cs == null || cs.length() == 0
     }
 
     static Map<String, String> parseBind(String option, int line) {
@@ -229,12 +229,12 @@ class Util {
     }
 
     @CompileStatic
-    public static void validateId(String id, int line) {
+    static void validateId(String id, int line) {
         validateId(id, line, false)
     }
 
     @CompileStatic
-    public static void validateId(String id, int line, boolean useXml) {
+    static void validateId(String id, int line, boolean useXml) {
         try {
             if (Study.validateWithXML.get() || useXml)
                 memoizedValidateGeneral.call(id)

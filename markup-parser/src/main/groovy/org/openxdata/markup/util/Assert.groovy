@@ -11,25 +11,25 @@ import org.openxdata.markup.exception.ValidationException
 class Assert {
     static void isTrue(boolean expression, String message) {
         if (!expression) {
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(message)
         }
     }
 
     static void isFalse(boolean expression, String message) {
         if (expression) {
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(message)
         }
     }
 
     static void attribute(boolean expression, String message, int line) {
         if (!expression) {
-            throw new InvalidAttributeException(message, line);
+            throw new InvalidAttributeException(message, line)
         }
     }
 
     static void isValid(boolean expression, String message, int line) {
         if (!expression) {
-            throw new ValidationException(message, line);
+            throw new ValidationException(message, line)
         }
     }
 

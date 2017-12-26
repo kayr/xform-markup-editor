@@ -3,11 +3,11 @@ package org.openxdata.markup.deserializer
 import junit.framework.TestCase
 import org.openxdata.markup.Fixtures
 
-public class StudyDeSerializerTest extends TestCase {
+class StudyDeSerializerTest extends TestCase {
 
     def deSerializer = new StudyDeSerializer()
 
-    public void testToStudy() throws Exception {
+    void testToStudy() throws Exception {
 
         def study = deSerializer.toStudy(Fixtures.snvStudyXML)
 

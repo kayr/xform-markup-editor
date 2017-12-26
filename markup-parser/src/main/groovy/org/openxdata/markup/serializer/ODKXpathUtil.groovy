@@ -10,7 +10,7 @@ import static org.openxdata.markup.XPathUtil.*
 /**
  * This class is mainly used to transform OXD XPATH Expressions to something ODK Understands
  */
-public class ODKXpathUtil {
+class ODKXpathUtil {
 
 
     String _xpath

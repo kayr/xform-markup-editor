@@ -21,24 +21,24 @@ class XFormDeserializerTest extends XMLTestCase {
     def serializer = new XFormSerializer()
 
     void testToForm() {
-        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: expectedXForm).parse()
         assert form.name == 'Snv Form'
         assert form.id == 'snv_study_snv_form_v1'
     }
 
     void testAddPages() {
-        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: expectedXForm).parse()
         assert form.pages.size() == 0
     }
 
     void testNumberOfQuestions() {
-        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: expectedXForm).parse()
         assert form.allQuestions.size() == 11
         assert extractQuestions(form).size() == 11
     }
 
     void testSingleSelectOption() {
-        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: expectedXForm).parse()
 
         def question = form.allQuestions.find { it.binding == 'what_is_sex' }
         assert question.class == SingleSelectQuestion
@@ -50,7 +50,7 @@ class XFormDeserializerTest extends XMLTestCase {
     }
 
     void testMultipleSelectOption() {
-        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: expectedXForm).parse()
 
         def question = form.allQuestions.find { it.binding == 'select_your_diseases' }
         assert question instanceof MultiSelectQuestion
@@ -63,7 +63,7 @@ class XFormDeserializerTest extends XMLTestCase {
     }
 
     void testDynamicOption() {
-        def form = new XFormDeserializer(xml: Fixtures.expectedXForm).parse()
+        def form = new XFormDeserializer(xml: expectedXForm).parse()
 
         assert form.dynamicOptions.size() == 2
 
@@ -103,7 +103,7 @@ class XFormDeserializerTest extends XMLTestCase {
     }
 
     void testDynamicOptionAttributesInQuestions() {
-        def form = new XFormDeserializer(xml: Fixtures.xmlFormWithDynamicInstanceIds).parse()
+        def form = new XFormDeserializer(xml: xmlFormWithDynamicInstanceIds).parse()
 
         assert form.dynamicOptions.size() == 1
 

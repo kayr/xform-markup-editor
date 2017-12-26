@@ -305,7 +305,7 @@ class ODKDeSerializer {
         return elem.itemset.size() > 0
     }
 
-    private def <T extends IFormElement> T addIdMetaInfo(T qn, HasQuestions parent, def elem) {
+    private <T extends IFormElement> T addIdMetaInfo(T qn, HasQuestions parent, def elem) {
 
         //repeats do not have a bind attribute
         if (isRepeatGroup(elem))
@@ -449,7 +449,7 @@ class ODKDeSerializer {
     private static void mayBeMakeReadOnly(bindNode, IQuestion qn) {
         String enabled = bindNode.@readonly
         if (enabled && enabled.contains('true')) {
-            qn.readOnly = true;
+            qn.readOnly = true
         }
     }
 

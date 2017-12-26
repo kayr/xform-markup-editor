@@ -32,8 +32,8 @@ class ODKSerializer {
         this.oxdConversion = oxdConversion
     }
 
-    public String toStudyXml(Study study) {
-        def printWriter = new StringWriter();
+    String toStudyXml(Study study) {
+        def printWriter = new StringWriter()
         def xml = new MarkupBuilder(printWriter)
         xml.setDoubleQuotes(true)
 
@@ -53,7 +53,7 @@ class ODKSerializer {
         return studyXML
     }
 
-    public String toXForm(Form form) {
+    String toXForm(Form form) {
         def printWriter = new StringWriter()
         def x = new MarkupBuilder(printWriter)
         x.doubleQuotes = true

@@ -11,43 +11,43 @@ import org.openxdata.markup.Form
  * To change this template use File | Settings | File Templates.
  */
 @CompileStatic
-public class DuplicateFormException extends Exception {
-    public DuplicateFormException() {
+class DuplicateFormException extends Exception {
+    DuplicateFormException() {
     }
 
-    public DuplicateFormException(String message) {
-        super(message);
+    DuplicateFormException(String message) {
+        super(message)
     }
 
-    public DuplicateFormException(String message, Throwable cause) {
-        super(message, cause);
+    DuplicateFormException(String message, Throwable cause) {
+        super(message, cause)
     }
 
-    public DuplicateFormException(Throwable cause) {
-        super(cause);
+    DuplicateFormException(Throwable cause) {
+        super(cause)
     }
 
     @Override
-    public String getMessage() {
-        return "Question[ " + String.valueOf(form1.getName()) + " ] and\n[ " + String.valueOf(form2.getName()) + " ] generate the same binding. Please try to make sure the question are not duplicates";
+    String getMessage() {
+        return "Question[ " + String.valueOf(form1.getName()) + " ] and\n[ " + String.valueOf(form2.getName()) + " ] generate the same binding. Please try to make sure the question are not duplicates"
     }
 
-    public Form getForm1() {
-        return form1;
+    Form getForm1() {
+        return form1
     }
 
-    public void setForm1(Form form1) {
-        this.form1 = form1;
+    void setForm1(Form form1) {
+        this.form1 = form1
     }
 
-    public Form getForm2() {
-        return form2;
+    Form getForm2() {
+        return form2
     }
 
-    public void setForm2(Form form2) {
-        this.form2 = form2;
+    void setForm2(Form form2) {
+        this.form2 = form2
     }
 
-    private Form form1;
-    private Form form2;
+    private Form form1
+    private Form form2
 }

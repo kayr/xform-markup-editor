@@ -184,7 +184,7 @@ class MarkupDeserializer {
 
     }
 
-    static def Page processPage(CommonTree tree, Page p) {
+    static Page processPage(CommonTree tree, Page p) {
         each(tree) { CommonTree child ->
             switch (child.type) {
                 case XformParser.ATTRIBUTE:
@@ -202,7 +202,7 @@ class MarkupDeserializer {
     }
 
     @CS
-    static def <T extends ISelectionQuestion> T processSelect(CommonTree tree, T q) {
+    static <T extends ISelectionQuestion> T processSelect(CommonTree tree, T q) {
         each(tree) { CommonTree child ->
             switch (child.type) {
                 case XformParser.SINGLEOPTION:
@@ -221,7 +221,7 @@ class MarkupDeserializer {
     }
 
     @CS
-    private static def <T extends IQuestion> T addAttributes(CommonTree tree, T qn) {
+    private static <T extends IQuestion> T addAttributes(CommonTree tree, T qn) {
         each(tree) { CommonTree child ->
             switch (child.type) {
                 case XformParser.ATTRIBUTE:
@@ -290,11 +290,11 @@ class MarkupDeserializer {
 
     @CS
     private static XformParser createXpathParser(String testString) throws IOException {
-        CharStream stream = new ANTLRStringStream(testString);
-        XformLexer lexer = new XformLexer(stream);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        XformParser parser = new XformParser(tokens);
-        return parser;
+        CharStream stream = new ANTLRStringStream(testString)
+        XformLexer lexer = new XformLexer(stream)
+        CommonTokenStream tokens = new CommonTokenStream(lexer)
+        XformParser parser = new XformParser(tokens)
+        return parser
     }
 
 }

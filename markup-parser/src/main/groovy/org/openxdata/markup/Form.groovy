@@ -81,11 +81,11 @@ class Form implements HasQuestions {
     }
 
 
-    public static String getAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {
+    static String getAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {
         return _absoluteBindingXP(xpath, question, config + [indexed: false])
     }
 
-    public static String getIndexedAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {
+    static String getIndexedAbsoluteBindingXPath(String xpath, IFormElement question, Map config = [:]) {
         return _absoluteBindingXP(xpath, question, config + [indexed: true])
     }
 
@@ -159,7 +159,7 @@ class Form implements HasQuestions {
     }
 
 
-    public String getBinding() {
+    String getBinding() {
 
         if (id == null) {
             if (study.name)

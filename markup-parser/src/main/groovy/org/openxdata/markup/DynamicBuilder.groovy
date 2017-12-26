@@ -17,8 +17,8 @@ import org.openxdata.markup.exception.ValidationException
 class DynamicBuilder {
 
     boolean instanceOnly = false
-    StringBuilder csvSrc = new StringBuilder();
-    String csvFilePath = null;
+    StringBuilder csvSrc = new StringBuilder()
+    String csvFilePath = null
     List<String[]> parsedCsv
     int line = 0
 
@@ -33,10 +33,10 @@ class DynamicBuilder {
     DynamicBuilder() {}
 
     DynamicBuilder(boolean instanceOnly) {
-        this.instanceOnly = instanceOnly;
+        this.instanceOnly = instanceOnly
     }
 
-    public void addQuestionsToForm(HasQuestions form) {
+    void addQuestionsToForm(HasQuestions form) {
         try {
             parse()
             if (!isInstanceOnly()) {
@@ -93,7 +93,7 @@ class DynamicBuilder {
         return getSingleSelectReferenceIfAvailable() == null && !isInstanceOnly()
     }
 
-    public void parse() {
+    void parse() {
         List<String[]> csv = parseCsv()
 
         def weAreBuildingQnsDirectlyFromCSV = isCsvDirectBuild()
@@ -220,7 +220,7 @@ class DynamicBuilder {
         }
     }
 
-    public boolean appendLine(String line) {
+    boolean appendLine(String line) {
         if (Study.quickParse.get() && line && linesAppended++ >= MAX_LINES)
             return false
         csvSrc << line << "\n"
@@ -300,7 +300,7 @@ class DynamicBuilder {
 
     static List<String[]> toStringArrayList(def csv) {
         CSVReader rd = new CSVReader(new StringReader(csv.toString()))
-        return rd.readAll();
+        return rd.readAll()
     }
 
     @CompileStatic(TypeCheckingMode.SKIP)

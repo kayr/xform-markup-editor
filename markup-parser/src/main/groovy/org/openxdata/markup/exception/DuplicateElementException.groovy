@@ -11,7 +11,7 @@ import org.openxdata.markup.IFormElement
  * To change this template use File | Settings | File Templates.
  */
 @CompileStatic
-public class DuplicateElementException extends Exception {
+class DuplicateElementException extends Exception {
 
     DuplicateElementException(List<IFormElement> elements) {
         this.elements = elements
@@ -21,7 +21,7 @@ public class DuplicateElementException extends Exception {
     @Override
     String getMessage() {
         return """The Elements below generate the same binding. Please assign different Ids
-                  |${elements*.debugString.join(',\n')}""".stripMargin();
+                  |${elements*.debugString.join(',\n')}""".stripMargin()
     }
 
     List<IFormElement> elements

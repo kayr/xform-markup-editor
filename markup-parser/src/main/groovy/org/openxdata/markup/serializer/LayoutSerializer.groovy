@@ -36,7 +36,7 @@ class LayoutSerializer {
         return writer.toString()
     }
 
-    def List<PageLayout> initPageLayoutHandlers(Form form) {
+    List<PageLayout> initPageLayoutHandlers(Form form) {
 
         List<PageLayout> pageLayouts = []
 
@@ -55,7 +55,7 @@ class LayoutSerializer {
         pageLayouts
     }
 
-    def Layout initQuestionLayout(IQuestion qn) {
+    Layout initQuestionLayout(IQuestion qn) {
         def layout = getLayoutHandler(qn)
         layout.numberBindings = numberBindings
         layout.numberText = numberText

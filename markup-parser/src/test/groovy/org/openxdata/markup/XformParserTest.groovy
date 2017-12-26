@@ -50,20 +50,20 @@ Kenya,Kampala,Bugiroad
 ##form2
 jeelopo
 """
-    MarkupDeserializer parser;
+    MarkupDeserializer parser
 
-    public void setUp() {
+    void setUp() {
         parser = createParser(xform)
     }
 
-    public void testStudyHas2Forms() {
+    void testStudyHas2Forms() {
 
         def study = parser.study()
 
         assertNotNull study
     }
 
-    public void testTwoFormPresent() {
+    void testTwoFormPresent() {
 
         def study = parser.study()
 
@@ -71,7 +71,7 @@ jeelopo
 
     }
 
-    public void testQuestionsArePresentInForm() {
+    void testQuestionsArePresentInForm() {
 
         def study = parser.study()
 
@@ -80,7 +80,7 @@ jeelopo
         }
     }
 
-    public void testSingleSelectExits() {
+    void testSingleSelectExits() {
         def study = parser.study()
 
         SingleSelectQuestion qn = study.forms[0].allQuestions.find { it instanceof SingleSelectQuestion }
@@ -90,7 +90,7 @@ jeelopo
         assertEquals 'Expecting 2 options', 2, qn.options.size()
     }
 
-    public void testSingleSelectDoesNotNewLines() {
+    void testSingleSelectDoesNotNewLines() {
         def study = parser.study()
 
         SingleSelectQuestion qn = study.forms[0].allQuestions.find { it instanceof SingleSelectQuestion }
@@ -100,7 +100,7 @@ jeelopo
 
     }
 
-    public void testTwoTxtQuestionsExist() {
+    void testTwoTxtQuestionsExist() {
         def study = parser.study()
 
         def txtQuestions = study.forms[0].questions.findAll { it instanceof TextQuestion }
@@ -108,7 +108,7 @@ jeelopo
         assertEquals 'Expecting 2 text questions', 2, txtQuestions.size()
     }
 
-    public void testMultiQuestionExists() {
+    void testMultiQuestionExists() {
 
         def study = parser.study()
 
@@ -120,7 +120,7 @@ jeelopo
 
     }
 
-    public void testRepeatQuestion() {
+    void testRepeatQuestion() {
         def study = parser.study()
 
         RepeatQuestion qn = study.forms[0].allElements.find { it instanceof RepeatQuestion }
@@ -139,7 +139,7 @@ jeelopo
         assertEquals 12, allQuestions.size()
     }
 
-    public void testDynamicQuestion() {
+    void testDynamicQuestion() {
         def study = parser.study()
 
         def count = study.forms[0].allElements.count { it instanceof DynamicQuestion }
@@ -147,20 +147,20 @@ jeelopo
         assertEquals 'Expecting two dyn qns', 2, count
     }
 
-    public void testAllFormsHaveRootStudy() {
+    void testAllFormsHaveRootStudy() {
         def study = parser.study()
 
         assertTrue study.forms.every { it.study != null }
     }
 
-    public void testStudyHasName() {
+    void testStudyHasName() {
         def study = parser.study()
 
         assertTrue study.name != null
         assertEquals "Snv Study", study.name
     }
 
-    public void testTypeParsing() {
+    void testTypeParsing() {
 
         def questions = Converter.markup2Form(Fixtures.formWithAttribs).allQuestions
 
@@ -371,7 +371,7 @@ jeelopo
 
 
         oldId = dynamicQuestion.parentQuestionId
-        dynamicQuestion.parentQuestionId = null;
+        dynamicQuestion.parentQuestionId = null
         try {
             form.validate()
             fail("Expectiong a Validation Exception")
@@ -382,7 +382,7 @@ jeelopo
 
 
         oldId = dynamicQuestion.parentQuestionId
-        dynamicQuestion.parentQuestionId = 'blahDynamicInstance';
+        dynamicQuestion.parentQuestionId = 'blahDynamicInstance'
         try {
             form.validate()
             fail("Expecting a Validation Exception")

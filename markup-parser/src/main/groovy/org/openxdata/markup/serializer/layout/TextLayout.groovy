@@ -21,7 +21,7 @@ class TextLayout extends Layout {
             case 'dateTime':
                 return 'DateTimeWidget'
             case 'time':
-                return 'TimeWidget';
+                return 'TimeWidget'
             default:
                 return 'TextBox'
         }

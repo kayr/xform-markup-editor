@@ -1,6 +1,6 @@
 package org.openxdata.markup.exception
 
-import groovy.transform.CompileStatic;
+import groovy.transform.CompileStatic
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,45 +10,45 @@ import groovy.transform.CompileStatic;
  * To change this template use File | Settings | File Templates.
  */
 @CompileStatic
-public class ValidationException extends Exception {
-    public ValidationException() {
-        super();
+class ValidationException extends Exception {
+    ValidationException() {
+        super()
     }
 
-    public ValidationException(String message) {
-        super(message);
+    ValidationException(String message) {
+        super(message)
     }
 
-    public ValidationException(String message, Throwable cause) {
-        super(message, cause);
+    ValidationException(String message, Throwable cause) {
+        super(message, cause)
     }
 
-    public ValidationException(Throwable cause) {
-        super(cause);
+    ValidationException(Throwable cause) {
+        super(cause)
     }
 
-    public ValidationException(String message, int line) {
-        this(message);
-        this.line = line;
+    ValidationException(String message, int line) {
+        this(message)
+        this.line = line
     }
 
-    public ValidationException(String message, int line, Throwable e) {
-        this(message);
-        this.line = line;
+    ValidationException(String message, int line, Throwable e) {
+        this(message)
+        this.line = line
     }
 
     @Override
-    public String getMessage() {
-        return "[Line:" + String.valueOf(line) + ":] " + super.getMessage();
+    String getMessage() {
+        return "[Line:" + String.valueOf(line) + ":] " + super.getMessage()
     }
 
-    public int getLine() {
-        return line;
+    int getLine() {
+        return line
     }
 
-    public void setLine(int line) {
-        this.line = line;
+    void setLine(int line) {
+        this.line = line
     }
 
-    private int line;
+    private int line
 }

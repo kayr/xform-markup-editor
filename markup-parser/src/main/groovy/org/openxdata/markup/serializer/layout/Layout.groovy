@@ -23,7 +23,7 @@ abstract class Layout {
     }
 
     int getWidgetHeight(String widgetName) {
-        return 25;
+        return 25
     }
 
     void add(MarkupBuilder xml) {
@@ -51,15 +51,15 @@ abstract class Layout {
         throw new UnsupportedOperationException("qetUserInput() should overridden!!")
     }
 
-    def String getText() {
+    String getText() {
         return qn.getText(numberText)
     }
 
-    def String getBinding() {
+    String getBinding() {
         return qn.getBinding(numberBindings)
     }
 
-    def String getComment() {
+    String getComment() {
         return qn.comment == null ? qn.getText(numberText) : qn.comment
     }
 

@@ -26,8 +26,8 @@ class XFormSerializer {
     Map<Form, String> xforms = [:]
     def               studyXML
 
-    public String toStudyXml(Study study) {
-        def printWriter = new StringWriter();
+    String toStudyXml(Study study) {
+        def printWriter = new StringWriter()
         def xml = new MarkupBuilder(printWriter)
         xml.setDoubleQuotes(true)
 
@@ -51,7 +51,7 @@ class XFormSerializer {
         return studyXML
     }
 
-    public Map<String, String> getFormImports() {
+    Map<String, String> getFormImports() {
 
         def imports = [:]
 
@@ -74,8 +74,8 @@ class XFormSerializer {
         layout
     }
 
-    public String toXForm(Form form) {
-        def printWriter = new StringWriter();
+    String toXForm(Form form) {
+        def printWriter = new StringWriter()
         def xml = new MarkupBuilder(printWriter)
         xml.doubleQuotes = true
         checkBindLength(form.binding)

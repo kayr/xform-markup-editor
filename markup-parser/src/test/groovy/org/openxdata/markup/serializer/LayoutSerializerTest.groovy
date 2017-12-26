@@ -10,10 +10,10 @@ import org.openxdata.markup.deserializer.MarkupDeserializer
  * Time: 11:47 PM
  * To change this template use File | Settings | File Templates.
  */
-public class LayoutSerializerTest extends XMLTestCase {
+class LayoutSerializerTest extends XMLTestCase {
 
     //ignore
-    public void testGenerateLayout() throws Exception {
+    void testGenerateLayout() throws Exception {
 
         LayoutSerializer ser = new LayoutSerializer()
 

@@ -56,9 +56,9 @@ Kenya,Nairobi,Macos
 '''
 
 
-    DynamicBuilder builder = new DynamicBuilder();
+    DynamicBuilder builder = new DynamicBuilder()
 
-    public void testParse() {
+    void testParse() {
         builder.csvSrc = new StringBuilder(csv)
         builder.parse()
 
@@ -83,7 +83,7 @@ Kenya,Nairobi,Macos
         assertEquals 'Expecting 3 option for school', 6, dynQn3.size()
     }
 
-    public void testQuickParse() {
+    void testQuickParse() {
         Study.quickParse.set(true)
         def lines = csv.split('\n')
         lines.each { builder.appendLine(it) }
@@ -94,12 +94,12 @@ Kenya,Nairobi,Macos
     }
 
 
-    public void testQuickParseWithFile() {
+    void testQuickParseWithFile() {
 
         Study.quickParse.set(true)
         def resourceFolder = Fixtures.setFormDirectory()
 
-        DynamicBuilder builder = new DynamicBuilder();
+        DynamicBuilder builder = new DynamicBuilder()
         builder.csvFilePath = "$resourceFolder/quarters.csv"
 
         builder.parse()
@@ -110,7 +110,7 @@ Kenya,Nairobi,Macos
         Study.quickParse.set(false)
     }
 
-    public void testOxdIncompatibleCSV() {
+    void testOxdIncompatibleCSV() {
         builder.csvSrc = new StringBuilder(oxdIncompatibleCSV)
 
         builder.parse()
@@ -122,14 +122,14 @@ Kenya,Nairobi,Macos
 
     }
 
-    public void testAppend() {
+    void testAppend() {
         def lines = csv.split('\n')
         lines.each { builder.appendLine(it) }
         builder.parse()
         checkQuestionContent()
     }
 
-    public void testFillUpSpace() {
+    void testFillUpSpace() {
 
         def spaceCsv = DynamicBuilder.toStringArrayList(csvWithSpace)
 
@@ -140,9 +140,9 @@ Kenya,Nairobi,Macos
 
     }
 
-    public void testDynamicInstanceBuilding() {
+    void testDynamicInstanceBuilding() {
 
-        DynamicBuilder builder = new DynamicBuilder();
+        DynamicBuilder builder = new DynamicBuilder()
 
         builder.csvSrc = new StringBuilder(dynInstance)
 
@@ -190,18 +190,18 @@ Kenya,Nairobi,Macos
 
     }
 
-    public void testCsvImport() {
+    void testCsvImport() {
 
         def resourceFolder = Fixtures.setFormDirectory()
 
-        DynamicBuilder builder = new DynamicBuilder();
+        DynamicBuilder builder = new DynamicBuilder()
         builder.csvFilePath = "$resourceFolder/quarters.csv"
 
         builder.parse()
 
         assertNotNull builder.parsedCsv
 
-        builder = new DynamicBuilder();
+        builder = new DynamicBuilder()
         builder.csvFilePath = /bad path/
 
         try {
@@ -212,7 +212,7 @@ Kenya,Nairobi,Macos
             //do nothins
         }
 
-        builder = new DynamicBuilder();
+        builder = new DynamicBuilder()
         builder.csvFilePath = 'quarters.csv'
         System.setProperty('form.dir', resourceFolder)
 
@@ -223,7 +223,7 @@ Kenya,Nairobi,Macos
 
     }
 
-    public void testDynamicOptionWithVariables() {
+    void testDynamicOptionWithVariables() {
         builder.csvSrc = new StringBuilder(csvWithVariables)
         builder.parse()
 
@@ -253,7 +253,7 @@ Kenya,Nairobi,Macos
                     Africa,    Kenya,    Eldoret
                     Europe,    Kenya,    Eldoret'''
 
-    public void testOxdInCompatibleCSV2() {
+    void testOxdInCompatibleCSV2() {
         builder.csvSrc = new StringBuilder(csvWithSameChildrenDifferentParents)
 
         builder.parse()
@@ -286,7 +286,7 @@ uganda,entebbe
         assert form.dynamicOptions.get('cities').size() == 3
     }
 
-    public void ignoreTestFillUpSpace2() {
+    void ignoreTestFillUpSpace2() {
         def file = new File(/C:\Users\kay\Dropbox\OMNI\snv database\community wash\community forms\lists.csv/)
 
         builder.csvFilePath = file

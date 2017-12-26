@@ -10,7 +10,7 @@ import static org.openxdata.markup.serializer.ODKFixtures.*
  * Created by kay on 7/13/14.
  */
 class ODKSerializerTest extends GroovyTestCase {
-    def serializer = new ODKSerializer();
+    def serializer = new ODKSerializer()
 
     void testReadonlyAndInvisibleIsConvertedToReadonly() {
         assertEquals formWithInvisible.xml, Converter.to(FORMAT.ODK, FORMAT.MARKUP, formWithInvisible.form)

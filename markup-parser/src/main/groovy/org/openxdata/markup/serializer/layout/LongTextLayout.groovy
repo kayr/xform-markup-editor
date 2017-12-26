@@ -10,7 +10,7 @@ package org.openxdata.markup.serializer.layout
 class LongTextLayout extends Layout {
 
     int getWidgetHeight(String widgetName) {
-        return 25 * 4;
+        return 25 * 4
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.openxdata.markup.exception
 
-import groovy.transform.CompileStatic;
+import groovy.transform.CompileStatic
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,23 +10,23 @@ import groovy.transform.CompileStatic;
  * To change this template use File | Settings | File Templates.
  */
 @CompileStatic
-public class InvalidAttributeException extends ValidationException {
-    public InvalidAttributeException() {
+class InvalidAttributeException extends ValidationException {
+    InvalidAttributeException() {
     }
 
-    public InvalidAttributeException(String message) {
-        super(message);
+    InvalidAttributeException(String message) {
+        super(message)
     }
 
-    public InvalidAttributeException(String message, Throwable cause) {
-        super(message, cause);
+    InvalidAttributeException(String message, Throwable cause) {
+        super(message, cause)
     }
 
-    public InvalidAttributeException(Throwable cause) {
-        super(cause);
+    InvalidAttributeException(Throwable cause) {
+        super(cause)
     }
 
-    public InvalidAttributeException(String message, int line) {
-        super(message, line);
+    InvalidAttributeException(String message, int line) {
+        super(message, line)
     }
 }

@@ -415,7 +415,7 @@ class XFormDeserializer {
     private static void mayBeMakeReadOnly(bindNode, IQuestion qn) {
         String enabled = bindNode.@readonly.text()
         if (enabled && enabled.contains('true')) {
-            qn.readOnly = true;
+            qn.readOnly = true
         }
     }
 
@@ -477,7 +477,7 @@ class XFormDeserializer {
         def format = binding.@format
 
         if (Attrib.types.contains(type) || type?.equalsIgnoreCase('string')) {
-            return format?.isEmpty() ? type : format;
+            return format?.isEmpty() ? type : format
         }
 
         switch (type) {
