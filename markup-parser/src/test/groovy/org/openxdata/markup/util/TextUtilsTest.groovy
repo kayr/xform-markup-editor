@@ -85,7 +85,7 @@ class TextUtilsTest extends GroovyTestCase {
 
         def odk = Converter.to(FORMAT.ODK, String).from(FORMAT.MARKUP).convert(f)
 
-        assert odk == '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+        assertEquals '''<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
   <h:head>
     <h:title>f</h:title>
     <model>
@@ -102,17 +102,13 @@ class TextUtilsTest extends GroovyTestCase {
   <h:body>
     <input ref="/f_v1/name">
       <label>Name</label>
-      <hint>
-        <output value="/f_v1/name" />
-      </hint>
+      <hint><output value="/f_v1/name" /></hint>
     </input>
     <input ref="/f_v1/sex_of_name">
-      <label>Sex of 
-        <output value="/f_v1/name" />
-      </label>
+      <label>Sex of <output value="/f_v1/name" /></label>
     </input>
   </h:body>
-</h:html>'''
+</h:html>''', odk
 
         def oxd = Converter.to(FORMAT.OXD, String).from(FORMAT.MARKUP).convert(f)
 

@@ -4,6 +4,7 @@ import groovy.transform.CompileStatic
 import groovy.xml.MarkupBuilder
 import org.openxdata.markup.*
 import org.openxdata.markup.deserializer.XFormDeserializer
+import org.openxdata.markup.util.CustomIndentPrinter
 import org.openxdata.markup.util.TextParser
 
 import static java.lang.System.err
@@ -22,9 +23,12 @@ class ODKSerializer {
     boolean           numberBindings    = false
     boolean           oxdConversion     = false
     boolean           addMetaInstanceId = false
+    def               printWriter       = new StringWriter()
+    def               indentPrinter     = new CustomIndentPrinter(printWriter)
     Map<Form, String> xforms            = [:]
     Study             study
     def               studyXML
+
 
     ODKSerializer() {}
 
@@ -33,8 +37,7 @@ class ODKSerializer {
     }
 
     String toStudyXml(Study study) {
-        def printWriter = new StringWriter()
-        def xml = new MarkupBuilder(printWriter)
+        def xml = new MarkupBuilder(indentPrinter)
         xml.setDoubleQuotes(true)
 
         println "========== Converting study [${study?.name}] to XML"
@@ -54,8 +57,8 @@ class ODKSerializer {
     }
 
     String toXForm(Form form) {
-        def printWriter = new StringWriter()
-        def x = new MarkupBuilder(printWriter)
+//        def printWriter = new StringWriter()
+        def x = new MarkupBuilder(indentPrinter)
         x.doubleQuotes = true
         vb(form.binding)
 
@@ -458,14 +461,21 @@ class ODKSerializer {
 
     private void buildTextLayout(MarkupBuilder xml, String txt, IFormElement e) {
 
+
         def tokens = TextParser.parseText(txt)
         for (token in tokens) {
             if (token.type == TextParser.TextToken.Type.EXPRESSION) {
-                xml.output(value: getAbsoluteBindingXPath(token.innerText, e))
+                try {
+                    indentPrinter.newLinesEnabled = false
+                    xml.output(value: getAbsoluteBindingXPath(token.innerText, e))
+                } finally {
+                    indentPrinter.newLinesEnabled = true
+                }
             } else {
                 xml.mkp.yield(token.text)
             }
         }
+
 
     }
 
