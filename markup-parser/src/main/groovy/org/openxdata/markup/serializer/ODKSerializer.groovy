@@ -35,7 +35,7 @@ class ODKSerializer {
 
     String toStudyXml(Study study) {
         def writer = new StringWriter()
-        def xml =  CustomMarkupBuilder._(writer)
+        def xml = CustomMarkupBuilder._(writer)
         xml.setDoubleQuotes(true)
 
         println "========== Converting study [${study?.name}] to XML"
@@ -56,7 +56,7 @@ class ODKSerializer {
 
     String toXForm(Form form) {
         def printWriter = new StringWriter()
-        def x =  CustomMarkupBuilder._(printWriter)
+        def x = CustomMarkupBuilder._(printWriter)
         x.doubleQuotes = true
         vb(form.binding)
 
@@ -189,7 +189,8 @@ class ODKSerializer {
         def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
 
         for (attr in question.parentForm.xpathBindAttr) {
-            map[attr] = getAbsoluteBindingXPath(map[attr], question)
+            if (map.containsKey(attr))
+                map[attr] = getAbsoluteBindingXPath(map[attr], question)
         }
 
         if (question instanceof IQuestion) {

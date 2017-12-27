@@ -179,7 +179,8 @@ class XFormSerializer {
         def map = [id: binding(element), nodeset: absoluteBinding(element)] + element.bindAttributes
 
         for (attr in element.parentForm.xpathBindAttr) {
-            map[attr] = getAbsoluteBindingXPath(map[attr], element)
+            if (map.containsKey(attr))
+                map[attr] = getAbsoluteBindingXPath(map[attr], element)
         }
 
         if (element instanceof IQuestion) {

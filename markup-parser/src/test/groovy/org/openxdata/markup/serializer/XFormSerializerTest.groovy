@@ -319,7 +319,7 @@ class XFormSerializerTest extends XMLTestCase {
         <endtime />
       </study_form_v1>
     </instance>
-    <bind id="name" nodeset="/study_form_v1/name" generex="" type="xsd:string" />
+    <bind id="name" nodeset="/study_form_v1/name" type="xsd:string" />
     <bind id="endtime" nodeset="/study_form_v1/endtime" generex="concat(/study_form_v1/name,' ')" type="xsd:time" />
   </model>
   <group id="1" isSynthetic="true">
@@ -347,7 +347,7 @@ class XFormSerializerTest extends XMLTestCase {
           <endtime />
         </study_form_v1>
       </instance>
-      <bind id="name" nodeset="/study_form_v1/name" generex="" type="string" />
+      <bind id="name" nodeset="/study_form_v1/name" type="string" />
       <bind id="endtime" nodeset="/study_form_v1/endtime" generex="concat(/study_form_v1/name,' ')" type="time" />
     </model>
   </h:head>
