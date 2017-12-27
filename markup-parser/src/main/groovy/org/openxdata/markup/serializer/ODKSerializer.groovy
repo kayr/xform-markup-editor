@@ -188,6 +188,10 @@ class ODKSerializer {
 
         def map = [id: binding(question), nodeset: absoluteBinding(question)] + question.bindAttributes
 
+        for (attr in question.parentForm.xpathBindAttr) {
+            map[attr] = getAbsoluteBindingXPath(map[attr], question)
+        }
+
         if (question instanceof IQuestion) {
             def type = getQuestionType(question)
 

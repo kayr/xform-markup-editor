@@ -66,6 +66,11 @@ class XFormDeserializer {
 
         if (layoutAttributes)
             form.layoutAttributes.putAll(layoutAttributes)
+
+        def bindattr = xForm.@bindattr
+        if (bindattr != null && !bindattr.toString().isEmpty()) {
+            form.xpathBindAttr.addAll(bindattr.toString().split(/\s+/))
+        }
     }
 
     private def addDynamicInstances() {
@@ -372,6 +377,10 @@ class XFormDeserializer {
                 target[keyConversion[finalKey] ?: finalKey] = kv.value
 
 
+        }
+
+        for (attr in form.xpathBindAttr) {
+            target[attr] = getXPathFormula(target[attr])
         }
     }
 

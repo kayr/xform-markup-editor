@@ -18,16 +18,18 @@ class Form implements HasQuestions {
     }
 
     String dbId
-    Study study
+    Study  study
     String version = 'v1'
-    int line
-    int dbIdLine
-    int idLine
+    int    line
+    int    dbIdLine
+    int    idLine
 
     Map<IFormElement, String> idxCache = [:]
 
-    Map<String, List<DynamicOption>> dynamicOptions = [:]
-    List<String> xpathInstanceAttrs,xpathBindAttr,xpathInstanceVariable
+    Map<String, List<DynamicOption>> dynamicOptions        = [:]
+    List<String>                     xpathInstanceAttrs = [],
+                                     xpathBindAttr = [],
+                                     xpathLayoutAttrs = []
 
 
     Form() { init() }

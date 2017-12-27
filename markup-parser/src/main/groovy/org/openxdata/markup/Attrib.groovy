@@ -105,6 +105,16 @@ class Attrib {
             case 'style':
                 form.layoutAttributes['style'] = param
                 break
+            case 'instancexpath':
+                form.xpathInstanceAttrs.addAll(params.param.toString().split(/\s+/))
+                break
+            case 'bindxpath':
+                form.xpathBindAttr.addAll(params.param.toString().split(/\s+/))
+
+                break
+            case 'layoutxpath':
+                form.xpathLayoutAttrs.addAll(params.param.toString().split(/\s+/))
+                break
             default:
                 if (TransformerResolver.instance.canHandle(attrib)) {
                     form.transformAttributes.put(attrib, new TransformAttribute(line: line, param: param, annotation: attrib))
