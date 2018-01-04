@@ -124,7 +124,7 @@ class MainUI {
                     }
 
                     separator()
-                    menuItem(text: 'About', actionPerformed: { showDialogue(15) })
+                    menuItem(text: 'About', actionPerformed: { showAbout() })
                 }
             }
         }
@@ -237,19 +237,6 @@ class MainUI {
         }
     }
 
-    private void showDialogue(int fontSize) {
-        s.dialog(owner: frame, locationRelativeTo: frame, title: 'About OxdMarkup',
-                visible: true, defaultCloseOperation: DISPOSE_ON_CLOSE, size: [200, 100],
-                modal: true) {
-            panel {
-                gridLayout(columns: 1, rows: 3)
-                label('Developed By')
-                textField()
-                button(text: "Set", actionPerformed: {})
-            }
-
-        }
-    }
 
     def renderHistory(java.util.List<String> history, Closure doLoadFile) {
         menuRecent.clear()
