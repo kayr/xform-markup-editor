@@ -132,7 +132,7 @@
                             <goal>addSources</goal>
                             <goal>addTestSources</goal>
                             <goal>compile</goal>
-                            <goal>testCompile</goal>
+                            <goal>compileTests</goal>
                             <goal>removeStubs</goal>
                             <goal>removeTestStubs</goal>
                         </goals>
