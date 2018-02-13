@@ -374,7 +374,7 @@ class XFormSerializer {
     }
 
     void buildLayout(MarkupBuilder xml, Page page) {
-        def pageId = page.id ?: page.parentForm.elements.indexOf(page) + 1
+        def pageId = page.id ? binding(page) : page.parentForm.elements.indexOf(page) + 1
 
         def map = [id: pageId] + page.layoutAttributes
 

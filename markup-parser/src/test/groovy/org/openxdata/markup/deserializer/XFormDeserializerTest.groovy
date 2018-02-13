@@ -235,13 +235,12 @@ class XFormDeserializerTest extends XMLTestCase {
         testRoundTrip(formWithMultiplePage)
         testRoundTrip(formWithSkipLogic)
         testRoundTrip(formWithActionAttributes)
-        testRoundTrip(formWithValidationLogic)
+        testRoundTrip0(formWithValidationLogic)//special
         testRoundTrip(normalPurcform)
         testRoundTrip(formWithId)
         testRoundTrip(normalPurcform2)
         testRoundTrip(formWithTrigger.markUp)
         testRoundTrip(this.class.getResourceAsStream('/failing-form-xml.xfm').text)
-        serializer.numberBindings = true
         testRoundTrip(wssbForm.markUp)
         testRoundTrip(gpsForm.markUp)
         testRoundTrip(formWithDollarInString)
@@ -256,6 +255,11 @@ class XFormDeserializerTest extends XMLTestCase {
     }
 
     void testRoundTrip(String markup) {
+        testRoundTrip0(markup)
+        withNumberedBindings { testRoundTrip0(markup) }
+    }
+
+    private void testRoundTrip0(String markup) {
 
 
         def form1 = new MarkupDeserializer(markup).study().forms[0]
@@ -335,6 +339,7 @@ class XFormDeserializerTest extends XMLTestCase {
             '''
 
         testRoundTrip(markup)
+
     }
 
     void testBugFixWhereRoundTripWasNotConsitent() {
@@ -401,9 +406,20 @@ group {
         testRoundTrip(markup)
     }
 
-    void testDeserializeWeirdForm(){
+    def withNumberedBindings(Closure closure) {
+        def orig = serializer.numberBindings
+
+        try {
+            serializer.numberBindings = true
+            closure()
+        } finally {
+            serializer.numberBindings = orig
+        }
+    }
+
+    void testDeserializeWeirdForm() {
         def text = this.getClass().getResource("/failing-form.xml").text
-        GroovyAssert.shouldFail (MarkUpException){
+        GroovyAssert.shouldFail(MarkUpException) {
             Converter.oxd2Form(text)
         }
 
