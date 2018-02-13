@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.openxdata</groupId>
             <artifactId>oxdmarkup-parser</artifactId>
-            <version>0.22-SNAPSHOT</version>
+            <version>0.24-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>jsyntaxpane</groupId>
