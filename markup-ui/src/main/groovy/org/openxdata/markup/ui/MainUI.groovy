@@ -25,16 +25,16 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE
 class MainUI {
 
     //UIManager.getDefaults().findAll{it.key.toString().toLowerCase().endsWith('icon')}
-    static Icon ICON_OPEN = getIcon('Tree.openIcon')
-    static Icon ICON_SAVE = getIcon('FileView.floppyDriveIcon')
-    static Icon ICON_NEW = getIcon('FileView.fileIcon')
-    static Icon ICON_IMPORT = getIcon('FileChooser.upFolderIcon')
-    static Icon ICON_FORM = getIcon('FileChooser.detailsViewIcon')
+    static Icon ICON_OPEN    = getIcon('Tree.openIcon')
+    static Icon ICON_SAVE    = getIcon('FileView.floppyDriveIcon')
+    static Icon ICON_NEW     = getIcon('FileView.fileIcon')
+    static Icon ICON_IMPORT  = getIcon('FileChooser.upFolderIcon')
+    static Icon ICON_FORM    = getIcon('FileChooser.detailsViewIcon')
     static Icon ICON_REFRESH = createImageIcon('/refresh.png', 'Refresh')
 
-    Closure formLoader
+    Closure      formLoader
     SwingBuilder s
-    PrintStream info
+    PrintStream  info
 
     MainUI() {
         initSyntaxKit()
@@ -121,7 +121,7 @@ class MainUI {
                     separator()
                     chkGenerateLayout = checkBoxMenuItem(text: 'Generate Layout')
                     chkSerializeExtraAttributesToComment = checkBoxMenuItem(text: 'Store Extra Attributes in Comment', selected: true,
-                            toolTipText: 'This is a compatibility hack when converting openxdata xform to odk where extra bind and layout attributes are stored in the openxdata comment section')
+                                                                            toolTipText: 'This is a compatibility hack when converting openxdata xform to odk where extra bind and layout attributes are stored in the openxdata comment section')
                 }
 
                 menu(text: 'Help') {
@@ -206,7 +206,7 @@ class MainUI {
         }
 
         frame = s.frame(title: 'OXD-Markup', defaultCloseOperation: DO_NOTHING_ON_CLOSE,
-                size: [800, 600], show: true, locationRelativeTo: null) {
+                        size: [800, 600], show: true, locationRelativeTo: null) {
 
             lookAndFeel('system')
 
@@ -234,8 +234,8 @@ class MainUI {
 
     private void showAbout() {
         s.dialog(owner: frame, locationRelativeTo: frame, title: 'About OxdMarkup',
-                visible: true, defaultCloseOperation: DISPOSE_ON_CLOSE, size: [200, 100],
-                modal: true) {
+                 visible: true, defaultCloseOperation: DISPOSE_ON_CLOSE, size: [200, 100],
+                 modal: true) {
             panel {
                 gridLayout(columns: 1, rows: 3)
                 label('Developed By')
@@ -300,7 +300,8 @@ class MainUI {
         URL imgURL = getClass().getResource(path)
         if (imgURL != null) {
             return new ImageIcon(imgURL, description)
-        } else {
+        }
+        else {
             System.err.println("Couldn't find file: " + path)
             return null
         }
@@ -316,30 +317,30 @@ class MainUI {
 
     JCheckBoxMenuItem chkGenerateLayout
     JCheckBoxMenuItem chkNumberBindings
-    JCheckBox chkNumberLabels
-    JCheckBox chkODKValidate
+    JCheckBox         chkNumberLabels
+    JCheckBox         chkODKValidate
     JCheckBoxMenuItem chkEmulateOXDConversion
     JCheckBoxMenuItem chkAutoAddInstanceId
-    JCheckBox chkAutoUpdateTree
+    JCheckBox         chkAutoUpdateTree
     JCheckBoxMenuItem chkUseXMLValidation
     JCheckBoxMenuItem chkEnsureUniqueIdentifier
     JCheckBoxMenuItem chkEnableAutoSave
     JCheckBoxMenuItem chkSerializeExtraAttributesToComment
-    JLabel lblCaret
+    JLabel            lblCaret
 
     //menus
-    JMenuItem menuImport
-    JMenuItem menuAlign
-    JMenuItem menuNew
-    JMenuItem menuRecent
-    JMenuItem menuOpen
-    JMenuItem menuSave
-    JMenuItem menuEnableODKMode
+    JMenuItem  menuImport
+    JMenuItem  menuAlign
+    JMenuItem  menuNew
+    JMenuItem  menuRecent
+    JMenuItem  menuOpen
+    JMenuItem  menuSave
+    JMenuItem  menuEnableODKMode
     JSplitPane spltMainPane
 
     //Text
     JEditorPane txtMarkUp
-    JTextPane txtConsole
+    JTextPane   txtConsole
 
     StudyTreeBuilder studyTreeBuilder
 
