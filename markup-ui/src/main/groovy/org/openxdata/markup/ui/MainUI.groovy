@@ -1,5 +1,7 @@
 package org.openxdata.markup.ui
 
+import fr.hugo4715.oslib.AbstractOperatingSystem
+import fr.hugo4715.oslib.OperatingSystem
 import groovy.swing.SwingBuilder
 import jsyntaxpane.DefaultSyntaxKit
 import jsyntaxpane.actions.CaretMonitor
@@ -44,7 +46,15 @@ class MainUI {
         DefaultSyntaxKit.initKit()
         // override default syntax values
         def config = DefaultSyntaxKit.getConfig(DefaultSyntaxKit.class);
-        for (it in ["Consolas 12", "Monospaced 13", "Courier New 12"]) {
+
+        def preferredFonts = ["Consolas 12", "Monospaced 13", "Courier New 12"]
+        def os = OperatingSystem.getOperatingSystem()
+        if (os.isUnix()) {
+            //Linux atleast on UBUNTU does not seem to like Consolas
+            preferredFonts = ["Monospaced 13", "Courier New 12"]
+        }
+
+        for (it in (preferredFonts)) {
             if (Font.decode(it)) {
                 println("Default Font Set To: [$it]")
                 config.put("DefaultFont", it)
