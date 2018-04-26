@@ -13,9 +13,9 @@ import static org.openxdata.markup.XPathUtil.*
 class ODKXpathUtil {
 
 
-    String _xpath
-    Form form
-    boolean numberedBindings
+            String           _xpath
+            Form             form
+            boolean          numberedBindings
     private List<CommonTree> visitedTrees = []
 
     ODKXpathUtil() {}
@@ -142,11 +142,15 @@ class ODKXpathUtil {
         def finalExpr
         if (rightString.startsWith('"') || rightString.startsWith("'")) {
             def rightParts = rightString
-                    .replaceAll(/('|")/, '').trim().split(',')
+                    .replaceAll(/('|")/, '').trim().split('[,|&|\\|]')
+            def joiner = ' or '
 
-            finalExpr = rightParts.collect { "selected($leftString, '$it')" }.join(' or ')
+            if (rightString.contains('&')) joiner = ' and '
 
-        } else {
+            finalExpr = rightParts.collect { "selected($leftString, '${it.toString().trim()}')" }.join(joiner)
+
+        }
+        else {
             rightString = makeCompatibleSubXpath(rightTree)
             finalExpr = "selected($leftString, $rightString)"
         }
